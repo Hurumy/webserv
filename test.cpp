@@ -17,13 +17,13 @@ int main()
 	socketfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketfd < 0)
 		return (-1);
-	bind(socketfd, &s_bind, s_bind_siz);
+	bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
 	std::cout << "Start Listening from the socket!" << std::endl;
 	listen(socketfd, 2);
 	while (1)
 	{
 		std::cout << "Waiting for new connection by accept" << std::endl;
-		clientfd = accept(socketfd, &s_bind, &s_bind);
+		clientfd = accept(socketfd, (struct sockaddr *)&s_bind, &s_bind_siz);
 		std::cout << "connected. then read" << std::endl;
 		read(clientfd, buf, 1000);
 		printf("%s\n", buf);
