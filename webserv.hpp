@@ -11,6 +11,8 @@
 # include <sys/types.h>
 # include <arpa/inet.h>
 
+class	Response
+
 
 
 #endif
