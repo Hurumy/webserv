@@ -1,0 +1,43 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    integration_test.yml                               :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
+#    Updated: 2023/09/02 17:47:02 by shtanemu         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: Integration test
+
+on:
+  pull-request:
+    branches:
+      - '*'
+    workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install-build-essential
+        run: sudo apt-get update && sudo apt-get install build-essential libbsd-dev -y
+
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: build
+        run: make
+
+      - name: Install Robot Framework
+        run: python -m pip install --upgrade pip setuptools && pip install robotframework
+
+      - name: Run test
+        run: |
+          cpp_files=$(find . -type f -name '*.robot' -path "./test/robots/*")
+          for file in $cppfiles; do
+            echo "Running integration test for $file..."
+            robot -i "$file"
+          done
