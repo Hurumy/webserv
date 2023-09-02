@@ -1,0 +1,48 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    google_utest.yml                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/02 15:36:37 by shtanemu          #+#    #+#              #
+#    Updated: 2023/09/02 17:29:10 by shtanemu         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+name: Google unit-test
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: install-build-essential
+      run: sudo apt-get update && sudo apt-get install build-essential libbsd-dev cmake ninja-build -y
+
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: install google-test
+      uses: actions/checkout@v3
+      with:
+        repository: google/googletest
+        path: gtest
+
+    - name: build google-test
+      run: |
+        cd gtest
+        cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=../test
+        cmake --build build
+        cmake --install build
+        cd ..
+
+    - name: unit-test
+      run: |
+        cd test
+        make utest

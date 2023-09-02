@@ -1,0 +1,46 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    formatter.yml                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/02 15:36:37 by shtanemu          #+#    #+#              #
+#    Updated: 2023/09/02 15:56:58 by shtanemu         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+  
+name: clang-format Code Formatter
+jobs:
+  lint:
+    name: clang-format Code Formatter
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: install tools
+      run: |
+        sudo apt update
+        sudo apt install clang-format
+    - name: Refactor codes
+      run: |
+        cpp_files=$(find . -type f -name '*.cpp' -path "./src/*")
+        for file in $cpp_files; do
+          echo "Running clang-format for $file..."
+          clang-format -i "$file"
+        done
+    - name: Remove unnecessary file
+      run: rm -f ".clang-fomat file"
+    - name: Create Pull Request
+      id: cpr
+      uses: peter-evans/create-pull-request@v5
+      with:
+        commit-message: Formatting by clang-format on Github actions
+        delete-branch: true
+        title: feature/formatting-by-clang-format-on-github-actions
