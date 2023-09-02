@@ -31,3 +31,8 @@
 *.out
 *.app
 webserv
+
+# Google unit test
+googletest/
+test/include
+test/lib
