@@ -6,7 +6,15 @@ const std::string	Response::getLines(void) const
 	std::string line;
 
 	line += this->version;
+	line += this->status;
 	line += this->statusMessage;
+	line += "\n";
+	line += this->contentType;
+	line += "\n";
+	line += "Content-Length: ";
+	line += this->contentLength;
+	line += "\n";
+	line += "\n";
 	line += this->body;
 
 	return (line);
@@ -21,6 +29,18 @@ const bool	Response::setstatus(unsigned int status)
 const bool Response::setstatusMessage(std::string message)
 {
 	this->statusMessage = message;
+	return (true);
+}
+
+const bool	Response::setcontentType(std::string type)
+{
+	this->contentType = type;
+	return (true);
+}
+
+const bool	Response::setcontentLength(size_t len)
+{
+	this->contentLength = len;
 	return (true);
 }
 
