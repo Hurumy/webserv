@@ -36,3 +36,4 @@ webserv
 googletest/
 test/include
 test/lib
+google-unit-test
