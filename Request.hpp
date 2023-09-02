@@ -11,7 +11,7 @@ class Request: public IPayload
 	protected:
 	public:
 		const std::string	getLines() const;
-		const bool			seturl(std::string url);
+		bool				seturl(std::string url);
 };
 
 

@@ -11,7 +11,7 @@ const std::string	Request::getLines() const
 	return (line);
 }
 
-const bool	Request::seturl(std::string url)
+bool	Request::seturl(std::string url)
 {
 	this->url = url;
 	return (true);

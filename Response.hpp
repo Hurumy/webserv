@@ -14,10 +14,10 @@ class Response: public IPayload
 	protected:
 	public:
 		std::string const	getLines(void) const;
-		const bool			setstatus(unsigned int status);
-		const bool			setstatusMessage(std::string message);
-		const bool			setcontentType(std::string type);
-		const bool			setcontentLength(size_t len);
+		bool				setstatus(unsigned int status);
+		bool				setstatusMessage(std::string message);
+		bool				setcontentType(std::string type);
+		bool				setcontentLength(size_t len);
 };
 
 

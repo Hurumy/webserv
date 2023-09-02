@@ -12,7 +12,7 @@ class IPayload
 		std::map<std::string, std::string> 	metadata;
 	public:
 		virtual const std::string	getLines() const = 0;
-		const bool					setversion(std::string version);
-		const bool					setbody(std::string body);
+		bool						setversion(std::string version);
+		bool						setbody(std::string body);
 };
 
