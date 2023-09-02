@@ -6,14 +6,14 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/02 17:47:02 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/02 18:29:04 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 name: Integration test
 
 on:
-  pull-request:
+  pull_request:
     branches:
       - '*'
     workflow_dispatch:
