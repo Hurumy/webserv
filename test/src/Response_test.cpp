@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 12:50:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 17:03:44 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/03 18:49:36 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ TEST(ResponseTest, versionTest) {
 	std::string expected("HTTP/1.1");
 
 	response.setVersion(expected);
-	ASSERT_EQ(response.getVersion().c_str(), expected);
+	ASSERT_STREQ(response.getVersion().c_str(), expected.c_str());
 }
 
 TEST(ResponseTest, statusTest) {
@@ -36,7 +36,7 @@ TEST(ResponseTest, statusMessageTest) {
 	std::string expected("OK");
 
 	response.setStatusMessage(expected);
-	ASSERT_EQ(response.getStatusMessage().c_str(), expected);
+	ASSERT_STREQ(response.getStatusMessage().c_str(), expected.c_str());
 }
 
 TEST(ResponseTest, contentTypeTest) {
@@ -44,7 +44,7 @@ TEST(ResponseTest, contentTypeTest) {
 	std::string expected("text/plain");
 
 	response.setContentType(expected);
-	ASSERT_EQ(response.getContentType().c_str(), expected);
+	ASSERT_STREQ(response.getContentType().c_str(), expected.c_str());
 }
 
 TEST(ResponseTest, contentLengthTest) {
@@ -60,15 +60,23 @@ TEST(ResponseTest, bodyTest) {
 	std::string expected("Hello, world.");
 
 	response.setBody(expected);
-	ASSERT_EQ(response.getBody().c_str(), expected);
+	ASSERT_STREQ(response.getBody().c_str(), expected.c_str());
 }
 
-TEST(ResponseTest, metaDataTest) {
+TEST(ResponseTest, headerTest01) {
 	Response response;
 	std::string expected("text/html;charset=UTF-8");
 
 	response.addHeader("Content-Type", expected);
-	ASSERT_EQ(response.getHeader("Content-Type").c_str(), expected);
+	ASSERT_STREQ(response.getHeader("Content-Type").c_str(), expected.c_str());
+}
+
+TEST(ResponseTest, headerTest02) {
+	Response response;
+	std::string expected("text/html;charset=UTF-8");
+
+	response.addHeader("Content-Type", expected);
+	ASSERT_EQ(response.addHeader("Content-Type", expected), false);
 }
 
 #define EXPECTED "\
@@ -92,5 +100,5 @@ TEST(ResponseTest, linesTest) {
 	response.setContentType("text/html;charset=UTF-8");
 	response.setContentLength(14);
 	response.setBody("Hello, world.");
-	ASSERT_EQ(response.getLines().c_str(), expected);
+	ASSERT_STREQ(response.getLines().c_str(), expected.c_str());
 }
