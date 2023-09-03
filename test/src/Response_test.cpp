@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 12:50:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 18:49:36 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/03 19:05:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,6 @@ TEST(ResponseTest, statusMessageTest) {
 	ASSERT_STREQ(response.getStatusMessage().c_str(), expected.c_str());
 }
 
-TEST(ResponseTest, contentTypeTest) {
-	Response response;
-	std::string expected("text/plain");
-
-	response.setContentType(expected);
-	ASSERT_STREQ(response.getContentType().c_str(), expected.c_str());
-}
-
-TEST(ResponseTest, contentLengthTest) {
-	Response response;
-	std::size_t expected(14);
-
-	response.setContentLength(expected);
-	ASSERT_EQ(response.getContentLength(), expected);
-}
-
 TEST(ResponseTest, bodyTest) {
 	Response response;
 	std::string expected("Hello, world.");
@@ -81,10 +65,10 @@ TEST(ResponseTest, headerTest02) {
 
 #define EXPECTED "\
 HTTP/1.1 200 OK\r\n\
+Content-Length: 14\r\n\
+Content-Type: text/html;charset=UTF-8\r\n\
 Date: Fri, 16 Mar 2018 17:36 27 GMT\r\n\
 Server: test server\r\n\
-Content-Type: text/html;charset=UTF-8\r\n\
-Content-Length: 14\r\n\
 \r\n\
 Hello, world."
 
@@ -97,8 +81,8 @@ TEST(ResponseTest, linesTest) {
 	response.setStatusMessage("OK");
 	response.addHeader("Date", "Fri, 16 Mar 2018 17:36 27 GMT");
 	response.addHeader("Server", "test server");
-	response.setContentType("text/html;charset=UTF-8");
-	response.setContentLength(14);
+	response.addHeader("Content-Type", "text/html;charset=UTF-8");
+	response.addHeader("Content-Length", "14");
 	response.setBody("Hello, world.");
 	ASSERT_STREQ(response.getLines().c_str(), expected.c_str());
 }

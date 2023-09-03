@@ -22,13 +22,6 @@ const std::string	Response::getLines() const
 		line += iter->second;
 		line += "\r\n";
 	}
-	line += "Content-Type: ";
-	line += contentType;
-	line += "\r\n";
-	line += "Content-Length: ";
-	numContentLength << contentLength;
-	line += numContentLength.str();
-	line += "\r\n";
 	line += "\r\n";
 	line += body;
 	return (line);
@@ -46,18 +39,6 @@ bool Response::setStatusMessage(std::string const &message)
 	return (true);
 }
 
-bool Response::setContentType(std::string const &_type)
-{
-	contentType = _type;
-	return (true);
-}
-
-bool Response::setContentLength(size_t const len)
-{
-	contentLength = len;
-	return (true);
-}
-
 unsigned int Response::getStatus() const
 {
 	return(status);
@@ -66,14 +47,4 @@ unsigned int Response::getStatus() const
 std::string const &Response::getStatusMessage() const
 {
 	return(statusMessage);
-}
-
-std::string const &Response::getContentType() const
-{
-	return(contentType);
-}
-
-size_t Response::getContentLength() const
-{
-	return (contentLength);
 }
