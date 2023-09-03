@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/02 17:07:47 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/03 15:46:19 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CFLAGS			:= -Wall -Wextra -Werror -std=c++14
 UNAME_OS		:= $(shell uname -s)
 
 SRC_FILES		:= \
-					gtest_main.cpp
+					gtest_main.cpp \
+					Response_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -31,6 +32,8 @@ DEPS			:= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.d, $(SRCS))
 DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
+					APayload.cpp \
+					Response.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
