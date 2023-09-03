@@ -16,4 +16,6 @@
 # include <poll.h>
 # include <vector>
 
+//request_parser
+bool	parseRequest(Request &req, std::string rawData);
 

@@ -40,14 +40,5 @@ std::string const	IPayload::getbody(void) const
 	return (this->body);
 }
 
-bool	IPayload::setmethod(std::string method) 
-{
-	this->method = method;
-	return (true);
-}
 
-std::string const	IPayload::getmethod(void) const
-{
-	return (this->method);
-}
 

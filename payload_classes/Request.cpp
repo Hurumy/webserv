@@ -22,6 +22,18 @@ std::string const	Request::geturl(void) const
 	return (this->url);
 }
 
+bool	Request::setmethod(std::string method)
+{
+	this->method = method;
+	return (true);
+}
+
+std::string const	Request::getmethod(void) const
+{
+	return (this->method);
+}
+
+
 //test code
 /*
 int main()
