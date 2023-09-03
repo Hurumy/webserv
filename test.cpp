@@ -119,15 +119,77 @@ static std::string	ReadRequest(int fd)
 	return (result);
 }
 
-int main()
+bool	MakeRequest(Request &request, int clientfd)
 {
-	int			socketfd;
-	sockaddr_in	s_bind;	
-	socklen_t	s_bind_siz;
-	int			clientfd;
+	bool		status;
+	std::string req_rawdata;
+	
+	req_rawdata = ReadRequest(clientfd);
+	status = parseRequest(request, req_rawdata);	
+	if (status == false)
+	{
+		std::cout << "parseRequest failed" << std::endl;
+		return (false);
+	}
+	//put out for debug
+	std::cout << "==rawdata====" << std::endl;
+	std::cout << req_rawdata << std::endl;
+	std::cout << "=============" << std::endl;
+	std::cout << "HEAD: "<< request.getmethod() << std::endl;
+	std::cout << "URL: " << request.geturl() << std::endl;
+	std::cout << "VERSION: " << request.getversion() << std::endl;
+	std::cout << "Host: " << request.getmetadata("Host") << std::endl;
+	std::cout << "User-Agent: " << request.getmetadata("User-Agent") << std::endl;
+	std::cout << "Accept: " << request.getmetadata("Accept") << std::endl;
+	std::cout << "Accept-Language: " << request.getmetadata("Accept-Language") << std::endl;
+	std::cout << "Connection: " << request.getmetadata("Connection") << std::endl;
+	std::cout << "Referer: " << request.getmetadata("Referer") << std::endl;
+	std::cout << "Sec-Fetch-Dest: " << request.getmetadata("Sec-Fetch-Dest") << std::endl;
+	std::cout << "Sec-Fetch-Mode: " << request.getmetadata("Sec-Fetch-Mode") << std::endl;		
+	std::cout << "Sec-Fetch-Site: " << request.getmetadata("Sec-Fetch-Site") << std::endl;
+	return (true);
+}
+
+int	SendResponse(Response &response, Request &request, int clientfd)
+{
+	std::string	line;
 	int			status;
-	std::string	req_rawdata;
-	Request		*request;
+
+	//HTTPバージョンのチェック
+	if (request.getversion().compare("HTTP/1.1\n") != 0)
+	{
+		std::cout << "SendResponse: Invalid Version(not HTTP/1.1)" << std::endl;
+		return (false);
+	}
+
+	//responseに中身詰めます
+	status = MakeResponse(response);		
+	if (status == false)
+	{
+		std::cout << "Make Response is failed;;" << std::endl;
+		return (false);
+	}
+	status = ReadFile(response, "content/readme.html");
+	if (status == false)
+	{
+		std::cout << "HTML File Reading failed;;" << std::endl;
+		return (false);
+	}
+	//レスポンスをWriteで書き込んで送信
+	line = response.getLines();
+	status = write(clientfd, line.c_str(), line.length());
+	if (status == -1)
+	{
+		std::cout << "write syscall is failed;;" << std::endl;
+		return (false);
+	}	
+	return (true);
+}
+
+int	MakeSocket(int &socketfd, sockaddr_in &s_bind)
+{
+	socklen_t	s_bind_siz;
+	int			status;
 
 	s_bind.sin_family = AF_INET;
 	s_bind.sin_port = htons(8080);
@@ -137,11 +199,37 @@ int main()
 	//ソケット作るよ
 	socketfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketfd < 0)
-		return (-1);
+	{
+		std::cout << "socket syscall is failed;;" << std::endl;
+		return (false);
+	}
 
 	//bindするよ
-	bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
-	std::cout << "Start Listening from the socket!" << std::endl;
+	status = bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
+	if (status == -1)
+	{
+		std::cout << "bind syscall is failed;;" << std::endl;
+		return (false);
+	}
+	return (true);
+}
+
+int main()
+{
+	int			socketfd;
+	sockaddr_in	s_bind;	
+	socklen_t	s_bind_siz;
+	int			clientfd;
+	int			status;
+	Request		*request;
+	Response	*response;
+
+	//ソケットを作る
+	s_bind_siz = sizeof(s_bind);
+	status = MakeSocket(socketfd, s_bind);
+	if (status == false)
+		std::cout << "MakeSocket failed;;" << std::endl;
+	std::cout << "===Start Listening from the socket!" << std::endl;
 	
 	//Listen開始します
 	listen(socketfd, 2);
@@ -156,42 +244,15 @@ int main()
 		//Acceptが通ったのでリクエストをReadします
 		request = new Request();
 		std::cout << "connected. then read" << std::endl << "========" << std::endl << std::endl;
-		req_rawdata = ReadRequest(clientfd);
-		status = parseRequest(*request, req_rawdata);	
+		status = MakeRequest(*request, clientfd);
 		if (status == false)
-			std::cout << "parseRequest failed" << std::endl;
-
-		std::cout << "==rawdata====" << std::endl;
-		std::cout << req_rawdata << std::endl;
-		std::cout << "=============" << std::endl;
-
-		std::cout << "HEAD: "<< request->getmethod() << std::endl;
-		std::cout << "URL: " << request->geturl() << std::endl;
-		std::cout << "VERSION: " << request->getversion() << std::endl;
-		std::cout << "Host: " << request->getmetadata("Host") << std::endl;
-		std::cout << "User-Agent: " << request->getmetadata("User-Agent") << std::endl;
-		std::cout << "Accept: " << request->getmetadata("Accept") << std::endl;
-		std::cout << "Accept-Language: " << request->getmetadata("Accept-Language") << std::endl;
-		std::cout << "Connection: " << request->getmetadata("Connection") << std::endl;
-		std::cout << "Referer: " << request->getmetadata("Referer") << std::endl;
-		std::cout << "Sec-Fetch-Dest: " << request->getmetadata("Sec-Fetch-Dest") << std::endl;
-		std::cout << "Sec-Fetch-Mode: " << request->getmetadata("Sec-Fetch-Mode") << std::endl;		
-		std::cout << "Sec-Fetch-Site: " << request->getmetadata("Sec-Fetch-Site") << std::endl;
-
+			std::cout << "MakeRequest Failed;;" << std::endl;
 
 		//クライアントにおくるレスポンスを作る
-		Response *response = new Response();
-		std::string	line;
-
-		//responseに中身詰めます
-		MakeResponse(*response);		
-		status = ReadFile(*response, "content/readme.html");
+		response = new Response();
+		status = SendResponse(*response, *request, clientfd);
 		if (status == false)
-			std::cout << "reading failed;;" << std::endl;
-
-		//レスポンスをWriteで書き込んで送信
-		line = response->getLines();
-		write(clientfd, line.c_str(), line.length());
+			std::cout << "SendResponse failed;;" << std::endl;
 		
 		//FDを閉じて次の接続をまつ
 		close(clientfd);
