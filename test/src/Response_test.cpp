@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 12:50:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 15:57:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/03 17:03:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ TEST(ResponseTest, metaDataTest) {
 	Response response;
 	std::string expected("text/html;charset=UTF-8");
 
-	response.addMetadata("Content-Type", expected);
-	ASSERT_EQ(response.getMetadata("Content-Type").c_str(), expected);
+	response.addHeader("Content-Type", expected);
+	ASSERT_EQ(response.getHeader("Content-Type").c_str(), expected);
 }
 
 #define EXPECTED "\
@@ -87,8 +87,8 @@ TEST(ResponseTest, linesTest) {
 	response.setVersion("HTTP/1.1");
 	response.setStatus(200);
 	response.setStatusMessage("OK");
-	response.addMetadata("Date", "Fri, 16 Mar 2018 17:36 27 GMT");
-	response.addMetadata("Server", "test server");
+	response.addHeader("Date", "Fri, 16 Mar 2018 17:36 27 GMT");
+	response.addHeader("Server", "test server");
 	response.setContentType("text/html;charset=UTF-8");
 	response.setContentLength(14);
 	response.setBody("Hello, world.");

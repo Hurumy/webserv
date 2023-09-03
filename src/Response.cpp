@@ -16,7 +16,7 @@ const std::string	Response::getLines() const
 	line += " ";
 	line += statusMessage;
 	line += "\r\n";
-	for (std::map<std::string, std::string>::const_iterator iter = metadata.begin(); iter != metadata.end(); ++iter) {
+	for (std::map<std::string, std::string>::const_iterator iter = header.begin(); iter != header.end(); ++iter) {
 		line += iter->first;
 		line += ": ";
 		line += iter->second;

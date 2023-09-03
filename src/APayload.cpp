@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 16:37:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/03 17:03:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,20 @@ bool APayload::setBody(std::string const &_body)
 	return (true);
 }
 
-std::string const &APayload::getMetadata(std::string const &key) const
+std::string const &APayload::getHeader(std::string const &key) const
 {	
-	if (metadata.find(key) == metadata.end())
-		return (metadata.rbegin()->second);
+	if (header.find(key) == header.end())
+		return (header.rbegin()->second);
 	else
-		return (metadata.at(key));
+		return (header.at(key));
 }
 
-bool APayload::addMetadata(std::string const &key, std::string const &value)
+bool APayload::addHeader(std::string const &key, std::string const &value)
 {
-	if (metadata.find(key) != metadata.end())
+	if (header.find(key) != header.end())
 		return (false);
 	else
-		metadata[key] = value;
+		header[key] = value;
 	return (true);
 }
 
