@@ -13,7 +13,9 @@ class IPayload
 	public:
 		virtual const std::string	getLines() const = 0;
 		bool						setversion(std::string version);
+		std::string const			getversion(void) const;
 		bool						setbody(std::string body);
+		std::string	const			getbody(void) const;
 		std::string const			getmetadata(std::string key) const;
 		bool						addmetadata(std::string key, std::string value);
 };

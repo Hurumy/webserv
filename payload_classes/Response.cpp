@@ -66,7 +66,7 @@ size_t const	Response::getcontentLength(void) const
 
 
 //test code
-/*
+
 int main()
 {
 	Response	*test = new Response();
@@ -74,10 +74,14 @@ int main()
 	test->setversion("version1.2.3\n");
 	test->setbody("NICE BODY~\n");
 	test->setstatusMessage("WTF!!\n");
+
 	std::cout << test->getLines() << std::endl;
+	std::cout << test->getstatusMessage() << std::endl;
+	std::cout << test->getversion() << std::endl;
+	std::cout << test->getbody() << std::endl;
 
 	delete test;
 	return 0;
 }
-*/
+
 

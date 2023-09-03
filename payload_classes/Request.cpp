@@ -17,6 +17,11 @@ bool	Request::seturl(std::string url)
 	return (true);
 }
 
+std::string const	Request::geturl(void) const
+{
+	return (this->url);
+}
+
 //test code
 /*
 int main()
@@ -28,9 +33,12 @@ int main()
 	test->setbody("NICE BODY~\n");
 	
 	std::cout << test->getLines() << std::endl;
+	std::cout << test->geturl() << std::endl;
+	std::cout << test->getversion() << std::endl;
+	std::cout << test->getbody() << std::endl;
 
 	delete test;
 	return (0);
-}
-*/
+}*/
+
 

@@ -30,3 +30,13 @@ bool	IPayload::addmetadata(std::string key, std::string value)
 	return (true);
 }
 
+std::string const	IPayload::getversion(void) const
+{
+	return(this->version);
+}
+
+std::string const	IPayload::getbody(void) const
+{
+	return (this->body);
+}
+

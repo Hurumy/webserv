@@ -12,6 +12,7 @@ class Request: public IPayload
 	public:
 		const std::string	getLines() const;
 		bool				seturl(std::string url);
+		std::string const	geturl(void) const;
 };
 
 
