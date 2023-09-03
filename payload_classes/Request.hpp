@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "webserv.hpp"
+#include "../webserv.hpp"
 #include "IPayload.hpp"
 
 class Request: public IPayload

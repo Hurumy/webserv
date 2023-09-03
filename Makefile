@@ -3,7 +3,8 @@ CC = c++
 
 CXFLAGS = -Wall -Werror -Wextra -std=c++98
 
-SRCS = *.cpp 
+SRCS = *.cpp \
+	   payload_classes/*.cpp
 
 NAME = webserv
 

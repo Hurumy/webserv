@@ -1,8 +1,8 @@
 
 #include "webserv.hpp"
-#include "IPayload.hpp"
-#include "Response.hpp"
-#include "Request.hpp"
+#include "payload_classes/IPayload.hpp"
+#include "payload_classes/Response.hpp"
+#include "payload_classes/Request.hpp"
 
 #define	FILE_READ_SIZE	500
 
@@ -160,7 +160,7 @@ int main()
 
 		//responseに中身詰めます
 		MakeResponse(*response);		
-		status = ReadFile(*response, "readme.html");
+		status = ReadFile(*response, "content/readme.html");
 		if (status == false)
 			std::cout << "reading failed;;" << std::endl;
 
