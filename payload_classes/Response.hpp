@@ -15,9 +15,13 @@ class Response: public IPayload
 	public:
 		std::string const	getLines(void) const;
 		bool				setstatus(unsigned int status);
+		unsigned int const	getstatus(void) const;
 		bool				setstatusMessage(std::string message);
+		std::string const	getstatusMessage(void) const;
 		bool				setcontentType(std::string type);
+		std::string const	getcontentType(void) const;
 		bool				setcontentLength(size_t len);
+		size_t const		getcontentLength(void) const;
 };
 
 

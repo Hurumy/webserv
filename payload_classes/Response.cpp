@@ -44,6 +44,27 @@ bool	Response::setcontentLength(size_t len)
 	return (true);
 }
 
+unsigned int const	Response::getstatus(void) const
+{
+	return(this->status);
+}
+
+std::string const	Response::getstatusMessage(void) const
+{
+	return(this->statusMessage);
+}
+
+std::string const	Response::getcontentType(void) const
+{
+	return(this->contentType);
+}
+
+size_t const	Response::getcontentLength(void) const
+{
+	return (this->contentLength);
+}
+
+
 //test code
 /*
 int main()
