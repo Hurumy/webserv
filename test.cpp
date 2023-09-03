@@ -4,52 +4,71 @@
 #include "Response.hpp"
 #include "Request.hpp"
 
-bool ReadFile(Response &response, std::string Filename)
-{
-	int			bytes = 0;
-	int			status;
-	int			fd;
-	char		buf[500];
-	std::string	body;
+#define	FILE_READ_SIZE	500
 
-	//バイト数を調べる
+static size_t	GetFilesize(std::string Filename)
+{
+	size_t 	bytes = 0;
+	int		status = 0;
+	int		fd;
+	char	buf[FILE_READ_SIZE];
+
 	fd = open(Filename.c_str(), O_RDONLY);
 	if (fd == -1)
-		return (false);
+		return (0);
 	do
 	{
-		status = read(fd, buf, 500);
+		status = read(fd, buf, FILE_READ_SIZE);
 		if (status > 0)
 			bytes += status;
 	}
 	while (status > 0);
-	if (bytes == -1)
-		return (false);
+	if (status == -1)
+		return (0);
 	close(fd);
+	return (bytes);
+}
+
+static std::string	GetFileContents(std::string Filename)
+{
+	int				status;
+	int				fd;
+	char			buf[FILE_READ_SIZE];
+	std::string		result;
+
+	fd = open(Filename.c_str(), O_RDONLY);
+	if (fd == -1)
+		return ("");
+	do
+	{
+		status = read(fd, buf, FILE_READ_SIZE);
+		if (status > 0)
+			result += buf;	
+	}
+	while (status > 0);
+
+	if (status == -1)
+		return ("");
+	close(fd);
+	return (result);
+}
+
+bool ReadFile(Response &response, std::string Filename)
+{
+	size_t		bytes;
+	std::string	body;
+
+	bytes = GetFilesize(Filename);
+	if (bytes == 0)
+		return (false);
 
 	//バイト数をResponseにセットする
 	response.setcontentLength(bytes);
 
-	bytes = 0;
 	//中身読み込む
-	fd = open(Filename.c_str(), O_RDONLY);
-	if (fd == -1)
+	body = GetFileContents(Filename);	
+	if (body == "")
 		return (false);
-	do
-	{
-		status = read(fd, buf, 500);
-		if (status > 0)
-		{
-			bytes += status;
-			body += buf;
-		}
-	}
-	while (status > 0);
-	
-
-	if (bytes == -1)
-		return (false);
-	close(fd);
 
 	//responseにセットする
 	response.setbody(body);
@@ -70,14 +89,41 @@ bool MakeResponse(Response &response)
 	return (true);
 }
 
+
+
+static std::string	ReadRequest(int fd)
+{
+	int				status;
+	int				is_end = 0;
+	char			buf[FILE_READ_SIZE];
+	std::string		result;
+	struct pollfd	s_poll;
+
+	s_poll.fd = fd;
+	s_poll.events = POLLIN;
+	do
+	{
+		status = read(fd, buf, FILE_READ_SIZE);
+		if (status > 0)
+			result += buf;
+		if (poll(&s_poll, 1, 500) >= 0 && (s_poll.revents & POLLIN) == 0)
+			is_end = 1;
+	}
+	while (status > 0 && is_end != 1);
+
+	if (status == -1 || is_end != 1)
+		return ("");
+	return (result);
+}
+
 int main()
 {
 	int			socketfd;
 	sockaddr_in	s_bind;	
 	socklen_t	s_bind_siz;
-	char		buf[1000];
 	int			clientfd;
 	int			status;
+	std::string	request;
 
 	s_bind.sin_family = AF_INET;
 	s_bind.sin_port = htons(8080);
@@ -103,13 +149,12 @@ int main()
 		std::cout << "Waiting for new connection by accept" << std::endl;
 		clientfd = accept(socketfd, (struct sockaddr *)&s_bind, &s_bind_siz);
 		
-		//Acceptが通ったのでReadします(たくさん)
-		std::cout << "connected. then read" << std::endl;
-		read(clientfd, buf, 1000);
-		printf("%s\n", buf);
-		printf("--That is all message. Start Sending.\n");
+		//Acceptが通ったのでリクエストをReadします
+		std::cout << "connected. then read" << std::endl << "========" << std::endl << std::endl;
+		request = ReadRequest(clientfd);
+		std::cout << "Request: " << request << std::endl;
 
-		//クライアントにデータを送信します
+		//クライアントにおくるレスポンスを作る
 		Response *response = new Response();
 		std::string	line;
 
@@ -119,14 +164,15 @@ int main()
 		if (status == false)
 			std::cout << "reading failed;;" << std::endl;
 
+		//レスポンスをWriteで書き込んで送信
 		line = response->getLines();
 		write(clientfd, line.c_str(), line.length());
 		
 		//FDを閉じて次の接続をまつ
 		close(clientfd);
+		std::cout << std::endl << "========" << std::endl << "close the connection." << std::endl << std::endl;
 	}
 	
 	return 0;
 }
-
-
+ 
