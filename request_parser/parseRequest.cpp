@@ -7,7 +7,7 @@
 static std::vector<std::string> lineSpliter(std::string origin, std::string delim)
 {
 	std::vector<std::string>	list;
-	int							pos;
+	long						pos;
 	int							delimlen = delim.length();
 	int							offset;
 
@@ -20,7 +20,7 @@ static std::vector<std::string> lineSpliter(std::string origin, std::string deli
 		while (1)
 		{
 			pos = origin.find(delim, offset);
-			if (pos == std::string::npos)
+			if ((unsigned long)pos == std::string::npos)
 			{
 				list.push_back(origin.substr(offset));
 				break;
@@ -53,7 +53,7 @@ static bool	parseFirstLine(Request &req, std::string Firstline)
 static bool	addParsedLine(Request &req, std::string line)
 {
 	std::vector<std::string> 	tmp;
-	int							status;
+	bool						status;
 
 	tmp = lineSpliter(line, ": ");
 	if (tmp.size() != 2)
@@ -68,17 +68,22 @@ static bool	addParsedLine(Request &req, std::string line)
 bool	parseRequest(Request &req, std::string rawData)
 {
 	std::vector<std::string> lines;
-	int	status;
+	bool					status;
 	
 	lines = lineSpliter(rawData, "\n");
 	status = parseFirstLine(req, lines.at(0));
 	if (status == false)
 		return (false);
-	for (int i = 1; i < lines.size(); i ++)
+	for (unsigned long i = 1; i < lines.size() - 2; i ++)
 	{
 		status = addParsedLine(req, lines.at(i));
 		if (status == false)
+		{
+			std::cout << "lines.size: " << lines.size() << std::endl;
+			std::cout << "parse failed line: " << lines.at(i) << std::endl;
+			std::cout << "parse failed line: " << i << std::endl;
 			return (false);
+		}
 	}
 	return (true);
 }

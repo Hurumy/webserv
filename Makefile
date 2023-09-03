@@ -5,7 +5,8 @@ CXFLAGS = -Wall -Werror -Wextra -std=c++98
 
 SRCS = *.cpp \
 	   payload_classes/*.cpp \
-	   statuscode/*.cpp
+	   statuscode/*.cpp \
+		request_parser/parseRequest.cpp \
 
 NAME = webserv
 
