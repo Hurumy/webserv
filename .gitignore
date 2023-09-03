@@ -37,3 +37,6 @@ googletest/
 test/include
 test/lib
 google-unit-test
+
+# VS code
+.vscode
