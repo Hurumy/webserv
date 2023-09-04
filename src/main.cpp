@@ -3,11 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/02 15:15:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/04 19:04:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int main() { return 0; }
+//int main() { return 0; }

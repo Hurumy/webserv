@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/03 16:59:28 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/04 19:03:26 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,11 @@ CFLAGS		:= -Wall -Wextra -Werror -std=c++98
 SRC_FILES	:= \
 				main.cpp \
 				APayload.cpp \
-				Response.cpp
+				Response.cpp \
+				Request.cpp \
+				parseRequest.cpp \
+				test.cpp \
+				makeStatusMap.cpp \
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
