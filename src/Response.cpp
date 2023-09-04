@@ -3,8 +3,7 @@
 
 #include <sstream>
 
-const std::string	Response::getLines() const
-{
+const std::string Response::getLines() const {
 	std::string line;
 	std::ostringstream numStatus;
 	std::ostringstream numContentLength;
@@ -13,7 +12,9 @@ const std::string	Response::getLines() const
 	numStatus << status;
 	line += numStatus.str() + " ";
 	line += statusMessage + "\r\n";
-	for (std::map<std::string, std::string>::const_iterator iter = header.begin(); iter != header.end(); ++iter) {
+	for (std::map<std::string, std::string>::const_iterator iter =
+			 header.begin();
+		 iter != header.end(); ++iter) {
 		line += iter->first + ": ";
 		line += iter->second + "\r\n";
 	}
@@ -22,24 +23,18 @@ const std::string	Response::getLines() const
 	return (line);
 }
 
-bool Response::setStatus(unsigned int _status)
-{
+bool Response::setStatus(unsigned int _status) {
 	status = _status;
 	return (true);
 }
 
-bool Response::setStatusMessage(std::string const &message)
-{
+bool Response::setStatusMessage(std::string const &message) {
 	statusMessage = message;
 	return (true);
 }
 
-unsigned int Response::getStatus() const
-{
-	return(status);
-}
+unsigned int Response::getStatus() const { return (status); }
 
-std::string const &Response::getStatusMessage() const
-{
-	return(statusMessage);
+std::string const &Response::getStatusMessage() const {
+	return (statusMessage);
 }

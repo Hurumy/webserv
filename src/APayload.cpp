@@ -11,34 +11,31 @@
 /* ************************************************************************** */
 
 #include "APayload.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 
-bool APayload::setVersion(std::string const &_version)
-{
+#include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
+
+bool APayload::setVersion(std::string const &_version) {
 	version = _version;
 	return (true);
 }
 
-bool APayload::setBody(std::string const &_body)
-{
+bool APayload::setBody(std::string const &_body) {
 	body = _body;
 	return (true);
 }
 
-Result<std::string, bool> const APayload::getHeader(std::string const &key) const
-{	
-	if (header.empty() == true)
-		return Error<bool>(false);
+Result<std::string, bool> const APayload::getHeader(
+	std::string const &key) const {
+	if (header.empty() == true) return Error<bool>(false);
 	if (header.find(key) == header.end())
 		return Error<bool>(false);
 	else
 		return Ok<std::string>(header.at(key));
 }
 
-bool APayload::addHeader(std::string const &key, std::string const &value)
-{
+bool APayload::addHeader(std::string const &key, std::string const &value) {
 	if (header.find(key) != header.end())
 		return (false);
 	else
@@ -46,12 +43,6 @@ bool APayload::addHeader(std::string const &key, std::string const &value)
 	return (true);
 }
 
-std::string const &APayload::getVersion() const
-{
-	return(version);
-}
+std::string const &APayload::getVersion() const { return (version); }
 
-std::string const &APayload::getBody() const
-{
-	return (body);
-}
+std::string const &APayload::getBody() const { return (body); }
