@@ -1,9 +1,8 @@
 
 #include "../include/webserv.hpp"
 
-std::map<int, std::string>	makeStatusMap()
-{
-	std::map<int, std::string>	result;
+std::map<int, std::string> makeStatusMap() {
+	std::map<int, std::string> result;
 	result[100] = "Continue";
 	result[101] = "Switching Protocol";
 	result[102] = "Processing";
@@ -66,5 +65,3 @@ int main(void)
 	std::cout << test.at(800) << std::endl;
 	return (0);
 }*/
-
-

@@ -12,9 +12,8 @@
 
 #include "../include/Request.hpp"
 
-const std::string	Request::getLines() const
-{
-	std::string	line;
+const std::string Request::getLines() const {
+	std::string line;
 
 	line += this->version;
 	line += this->body;
@@ -22,30 +21,21 @@ const std::string	Request::getLines() const
 	return (line);
 }
 
-bool	Request::seturl(std::string url)
-{
+bool Request::seturl(std::string url) {
 	this->url = url;
 	return (true);
 }
 
-std::string const	Request::geturl(void) const
-{
-	return (this->url);
-}
+std::string const Request::geturl(void) const { return (this->url); }
 
-bool	Request::setmethod(std::string method)
-{
+bool Request::setmethod(std::string method) {
 	this->method = method;
 	return (true);
 }
 
-std::string const	Request::getmethod(void) const
-{
-	return (this->method);
-}
+std::string const Request::getmethod(void) const { return (this->method); }
 
-
-//test code
+// test code
 /*
 int main()
 {
@@ -54,7 +44,7 @@ int main()
 	test->setversion("v1.2\n");
 	test->seturl("http:\n");
 	test->setbody("NICE BODY~\n");
-	
+
 	std::cout << test->getLines() << std::endl;
 	std::cout << test->geturl() << std::endl;
 	std::cout << test->getversion() << std::endl;
@@ -63,5 +53,3 @@ int main()
 	delete test;
 	return (0);
 }*/
-
-
