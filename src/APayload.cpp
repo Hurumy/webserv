@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/04 15:45:40 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/04 16:30:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ bool APayload::setBody(std::string const &_body)
 
 Result<std::string, bool> const APayload::getHeader(std::string const &key) const
 {	
+	if (header.empty() == true)
+		return Error<bool>(false);
 	if (header.find(key) == header.end())
 		return Error<bool>(false);
 	else
