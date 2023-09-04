@@ -10,29 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/webserv.hpp"
 #include "../include/Request.hpp"
-
+#include "../include/webserv.hpp"
 
 //単純なSplit Delimは完全一致 必要ならStatic外して使ってください
-static std::vector<std::string> lineSpliter(std::string origin, std::string delim)
-{
-	std::vector<std::string>	list;
-	long						pos;
-	int							delimlen = delim.length();
-	int							offset;
+static std::vector<std::string> lineSpliter(std::string origin,
+											std::string delim) {
+	std::vector<std::string> list;
+	long pos;
+	int delimlen = delim.length();
+	int offset;
 
 	if (delimlen == 0)
 		list.push_back(origin);
-	else
-	{
+	else {
 		offset = 0;
 		pos = 0;
-		while (1)
-		{
+		while (1) {
 			pos = origin.find(delim, offset);
-			if ((unsigned long)pos == std::string::npos)
-			{
+			if ((unsigned long)pos == std::string::npos) {
 				list.push_back(origin.substr(offset));
 				break;
 			}
@@ -43,53 +39,43 @@ static std::vector<std::string> lineSpliter(std::string origin, std::string deli
 	return (list);
 }
 
-//1行目をパースしてRequestに中身をセットする
-static bool	parseFirstLine(Request &req, std::string Firstline)
-{
+// 1行目をパースしてRequestに中身をセットする
+static bool parseFirstLine(Request &req, std::string Firstline) {
 	std::vector<std::string> elems;
 
 	elems = lineSpliter(Firstline, " ");
-	if (elems.size() >= 3)
-	{
+	if (elems.size() >= 3) {
 		req.setmethod(elems.at(0));
 		req.seturl(elems.at(1));
 		req.setVersion(elems.at(2));
-	}
-	else
+	} else
 		return (false);
 	return (true);
 }
 
 //ヘッダーのうち1行をもらい、RequestにHeaderとして詰める
-static bool	addParsedLine(Request &req, std::string line)
-{
-	std::vector<std::string> 	tmp;
-	bool						status;
+static bool addParsedLine(Request &req, std::string line) {
+	std::vector<std::string> tmp;
+	bool status;
 
 	tmp = lineSpliter(line, ": ");
-	if (tmp.size() != 2)
-		return (false);
+	if (tmp.size() != 2) return (false);
 	status = req.addHeader(tmp.at(0), tmp.at(1));
-	if (status == false)
-		return (false);
+	if (status == false) return (false);
 	return (true);
 }
 
 //リクエストをパースして参照に詰める
-bool	parseRequest(Request &req, std::string rawData)
-{
+bool parseRequest(Request &req, std::string rawData) {
 	std::vector<std::string> lines;
-	bool					status;
-	
+	bool status;
+
 	lines = lineSpliter(rawData, "\n");
 	status = parseFirstLine(req, lines.at(0));
-	if (status == false)
-		return (false);
-	for (unsigned long i = 1; i < lines.size() - 2; i ++)
-	{
+	if (status == false) return (false);
+	for (unsigned long i = 1; i < lines.size() - 2; i++) {
 		status = addParsedLine(req, lines.at(i));
-		if (status == false)
-		{
+		if (status == false) {
 			std::cout << "lines.size: " << lines.size() << std::endl;
 			std::cout << "parse failed line: " << lines.at(i) << std::endl;
 			std::cout << "parse failed line: " << i << std::endl;
@@ -112,8 +98,9 @@ int main()
 		std::cout << lines.at(i) << std::endl;
 	std::cout << "====" << std::endl;
 
-	parseRequest(test, "GET / HTTP/1.1\t\nHost: xxx\nUser-Agent: FireFox\nAccept: ???\n\n");
-	
+	parseRequest(test, "GET / HTTP/1.1\t\nHost: xxx\nUser-Agent:
+FireFox\nAccept: ???\n\n");
+
 	std::cout << test.getmethod() << std::endl;
 	std::cout << test.geturl() << std::endl;
 	std::cout << test.getversion() << std::endl;
@@ -125,4 +112,3 @@ int main()
 	return (0);
 }
 */
-
