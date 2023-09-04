@@ -6,11 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 17:03:44 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:45:40 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "APayload.hpp"
+#include "Result.hpp"
+#include "Ok.hpp"
+#include "Error.hpp"
 
 bool APayload::setVersion(std::string const &_version)
 {
@@ -24,12 +27,12 @@ bool APayload::setBody(std::string const &_body)
 	return (true);
 }
 
-std::string const &APayload::getHeader(std::string const &key) const
+Result<std::string, bool> const APayload::getHeader(std::string const &key) const
 {	
 	if (header.find(key) == header.end())
-		return (header.rbegin()->second);
+		return Error<bool>(false);
 	else
-		return (header.at(key));
+		return Ok<std::string>(header.at(key));
 }
 
 bool APayload::addHeader(std::string const &key, std::string const &value)
