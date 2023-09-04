@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 12:50:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 19:05:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/04 15:53:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ TEST(ResponseTest, headerTest01) {
 	std::string expected("text/html;charset=UTF-8");
 
 	response.addHeader("Content-Type", expected);
-	ASSERT_STREQ(response.getHeader("Content-Type").c_str(), expected.c_str());
+	ASSERT_STREQ(response.getHeader("Content-Type").getOk().c_str(), expected.c_str());
 }
 
 TEST(ResponseTest, headerTest02) {
@@ -61,6 +61,14 @@ TEST(ResponseTest, headerTest02) {
 
 	response.addHeader("Content-Type", expected);
 	ASSERT_EQ(response.addHeader("Content-Type", expected), false);
+}
+
+TEST(ResponseTest, headerTest03) {
+	Response response;
+
+	ASSERT_EQ(response.getHeader("Content-Type").isOK(), false);
+	ASSERT_EQ(response.getHeader("Content-Type").isError(), true);
+	ASSERT_EQ(response.getHeader("Content-Type").getError(), false);
 }
 
 #define EXPECTED "\
