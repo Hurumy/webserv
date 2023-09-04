@@ -9,18 +9,13 @@ const std::string	Response::getLines() const
 	std::ostringstream numStatus;
 	std::ostringstream numContentLength;
 
-	line += version;
-	line += " ";
+	line += version + " ";
 	numStatus << status;
-	line += numStatus.str();
-	line += " ";
-	line += statusMessage;
-	line += "\r\n";
+	line += numStatus.str() + " ";
+	line += statusMessage + "\r\n";
 	for (std::map<std::string, std::string>::const_iterator iter = header.begin(); iter != header.end(); ++iter) {
-		line += iter->first;
-		line += ": ";
-		line += iter->second;
-		line += "\r\n";
+		line += iter->first + ": ";
+		line += iter->second + "\r\n";
 	}
 	line += "\r\n";
 	line += body;
