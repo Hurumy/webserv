@@ -56,8 +56,6 @@ class Result {
 			ERROR,
 		};
 		tag t;
-		union {
-			T ok;
-			E error;
-		};
+		T ok;
+		E error;
 };

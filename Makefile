@@ -17,7 +17,7 @@ CFLAGS		:= -Wall -Wextra -Werror -std=c++98
 SRC_FILES	:= \
 				main.cpp \
 				APayload.cpp \
-				Response.cpp \
+				Response.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
