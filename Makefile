@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/02 17:08:18 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/03 16:59:28 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ CC			:= c++
 CFLAGS		:= -Wall -Wextra -Werror -std=c++98
 
 SRC_FILES	:= \
-				main.cpp
+				main.cpp \
+				APayload.cpp \
+				Response.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
