@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 14:55:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/04 15:44:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/04 16:23:55 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,6 @@ class Result {
 				}
 			}
 			return *this;
-		}
-		~Result() {
-			switch (t) {
-				case OK:
-					ok.~T();
-					break;
-				case ERROR:
-					error.~E();
-					break;
-			}
 		}
 
 		bool isOK() const { return t == OK; }
