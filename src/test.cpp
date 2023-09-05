@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 15:41:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:48:04 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@
 #include "webserv.hpp"
 
 // request_parser
-bool 				parseRequest(Request &req, std::string rawData);
-int					makeResBody(Request req, Response &res);
+bool parseRequest(Request &req, std::string rawData);
+int makeResBody(Request req, Response &res);
 
 #define FILE_READ_SIZE 500
 

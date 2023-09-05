@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/04 13:12:04 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/05 13:09:10 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ UNAME_OS		:= $(shell uname -s)
 SRC_FILES		:= \
 					gtest_main.cpp \
 					Response_test.cpp \
-					Result_test.cpp
+					Result_test.cpp \
+					Status_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -34,7 +35,8 @@ DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
 					APayload.cpp \
-					Response.cpp
+					Response.cpp \
+					Status.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
@@ -63,7 +65,7 @@ $(DEPS):
 $(WS_DEPS):
 
 
-utest: all
+utest: re
 	./$(NAME)
 
 all: $(NAME)
