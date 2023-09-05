@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 15:48:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:55:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,14 @@ int makeSocket(int &socketfd, sockaddr_in &s_bind) {
 	//ソケット作るよ
 	socketfd = socket(AF_INET, SOCK_STREAM, 0);
 	if (socketfd < 0) {
-		std::cout << RED"socket syscall is failed;;"RESET << std::endl;
+		std::cout << RED "socket syscall is failed;;" RESET << std::endl;
 		return (false);
 	}
 
 	// bindするよ
 	status = bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
 	if (status == -1) {
-		std::cout << RED"bind syscall is failed;;"RESET << std::endl;
+		std::cout << RED "bind syscall is failed;;" RESET << std::endl;
 		return (false);
 	}
 	return (true);
@@ -73,14 +73,14 @@ bool makeRequest(Request &request, int clientfd) {
 	req_rawdata = readRequest(clientfd);
 	status = parseRequest(request, req_rawdata);
 	if (status == false) {
-		std::cout << RED"parseRequest failed"RESET << std::endl;
+		std::cout << RED "parseRequest failed" RESET << std::endl;
 		return (false);
 	}
 
 	// put out for debug
 	//std::cout << "==rawdata====" << std::endl;
 	//std::cout << req_rawdata << std::endl;
-	std::cout << CYAN"=PARSED REQUEST============" << std::endl;
+	std::cout << CYAN "=PARSED REQUEST============" << std::endl;
 	std::cout << "HEAD: " << request.getMethod() << std::endl;
 	std::cout << "URL: " << request.getUrl() << std::endl;
 	std::cout << "VERSION: " << request.getVersion() << std::endl;
@@ -100,7 +100,7 @@ bool makeRequest(Request &request, int clientfd) {
 			  << request.getHeader("Sec-Fetch-Mode").getOk() << std::endl;
 	std::cout << "Sec-Fetch-Site: "
 			  << request.getHeader("Sec-Fetch-Site").getOk() << std::endl;
-	std::cout << "==========================="RESET << std::endl;
+	std::cout << "===========================" RESET << std::endl;
 	return (true);
 }
 
@@ -123,7 +123,7 @@ int sendResponse(Response &response, Request &request, int clientfd) {
 	
 	// HTTPバージョンのチェック
 	if (request.getVersion().compare("HTTP/1.1") != 0) {
-		std::cout << RED"SendResponse: Invalid Version(not HTTP/1.1)"RESET << std::endl;
+		std::cout << RED "SendResponse: Invalid Version(not HTTP/1.1)" RESET << std::endl;
 		response.setStatus(505);
 		response.setStatusMessage("HTTP Version Not Supported");
 	}
@@ -131,17 +131,17 @@ int sendResponse(Response &response, Request &request, int clientfd) {
 	// responseに中身詰めます
 	status = makeResponse(request, response);
 	if (status == false) {
-		std::cout << RED"Make Response is failed;; STATUSCODE: " << response.getStatus() << RESET << std::endl;
+		std::cout << RED "Make Response is failed;; STATUSCODE: " << response.getStatus() << RESET << std::endl;
 	}
-	std::cout << YELLOW"=Maked Response=======" << std::endl;
+	std::cout << YELLOW "=Maked Response=======" << std::endl;
 	std::cout << response.getLines() << std::endl;
-	std::cout << "======================"RESET << std::endl;
+	std::cout << "======================" RESET << std::endl;
 	
 	//レスポンスをWriteで書き込んで送信
 	line = response.getLines();
 	status = write(clientfd, line.c_str(), line.length());
 	if (status == -1) {
-		std::cout << RED"write syscall is failed;;"RESET << std::endl;
+		std::cout << RED "write syscall is failed;;" RESET << std::endl;
 		return (false);
 	}
 	return (true);
@@ -158,8 +158,8 @@ int main() {
 	//ソケットを作る
 	s_bind_siz = sizeof(s_bind);
 	status = makeSocket(socketfd, s_bind);
-	if (status == false) std::cout << RED"makeSocket failed;;"RESET << std::endl;
-	std::cout << GREY"===Start Listening from the socket!"RESET << std::endl;
+	if (status == false) std::cout << RED "makeSocket failed;;" RESET << std::endl;
+	std::cout << GREY "===Start Listening from the socket!" RESET << std::endl;
 
 	// Listen開始します
 	listen(socketfd, 2);
@@ -167,29 +167,29 @@ int main() {
 	//ループで回します
 	while (1) {
 		// Accept待ちます
-		std::cout << GREY"Waiting for new connection by accept"RESET << std::endl;
+		std::cout << GREY "Waiting for new connection by accept" RESET << std::endl;
 		clientfd = accept(socketfd, (struct sockaddr *)&s_bind, &s_bind_siz);
 
 		// Acceptが通ったのでリクエストをReadします
 		request = new Request();
-		std::cout << GREY"connected. then read" << std::endl
-				  << "========"RESET << std::endl
+		std::cout << GREY "connected. then read" << std::endl
+				  << "========" RESET << std::endl
 				  << std::endl;
 		status = makeRequest(*request, clientfd);
-		if (status == false) std::cout << RED"MakeRequest Failed;;"RESET << std::endl;
+		if (status == false) std::cout << RED "MakeRequest Failed;;" RESET << std::endl;
 
 		//クライアントにおくるレスポンスを作る
 		response = new Response();
 		status = sendResponse(*response, *request, clientfd);
-		if (status == false) std::cout << RED"SendResponse failed;;"RESET << std::endl;
+		if (status == false) std::cout << RED "SendResponse failed;;" RESET << std::endl;
 
 		// FDを閉じて次の接続をまつ
 		close(clientfd);
 		// delete response;
 		// delete request;
 		std::cout << std::endl
-				  << GREY"========" << std::endl
-				  << "close the connection."RESET << std::endl
+				  << GREY "========" << std::endl
+				  << "close the connection." RESET << std::endl
 				  << std::endl;
 	}
 
