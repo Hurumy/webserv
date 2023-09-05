@@ -6,15 +6,15 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 11:02:03 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:06:09 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/APayload.hpp"
-#include "../include/Request.hpp"
-#include "../include/Response.hpp"
-#include "../include/Result.hpp"
-#include "../include/webserv.hpp"
+#include "APayload.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "Result.hpp"
+#include "webserv.hpp"
 
 // request_parser
 bool parseRequest(Request &req, std::string rawData);

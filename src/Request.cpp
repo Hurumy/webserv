@@ -6,11 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 11:01:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:05:44 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Request.hpp"
+#include "Request.hpp"
 
 const std::string Request::getLines() const {
 	std::string line;
