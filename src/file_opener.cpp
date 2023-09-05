@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file_opener.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/05 15:31:46 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/05 15:47:07 by komatsud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "APayload.hpp"
 #include "Error.hpp"
@@ -6,10 +17,6 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
-
-#define FILE_READ_SIZE 500
-#define DEFAULT_EXT_TYPE "text/plain"
-#define DEFAULT_RETURN_FILE "./content/readme.html"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
@@ -32,7 +39,7 @@ static unsigned long long setFileSize(std::string Filename, Response &res) {
 	ss << bytes;
 	length = ss.str();
 	res.addHeader("Content-Length", length);
-	std::cout << "SetFileSize: " << length << std::endl;
+	//std::cout << "SetFileSize: " << length << std::endl;
 	return (bytes);
 }
 

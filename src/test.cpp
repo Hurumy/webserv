@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 12:52:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 15:55:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,52 +22,65 @@ int makeResBody(Request req, Response &res);
 
 #define FILE_READ_SIZE 500
 
-bool MakeResponse(Request &request, Response &response) {
+int makeSocket(int &socketfd, sockaddr_in &s_bind) {
+	socklen_t s_bind_siz;
 	int status;
 
-	response.setVersion("HTTP/1.1");
-	response.setStatus(200);
-	response.setStatusMessage("OK");
-	status = makeResBody(request, response);
-	if (status == -1) return (false);
+	s_bind.sin_family = AF_INET;
+	s_bind.sin_port = htons(DEFAULT_PORT);
+	s_bind.sin_addr.s_addr = INADDR_ANY;
+	s_bind_siz = sizeof(s_bind);
+
+	//ソケット作るよ
+	socketfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (socketfd < 0) {
+		std::cout << RED "socket syscall is failed;;" RESET << std::endl;
+		return (false);
+	}
+
+	// bindするよ
+	status = bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
+	if (status == -1) {
+		std::cout << RED "bind syscall is failed;;" RESET << std::endl;
+		return (false);
+	}
 	return (true);
 }
 
-static std::string ReadRequest(int fd) {
-	int status;
-	int is_end = 0;
-	char buf[FILE_READ_SIZE];
-	std::string result;
-	struct pollfd s_poll;
+static std::string readRequest(int fd) {
+	int 			status;
+	int 			is_end = 0;
+	char 			buf[FILE_READ_SIZE];
+	std::string 	result;
+	struct pollfd 	s_poll;
 
 	s_poll.fd = fd;
 	s_poll.events = POLLIN;
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status > 0) result += buf;
-		if (poll(&s_poll, 1, 500) >= 0 && (s_poll.revents & POLLIN) == 0)
+		if (poll(&s_poll, 1, 1000) >= 0 && (s_poll.revents & POLLIN) == 0)
 			is_end = 1;
 	} while (status > 0 && is_end != 1);
-
 	if (status == -1 || is_end != 1) return ("");
 	return (result);
 }
 
-bool MakeRequest(Request &request, int clientfd) {
+bool makeRequest(Request &request, int clientfd) {
 	bool status;
 	std::string req_rawdata;
 
-	req_rawdata = ReadRequest(clientfd);
+	req_rawdata = readRequest(clientfd);
 	status = parseRequest(request, req_rawdata);
 	if (status == false) {
-		std::cout << "parseRequest failed" << std::endl;
+		std::cout << RED "parseRequest failed" RESET << std::endl;
 		return (false);
 	}
 
 	// put out for debug
-	// std::cout << "==rawdata====" << std::endl;
-	// std::cout << req_rawdata << std::endl;
-	std::cout << "=============" << std::endl;
+	//std::cout << "==rawdata====" << std::endl;
+	//std::cout << req_rawdata << std::endl;
+	std::cout << CYAN "=PARSED REQUEST============" << std::endl;
 	std::cout << "HEAD: " << request.getMethod() << std::endl;
 	std::cout << "URL: " << request.getUrl() << std::endl;
 	std::cout << "VERSION: " << request.getVersion() << std::endl;
@@ -87,77 +100,66 @@ bool MakeRequest(Request &request, int clientfd) {
 			  << request.getHeader("Sec-Fetch-Mode").getOk() << std::endl;
 	std::cout << "Sec-Fetch-Site: "
 			  << request.getHeader("Sec-Fetch-Site").getOk() << std::endl;
+	std::cout << "===========================" RESET << std::endl;
 	return (true);
 }
 
-int SendResponse(Response &response, Request &request, int clientfd) {
+bool makeResponse(Request &request, Response &response) {
+	int	status;
+	
+	response.setVersion("HTTP/1.1");
+	status = makeResBody(request, response);
+	if (status == -1)
+		return (false);
+	return (true);
+}
+
+int sendResponse(Response &response, Request &request, int clientfd) {
 	std::string line;
 	int status;
 
+	response.setStatus(200);
+	response.setStatusMessage("OK");
+	
 	// HTTPバージョンのチェック
-	if (request.getVersion().compare("HTTP/1.1\r\n") != 0) {
-		std::cout << "SendResponse: Invalid Version(not HTTP/1.1)" << std::endl;
-		// response.setStatus(505);
-		// response.setStatusMessage("HTTP Version Not Supported");
-		// return (false);
+	if (request.getVersion().compare("HTTP/1.1") != 0) {
+		std::cout << RED "SendResponse: Invalid Version(not HTTP/1.1)" RESET << std::endl;
+		response.setStatus(505);
+		response.setStatusMessage("HTTP Version Not Supported");
 	}
 
 	// responseに中身詰めます
-	status = MakeResponse(request, response);
+	status = makeResponse(request, response);
 	if (status == false) {
-		std::cout << "Make Response is failed;;" << std::endl;
-		// return (false);
+		std::cout << RED "Make Response is failed;; STATUSCODE: " << response.getStatus() << RESET << std::endl;
 	}
-	std::cout << "Response: " << response.getLines() << std::endl;
+	std::cout << YELLOW "=Maked Response=======" << std::endl;
+	std::cout << response.getLines() << std::endl;
+	std::cout << "======================" RESET << std::endl;
+	
 	//レスポンスをWriteで書き込んで送信
 	line = response.getLines();
 	status = write(clientfd, line.c_str(), line.length());
 	if (status == -1) {
-		std::cout << "write syscall is failed;;" << std::endl;
-		return (false);
-	}
-	return (true);
-}
-
-int MakeSocket(int &socketfd, sockaddr_in &s_bind) {
-	socklen_t s_bind_siz;
-	int status;
-
-	s_bind.sin_family = AF_INET;
-	s_bind.sin_port = htons(8080);
-	s_bind.sin_addr.s_addr = INADDR_ANY;
-	s_bind_siz = sizeof(s_bind);
-
-	//ソケット作るよ
-	socketfd = socket(AF_INET, SOCK_STREAM, 0);
-	if (socketfd < 0) {
-		std::cout << "socket syscall is failed;;" << std::endl;
-		return (false);
-	}
-
-	// bindするよ
-	status = bind(socketfd, (const struct sockaddr *)&s_bind, s_bind_siz);
-	if (status == -1) {
-		std::cout << "bind syscall is failed;;" << std::endl;
+		std::cout << RED "write syscall is failed;;" RESET << std::endl;
 		return (false);
 	}
 	return (true);
 }
 
 int main() {
-	int socketfd;
-	sockaddr_in s_bind;
-	socklen_t s_bind_siz;
-	int clientfd;
-	int status;
-	Request *request;
-	Response *response;
-
+	int				socketfd;
+	sockaddr_in		s_bind;
+	socklen_t		s_bind_siz;
+	int				clientfd;
+	bool			status;
+	Request			*request;
+	Response		*response;
 	//ソケットを作る
 	s_bind_siz = sizeof(s_bind);
-	status = MakeSocket(socketfd, s_bind);
-	if (status == false) std::cout << "MakeSocket failed;;" << std::endl;
-	std::cout << "===Start Listening from the socket!" << std::endl;
+	status = makeSocket(socketfd, s_bind);
+	if (status == false) std::cout << RED "makeSocket failed;;" RESET << std::endl;
+	std::cout << GREY "===Start Listening from the socket!" RESET << std::endl;
 
 	// Listen開始します
 	listen(socketfd, 2);
@@ -165,31 +167,32 @@ int main() {
 	//ループで回します
 	while (1) {
 		// Accept待ちます
-		std::cout << "Waiting for new connection by accept" << std::endl;
+		std::cout << GREY "Waiting for new connection by accept" RESET << std::endl;
 		clientfd = accept(socketfd, (struct sockaddr *)&s_bind, &s_bind_siz);
 
 		// Acceptが通ったのでリクエストをReadします
 		request = new Request();
-		std::cout << "connected. then read" << std::endl
-				  << "========" << std::endl
+		std::cout << GREY "connected. then read" << std::endl
+				  << "========" RESET << std::endl
 				  << std::endl;
-		status = MakeRequest(*request, clientfd);
-		if (status == false) std::cout << "MakeRequest Failed;;" << std::endl;
+		status = makeRequest(*request, clientfd);
+		if (status == false) std::cout << RED "MakeRequest Failed;;" RESET << std::endl;
 
 		//クライアントにおくるレスポンスを作る
 		response = new Response();
-		status = SendResponse(*response, *request, clientfd);
-		if (status == false) std::cout << "SendResponse failed;;" << std::endl;
+		status = sendResponse(*response, *request, clientfd);
+		if (status == false) std::cout << RED "SendResponse failed;;" RESET << std::endl;
 
 		// FDを閉じて次の接続をまつ
 		close(clientfd);
 		// delete response;
 		// delete request;
 		std::cout << std::endl
-				  << "========" << std::endl
-				  << "close the connection." << std::endl
+				  << GREY "========" << std::endl
+				  << "close the connection." RESET << std::endl
 				  << std::endl;
 	}
 
 	return 0;
 }
+

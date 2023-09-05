@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 11:30:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 14:58:45 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,15 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 
 // 1行目をパースしてRequestに中身をセットする
 static bool parseFirstLine(Request &req, std::string Firstline) {
-	std::vector<std::string> elems;
+	std::vector<std::string>	elems;
+	std::vector<std::string>	tmp;
 
 	elems = lineSpliter(Firstline, " ");
 	if (elems.size() >= 3) {
 		req.setMethod(elems.at(0));
 		req.setUrl(elems.at(1));
-		req.setVersion(elems.at(2));
+		tmp = lineSpliter(elems.at(2), "\r");
+		req.setVersion(tmp.at(0));
 	} else
 		return (false);
 	return (true);
@@ -72,14 +74,8 @@ bool parseRequest(Request &req, std::string rawData) {
 	lines = lineSpliter(rawData, "\n");
 	status = parseFirstLine(req, lines.at(0));
 	if (status == false) return (false);
-	for (unsigned long i = 1; i < lines.size() - 2; i++) {
+	for (unsigned long i = 1; i < lines.size(); i++) {
 		status = addParsedLine(req, lines.at(i));
-		if (status == false) {
-			std::cout << "lines.size: " << lines.size() << std::endl;
-			std::cout << "parse failed line: " << lines.at(i) << std::endl;
-			std::cout << "parse failed line: " << i << std::endl;
-			return (false);
-		}
 	}
 	return (true);
 }
