@@ -6,11 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/04 19:03:36 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:05:44 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Request.hpp"
+#include "Request.hpp"
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -21,19 +21,19 @@ const std::string Request::getLines() const {
 	return (line);
 }
 
-bool Request::seturl(std::string url) {
+bool Request::setUrl(std::string url) {
 	this->url = url;
 	return (true);
 }
 
-std::string const Request::geturl(void) const { return (this->url); }
+std::string const Request::getUrl(void) const { return (this->url); }
 
-bool Request::setmethod(std::string method) {
+bool Request::setMethod(std::string method) {
 	this->method = method;
 	return (true);
 }
 
-std::string const Request::getmethod(void) const { return (this->method); }
+std::string const Request::getMethod(void) const { return (this->method); }
 
 // test code
 /*
@@ -46,9 +46,9 @@ int main()
 	test->setbody("NICE BODY~\n");
 
 	std::cout << test->getLines() << std::endl;
-	std::cout << test->geturl() << std::endl;
-	std::cout << test->getversion() << std::endl;
-	std::cout << test->getbody() << std::endl;
+	std::cout << test->getUrl() << std::endl;
+	std::cout << test->getVersion() << std::endl;
+	std::cout << test->getBody() << std::endl;
 
 	delete test;
 	return (0);

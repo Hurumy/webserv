@@ -6,12 +6,12 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/04 16:56:42 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:05:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/Request.hpp"
-#include "../include/webserv.hpp"
+#include "Request.hpp"
+#include "webserv.hpp"
 
 //単純なSplit Delimは完全一致 必要ならStatic外して使ってください
 static std::vector<std::string> lineSpliter(std::string origin,
@@ -45,8 +45,8 @@ static bool parseFirstLine(Request &req, std::string Firstline) {
 
 	elems = lineSpliter(Firstline, " ");
 	if (elems.size() >= 3) {
-		req.setmethod(elems.at(0));
-		req.seturl(elems.at(1));
+		req.setMethod(elems.at(0));
+		req.setUrl(elems.at(1));
 		req.setVersion(elems.at(2));
 	} else
 		return (false);
@@ -101,9 +101,9 @@ int main()
 	parseRequest(test, "GET / HTTP/1.1\t\nHost: xxx\nUser-Agent:
 FireFox\nAccept: ???\n\n");
 
-	std::cout << test.getmethod() << std::endl;
-	std::cout << test.geturl() << std::endl;
-	std::cout << test.getversion() << std::endl;
+	std::cout << test.getMethod() << std::endl;
+	std::cout << test.getUrl() << std::endl;
+	std::cout << test.getVersion() << std::endl;
 
 	std::cout << test.getHeader("Host") << std::endl;
 	std::cout << test.getHeader("User-Agent") << std::endl;

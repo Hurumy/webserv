@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/04 16:59:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 10:58:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ class Request: public virtual APayload
 	protected:
 	public:
 		const std::string	getLines() const;
-		bool				seturl(std::string url);
-		std::string const	geturl(void) const;
-		bool				setmethod(std::string method);
-		std::string const	getmethod(void) const;
+		bool				setUrl(std::string url);
+		std::string const	getUrl(void) const;
+		bool				setMethod(std::string method);
+		std::string const	getMethod(void) const;
 };
 
 

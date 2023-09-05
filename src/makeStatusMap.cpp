@@ -1,5 +1,5 @@
 
-#include "../include/webserv.hpp"
+#include "webserv.hpp"
 
 std::map<int, std::string> makeStatusMap() {
 	std::map<int, std::string> result;
