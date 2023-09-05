@@ -13,7 +13,7 @@
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
-static size_t setFileSize(std::string Filename, Response &res) {	
+static unsigned long long setFileSize(std::string Filename, Response &res) {	
 	unsigned long long		bytes = 0;
 	int						status = 0;
 	int						fd;
