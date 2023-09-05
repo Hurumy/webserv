@@ -69,7 +69,8 @@ std::map<unsigned int, std::string> Status::initStatusMap() {
 	return m;
 }
 
-Result<std::string, bool> const Status::getStatusMessage(unsigned int const statusCode) {
+Result<std::string, bool> const Status::getStatusMessage(
+	unsigned int const statusCode) {
 	if (statusMap.empty() == true) return Error<bool>(false);
 	if (statusMap.find(statusCode) == statusMap.end())
 		return Error<bool>(false);
