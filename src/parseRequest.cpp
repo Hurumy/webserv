@@ -40,8 +40,8 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 
 // 1行目をパースしてRequestに中身をセットする
 static bool parseFirstLine(Request &req, std::string Firstline) {
-	std::vector<std::string>	elems;
-	std::vector<std::string>	tmp;
+	std::vector<std::string> elems;
+	std::vector<std::string> tmp;
 
 	elems = lineSpliter(Firstline, " ");
 	if (elems.size() >= 3) {

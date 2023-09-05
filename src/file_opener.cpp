@@ -39,7 +39,7 @@ static unsigned long long setFileSize(std::string Filename, Response &res) {
 	ss << bytes;
 	length = ss.str();
 	res.addHeader("Content-Length", length);
-	//std::cout << "SetFileSize: " << length << std::endl;
+	// std::cout << "SetFileSize: " << length << std::endl;
 	return (bytes);
 }
 
