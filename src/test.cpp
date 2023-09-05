@@ -48,11 +48,11 @@ int makeSocket(int &socketfd, sockaddr_in &s_bind) {
 }
 
 static std::string readRequest(int fd) {
-	int 			status;
-	int 			is_end = 0;
-	char 			buf[FILE_READ_SIZE];
-	std::string 	result;
-	struct pollfd 	s_poll;
+	int status;
+	int is_end = 0;
+	char buf[FILE_READ_SIZE];
+	std::string result;
+	struct pollfd s_poll;
 
 	s_poll.fd = fd;
 	s_poll.events = POLLIN;
@@ -78,8 +78,8 @@ bool makeRequest(Request &request, int clientfd) {
 	}
 
 	// put out for debug
-	//std::cout << "==rawdata====" << std::endl;
-	//std::cout << req_rawdata << std::endl;
+	// std::cout << "==rawdata====" << std::endl;
+	// std::cout << req_rawdata << std::endl;
 	std::cout << CYAN "=PARSED REQUEST============" << std::endl;
 	std::cout << "HEAD: " << request.getMethod() << std::endl;
 	std::cout << "URL: " << request.getUrl() << std::endl;
@@ -105,12 +105,11 @@ bool makeRequest(Request &request, int clientfd) {
 }
 
 bool makeResponse(Request &request, Response &response) {
-	int	status;
-	
+	int status;
+
 	response.setVersion("HTTP/1.1");
 	status = makeResBody(request, response);
-	if (status == -1)
-		return (false);
+	if (status == -1) return (false);
 	return (true);
 }
 
@@ -120,10 +119,11 @@ int sendResponse(Response &response, Request &request, int clientfd) {
 
 	response.setStatus(200);
 	response.setStatusMessage("OK");
-	
+
 	// HTTPバージョンのチェック
 	if (request.getVersion().compare("HTTP/1.1") != 0) {
-		std::cout << RED "SendResponse: Invalid Version(not HTTP/1.1)" RESET << std::endl;
+		std::cout << RED "SendResponse: Invalid Version(not HTTP/1.1)" RESET
+				  << std::endl;
 		response.setStatus(505);
 		response.setStatusMessage("HTTP Version Not Supported");
 	}
@@ -131,12 +131,13 @@ int sendResponse(Response &response, Request &request, int clientfd) {
 	// responseに中身詰めます
 	status = makeResponse(request, response);
 	if (status == false) {
-		std::cout << RED "Make Response is failed;; STATUSCODE: " << response.getStatus() << RESET << std::endl;
+		std::cout << RED "Make Response is failed;; STATUSCODE: "
+				  << response.getStatus() << RESET << std::endl;
 	}
 	std::cout << YELLOW "=Maked Response=======" << std::endl;
 	std::cout << response.getLines() << std::endl;
 	std::cout << "======================" RESET << std::endl;
-	
+
 	//レスポンスをWriteで書き込んで送信
 	line = response.getLines();
 	status = write(clientfd, line.c_str(), line.length());
@@ -148,17 +149,18 @@ int sendResponse(Response &response, Request &request, int clientfd) {
 }
 
 int main() {
-	int				socketfd;
-	sockaddr_in		s_bind;
-	socklen_t		s_bind_siz;
-	int				clientfd;
-	bool			status;
-	Request			*request;
-	Response		*response;
+	int socketfd;
+	sockaddr_in s_bind;
+	socklen_t s_bind_siz;
+	int clientfd;
+	bool status;
+	Request *request;
+	Response *response;
 	//ソケットを作る
 	s_bind_siz = sizeof(s_bind);
 	status = makeSocket(socketfd, s_bind);
-	if (status == false) std::cout << RED "makeSocket failed;;" RESET << std::endl;
+	if (status == false)
+		std::cout << RED "makeSocket failed;;" RESET << std::endl;
 	std::cout << GREY "===Start Listening from the socket!" RESET << std::endl;
 
 	// Listen開始します
@@ -167,7 +169,8 @@ int main() {
 	//ループで回します
 	while (1) {
 		// Accept待ちます
-		std::cout << GREY "Waiting for new connection by accept" RESET << std::endl;
+		std::cout << GREY "Waiting for new connection by accept" RESET
+				  << std::endl;
 		clientfd = accept(socketfd, (struct sockaddr *)&s_bind, &s_bind_siz);
 
 		// Acceptが通ったのでリクエストをReadします
@@ -176,12 +179,14 @@ int main() {
 				  << "========" RESET << std::endl
 				  << std::endl;
 		status = makeRequest(*request, clientfd);
-		if (status == false) std::cout << RED "MakeRequest Failed;;" RESET << std::endl;
+		if (status == false)
+			std::cout << RED "MakeRequest Failed;;" RESET << std::endl;
 
 		//クライアントにおくるレスポンスを作る
 		response = new Response();
 		status = sendResponse(*response, *request, clientfd);
-		if (status == false) std::cout << RED "SendResponse failed;;" RESET << std::endl;
+		if (status == false)
+			std::cout << RED "SendResponse failed;;" RESET << std::endl;
 
 		// FDを閉じて次の接続をまつ
 		close(clientfd);
@@ -195,4 +200,3 @@ int main() {
 
 	return 0;
 }
-
