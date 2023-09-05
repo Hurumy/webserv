@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file_opener.cpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/05 15:31:46 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/05 15:31:47 by komatsud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "Error.hpp"
 #include "Ok.hpp"
@@ -6,10 +17,6 @@
 #include "APayload.hpp"
 #include "Response.hpp"
 #include "Request.hpp"
-
-#define FILE_READ_SIZE 500
-#define	DEFAULT_EXT_TYPE "text/plain"
-#define	DEFAULT_RETURN_FILE	"./content/readme.html"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
