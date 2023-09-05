@@ -6,8 +6,8 @@
 
 // int	setcontentType(Request req, Response &res)
 // {
-// 	std::string	file = req.geturl();
-// 	size_t		len = req.geturl().size();
+// 	std::string	file = req.getUrl();
+// 	size_t		len = req.getUrl().size();
 // 	std::string	checkstr;
 // 	std::map<std::string, std::string>	ext;
 
@@ -29,9 +29,9 @@
 // 	char		buf[FILE_READ_SIZE];
 // 	std::string	body;
 
-// 	if (req.geturl() == "")
+// 	if (req.getUrl() == "")
 // 		return (0);
-// 	status = open(req.geturl(), O_RDONLY);
+// 	status = open(req.getUrl(), O_RDONLY);
 // 	if (status == -1)
 // 		return (-1);
 // 	fd = status;

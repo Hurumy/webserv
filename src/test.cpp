@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/04 19:15:46 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:02:03 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,8 @@ bool MakeRequest(Request &request, int clientfd) {
 	std::cout << "==rawdata====" << std::endl;
 	std::cout << req_rawdata << std::endl;
 	std::cout << "=============" << std::endl;
-	std::cout << "HEAD: " << request.getmethod() << std::endl;
-	std::cout << "URL: " << request.geturl() << std::endl;
+	std::cout << "HEAD: " << request.getMethod() << std::endl;
+	std::cout << "URL: " << request.getUrl() << std::endl;
 	std::cout << "VERSION: " << request.getVersion() << std::endl;
 	std::cout << "Host: " << request.getHeader("Host").getOk() << std::endl;
 	std::cout << "User-Agent: " << request.getHeader("User-Agent").getOk()
