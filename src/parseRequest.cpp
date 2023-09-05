@@ -6,15 +6,15 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 11:05:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:30:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 #include "webserv.hpp"
 
-//単純なSplit Delimは完全一致 必要ならStatic外して使ってください
-static std::vector<std::string> lineSpliter(std::string origin,
+//単純なSplit Delimは完全一致
+std::vector<std::string> lineSpliter(std::string origin,
 											std::string delim) {
 	std::vector<std::string> list;
 	long pos;

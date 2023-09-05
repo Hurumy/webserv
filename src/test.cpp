@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 11:06:09 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:52:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,78 +17,20 @@
 #include "webserv.hpp"
 
 // request_parser
-bool parseRequest(Request &req, std::string rawData);
+bool 				parseRequest(Request &req, std::string rawData);
+int					makeResBody(Request req, Response &res);
 
 #define FILE_READ_SIZE 500
 
-// std::string	ft_stoull(unsigned long long num)
-// {
-// 	std::string	res;
-// }
-
-static size_t GetFilesize(std::string Filename) {
-	size_t bytes = 0;
-	int status = 0;
-	int fd;
-	char buf[FILE_READ_SIZE];
-
-	fd = open(Filename.c_str(), O_RDONLY);
-	if (fd == -1) return (0);
-	do {
-		status = read(fd, buf, FILE_READ_SIZE);
-		if (status > 0) bytes += status;
-	} while (status > 0);
-	if (status == -1) return (0);
-	close(fd);
-	return (bytes);
-}
-
-static std::string GetFileContents(std::string Filename) {
-	int status;
-	int fd;
-	char buf[FILE_READ_SIZE];
-	std::string result;
-
-	fd = open(Filename.c_str(), O_RDONLY);
-	if (fd == -1) return ("");
-	do {
-		status = read(fd, buf, FILE_READ_SIZE);
-		if (status > 0) result += buf;
-	} while (status > 0);
-	if (status == -1) return ("");
-	close(fd);
-	return (result);
-}
-
-bool ReadFile(Response &response, std::string Filename) {
-	unsigned long long bytes;
-	std::string body;
-
-	bytes = GetFilesize(Filename);
-	if (bytes == 0) return (false);
-
-	//バイト数をResponseにセットする
-	response.addHeader("Content-Length", "7000");
-
-	//中身読み込む
-	body = GetFileContents(Filename);
-	if (body == "") return (false);
-
-	// responseにセットする
-	response.setBody(body);
-	response.addHeader("Content-Type", "text/html;charset=UTF-8");
-
-	return (true);
-}
-
-bool MakeResponse(Response &response) {
+bool MakeResponse(Request &request, Response &response) {
+	int	status;
+	
 	response.setVersion("HTTP/1.1");
 	response.setStatus(200);
 	response.setStatusMessage("OK");
-	response.setBody("Hello World!");
-	// response.addHeader("Content-Type", "text/plain");
-	// response.addHeader("Content-Length", "12");
-
+	status = makeResBody(request, response);
+	if (status == -1)
+		return (false);
 	return (true);
 }
 
@@ -124,8 +66,8 @@ bool MakeRequest(Request &request, int clientfd) {
 	}
 
 	// put out for debug
-	std::cout << "==rawdata====" << std::endl;
-	std::cout << req_rawdata << std::endl;
+	//std::cout << "==rawdata====" << std::endl;
+	//std::cout << req_rawdata << std::endl;
 	std::cout << "=============" << std::endl;
 	std::cout << "HEAD: " << request.getMethod() << std::endl;
 	std::cout << "URL: " << request.getUrl() << std::endl;
@@ -156,20 +98,18 @@ int SendResponse(Response &response, Request &request, int clientfd) {
 	// HTTPバージョンのチェック
 	if (request.getVersion().compare("HTTP/1.1\r\n") != 0) {
 		std::cout << "SendResponse: Invalid Version(not HTTP/1.1)" << std::endl;
+		// response.setStatus(505);
+		// response.setStatusMessage("HTTP Version Not Supported");
 		// return (false);
 	}
 
 	// responseに中身詰めます
-	status = MakeResponse(response);
+	status = MakeResponse(request, response);
 	if (status == false) {
 		std::cout << "Make Response is failed;;" << std::endl;
-		return (false);
+		//return (false);
 	}
-	status = ReadFile(response, "content/readme.html");
-	if (status == false) {
-		std::cout << "HTML File Reading failed;;" << std::endl;
-		return (false);
-	}
+	std::cout << "Response: " << response.getLines() << std::endl;
 	//レスポンスをWriteで書き込んで送信
 	line = response.getLines();
 	status = write(clientfd, line.c_str(), line.length());
