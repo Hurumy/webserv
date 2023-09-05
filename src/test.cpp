@@ -17,20 +17,19 @@
 #include "webserv.hpp"
 
 // request_parser
-bool 				parseRequest(Request &req, std::string rawData);
-int					makeResBody(Request req, Response &res);
+bool parseRequest(Request &req, std::string rawData);
+int makeResBody(Request req, Response &res);
 
 #define FILE_READ_SIZE 500
 
 bool MakeResponse(Request &request, Response &response) {
-	int	status;
-	
+	int status;
+
 	response.setVersion("HTTP/1.1");
 	response.setStatus(200);
 	response.setStatusMessage("OK");
 	status = makeResBody(request, response);
-	if (status == -1)
-		return (false);
+	if (status == -1) return (false);
 	return (true);
 }
 
@@ -66,8 +65,8 @@ bool MakeRequest(Request &request, int clientfd) {
 	}
 
 	// put out for debug
-	//std::cout << "==rawdata====" << std::endl;
-	//std::cout << req_rawdata << std::endl;
+	// std::cout << "==rawdata====" << std::endl;
+	// std::cout << req_rawdata << std::endl;
 	std::cout << "=============" << std::endl;
 	std::cout << "HEAD: " << request.getMethod() << std::endl;
 	std::cout << "URL: " << request.getUrl() << std::endl;
@@ -107,7 +106,7 @@ int SendResponse(Response &response, Request &request, int clientfd) {
 	status = MakeResponse(request, response);
 	if (status == false) {
 		std::cout << "Make Response is failed;;" << std::endl;
-		//return (false);
+		// return (false);
 	}
 	std::cout << "Response: " << response.getLines() << std::endl;
 	//レスポンスをWriteで書き込んで送信

@@ -14,8 +14,7 @@
 #include "webserv.hpp"
 
 //単純なSplit Delimは完全一致
-std::vector<std::string> lineSpliter(std::string origin,
-											std::string delim) {
+std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 	std::vector<std::string> list;
 	long pos;
 	int delimlen = delim.length();
