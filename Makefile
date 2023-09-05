@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/04 19:03:26 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/05 13:02:20 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRC_FILES	:= \
 				parseRequest.cpp \
 				test.cpp \
 				makeStatusMap.cpp \
+				Status.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
