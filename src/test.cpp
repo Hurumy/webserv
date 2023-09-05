@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 12:52:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/05 14:50:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ bool MakeResponse(Request &request, Response &response) {
 	int	status;
 	
 	response.setVersion("HTTP/1.1");
-	response.setStatus(200);
-	response.setStatusMessage("OK");
 	status = makeResBody(request, response);
 	if (status == -1)
 		return (false);
@@ -35,21 +33,20 @@ bool MakeResponse(Request &request, Response &response) {
 }
 
 static std::string ReadRequest(int fd) {
-	int status;
-	int is_end = 0;
-	char buf[FILE_READ_SIZE];
-	std::string result;
-	struct pollfd s_poll;
+	int 			status;
+	int 			is_end = 0;
+	char 			buf[FILE_READ_SIZE];
+	std::string 	result;
+	struct pollfd 	s_poll;
 
 	s_poll.fd = fd;
 	s_poll.events = POLLIN;
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status > 0) result += buf;
-		if (poll(&s_poll, 1, 500) >= 0 && (s_poll.revents & POLLIN) == 0)
+		if (poll(&s_poll, 1, 1000) >= 0 && (s_poll.revents & POLLIN) == 0)
 			is_end = 1;
 	} while (status > 0 && is_end != 1);
-
 	if (status == -1 || is_end != 1) return ("");
 	return (result);
 }
@@ -95,21 +92,23 @@ int SendResponse(Response &response, Request &request, int clientfd) {
 	std::string line;
 	int status;
 
+	response.setStatus(200);
+	response.setStatusMessage("OK");
+	
 	// HTTPバージョンのチェック
-	if (request.getVersion().compare("HTTP/1.1\r\n") != 0) {
+	if (request.getVersion().compare("HTTP/1.1") != 0) {
 		std::cout << "SendResponse: Invalid Version(not HTTP/1.1)" << std::endl;
-		// response.setStatus(505);
-		// response.setStatusMessage("HTTP Version Not Supported");
-		// return (false);
+		response.setStatus(505);
+		response.setStatusMessage("HTTP Version Not Supported");
 	}
 
 	// responseに中身詰めます
 	status = MakeResponse(request, response);
 	if (status == false) {
-		std::cout << "Make Response is failed;;" << std::endl;
-		//return (false);
+		std::cout << "Make Response is failed;; STATUSCODE: " << response.getStatus() << std::endl;
 	}
-	std::cout << "Response: " << response.getLines() << std::endl;
+	//std::cout << "Response: " << response.getLines() << std::endl;
+	
 	//レスポンスをWriteで書き込んで送信
 	line = response.getLines();
 	status = write(clientfd, line.c_str(), line.length());
@@ -146,14 +145,13 @@ int MakeSocket(int &socketfd, sockaddr_in &s_bind) {
 }
 
 int main() {
-	int socketfd;
-	sockaddr_in s_bind;
-	socklen_t s_bind_siz;
-	int clientfd;
-	int status;
-	Request *request;
-	Response *response;
-
+	int				socketfd;
+	sockaddr_in		s_bind;
+	socklen_t		s_bind_siz;
+	int				clientfd;
+	bool			status;
+	Request			*request;
+	Response		*response;
 	//ソケットを作る
 	s_bind_siz = sizeof(s_bind);
 	status = MakeSocket(socketfd, s_bind);
@@ -194,3 +192,4 @@ int main() {
 
 	return 0;
 }
+
