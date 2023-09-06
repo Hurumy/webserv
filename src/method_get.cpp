@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "APayload.hpp"
-#include "Response.hpp"
-#include "Request.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
 #include "Result.hpp"
+#include "webserv.hpp"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 

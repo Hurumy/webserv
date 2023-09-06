@@ -11,21 +11,20 @@
 /* ************************************************************************** */
 
 #include "APayload.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
 
 // request_parser
 bool parseRequest(Request &req, std::string rawData);
-Result<size_t, int>	methodPut(Request req, Response &res);
+Result<size_t, int> methodPut(Request req, Response &res);
 int methodGet(Request req, Response &res);
-Result<size_t, int>	methodPost(Request req, Response &res);
-bool	methodUnAcceptable(Request req, Response &res);
-Result<size_t, int>	methodDelete(Request req, Response &res);
-
+Result<size_t, int> methodPost(Request req, Response &res);
+bool methodUnAcceptable(Request req, Response &res);
+Result<size_t, int> methodDelete(Request req, Response &res);
 
 #define FILE_READ_SIZE 500
 
@@ -116,43 +115,34 @@ bool makeResponse(Request &request, Response &response) {
 
 	response.setVersion("HTTP/1.1");
 
-	//res.urlをいい感じにする
+	// res.urlをいい感じにする
 
 	//メソッド別に分けて処理する
-	if (request.getMethod() == "GET")
-	{
+	if (request.getMethod() == "GET") {
 		status = methodGet(request, response);
 		if (status == -1)
 			return (false);
 		else
 			return (true);
-	}
-	else if (request.getMethod() == "PUT")
-	{
+	} else if (request.getMethod() == "PUT") {
 		Result<size_t, int> result = methodPut(request, response);
 		if (result.isOK() == true)
 			return (true);
 		else
 			return (false);
-	}
-	else if (request.getMethod() == "POST")
-	{
+	} else if (request.getMethod() == "POST") {
 		Result<size_t, int> result = methodPost(request, response);
 		if (result.isOK() == true)
 			return (true);
 		else
 			return (false);
-	}
-	else if (request.getMethod() == "DELETE")
-	{
+	} else if (request.getMethod() == "DELETE") {
 		Result<size_t, int> result = methodDelete(request, response);
 		if (result.isOK() == true)
 			return (true);
 		else
 			return (false);
-	}
-	else
-	{
+	} else {
 		status = methodUnAcceptable(request, response);
 		if (status == true)
 			return (true);
