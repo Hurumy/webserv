@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_opener.cpp                                    :+:      :+:    :+:   */
+/*   method_get.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/05 15:31:46 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 15:47:07 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/06 17:03:56 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/06 17:15:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "webserv.hpp"
 #include "APayload.hpp"
+#include "Response.hpp"
+#include "Request.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
-#include "Request.hpp"
-#include "Response.hpp"
 #include "Result.hpp"
-#include "webserv.hpp"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
@@ -92,15 +92,7 @@ static int setContentType(Response &res, std::string filename) {
 	return (0);
 }
 
-Result<std::string, int> getFileName(std::string url) {
-	if (url.empty() == true) return Error<int>(false);
-	if (url == "/")
-		return Ok<std::string>(DEFAULT_RETURN_FILE);
-	else
-		return Ok<std::string>(url);
-}
-
-Result<bool, int> readFileContents(Response &res, std::string filename) {
+static Result<bool, int> readFileContents(Response &res, std::string filename) {
 	int fd;
 	int status = 1;
 	std::string body;
@@ -117,12 +109,14 @@ Result<bool, int> readFileContents(Response &res, std::string filename) {
 		res.setStatusMessage("Forbidden");
 		return Error<int>(-1);
 	}
+
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status != -1) body += buf;
 	}
 	close(fd);
+
 	// set
 	if (status == -1) {
 		res.setStatus(500);
@@ -131,23 +125,24 @@ Result<bool, int> readFileContents(Response &res, std::string filename) {
 	}
 	// std::cout << "Body: " << body << std::endl;
 	res.setBody(body);
+
 	return Ok<bool>(true);
 }
 
-int makeResBody(Request req, Response &res) {
+int methodGet(Request req, Response &res) {
 	std::string filename;
-	std::string body;
 
-	//ファイルの名前が正しいかどうかを見る
-	//ルートが指定された時は適切なパスを返す
-	Result<std::string, int> result = getFileName(req.getUrl());
-	if (result.isOK() == true) filename = result.getOk();
+	filename = req.getUrl().substr(1, req.getUrl().size());
+
 	//拡張子を見てContentTypeを判断しResponseにセット
 	setContentType(res, filename);
+
 	//ファイルサイズを数えResponseにセット ついでにOpenが可能かどうかも見る
 	setFileSize(filename, res);
+
 	//ファイルの中身を読み込んでBodyに詰める
 	Result<bool, int> res_read = readFileContents(res, filename);
 	if (res_read.isError() == true) return (-1);
+
 	return (0);
 }

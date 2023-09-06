@@ -41,3 +41,8 @@ google-unit-test
 
 # VS code
 .vscode
+
+#tmp files
+usr/*
+dir/*
+
