@@ -6,19 +6,26 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 15:55:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:39:52 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "APayload.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+#include "Ok.hpp"
+#include "Error.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
 
 // request_parser
 bool parseRequest(Request &req, std::string rawData);
-int makeResBody(Request req, Response &res);
+Result<size_t, int>	methodPut(Request req, Response &res);
+int methodGet(Request req, Response &res);
+Result<size_t, int>	methodPost(Request req, Response &res);
+bool	methodUnAcceptable(Request req, Response &res);
+Result<size_t, int>	methodDelete(Request req, Response &res);
+
 
 #define FILE_READ_SIZE 500
 
@@ -108,9 +115,51 @@ bool makeResponse(Request &request, Response &response) {
 	int status;
 
 	response.setVersion("HTTP/1.1");
-	status = makeResBody(request, response);
-	if (status == -1) return (false);
-	return (true);
+
+	//res.urlをいい感じにする
+
+	//メソッド別に分けて処理する
+	if (request.getMethod() == "GET")
+	{
+		status = methodGet(request, response);
+		if (status == -1)
+			return (false);
+		else
+			return (true);
+	}
+	else if (request.getMethod() == "PUT")
+	{
+		Result<size_t, int> result = methodPut(request, response);
+		if (result.isOK() == true)
+			return (true);
+		else
+			return (false);
+	}
+	else if (request.getMethod() == "POST")
+	{
+		Result<size_t, int> result = methodPost(request, response);
+		if (result.isOK() == true)
+			return (true);
+		else
+			return (false);
+	}
+	else if (request.getMethod() == "DELETE")
+	{
+		Result<size_t, int> result = methodDelete(request, response);
+		if (result.isOK() == true)
+			return (true);
+		else
+			return (false);
+	}
+	else
+	{
+		status = methodUnAcceptable(request, response);
+		if (status == true)
+			return (true);
+		else
+			return (false);
+	}
+	return (false);
 }
 
 int sendResponse(Response &response, Request &request, int clientfd) {
