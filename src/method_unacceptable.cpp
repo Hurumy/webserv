@@ -10,19 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "APayload.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "Result.hpp"
+#include "webserv.hpp"
 
-bool	methodUnAcceptable(Request req, Response &res)
-{
-	std::cout << RED "Unacceptable method: " << req.getMethod() << RESET << std::endl;
+bool methodUnAcceptable(Request req, Response &res) {
+	std::cout << RED "Unacceptable method: " << req.getMethod() << RESET
+			  << std::endl;
 	res.setStatus(405);
 	res.setStatusMessage("Method Not Allowed");
 	return (true);
 }
-
