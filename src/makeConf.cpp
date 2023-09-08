@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "Config.hpp"
+#include "webserv.hpp"
 
 /*
 int	makeConf(std::string filepath)
@@ -23,5 +23,3 @@ int	makeConf(std::string filepath)
 	//終わり
 }
 */
-
-
