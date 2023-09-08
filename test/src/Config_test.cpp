@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:03:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:13:04 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,55 @@ TEST(ConfigTest, errorPagesTest)
 	ASSERT_EQ(tmp, val);
 }
 
+TEST(ConfigTest, redirectsTest)
+{
+	Config		config;
+	std::string	key("./index.html");
+	std::string val("./content/404.html");
+
+	config.addRedirects(key, val);
+	Result<std::string, bool> res = config.getRedirects(key);
+	ASSERT_EQ(res.isOK(), true);
+	std::string tmp = res.getOk();
+	ASSERT_EQ(res.getOk(), val);
+}
+
+TEST(ConfigTest, dirlistTest)
+{
+	Config		config;
+	bool	expected(true);
+
+	config.setDirlist(expected);
+	ASSERT_EQ(config.getDirlist(), expected);
+}
+
+TEST(ConfigTest, returnDirTest)
+{
+	Config		config;
+	std::string	expected("./content");
+
+	config.setReturnDir(expected);
+	ASSERT_EQ(config.getReturnDir(), expected);
+}
+
+TEST(ConfigTest, uploadPathTest)
+{
+	Config		config;
+	std::string	expected("./usr/upload");
+
+	config.setUploadPath(expected);
+	ASSERT_EQ(config.getUploadPath(), expected);
+}
+
+TEST(ConfigTest, reqMethodTest)
+{
+	Config		config;
+	std::string	key("GET");
+	bool		val(true);
+
+	config.addReqMethod(key, val);
+	Result<std::string, bool> res = config.getReqMethod(key);
+	ASSERT_EQ(res.isOK(), true);
+	ASSERT_EQ(res.getOk(), "");
+}
 
