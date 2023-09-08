@@ -11,46 +11,31 @@
 /* ************************************************************************** */
 
 #include "Port.hpp"
-#include "Config.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 
-Result<Config, bool>	Port::getConf(int port) const
-{
-	if (this->conf.empty() == true)
-	{
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
+
+Result<Config, bool> Port::getConf(int port) const {
+	if (this->conf.empty() == true) {
 		return Error<bool>(false);
-	}
-	else if (this->conf.find(port) == this->conf.end())
-	{
+	} else if (this->conf.find(port) == this->conf.end()) {
 		return Error<bool>(false);
-	}
-	else
+	} else
 		return Ok<Config>(this->conf.at(port));
 }
 
-int	Port::getHostPort() const
-{
-	return(this->hostport);
-}
+int Port::getHostPort() const { return (this->hostport); }
 
-size_t	Port::getNumofPorts() const
-{
-	return (this->conf.size());
-}
+size_t Port::getNumofPorts() const { return (this->conf.size()); }
 
-bool	Port::addConf(int port, Config &conf)
-{
+bool Port::addConf(int port, Config &conf) {
 	this->conf[port] = conf;
 	return (true);
 }
 
-bool	Port::setHostPort(int port)
-{
+bool Port::setHostPort(int port) {
 	this->hostport = port;
 	return (true);
 }
-
-
-
