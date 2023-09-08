@@ -38,6 +38,7 @@ googletest/
 test/include
 test/lib
 google-unit-test
+*.sh
 
 # VS code
 .vscode
