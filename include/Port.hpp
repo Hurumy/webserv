@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:15:55 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:47:11 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:55:23 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ class	Port
 
 		//for test
 		bool						addConf(int port, Config &conf);
-		bool						addHostPort(int port);
+		bool						setHostPort(int port);
 };
 

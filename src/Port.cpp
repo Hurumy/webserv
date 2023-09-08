@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:19:15 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:47:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:55:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool	Port::addConf(int port, Config &conf)
 	return (true);
 }
 
-bool	Port::addHostPort(int port)
+bool	Port::setHostPort(int port)
 {
 	this->hostport = port;
 	return (true);

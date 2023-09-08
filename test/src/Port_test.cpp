@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:23:46 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:53:52 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:55:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ TEST(PortTest, getHostPortTest)
 	port.addConf(a_port, conf_a);
 	port.addConf(b_port, conf_b);
 	
-	port.addHostPort(a_port);
+	port.setHostPort(a_port);
 
 	int	host = port.getHostPort();
 	Result<Config, bool> res = port.getConf(host);
