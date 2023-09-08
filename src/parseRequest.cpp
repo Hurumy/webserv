@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 14:58:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/07 18:05:27 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,29 @@ static bool addParsedLine(Request &req, std::string line) {
 	return (true);
 }
 
+static bool	getRequestBody(Request &req, std::vector<std::string> lines)
+{
+	std::stringstream	ss;
+	std::string			str;
+	unsigned long long	bytes = 0;
+
+
+	//Bodyが存在するかチェックする
+	//req.getHeader("Content-Type")
+	
+	//Bodyのバイト数を見る
+	Result<std::string, bool> result = getHeader("Content-Length");
+	if (result.isError() == true)
+		return (false);
+	
+	//バイト数分読み込んで詰める
+	str = result.getOk();
+	ss << str;
+	ss >> bytes;
+
+
+}
+
 //リクエストをパースして参照に詰める
 bool parseRequest(Request &req, std::string rawData) {
 	std::vector<std::string> lines;
@@ -75,8 +98,11 @@ bool parseRequest(Request &req, std::string rawData) {
 	status = parseFirstLine(req, lines.at(0));
 	if (status == false) return (false);
 	for (unsigned long i = 1; i < lines.size(); i++) {
+		if (lines.at(i) == "")
+			break ;
 		status = addParsedLine(req, lines.at(i));
 	}
+
 	return (true);
 }
 
