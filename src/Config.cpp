@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 10:08:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:22:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,9 @@ bool	Config::addReqMethod(std::string key, bool val)
 	this->reqmethod[key] = val;
 	return (true);
 }
+
+
+
 
 
 

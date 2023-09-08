@@ -6,9 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 10:45:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/08 11:32:22 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #include "webserv.hpp"
 #include "Result.hpp"

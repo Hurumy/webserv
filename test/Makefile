@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/08 10:47:28 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/08 11:23:35 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ SRC_FILES		:= \
 					Response_test.cpp \
 					Result_test.cpp \
 					Status_test.cpp \
-					Config_test.cpp
+					Config_test.cpp \
+					Port_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -38,7 +39,8 @@ WS_SRC_FILES	:= \
 					APayload.cpp \
 					Response.cpp \
 					Status.cpp \
-					Config.cpp
+					Config.cpp \
+					Port.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
