@@ -1,38 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Port.hpp                                           :+:      :+:    :+:   */
+/*   makeConf.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/08 11:15:55 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:47:11 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/08 11:41:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
-
 #include "webserv.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "Config.hpp"
 
-class	Port
+/*
+int	makeConf(std::string filepath)
 {
-	private:
-		std::map<int, Config>			conf;
-		int								hostport;
-	
-	protected:
+	//ファイルを開く
+	//ファイルを読み込み、まっすぐなStringにする
+	//なんとかして・・・パースする・・・
+	//詰める
+	//終わり
+}
+*/
 
-	public:
-		Result<Config, bool>		getConf(int port) const;
-		int							getHostPort() const;
-		size_t						getNumofPorts() const;
-
-		//for test
-		bool						addConf(int port, Config &conf);
-		bool						addHostPort(int port);
-};
 
