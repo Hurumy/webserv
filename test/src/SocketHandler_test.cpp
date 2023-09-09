@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 15:10:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 16:49:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,33 @@ TEST(SocketHandlerTest, setReventsTest) {
 	ASSERT_EQ(resutl_pollfds.at(0).fd, ssockets.at(0).getSockfd());
 	ASSERT_EQ(resutl_pollfds.at(0).revents, ssockets.at(0).getRevents());
 	ASSERT_EQ(resutl_pollfds.at(1).revents, ssockets.at(1).getRevents());
+}
+
+TEST(SocketHandlerTest, recieveCSocketsTest) {
+	std::vector<SSocket> sources;
+
+	sources.push_back(SSocket(8080, IPV4, 1));
+	SocketHandler socketHandler(sources, 1000);
+	socketHandler.initAllSSockets();
+	socketHandler.createPollfds();
+	socketHandler.setRevents();
+	pid_t pid = fork();
+	if (pid == -1) {
+		std::exit(EXIT_FAILURE);
+	}
+	if (pid == 0) {
+		sleep(1);
+		system("curl localhost:8080");
+		std::exit(EXIT_SUCCESS);
+	}
+	while (true) {
+		socketHandler.recieveCSockets();
+		if (socketHandler.getCSockets().size() != 0) {
+			break ;
+		}
+		socketHandler.clearPollfds();
+		socketHandler.createPollfds();
+		socketHandler.setRevents();
+	}
+	socketHandler.closeAllSSockets();
 }
