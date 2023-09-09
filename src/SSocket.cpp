@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 15:09:05 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 16:40:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <unistd.h>
 #include <cstring>
 
 SSocket::SSocket(int _port, ipvers _ipver, int _backlog) : port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
@@ -46,6 +47,13 @@ bool SSocket::init() {
 	}
 	if (listen(sockfd, backlog) == -1) {
 		// error output
+		return false;
+	}
+	return true;
+}
+
+bool SSocket::closeSockfd() {
+	if (close(sockfd) == -1) {
 		return false;
 	}
 	return true;

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:15:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 15:08:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 16:40:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class SSocket {
 		SSocket(int _port, ipvers _ipver, int _backlog);
 
 		bool init();
+		bool closeSockfd();
 		int const &getPort() const;
 		int const &getSockfd() const;
 		ipvers const &getIpVer() const;
