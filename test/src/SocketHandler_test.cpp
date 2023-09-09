@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 12:30:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 13:33:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,7 @@ TEST(SocketHandlerTest, constructorTest) {
 	ASSERT_EQ(ssockets.at(0).getPort(), 8080);
 	ASSERT_EQ(ssockets.at(1).getPort(), 8000);
 	ASSERT_EQ(ssockets.at(2).getPort(), 4040);
+	socketHandler.addCSocket(CSocket(0));
+	std::vector<CSocket> const &csockets = socketHandler.getCSockets();
+	ASSERT_EQ(csockets.at(0).getRevents(), 0);
 }
