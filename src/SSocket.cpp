@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 12:03:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 15:09:05 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <netinet/in.h>
 #include <cstring>
 
-SSocket::SSocket(int _port, ipvers _ipver, int _backlog) : port(_port), ipver(_ipver), backlog(_backlog) {}
+SSocket::SSocket(int _port, ipvers _ipver, int _backlog) : port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
 
 bool SSocket::init() {
 	struct  sockaddr_in s_addr;
@@ -65,4 +65,12 @@ int const &SSocket::getPort() const {
 
 int const &SSocket::getBacklog() const {
 	return backlog;
+}
+
+short SSocket::getRevents() const {
+	return revents;
+}
+
+void SSocket::setRevents(short const _revents) {
+	revents = _revents;
 }

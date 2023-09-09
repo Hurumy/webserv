@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 14:49:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 15:06:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,20 @@ std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 bool SocketHandler::setRevents() {
 	if (poll(pollfds.data(), pollfds.size(), timeout) == -1) {
 		return false;
+	}
+	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin(); polliter != pollfds.end(); ++polliter) {
+		for (std::vector<SSocket>::iterator ssockiter = ssockets.begin(); ssockiter != ssockets.end(); ++ssockiter) {
+			if (polliter->fd == ssockiter->getSockfd()) {
+				ssockiter->setRevents(polliter->revents);
+			}
+		}
+	}
+	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin(); polliter != pollfds.end(); ++polliter) {
+		for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
+			if (polliter->fd == csockiter->getSockfd()) {
+				csockiter->setRevents(polliter->revents);
+			}
+		}
 	}
 	return true;
 }
