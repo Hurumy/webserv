@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 15:06:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 16:48:55 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,29 @@
 
 #include <poll.h>
 #include <vector>
+#include <netinet/in.h>
 #include "SSocket.hpp"
 #include "CSocket.hpp"
 
 SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, int _timeout) : timeout(_timeout), ssockets(_ssockets) {}
+
+bool SocketHandler::initAllSSockets() {
+	for (std::vector<SSocket>::iterator iter = ssockets.begin(); iter != ssockets.end(); ++iter) {
+		if (iter->init() == false) {
+			// error handling
+		}
+	}
+	return true;
+}
+
+bool SocketHandler::closeAllSSockets() {
+	for (std::vector<SSocket>::iterator iter = ssockets.begin(); iter != ssockets.end(); ++iter) {
+		if (iter->closeSockfd() == false) {
+			// error handling
+		}
+	}
+	return true;
+}
 
 std::vector<SSocket> const &SocketHandler::getSSockets() const {
 	return ssockets;
@@ -56,10 +75,14 @@ bool SocketHandler::createPollfds() {
 	return true;
 }
 
+void SocketHandler::clearPollfds() {
+	pollfds.clear();
+}
+
 std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 	return pollfds;
 }
-
+#include <iostream>
 bool SocketHandler::setRevents() {
 	if (poll(pollfds.data(), pollfds.size(), timeout) == -1) {
 		return false;
@@ -75,7 +98,28 @@ bool SocketHandler::setRevents() {
 		for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
 			if (polliter->fd == csockiter->getSockfd()) {
 				csockiter->setRevents(polliter->revents);
+				std::clog << "csocket:" << std::endl;
 			}
+		}
+	}
+	return true;
+}
+
+bool SocketHandler::recieveCSockets() {
+	struct  sockaddr_in s_addr;
+	socklen_t addrsize;
+	int sockfd;
+
+	for (std::vector<SSocket>::iterator ssockiter = ssockets.begin(); ssockiter != ssockets.end(); ++ssockiter) {
+		if ((ssockiter->getRevents() & POLLIN) == 1) {
+			std::memset(&s_addr, 0, sizeof(s_addr));
+			addrsize = sizeof(sockaddr_in);
+			sockfd = accept(ssockiter->getSockfd(), (struct sockaddr *)&s_addr, (socklen_t *)&addrsize);
+			if (sockfd == -1) {
+				// error handling?
+				return false;
+			}
+			csockets.push_back(CSocket(sockfd));
 		}
 	}
 	return true;
