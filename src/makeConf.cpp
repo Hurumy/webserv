@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/09 13:49:11 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/09 15:02:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 
-std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
+std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
 Result<std::string, bool>	openAndReadConf(std::string filepath)
 {
@@ -167,7 +167,7 @@ Result<std::vector<std::string>, bool>	makeConf(std::string filepath)
 			std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
 
 	//終わり
-	return Ok<std::vector<std::string>>(firstlayer);
+	return Ok<std::vector<std::string> >(firstlayer);
 }
 
 static int		isServerSetting(std::string raw)
@@ -179,36 +179,40 @@ static int		isServerSetting(std::string raw)
 	pos = line.find("server", 0);
 
 	if (pos == std::string::npos)
-		return (-1)
+		return (-1);
 	else
 		return (0);
 }
 
-int	checkSettings(std::string line)
+static int	checkSettings(Config conf, std::vector<std::string>	oneline)
 {
-
+	for (size_t i = 0; i < oneline.size(); i ++)
+		std::cout << RED ": " << oneline.at(i) << RESET << std::endl;
+	conf.setPort(oneline.size());
+	return 0;
 }
 
-Config	getConf(std::string raw)
+static Config	getConf(std::string raw)
 {
 	std::vector<std::string>	lines;
+	std::vector<std::string>	oneline;
 	Config						conf;
 
-	std::erase(std::remove(raw.start(), raw.end(), '\n'), raw.end());
-	std::erase(std::remove(raw.start(), raw.end(), '\t'), raw.end());
-	std::erase(std::remove(raw.start(), raw.end(), '\r'), raw.end());
+	raw.erase(std::remove(raw.begin(), raw.end(), '\n'), raw.end());
+	raw.erase(std::remove(raw.begin(), raw.end(), '\r'), raw.end());
+	std::regex_replace(raw, std::regex("\t"), "    ");
 
 	lines = lineSpliter(raw, ";");
 
-	for (int i = 0; i < lines.size(); i ++)
+	for (size_t i = 0; i < lines.size(); i ++)
 	{
-
+		oneline = lineSpliter(lines.at(i), " ");
+		checkSettings(conf, oneline);
 	}
-
-	return ();
+	return (conf);
 }
 
-Result(std::vector<Config>, bool)	parsePortVecs(std::vector<std::string> list)
+Result<std::vector<Config>, bool>	parsePortVecs(std::vector<std::string> list)
 {
 	std::vector<Config>	confs;
 	Config				tmp;
@@ -216,7 +220,7 @@ Result(std::vector<Config>, bool)	parsePortVecs(std::vector<std::string> list)
 
 	//リストの数だけループする
 
-	for (int i = 0; i < list.size(); i ++)
+	for (size_t i = 0; i < list.size(); i ++)
 	{
 		//頭が”Server”であることを確認 そうでなければスキップ
 		status = isServerSetting(list.at(i));
@@ -228,15 +232,18 @@ Result(std::vector<Config>, bool)	parsePortVecs(std::vector<std::string> list)
 			confs.push_back(tmp);
 		}
 	}
+	
 	//返す
-
+	return Ok<std::vector<Config> >(confs);
 }
 
 int main()
 {
 	std::vector<std::string>	list;
 
-	list = makeConf("../conf_files/test.conf");
+	Result<std::vector<std::string>, bool> res = makeConf("../conf_files/test.conf");
+	if (res.isOK() == true)
+		list = res.getOk();
 	parsePortVecs(list);
 	
 	return 0;
