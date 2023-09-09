@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:07:23 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/08 17:35:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 12:39:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include "SSocket.hpp"
 
-TEST(SSocketTest, SSockConstructorTest) {
+TEST(SSocketTest, constructorTest) {
 	SSocket ssocket(8080, IPV4, 100);
 
 	ASSERT_EQ(ssocket.getPort(), 8080);
