@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:07:23 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 12:39:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/09 16:38:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,5 @@ TEST(SSocketTest, SSocketInitTest) {
 	ASSERT_EQ(ssocket.getPort(), 8080);
 	ASSERT_EQ(ssocket.getIpVer(), IPV4);
 	ASSERT_EQ(ssocket.getBacklog(), 100);
+	ssocket.closeSockfd();
 }
