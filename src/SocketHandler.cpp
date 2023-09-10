@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 16:48:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/10 17:36:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 #include <poll.h>
 #include <vector>
+#include <map>
 #include <netinet/in.h>
+
+#include "Result.hpp"
+#include "Ok.hpp"
+#include "Error.hpp"
 #include "SSocket.hpp"
 #include "CSocket.hpp"
 
@@ -82,7 +87,7 @@ void SocketHandler::clearPollfds() {
 std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 	return pollfds;
 }
-#include <iostream>
+
 bool SocketHandler::setRevents() {
 	if (poll(pollfds.data(), pollfds.size(), timeout) == -1) {
 		return false;
@@ -98,7 +103,6 @@ bool SocketHandler::setRevents() {
 		for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
 			if (polliter->fd == csockiter->getSockfd()) {
 				csockiter->setRevents(polliter->revents);
-				std::clog << "csocket:" << std::endl;
 			}
 		}
 	}
@@ -123,4 +127,27 @@ bool SocketHandler::recieveCSockets() {
 		}
 	}
 	return true;
+}
+
+Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
+	std::map<int, std::string> dataMap;
+
+	if (csockets.empty() == true) {
+		return Error<bool>(false);
+	}
+	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if ((iter->getRevents() & POLLIN) == 1) {
+			Result<std::string, bool> data = iter->getData();
+			if (data.isOK() == true) {
+				dataMap[iter->getSockfd()] = data.getOk();
+			} else {
+				// error handling
+				// return Error<bool>(false);
+			}
+		}
+	}
+	if (dataMap.empty() == true) {
+		return Error<bool>(false);
+	}
+	return Ok<std::map<int, std::string>>(dataMap);
 }
