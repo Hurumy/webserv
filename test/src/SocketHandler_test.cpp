@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 17:37:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:11:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,6 +160,7 @@ TEST(SocketHandlerTest, getDataMapTest) {
 			}
 		}
 		socketHandler.clearPollfds();
+		socketHandler.removeClosedCSockets();
 		socketHandler.createPollfds();
 		socketHandler.setRevents();
 	}
