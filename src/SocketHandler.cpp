@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 17:36:31 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/10 19:11:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,15 @@ bool SocketHandler::closeAllSSockets() {
 	for (std::vector<SSocket>::iterator iter = ssockets.begin(); iter != ssockets.end(); ++iter) {
 		if (iter->closeSockfd() == false) {
 			// error handling
+		}
+	}
+	return true;
+}
+
+bool SocketHandler::removeClosedCSockets() {
+	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if ((iter->getRevents() & POLLHUP) == 1) {
+			csockets.erase(iter);
 		}
 	}
 	return true;

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 12:34:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/10 18:55:47 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class SocketHandler {
 
 		bool initAllSSockets();
 		bool closeAllSSockets();
+		bool removeClosedCSockets();
 		std::vector<SSocket> const &getSSockets() const;
 		std::vector<CSocket> const &getCSockets() const;
 		int getTimeout() const;
