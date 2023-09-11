@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 19:11:44 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/11 13:58:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <poll.h>
 #include <vector>
 #include <map>
+#include <algorithm>
+#include <fcntl.h>
 #include <netinet/in.h>
 
 #include "Result.hpp"
@@ -45,7 +47,7 @@ bool SocketHandler::closeAllSSockets() {
 
 bool SocketHandler::removeClosedCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if ((iter->getRevents() & POLLHUP) == 1) {
+		if ((iter->getRevents() & POLLHUP) == POLLHUP) {
 			csockets.erase(iter);
 		}
 	}
@@ -124,7 +126,7 @@ bool SocketHandler::recieveCSockets() {
 	int sockfd;
 
 	for (std::vector<SSocket>::iterator ssockiter = ssockets.begin(); ssockiter != ssockets.end(); ++ssockiter) {
-		if ((ssockiter->getRevents() & POLLIN) == 1) {
+		if ((ssockiter->getRevents() & POLLIN) == POLLIN) {
 			std::memset(&s_addr, 0, sizeof(s_addr));
 			addrsize = sizeof(sockaddr_in);
 			sockfd = accept(ssockiter->getSockfd(), (struct sockaddr *)&s_addr, (socklen_t *)&addrsize);
@@ -132,6 +134,7 @@ bool SocketHandler::recieveCSockets() {
 				// error handling?
 				return false;
 			}
+			fcntl(sockfd, O_NONBLOCK);
 			csockets.push_back(CSocket(sockfd));
 		}
 	}
@@ -145,13 +148,12 @@ Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
 		return Error<bool>(false);
 	}
 	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if ((iter->getRevents() & POLLIN) == 1) {
+		if ((iter->getRevents() & POLLIN) == POLLIN) {
 			Result<std::string, bool> data = iter->getData();
 			if (data.isOK() == true) {
 				dataMap[iter->getSockfd()] = data.getOk();
 			} else {
 				// error handling
-				// return Error<bool>(false);
 			}
 		}
 	}
@@ -159,4 +161,27 @@ Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
 		return Error<bool>(false);
 	}
 	return Ok<std::map<int, std::string>>(dataMap);
+}
+
+bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) const {
+	if (dataMap.empty() == true) {
+		// error handling
+		return false;
+	}
+	for (std::map<int, std::string>::const_iterator dataiter = dataMap.begin(); dataiter != dataMap.end(); ++dataiter) {
+		for (std::vector<CSocket>::const_iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
+			if ((csockiter->getRevents() & POLLOUT) == POLLOUT) {
+				if (dataiter->first == csockiter->getSockfd()) {
+					if (csockiter->sendData(dataiter->second) == false) {
+						// error handling
+					}
+					if (csockiter->closeSockfd() == false) {
+						// error handling
+					}
+					break ;
+				}
+			}
+		}
+	}
+	return true;
 }

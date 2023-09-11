@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 19:12:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/11 11:57:40 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include <unistd.h>
 #include <string>
 #include <poll.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <errno.h>
 
 #include "Result.hpp"
 #include "Ok.hpp"
@@ -39,13 +42,19 @@ Result<std::string, bool> CSocket::getData() const {
 	char buff[BUFFER_SIZE];
 	ssize_t readLen;
 
+	if ((revents & POLLIN) != POLLIN) {
+		return Error<bool>(false);
+	}
 	while (true) {
-		if ((revents & POLLIN) == 0) {
+		if ((revents & POLLIN) != POLLIN) {
 			break ;
 		}
-		std::memset(buff, 0, sizeof(char) * BUFFER_SIZE);
-		readLen = read(sockfd, buff, BUFFER_SIZE);
+		std::memset(buff, '\0', sizeof(char) * BUFFER_SIZE);
+		readLen = recv(sockfd, buff, BUFFER_SIZE, MSG_DONTWAIT);
 		if (readLen == -1) {
+			if (errno == EWOULDBLOCK) {	
+				return Ok<std::string>(data);
+			}
 			return Error<bool>(false);
 		}
 		if (readLen == 0) {
@@ -54,4 +63,18 @@ Result<std::string, bool> CSocket::getData() const {
 		data.append(buff, readLen);
 	}
 	return Ok<std::string>(data);
+}
+
+bool CSocket::sendData(std::string const &data) const{
+	if (write(sockfd, data.c_str(), data.size()) == -1) {
+		return false;
+	}
+	return true;
+}
+
+bool CSocket::closeSockfd() const {
+	if (close(sockfd) == -1) {
+		return false;
+	}
+	return true;
 }

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 17:44:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:25:11 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,6 @@ class CSocket {
 		short getRevents() const;
 		void setRevents(short const _revents);
 		Result<std::string, bool>  getData() const;
+		bool sendData(std::string const &data) const;
+		bool closeSockfd() const;
 };
