@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/11 12:25:11 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/12 01:16:11 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class CSocket {
 
 		int sockfd;
 		short revents;
+		bool isFirst;
 	protected:
 	public:
 		CSocket(int const _sockfd);
@@ -31,6 +32,8 @@ class CSocket {
 		int getSockfd() const;
 		short getRevents() const;
 		void setRevents(short const _revents);
+		bool getIsFirst() const;
+		void setIsFirst(bool _isFirst);
 		Result<std::string, bool>  getData() const;
 		bool sendData(std::string const &data) const;
 		bool closeSockfd() const;

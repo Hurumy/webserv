@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/11 13:58:58 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/12 01:18:10 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ bool SocketHandler::closeAllSSockets() {
 }
 
 bool SocketHandler::removeClosedCSockets() {
-	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if ((iter->getRevents() & POLLHUP) == POLLHUP) {
-			csockets.erase(iter);
+	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ) {
+		if (iter->getIsFirst() == false && (iter->getRevents() & (POLLIN | POLLOUT)) == (POLLIN | POLLOUT)) {
+			iter = csockets.erase(iter);
+		} else {
+			iter->setIsFirst(false);
+			iter++;
 		}
 	}
 	return true;
@@ -160,7 +163,7 @@ Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
 	if (dataMap.empty() == true) {
 		return Error<bool>(false);
 	}
-	return Ok<std::map<int, std::string>>(dataMap);
+	return Ok<std::map<int, std::string> >(dataMap);
 }
 
 bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) const {
