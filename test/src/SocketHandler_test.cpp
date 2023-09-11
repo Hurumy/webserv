@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 19:11:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/11 13:57:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ TEST(SocketHandlerTest, recieveCSocketsTest) {
 	socketHandler.closeAllSSockets();
 }
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -104,37 +103,44 @@ TEST(SocketHandlerTest, recieveCSocketsTest) {
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-static int main_simple_http_client() {
+std::string main_simple_http_client() {
     struct sockaddr_in serv_addr;
     const char *hello = "Hello from client";
-    // char buffer[1024] = {0};
+    char buffer[1024] = {0};
 
     const int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (0 > sock) {
         perror("simple HTTP client: sock");
-        return EXIT_FAILURE;
+        return std::string("");
     }
     bzero(&serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(8081);
+    serv_addr.sin_port = htons(8000);
     if (0 >= inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)) {
         perror("simple HTTP client: inet_pton");
-        return EXIT_FAILURE;
+        return std::string("");
     }
     if (0 > connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr))) {
         perror("simple HTTP client: connect");
-        return EXIT_FAILURE;
+        return std::string("");
     }
     send(sock, hello, strlen(hello), 0);
     printf("Hello message sent\n");
-    return 0;
+    const int valread = read(sock, buffer, 1024);
+    if (0 > valread) {
+        perror("simple HTTP client: read");
+        return std::string("");
+    }
+    buffer[valread] = '\0';
+    printf("%s\n", buffer);
+    return std::string(buffer);
 }
 
-TEST(SocketHandlerTest, getDataMapTest) {
+TEST(SocketHandlerTest, sendDataMapTest) {
 	std::vector<SSocket> sources;
 	std::map<int, std::string> request;
 
-	sources.push_back(SSocket(8081, IPV4, 1));
+	sources.push_back(SSocket(8000, IPV4, 1));
 	SocketHandler socketHandler(sources, 1000);
 	socketHandler.initAllSSockets();
 	socketHandler.createPollfds();
@@ -145,20 +151,20 @@ TEST(SocketHandlerTest, getDataMapTest) {
 	}
 	if (pid == 0) {
 		sleep(1);
-		main_simple_http_client();
+		std::string const response = main_simple_http_client();
+		ASSERT_STREQ(response.c_str(), "Hello from client");
 		std::exit(EXIT_SUCCESS);
 	}
 	while (true) {
-		socketHandler.recieveCSockets();
 		if (socketHandler.getCSockets().empty() == false) {
 			Result<std::map<int, std::string>, bool> dataMap = socketHandler.getDataMap();
 			if (dataMap.isOK() == true) {
 				request = dataMap.getOk();
-				if (request.empty() == false) {
-					break ;
-				}
+				socketHandler.sendDataMap(request);
+				break ;
 			}
 		}
+		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
 		socketHandler.removeClosedCSockets();
 		socketHandler.createPollfds();
