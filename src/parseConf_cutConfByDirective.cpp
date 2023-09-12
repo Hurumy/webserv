@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/11 15:29:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 08:42:11 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static Result<std::string, bool>	openAndReadConf(std::string filepath)
 	if (status == -1)
 		return Error<bool>(false);
 	
-	std::cout << rawdata << std::endl;
+	//std::cout << rawdata << std::endl;
 	
 	return Ok<std::string>(rawdata);
 }
@@ -69,8 +69,6 @@ static bool	countParentheses(std::string rawdata, std::string start, std::string
 		num_of_end ++;
 		offset = pos + end.length();
 	}
-
-	std::cout << YELLOW "num_of_{}: " << num_of_end << RESET << std::endl;
 
 	if(num_of_start == num_of_end)
 		return (true);
@@ -143,7 +141,6 @@ Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath)
 	
 	if (res.isError() == true)
 		return Error<bool>(false);
-	std::cout << YELLOW "open and read success" RESET << std::endl;
 
 	rawdata = res.getOk();
 
@@ -151,12 +148,10 @@ Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath)
 	status = countParentheses(rawdata, "{", "}");				
 	if (status == false)
 		return Error<bool>(false);
-	std::cout << YELLOW "count parent success" RESET << std::endl;
 
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
 
-	std::cout << YELLOW << firstlayer.size() << RESET << std::endl;
 	for(size_t i = 0; i < firstlayer.size(); i ++)
 		std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
 

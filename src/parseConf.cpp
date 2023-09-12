@@ -6,16 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/11 17:00:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 08:49:20 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
-
-std::vector<std::string> lineSpliter(std::string origin, std::string delim);
-Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);
-std::vector<std::string>	cutConfToEachPort(std::string raw);
-Result<Config, bool>	parsePortVecs(std::string port);
 
 Result<std::vector<Config>, bool>	parseConf(std::string filepath)
 {
@@ -38,6 +33,7 @@ Result<std::vector<Config>, bool>	parseConf(std::string filepath)
 		{
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
+			std::cout << RED "test: " << tmp.getPort() << RESET << std::endl;
 		}
 	}
 	

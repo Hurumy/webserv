@@ -6,13 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/11 16:59:58 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 08:48:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
-
-std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 
 //そのディレクティブにServerと書かれていることを確認する
 static int		isServerSetting(std::string raw)
@@ -33,6 +31,7 @@ static int		isServerSetting(std::string raw)
 static int	checkSettings(Config &conf, std::string	oneline)
 {
 	std::vector<std::string>	lines;
+	int							status;
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i ++)
@@ -45,7 +44,7 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			{
 				if (i + 1 >= lines.size())	
 					return (-1);	
-				readListen(conf, oneline);
+				status = readListen(conf, oneline);
 			}
 			else if (lines.at(i) == "server_name")
 			{}
@@ -57,6 +56,8 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			{}
 			else if (lines.at(i) == "return")
 			{}
+			if (status == -1)
+				
 		}
 	}
 	conf.setPort(oneline.size());
@@ -80,9 +81,12 @@ Result<Config, bool>	parsePortVecs(std::string port)
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for(size_t i = 0; i < line.size(); i ++)
 	{
-		status = checkSettings(conf, line.at(i));
-		if (status == -1)
-			return Error<bool>(false);
+		if (line.at(i).empty() == false)
+		{
+			status = checkSettings(conf, line.at(i));
+			if (status == -1)
+				return Error<bool>(false);
+		}
 	}
 	
 	//返す
