@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:11:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/11 16:32:25 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 09:42:45 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static std::string	cutOffStr(std::string &origin, std::string start, std::string
 }
 
 //第一引数の文字列から、第二引数の文字列を検索し、その全てを第三引数の文字列に置き換える
-static std::string	replaceStr(std::string &origin, std::string search, std::string replace)
+std::string	replaceStr(std::string &origin, std::string search, std::string replace)
 {
 	size_t			pos = 0;
 	size_t			offset = 0;

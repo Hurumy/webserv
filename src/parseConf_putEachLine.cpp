@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/12 08:48:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 11:38:18 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ static int	checkSettings(Config &conf, std::string	oneline)
 				if (i + 1 >= lines.size())	
 					return (-1);	
 				status = readListen(conf, oneline);
+				break ;
 			}
 			else if (lines.at(i) == "server_name")
 			{}
@@ -56,8 +57,6 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			{}
 			else if (lines.at(i) == "return")
 			{}
-			if (status == -1)
-				
 		}
 	}
 	conf.setPort(oneline.size());

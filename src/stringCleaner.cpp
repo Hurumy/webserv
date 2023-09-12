@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 09:06:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/12 09:28:16 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/12 11:13:23 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,15 @@ bool	isAlnum(std::string str)
 	}
 	return (true);
 }
+
+// bool	removeEmptyString(std::vector<std::string> lines)
+// {
+// 	for (size_t i = 0; i < lines.size(); i ++)
+// 	{
+// 		if (lines.at(i).empty() == true)
+// 			lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+// 	}
+// }
 
 // int	main()
 // {
