@@ -47,3 +47,5 @@ google-unit-test
 usr/*
 dir/*
 
+# Python
+__pycache__
