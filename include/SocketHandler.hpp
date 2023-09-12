@@ -6,13 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/10 21:11:32 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/12 12:34:51 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <poll.h>
+#include <cstring>
 #include <vector>
 #include <map>
 

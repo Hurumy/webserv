@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/12 01:16:11 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/12 12:34:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <unistd.h>
 #include <string>
+#include <cstring>
 #include <poll.h>
 #include <sys/types.h>
 #include <sys/socket.h>
