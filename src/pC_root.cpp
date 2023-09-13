@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pC_servername.cpp                                  :+:      :+:    :+:   */
+/*   pC_root.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 11:43:12 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 12:58:18 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/13 12:55:56 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/13 13:04:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-int readServerName(Config &conf, std::string oneline)
+int readRoot(Config &conf, std::string oneline)
 {
 	std::vector<std::string>	lines;
 
@@ -20,17 +20,14 @@ int readServerName(Config &conf, std::string oneline)
 
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-	if (lines.at(0) != "server_name")
+	if (lines.at(0) != "root")
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
-		conf.setServerName(lines.at(i));
-		std::cout << GREEN "server_name: " << conf.getServerName() << RESET << std::endl;
-	}
+	if (lines.size() != 2)
+		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+
+	conf.setRootDir(lines.at(1));
+	std::cout << CYAN "root: " << conf.getRootDir() << RESET << std::endl;
 
 	return (0);
 }
-
-
-

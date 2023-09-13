@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/12 11:37:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/13 13:05:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,8 @@ static int	checkProtocol(Config &conf, std::string &oneline)
 	}
 	else
 		errorInInit("Invalid string detected in http:server:listen directive (ﾉ´・ω・)ﾉ⌒✹\n");
-	
-	std::cout << BLUE "ip: " << lines.at(0) << std::endl;
-	std::cout << "port: " << lines.at(1) << RESET << std::endl;
+
+ 	std::cout << BLUE "ip: " << lines.at(0) << std::endl;
 
 	return (0);
 }
@@ -122,6 +121,8 @@ int	readListen(Config &conf, std::string oneline)
 		checkProtocol(conf, lines.at(1));
 	else //:がないとき
 		setPortNumber(conf, lines.at(1));
+	
+	std::cout << BLUE "port: " << conf.getPort() << RESET << std::endl;
 
 	return (0);
 }

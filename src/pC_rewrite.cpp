@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pC_servername.cpp                                  :+:      :+:    :+:   */
+/*   pC_rewrite.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 11:43:12 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 12:58:18 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/13 16:23:10 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/13 17:41:00 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-int readServerName(Config &conf, std::string oneline)
+int readRewrite(Config &conf, std::string oneline)
 {
 	std::vector<std::string>	lines;
 
@@ -20,17 +20,18 @@ int readServerName(Config &conf, std::string oneline)
 
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-	if (lines.at(0) != "server_name")
+	if (lines.at(0) != "rewrite")
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
-		conf.setServerName(lines.at(i));
-		std::cout << GREEN "server_name: " << conf.getServerName() << RESET << std::endl;
-	}
+	if (lines.size() != 3)
+		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+
+	conf.addRedirects(lines.at(1), lines.at(2));
+
+	Result<std::string, bool>	res = conf.getRedirects(lines.at(1));
+	std::cout << YELLOW "redirects: " << lines.at(1) << ": " << res.getOk() << RESET << std::endl;
 
 	return (0);
 }
-
 
 
