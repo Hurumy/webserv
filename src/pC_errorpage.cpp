@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 14:39:24 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 14:57:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:43:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int readErrorPage(Config &conf, std::string oneline)
 	conf.addErrorPages(num, lines.at(2));
 	Result<std::string, bool>	res = conf.getErrorPages(num);
 
-	std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() << RESET << std::endl;
+	//std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() << RESET << std::endl;
 
 	return (0);
 }

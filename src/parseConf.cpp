@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 11:50:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:42:09 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ Result<std::vector<Config>, bool>	parseConf(std::string filepath)
 		{
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
-			std::cout << RED "test: " << tmp.getPort() << RESET << std::endl;
 		}
 	}
 	
@@ -41,10 +40,8 @@ Result<std::vector<Config>, bool>	parseConf(std::string filepath)
 	return	Ok<std::vector<Config> >(confs);
 }
 
-int main()
-{
-	parseConf("../conf_files/test.conf");
-	return 0;
-}
-
-
+// int main()
+// {
+// 	parseConf("../conf_files/test.conf");
+// 	return 0;
+// }

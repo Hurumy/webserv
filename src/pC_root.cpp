@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 12:55:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 13:04:46 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:43:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int readRoot(Config &conf, std::string oneline)
 		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
 	conf.setRootDir(lines.at(1));
-	std::cout << CYAN "root: " << conf.getRootDir() << RESET << std::endl;
+	//std::cout << CYAN "root: " << conf.getRootDir() << RESET << std::endl;
 
 	return (0);
 }

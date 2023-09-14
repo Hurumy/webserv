@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/12 08:42:11 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:42:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,8 @@ Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath)
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
 
-	for(size_t i = 0; i < firstlayer.size(); i ++)
-		std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
+	// for(size_t i = 0; i < firstlayer.size(); i ++)
+	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
 
 	return Ok<std::vector<std::string> >(firstlayer);
 }

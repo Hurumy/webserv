@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 17:52:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:42:22 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			}
 		}
 	}
-	conf.setPort(oneline.size());
+	conf.addPort(oneline.size());
 	return 0;
 }
 

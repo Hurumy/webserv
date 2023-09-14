@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 11:43:12 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 12:58:18 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:43:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int readServerName(Config &conf, std::string oneline)
 
 	for (size_t i = 1; i < lines.size(); i ++)
 	{
-		conf.setServerName(lines.at(i));
-		std::cout << GREEN "server_name: " << conf.getServerName() << RESET << std::endl;
+		conf.addServerName(lines.at(i));
+		//std::cout << GREEN "server_name: " << conf.getServerName() << RESET << std::endl;
 	}
 
 	return (0);

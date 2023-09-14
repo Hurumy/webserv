@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 17:47:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 17:56:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:43:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int readAutoindex(Config &conf, std::string oneline)
 	else
 		errorInInit("Invalid setting is detected in autoindex directive (¦3[___]");
 
-	std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET << std::endl;
+	//std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET << std::endl;
 
 	return (0);
 }

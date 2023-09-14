@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 17:51:43 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 17:39:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);
 std::vector<std::string>	cutConfToEachPort(std::string raw);
 Result<Config, bool>	parsePortVecs(std::string port);
 std::string	replaceStr(std::string &origin, std::string search, std::string replace);
+Result<std::vector<Config>, bool>	parseConf(std::string filepath);
 
 int	errorInInit(std::string errormessage);
 
