@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:18:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:22:27 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 #include "Result.hpp"
 #include "Config.hpp"
 
-std::string const	Config::getIpAddress() const{return(this->ipaddress);}
+std::vector<std::string> const	Config::getIpAddress() const{return(this->ipaddress);}
 
-int	Config::getPort() const{return(this->port);}
+std::vector<int> const	Config::getPort() const{return(this->port);}
 
 std::vector<std::string> const	Config::getServerName() const {return(this->servername);}
 
@@ -90,15 +90,15 @@ Result<std::string, bool> const	Config::getReqMethod(std::string key) const
 		return Ok<std::string>("");
 }
 
-bool	Config::setIpAddress(std::string address)
+bool	Config::addIpAddress(std::string address)
 {
-	this->ipaddress = address;
+	this->ipaddress.push_back(address);
 	return (true);
 }
 
-bool	Config::setPort(int port)
+bool	Config::addPort(int port)
 {
-	this->port = port;
+	this->port.push_back(port);
 	return (true);
 }
 

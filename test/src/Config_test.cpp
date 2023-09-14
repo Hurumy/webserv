@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:13:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/14 16:23:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,37 @@
 #include <string>
 #include "Config.hpp"
 
+TEST(ConfigTest, ipaddressTest)
+{
+	Config config;
+	std::vector<std::string>	res;
+	std::string	expected("111.108.92.125");
+
+	config.addIpAddress(expected);
+	res = config.getIpAddress();
+	ASSERT_EQ(res.at(0), expected);
+}
+
 TEST(ConfigTest, portTest)
 {
 	Config config;
+	std::vector<int>	res;
 	int	expected(8080);
 
-	config.setPort(expected);
-	ASSERT_EQ(config.getPort(), expected);
+	config.addPort(expected);
+	res = config.getPort();
+	ASSERT_EQ(res.at(0), expected);
 }
 
 TEST(ConfigTest, servernameTest)
 {
 	Config		config;
+	std::vector<std::string>	res;
 	std::string	expected("WEBSERV");
 
-	config.setServerName(expected);
-	ASSERT_EQ(config.getServerName(), expected);
+	config.addServerName(expected);
+	res = config.getServerName();
+	ASSERT_EQ(res.at(0), expected);
 }
 
 TEST(ConfigTest, rootDirTest)
@@ -75,6 +90,33 @@ TEST(ConfigTest, redirectsTest)
 	ASSERT_EQ(res.isOK(), true);
 	std::string tmp = res.getOk();
 	ASSERT_EQ(res.getOk(), val);
+}
+
+TEST(ConfigTest, isreturnTest)
+{
+	Config	config;
+	bool	expected(true);
+
+	config.setIsReturn(expected);
+	ASSERT_EQ(config.isReturn(), expected);
+}
+
+TEST(ConfigTest, returnstatusTest)
+{
+	Config	config;
+	int		expected(300);
+
+	config.setReturnStatus(expected);
+	ASSERT_EQ(config.getReturnStatus(), expected);
+}
+
+TEST(ConfigTest, returnurlTest)
+{
+	Config	config;
+	std::string	expected("google.com");
+
+	config.setReturnUrl(expected);
+	ASSERT_EQ(config.getReturnUrl(), expected);
 }
 
 TEST(ConfigTest, dirlistTest)
