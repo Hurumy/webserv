@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/13 17:41:24 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/13 17:52:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			}
 			else if (lines.at(i) == "return")
 			{
-
+				status = readReturn(conf, oneline);
+				break ;
 			}
 			else if (lines.at(i) == "rewrite")
 			{
@@ -71,7 +72,8 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			}
 			else if (lines.at(i) == "autoindex")
 			{
-				
+				status = readAutoindex(conf, oneline);
+				break ;
 			}
 		}
 	}
