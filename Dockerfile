@@ -1,5 +1,5 @@
-FROM python:latest
-RUN apt-get update && apt-get install build-essential && pip install locust
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y build-essential
 RUN mkdir /code 
 WORKDIR /code
 COPY . /code/
