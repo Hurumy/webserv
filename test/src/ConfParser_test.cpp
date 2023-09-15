@@ -49,4 +49,3 @@ TEST(ConfigParserTest, pIPTest)
 	ASSERT_EQ(tmp.at(0).getIpAddress().at(1), expected_2);
 }
 
-
