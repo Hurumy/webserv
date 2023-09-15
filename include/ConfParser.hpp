@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:32:53 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:11:00 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int readReturn(Config &conf, std::string oneline);
 int readAutoindex(Config &conf, std::string oneline);
 int readMaxBodySize(Config &conf, std::string oneline);
 int readIndex(Config &conf, std::string oneline);
+int readUploadPath(Config &conf, std::string oneline);
+int readAllowedMethods(Config &conf, std::string oneline);
 
 bool	isNumber(std::string str);
 bool	isSpace(std::string str);

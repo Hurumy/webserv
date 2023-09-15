@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:41:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:17:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,4 +163,40 @@ TEST(ConfigParserTest, pIndexTest)
 	ASSERT_EQ(tmp.at(0).getIndex().at(0), expected_1);
 	ASSERT_EQ(tmp.at(1).getIndex().at(0), expected_2);
 	ASSERT_EQ(tmp.at(1).getIndex().at(1), expected_3);
+}
+
+TEST(ConfigParserTest, pUploadPathTest)
+{
+	std::vector<Config>	tmp;
+	std::string			expected_1("/content");
+	std::string			expected_2("Users/komatsud/webserv/html/www/content/");
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getUploadPath(), expected_1);
+	ASSERT_EQ(tmp.at(1).getUploadPath(), expected_2);
+}
+
+TEST(ConfigParserTest, pAllowedMethodsTest)
+{
+	std::vector<Config>	tmp;
+	bool			expected_1(true);
+	bool			expected_2(true);
+	bool			expected_3(true);
+	bool			expected_4(false);
+	bool			expected_5(true);
+	bool			expected_6(true);
+	bool			expected_7(false);
+	bool			expected_8(false);	
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getReqMethod("GET").isOK(), expected_1);
+	ASSERT_EQ(tmp.at(0).getReqMethod("POST").isOK(), expected_2);
+	ASSERT_EQ(tmp.at(0).getReqMethod("DELETE").isOK(), expected_3);
+	ASSERT_EQ(tmp.at(0).getReqMethod("PUT").isOK(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReqMethod("GET").isOK(), expected_5);
+	ASSERT_EQ(tmp.at(1).getReqMethod("POST").isOK(), expected_6);
+	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
+	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
 }

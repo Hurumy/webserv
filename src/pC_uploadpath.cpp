@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pC_index.cpp                                       :+:      :+:    :+:   */
+/*   pC_uploadpath.cpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/15 17:20:57 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:53:52 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/15 17:51:35 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/15 17:54:18 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-int readIndex(Config &conf, std::string oneline)
+int readUploadPath(Config &conf, std::string oneline)
 {
 	std::vector<std::string>	lines;
 
@@ -20,15 +20,19 @@ int readIndex(Config &conf, std::string oneline)
 
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-	if (lines.at(0) != "index")
+	if (lines.at(0) != "upload_path")
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (conf.getIndex().empty() == false)
-		errorInInit("Too many index declare");
+	if (lines.size() != 2)
+		errorInInit("Too many elements in upload_path directive");
 
-	for (size_t i = 1; i <= lines.size() - 1; i ++)
-		conf.addIndex(lines.at(i));
+	if (conf.getUploadPath().empty() == false)
+		errorInInit("Too many upload_path declare");
+
+	conf.setUploadPath(lines.at(1));
 
 	return (0);
 }
+
+
 

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pC_index.cpp                                       :+:      :+:    :+:   */
+/*   pC_allowedmethods.cpp                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/15 17:20:57 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:53:52 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/15 18:01:52 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/15 18:19:00 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-int readIndex(Config &conf, std::string oneline)
+int readAllowedMethods(Config &conf, std::string oneline)
 {
 	std::vector<std::string>	lines;
 
@@ -20,14 +20,19 @@ int readIndex(Config &conf, std::string oneline)
 
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-	if (lines.at(0) != "index")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+	if (lines.at(0) != "allowedMethods")
+		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (conf.getIndex().empty() == false)
-		errorInInit("Too many index declare");
+	if (lines.size() > 5)
+		errorInInit("Too many allowedMethods directives _(´ω`_)⌒)_ ))");
 
-	for (size_t i = 1; i <= lines.size() - 1; i ++)
-		conf.addIndex(lines.at(i));
+	for (size_t i = 1; i < lines.size(); i ++)
+	{
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
+			conf.addReqMethod(lines.at(i), true);
+		else
+			errorInInit("Unsupported method is detected (*´ω｀*)");
+	}
 
 	return (0);
 }

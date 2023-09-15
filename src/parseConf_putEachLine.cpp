@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:33:07 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:11:13 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,16 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			else if (lines.at(i) == "index")
 			{
 				status = readIndex(conf, oneline);
+				break ;
+			}
+			else if (lines.at(i) == "upload_path")
+			{
+				status = readUploadPath(conf, oneline);
+				break ;
+			}
+			else if (lines.at(i) == "allowedMethods")
+			{
+				status = readAllowedMethods(conf, oneline);
 				break ;
 			}
 			if (status == -1)
