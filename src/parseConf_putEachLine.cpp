@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:04:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:33:07 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,11 @@ static int	checkSettings(Config &conf, std::string	oneline)
 			else if (lines.at(i) == "client_max_body_size")
 			{
 				status = readMaxBodySize(conf, oneline);
+				break ;
+			}
+			else if (lines.at(i) == "index")
+			{
+				status = readIndex(conf, oneline);
 				break ;
 			}
 			if (status == -1)
