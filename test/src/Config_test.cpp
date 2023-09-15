@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:23:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:42:47 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,13 +128,13 @@ TEST(ConfigTest, dirlistTest)
 	ASSERT_EQ(config.getDirlist(), expected);
 }
 
-TEST(ConfigTest, returnDirTest)
+TEST(ConfigTest, indexTest)
 {
 	Config		config;
-	std::string	expected("./content");
+	std::string	expected("index.html");
 
-	config.setReturnDir(expected);
-	ASSERT_EQ(config.getReturnDir(), expected);
+	config.addIndex(expected);
+	ASSERT_EQ(config.getIndex().at(0), expected);
 }
 
 TEST(ConfigTest, uploadPathTest)

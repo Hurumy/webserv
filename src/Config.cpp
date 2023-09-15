@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:22:27 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:39:18 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ std::string	Config::getReturnUrl() const
 bool	Config::getDirlist() const
 {return(this->dirlisting);}
 
-std::string const	Config::getReturnDir() const
-{return(this->returndir);}
+std::vector<std::string> const	Config::getIndex() const
+{return(this->index);}
 
 std::string const	Config::getUploadPath() const
 {return(this->uploadpath);}
@@ -156,9 +156,9 @@ bool	Config::setDirlist(bool conf)
 	return (true);
 }
 
-bool	Config::setReturnDir(std::string retdir)
+bool	Config::addIndex(std::string index)
 {
-	this->returndir = retdir;
+	this->index.push_back(index);
 	return (true);
 }
 

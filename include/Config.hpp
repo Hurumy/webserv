@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:25:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:39:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class	Config
 		int											returnstatus;
 		std::string									returnurl;
 		bool										dirlisting;
-		std::string									returndir;
+		std::vector<std::string>					index;
 		std::string									uploadpath;
 		std::map<std::string, bool>					reqmethod;		
 	
@@ -50,7 +50,7 @@ class	Config
 		int									getReturnStatus() const;
 		std::string							getReturnUrl() const;
 		bool								getDirlist() const;
-		std::string const					getReturnDir() const;
+		std::vector<std::string> const		getIndex() const;
 		std::string const					getUploadPath() const;
 		Result<std::string, bool> const		getReqMethod(std::string key) const;
 		
@@ -66,7 +66,7 @@ class	Config
 		bool								setReturnStatus(int status);
 		bool								setReturnUrl(std::string url);
 		bool								setDirlist(bool conf);
-		bool								setReturnDir(std::string retdir);
+		bool								addIndex(std::string index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
 };
