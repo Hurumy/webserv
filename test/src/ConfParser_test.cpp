@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 16:45:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:05:16 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,17 @@ TEST(ConfigParserTest, pRootTest)
 	ASSERT_EQ(tmp.at(1).getServerName().at(1), expected_3);
 }
 
-// TEST(ConfigParserTest, pMaxBodySize)
-// {
-// }
+TEST(ConfigParserTest, pMaxBodySize)
+{
+	std::vector<Config>			tmp;
+	unsigned long long			expected_1(5000000);
+	unsigned long long			expected_2(10000);
+	
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getMaxBodySize(), expected_1);
+	ASSERT_EQ(tmp.at(1).getMaxBodySize(), expected_2);
+}
 
 TEST(ConfigParserTest, pErrorPagesTest)
 {
