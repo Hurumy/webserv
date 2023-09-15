@@ -67,7 +67,7 @@ static int	checkProtocol(Config &conf, std::string &oneline)
 		setPortNumber(conf, lines.at(1));
 
 		//IPv4アドレスをセットする
-
+		conf.addIpAddress(lines.at(0));
 	}
 	else if (start != std::string::npos && end != std::string::npos && start <= end)
 	{
@@ -85,11 +85,10 @@ static int	checkProtocol(Config &conf, std::string &oneline)
 		setPortNumber(conf, lines.at(1));
 
 		//IPv6アドレスをセットする
+		conf.addIpAddress(lines.at(0));
 	}
 	else
 		errorInInit("Invalid string detected in http:server:listen directive (ﾉ´・ω・)ﾉ⌒✹\n");
-
- 	std::cout << BLUE "ip: " << lines.at(0) << std::endl;
 
 	return (0);
 }

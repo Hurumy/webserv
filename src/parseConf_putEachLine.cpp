@@ -31,7 +31,7 @@ static int		isServerSetting(std::string raw)
 static int	checkSettings(Config &conf, std::string	oneline)
 {
 	std::vector<std::string>	lines;
-	int							status;
+	int							status = 0;
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i ++)
@@ -75,9 +75,10 @@ static int	checkSettings(Config &conf, std::string	oneline)
 				status = readAutoindex(conf, oneline);
 				break ;
 			}
+			if (status == -1)
+				break ;
 		}
 	}
-	conf.addPort(oneline.size());
 	return 0;
 }
 
