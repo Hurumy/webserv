@@ -26,7 +26,8 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 		offset = 0;
 		pos = 0;
 		while (1) {
-			while (origin.find(delim, offset) + delimlen == origin.find(delim, offset + delimlen))
+			while (origin.find(delim, offset) + delimlen ==
+				   origin.find(delim, offset + delimlen))
 				offset += delimlen;
 			pos = origin.find(delim, offset);
 			if ((unsigned long)pos == std::string::npos) {

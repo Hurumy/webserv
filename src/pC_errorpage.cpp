@@ -12,11 +12,10 @@
 
 #include "ConfParser.hpp"
 
-int readErrorPage(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
-	std::stringstream			ss;
-	int							num;
+int readErrorPage(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
+	std::stringstream ss;
+	int num;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -29,20 +28,23 @@ int readErrorPage(Config &conf, std::string oneline)
 		errorInInit("Too many argments in error_page directives ι(´Д｀υ)");
 
 	if (isNumber(lines.at(1)) == false)
-		errorInInit("Invalid HTTP statuscode in error_page directives ▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
+		errorInInit(
+			"Invalid HTTP statuscode in error_page directives "
+			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
 	ss << lines.at(1);
 	ss >> num;
 
 	if (!(100 <= num && num < 600))
-		errorInInit("Invalid HTTP statuscode in error_page directives ▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
+		errorInInit(
+			"Invalid HTTP statuscode in error_page directives "
+			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
 	conf.addErrorPages(num, lines.at(2));
-	Result<std::string, bool>	res = conf.getErrorPages(num);
+	Result<std::string, bool> res = conf.getErrorPages(num);
 
-	//std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() << RESET << std::endl;
+	// std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() <<
+	// RESET << std::endl;
 
 	return (0);
 }
-
-

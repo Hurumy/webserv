@@ -12,61 +12,57 @@
 
 #include "ConfParser.hpp"
 
-static int	threecontents(Config &conf, std::vector<std::string> lines)
-{
-	std::stringstream	ss;
-	int					num;
+static int threecontents(Config &conf, std::vector<std::string> lines) {
+	std::stringstream ss;
+	int num;
 
-	if (isNumber(lines.at(1)) == true)
-	{
+	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
 		if (!(100 <= num && num < 600))
-			errorInInit("Invalid Status Code detected in return directive (◞‸◟)");
+			errorInInit(
+				"Invalid Status Code detected in return directive (◞‸◟)");
 		conf.setReturnStatus(num);
 		conf.setIsReturn(true);
-	}
-	else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
-	if (lines.at(2).compare(0, 7, "http://") == 0 || lines.at(2).compare(0, 8, "https://") == 0)
-	{
+	} else
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	if (lines.at(2).compare(0, 7, "http://") == 0 ||
+		lines.at(2).compare(0, 8, "https://") == 0) {
 		conf.setReturnUrl(lines.at(2));
 		conf.setIsReturn(true);
-	}
-	else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	} else
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
 
-static int	twocontents(Config &conf, std::vector<std::string> lines)
-{
-	std::stringstream	ss;
-	int					num;
+static int twocontents(Config &conf, std::vector<std::string> lines) {
+	std::stringstream ss;
+	int num;
 
-	if (isNumber(lines.at(1)) == true)
-	{
+	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
 		if (!(100 <= num && num < 600))
-			errorInInit("Invalid Status Code detected in return directive (◞‸◟)");
+			errorInInit(
+				"Invalid Status Code detected in return directive (◞‸◟)");
 		conf.setReturnStatus(num);
 		conf.setIsReturn(true);
-	}
-	else if (lines.at(1).compare(0, 7, "http://") == 0 || lines.at(1).compare(0, 8, "https://") == 0)
-	{
+	} else if (lines.at(1).compare(0, 7, "http://") == 0 ||
+			   lines.at(1).compare(0, 8, "https://") == 0) {
 		conf.setReturnUrl(lines.at(1));
 		conf.setIsReturn(true);
-	}
-	else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	} else
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
 
-int readReturn(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readReturn(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -84,4 +80,3 @@ int readReturn(Config &conf, std::string oneline)
 
 	return (0);
 }
-

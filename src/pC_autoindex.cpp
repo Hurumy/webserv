@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readAutoindex(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readAutoindex(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -31,10 +30,11 @@ int readAutoindex(Config &conf, std::string oneline)
 	else if (lines.at(1) == "off")
 		conf.setDirlist(false);
 	else
-		errorInInit("Invalid setting is detected in autoindex directive (¦3[___]");
+		errorInInit(
+			"Invalid setting is detected in autoindex directive (¦3[___]");
 
-	//std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET << std::endl;
+	// std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET <<
+	// std::endl;
 
 	return (0);
 }
-

@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readAllowedMethods(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readAllowedMethods(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -26,9 +25,9 @@ int readAllowedMethods(Config &conf, std::string oneline)
 	if (lines.size() > 5)
 		errorInInit("Too many allowedMethods directives _(´ω`_)⌒)_ ))");
 
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
-		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
+	for (size_t i = 1; i < lines.size(); i++) {
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
+			lines.at(i) == "DELETE" || lines.at(i) == "PUT")
 			conf.addReqMethod(lines.at(i), true);
 		else
 			errorInInit("Unsupported method is detected (*´ω｀*)");
@@ -36,4 +35,3 @@ int readAllowedMethods(Config &conf, std::string oneline)
 
 	return (0);
 }
-

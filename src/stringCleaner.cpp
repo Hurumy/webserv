@@ -12,65 +12,53 @@
 
 #include "webserv.hpp"
 
-bool	isNumber(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('0' <= str.c_str()[i] && str.c_str()[i] <= '9'))
-			return (false);
+bool isNumber(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('0' <= str.c_str()[i] && str.c_str()[i] <= '9')) return (false);
 	}
 	return (true);
 }
 
-bool	isSpace(std::string str)
-{
+bool isSpace(std::string str) {
 	char c;
 
-	for (size_t i = 0; i < str.length(); i ++)
-	{
+	for (size_t i = 0; i < str.length(); i++) {
 		c = str.c_str()[i];
-		if (c != ' ' && c != '\t' && c != '\r' && c != '\n' && c != '\v' && c != '\f')
+		if (c != ' ' && c != '\t' && c != '\r' && c != '\n' && c != '\v' &&
+			c != '\f')
 			return (false);
 	}
 	return (true);
 }
 
-bool	isCapitalAlphabet(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z'))
+bool isCapitalAlphabet(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z')) return (false);
+	}
+	return (true);
+}
+
+bool isSmallAlphabet(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z')) return (false);
+	}
+	return (true);
+}
+
+bool isAlphabet(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z') &&
+			!('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z'))
 			return (false);
 	}
 	return (true);
 }
 
-bool	isSmallAlphabet(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z'))
-			return (false);
-	}
-	return (true);
-}
-
-bool	isAlphabet(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z') && !('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z'))
-			return (false);
-	}
-	return (true);
-}
-
-bool	isAlnum(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z') && !('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z')
-				&& !('0' <= str.c_str()[i] && str.c_str()[i] <= '9'))
+bool isAlnum(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('a' <= str.c_str()[i] && str.c_str()[i] <= 'z') &&
+			!('A' <= str.c_str()[i] && str.c_str()[i] <= 'Z') &&
+			!('0' <= str.c_str()[i] && str.c_str()[i] <= '9'))
 			return (false);
 	}
 	return (true);
@@ -81,7 +69,8 @@ bool	isAlnum(std::string str)
 // 	for (size_t i = 0; i < lines.size(); i ++)
 // 	{
 // 		if (lines.at(i).empty() == true)
-// 			lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+// 			lines.erase(std::remove(lines.begin(), lines.end(), ""),
+// lines.end());
 // 	}
 // }
 

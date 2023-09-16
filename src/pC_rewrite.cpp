@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readRewrite(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readRewrite(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -28,9 +27,7 @@ int readRewrite(Config &conf, std::string oneline)
 
 	conf.addRedirects(lines.at(1), lines.at(2));
 
-	Result<std::string, bool>	res = conf.getRedirects(lines.at(1));
+	Result<std::string, bool> res = conf.getRedirects(lines.at(1));
 
 	return (0);
 }
-
-
