@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/05 13:09:10 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/15 18:17:37 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,10 @@ SRC_FILES		:= \
 					gtest_main.cpp \
 					Response_test.cpp \
 					Result_test.cpp \
-					Status_test.cpp
+					Status_test.cpp \
+					Config_test.cpp \
+					Port_test.cpp \
+					ConfParser_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -35,8 +38,29 @@ DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
 					APayload.cpp \
+					Request.cpp \
 					Response.cpp \
-					Status.cpp
+					Status.cpp \
+					Config.cpp \
+					Port.cpp \
+					error.cpp \
+					parseRequest.cpp \
+					stringCleaner.cpp \
+					parseConf.cpp \
+					parseConf_cutConfByDirective.cpp \
+					parseConf_cutConfToEachPort.cpp \
+					parseConf_putEachLine.cpp \
+					pC_listen.cpp \
+					pC_return.cpp \
+					pC_root.cpp \
+					pC_rewrite.cpp \
+					pC_servername.cpp \
+					pC_autoindex.cpp \
+					pC_errorpage.cpp \
+					pC_maxbodysize.cpp \
+					pC_index.cpp \
+					pC_uploadpath.cpp \
+					pC_allowedmethods.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

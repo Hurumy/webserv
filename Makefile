@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/06 17:32:54 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/08 11:56:24 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,8 @@ SRC_FILES	:= \
 				method_post.cpp \
 				method_delete.cpp \
 				method_unacceptable.cpp \
+				Config.cpp \
+				Port.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
