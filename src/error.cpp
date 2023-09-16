@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   makeConf.cpp                                       :+:      :+:    :+:   */
+/*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:41:53 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/12 08:45:11 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/15 18:57:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Config.hpp"
 #include "webserv.hpp"
 
-/*
-int	makeConf(std::string filepath)
+int	errorInInit(std::string errormessage)
 {
-	//ファイルを開く
-	//ファイルを読み込み、まっすぐなStringにする
-	//なんとかして・・・パースする・・・
-	//詰める
-	//終わり
+	perror(errormessage.c_str());
+	std::exit(1);
 }
-*/

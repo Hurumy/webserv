@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:22:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/15 18:57:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-int Config::getPort() const { return (this->port); }
+std::vector<std::string> const	Config::getIpAddress() const{return(this->ipaddress);}
 
-std::string const Config::getServerName() const { return (this->servername); }
+std::vector<int> const	Config::getPort() const{return(this->port);}
+
+std::vector<std::string> const	Config::getServerName() const {return(this->servername);}
 
 std::string const Config::getRootDir() const { return (this->rootdir); }
 
@@ -45,9 +47,26 @@ Result<std::string, bool> const Config::getRedirects(std::string key) const {
 		return Ok<std::string>(this->redirects.at(key));
 }
 
-bool Config::getDirlist() const { return (this->dirlisting); }
+bool	Config::isReturn() const
+{
+	return (this->isreturn);
+}
 
-std::string const Config::getReturnDir() const { return (this->returndir); }
+int		Config::getReturnStatus() const
+{
+	return (this->returnstatus);
+}
+
+std::string	Config::getReturnUrl() const
+{
+	return (this->returnurl);
+}
+
+bool	Config::getDirlist() const
+{return(this->dirlisting);}
+
+std::vector<std::string> const	Config::getIndex() const
+{return(this->index);}
 
 std::string const Config::getUploadPath() const { return (this->uploadpath); }
 
@@ -60,13 +79,21 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-bool Config::setPort(int port) {
-	this->port = port;
+bool	Config::addIpAddress(std::string address)
+{
+	this->ipaddress.push_back(address);
 	return (true);
 }
 
-bool Config::setServerName(std::string name) {
-	this->servername = name;
+bool	Config::addPort(int port)
+{
+	this->port.push_back(port);
+	return (true);
+}
+
+bool	Config::addServerName(std::string name)
+{
+	this->servername.push_back(name);
 	return (true);
 }
 
@@ -90,13 +117,33 @@ bool Config::addRedirects(std::string key, std::string val) {
 	return (true);
 }
 
-bool Config::setDirlist(bool conf) {
+bool	Config::setIsReturn(bool is)
+{
+	this->isreturn = is;
+	return (true);
+}
+
+bool	Config::setReturnStatus(int status)
+{
+	this->returnstatus = status;
+	return (true);
+}
+
+bool	Config::setReturnUrl(std::string url)
+{
+	this->returnurl = url;
+	return (true);
+}
+
+bool	Config::setDirlist(bool conf)
+{
 	this->dirlisting = conf;
 	return (true);
 }
 
-bool Config::setReturnDir(std::string retdir) {
-	this->returndir = retdir;
+bool	Config::addIndex(std::string index)
+{
+	this->index.push_back(index);
 	return (true);
 }
 
