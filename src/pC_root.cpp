@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readRoot(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readRoot(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 

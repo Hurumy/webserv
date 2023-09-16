@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readServerName(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readServerName(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -23,14 +22,11 @@ int readServerName(Config &conf, std::string oneline)
 	if (lines.at(0) != "server_name")
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
+	for (size_t i = 1; i < lines.size(); i++) {
 		conf.addServerName(lines.at(i));
-		//std::cout << GREEN "server_name: " << conf.getServerName() << RESET << std::endl;
+		// std::cout << GREEN "server_name: " << conf.getServerName() << RESET
+		// << std::endl;
 	}
 
 	return (0);
 }
-
-
-

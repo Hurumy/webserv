@@ -12,21 +12,19 @@
 
 #include "ConfParser.hpp"
 
-static bool	isNumber_andUnit(std::string str)
-{
-	for (size_t i = 0; i < str.length(); i ++)
-	{
-		if (!('0' <= str.c_str()[i] && str.c_str()[i] <= '9') && str.c_str()[i] != 'm' && str.c_str()[i] != 'k')
+static bool isNumber_andUnit(std::string str) {
+	for (size_t i = 0; i < str.length(); i++) {
+		if (!('0' <= str.c_str()[i] && str.c_str()[i] <= '9') &&
+			str.c_str()[i] != 'm' && str.c_str()[i] != 'k')
 			return (false);
 	}
 	return (true);
 }
 
-int readMaxBodySize(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
-	std::stringstream			ss;
-	unsigned long long			size;
+int readMaxBodySize(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
+	std::stringstream ss;
+	unsigned long long size;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -39,7 +37,9 @@ int readMaxBodySize(Config &conf, std::string oneline)
 		errorInInit("Invalid form detected in return directives ⊂('ω`⊂ 三");
 
 	if (isNumber_andUnit(lines.at(1)) == false)
-		errorInInit("Invalid expression detected in client_max_body_size directive (´っω-).｡oO");
+		errorInInit(
+			"Invalid expression detected in client_max_body_size directive "
+			"(´っω-).｡oO");
 
 	replaceStr(lines.at(1), "k", "000");
 	replaceStr(lines.at(1), "m", "000000");
@@ -50,4 +50,3 @@ int readMaxBodySize(Config &conf, std::string oneline)
 	conf.setMaxBodySize(size);
 	return (0);
 }
-

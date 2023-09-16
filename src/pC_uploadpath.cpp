@@ -12,9 +12,8 @@
 
 #include "ConfParser.hpp"
 
-int readUploadPath(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
+int readUploadPath(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -33,6 +32,3 @@ int readUploadPath(Config &conf, std::string oneline)
 
 	return (0);
 }
-
-
-

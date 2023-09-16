@@ -13,23 +13,20 @@
 #include "ConfParser.hpp"
 
 //コメントを丸ごと切り出す
-static std::string	cutOffStr(std::string &origin, std::string start, std::string end)
-{
-	size_t		startpos;
-	size_t		endpos;
-	size_t		offset = 0;
-	std::string	prev;
-	std::string	next;
-	std::string	result = origin;
+static std::string cutOffStr(std::string &origin, std::string start,
+							 std::string end) {
+	size_t startpos;
+	size_t endpos;
+	size_t offset = 0;
+	std::string prev;
+	std::string next;
+	std::string result = origin;
 
-	while (1)
-	{
+	while (1) {
 		startpos = origin.find(start, offset);
-		if (startpos == std::string::npos)
-			break;
+		if (startpos == std::string::npos) break;
 		endpos = origin.find(end, startpos);
-		if (endpos == std::string::npos)
-			break;
+		if (endpos == std::string::npos) break;
 		prev = origin.substr(0, startpos);
 		next = origin.substr(endpos, origin.size());
 		result = prev;
@@ -41,18 +38,16 @@ static std::string	cutOffStr(std::string &origin, std::string start, std::string
 }
 
 //第一引数の文字列から、第二引数の文字列を検索し、その全てを第三引数の文字列に置き換える
-std::string	replaceStr(std::string &origin, std::string search, std::string replace)
-{
-	size_t			pos = 0;
-	size_t			offset = 0;
-	const size_t	searchlen = search.length();
-	const size_t	replen = replace.length();
+std::string replaceStr(std::string &origin, std::string search,
+					   std::string replace) {
+	size_t pos = 0;
+	size_t offset = 0;
+	const size_t searchlen = search.length();
+	const size_t replen = replace.length();
 
-	while (pos != std::string::npos || search.empty() == false)
-	{
+	while (pos != std::string::npos || search.empty() == false) {
 		pos = origin.find(search, offset);
-		if (pos == std::string::npos)
-			break;
+		if (pos == std::string::npos) break;
 		origin.replace(pos, searchlen, replace);
 		offset = pos + replen;
 	}
@@ -60,14 +55,13 @@ std::string	replaceStr(std::string &origin, std::string search, std::string repl
 }
 
 //一つの命令ごとに切り分ける
-std::vector<std::string>	cutConfToEachPort(std::string raw)
-{
-	std::vector<std::string>	lines;
+std::vector<std::string> cutConfToEachPort(std::string raw) {
+	std::vector<std::string> lines;
 
-	//delete&ignore comments
+	// delete&ignore comments
 	cutOffStr(raw, "#", "\n");
 
-	//interpret spaces as " "
+	// interpret spaces as " "
 	replaceStr(raw, "\n", " ");
 	replaceStr(raw, "\r", " ");
 	replaceStr(raw, "\t", " ");
@@ -76,7 +70,7 @@ std::vector<std::string>	cutConfToEachPort(std::string raw)
 	replaceStr(raw, "{", ";{;");
 	replaceStr(raw, "}", ";};");
 
-	//cut string by ";"
+	// cut string by ";"
 	lines = lineSpliter(raw, ";");
 
 	return (lines);

@@ -12,11 +12,10 @@
 
 #include "ConfParser.hpp"
 
-static int	setPortNumber(Config &conf, std::string line)
-{		
-	int					tmp;
-	unsigned long long	port;
-	std::stringstream	ss;
+static int setPortNumber(Config &conf, std::string line) {
+	int tmp;
+	unsigned long long port;
+	std::stringstream ss;
 
 	//ポート番号があるはずの文字列の中身が全て数字であることを確認
 	tmp = isNumber(line);
@@ -29,20 +28,21 @@ static int	setPortNumber(Config &conf, std::string line)
 
 	//ポート番号が有効であることを確認する
 	if (!(1 <= port && port <= 65535))
-		errorInInit("Invalid Port Number detected in http:server:listen directive! ⊂(  っ☉ω☉)っ\n");
+		errorInInit(
+			"Invalid Port Number detected in http:server:listen directive! ⊂(  "
+			"っ☉ω☉)っ\n");
 
 	conf.addPort(port);
 	return (0);
 }
 
 //このOnelineの中身はポート番号のみ
-static int	checkProtocol(Config &conf, std::string &oneline)
-{
-	size_t						start;
-	size_t						end;
-	size_t						tmp;
-	size_t						tmp2;
-	std::vector<std::string>	lines;
+static int checkProtocol(Config &conf, std::string &oneline) {
+	size_t start;
+	size_t end;
+	size_t tmp;
+	size_t tmp2;
+	std::vector<std::string> lines;
 
 	start = oneline.find("[", 0);
 	end = oneline.find("]", 0);
@@ -53,24 +53,24 @@ static int	checkProtocol(Config &conf, std::string &oneline)
 	if (tmp != std::string::npos || tmp2 != std::string::npos)
 		errorInInit("too many [] signs detected!! (ﾉω<､)\n");
 
-	if (start == std::string::npos && end == std::string::npos)
-	{
+	if (start == std::string::npos && end == std::string::npos) {
 		//プロトコルをIPv4にセットする
 
-		//v4アドレス部分とポート番号部分に分ける
+		// v4アドレス部分とポート番号部分に分ける
 		lines = lineSpliter(oneline, ":");
 
 		if (lines.size() != 2)
-			errorInInit("Invalid number of elements detected in http:server:listen directive Σ(・ω・ノ)ノ\n");
+			errorInInit(
+				"Invalid number of elements detected in http:server:listen "
+				"directive Σ(・ω・ノ)ノ\n");
 
 		//ポートをセットする
 		setPortNumber(conf, lines.at(1));
 
-		//IPv4アドレスをセットする
+		// IPv4アドレスをセットする
 		conf.addIpAddress(lines.at(0));
-	}
-	else if (start != std::string::npos && end != std::string::npos && start <= end)
-	{
+	} else if (start != std::string::npos && end != std::string::npos &&
+			   start <= end) {
 		//プロトコルをIPv6にセットする
 
 		//"["を消し、"]"で文字列を切り分ける(v6アドレスとポートに分かれる)
@@ -78,27 +78,29 @@ static int	checkProtocol(Config &conf, std::string &oneline)
 		lines = lineSpliter(oneline, "]");
 
 		if (lines.size() != 2)
-			errorInInit("Invalid number of elements detected in http:server:listen directive Σ(・ω・ノ)ノ\n");
+			errorInInit(
+				"Invalid number of elements detected in http:server:listen "
+				"directive Σ(・ω・ノ)ノ\n");
 
 		//ポートをセットするために、ポート番号の前にある:を消し、関数に送る
 		replaceStr(lines.at(1), ":", "");
 		setPortNumber(conf, lines.at(1));
 
-		//IPv6アドレスをセットする
+		// IPv6アドレスをセットする
 		conf.addIpAddress(lines.at(0));
-	}
-	else
-		errorInInit("Invalid string detected in http:server:listen directive (ﾉ´・ω・)ﾉ⌒✹\n");
+	} else
+		errorInInit(
+			"Invalid string detected in http:server:listen directive "
+			"(ﾉ´・ω・)ﾉ⌒✹\n");
 
 	return (0);
 }
 
-int	readListen(Config &conf, std::string oneline)
-{
-	std::vector<std::string>	lines;
-	unsigned long long			status;
+int readListen(Config &conf, std::string oneline) {
+	std::vector<std::string> lines;
+	unsigned long long status;
 
-	//IP設定の有無を確認
+	// IP設定の有無を確認
 	status = oneline.find(":", 0);
 
 	//スペースで区切る。と、"listen" "(IP):8080"のように切れるはず
@@ -107,9 +109,11 @@ int	readListen(Config &conf, std::string oneline)
 	//空の文字列を削除して寄せる
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-	//default_serverが設定されていた時
-	if (lines.size() == 3  && lines.at(2) == "default_server")
-		errorInInit("I'm literally so sorry but you cant set default_server in this webserv (ヾﾉ･ω･`)\n");
+	// default_serverが設定されていた時
+	if (lines.size() == 3 && lines.at(2) == "default_server")
+		errorInInit(
+			"I'm literally so sorry but you cant set default_server in this "
+			"webserv (ヾﾉ･ω･`)\n");
 
 	//スペースで区切った後の要素数が2つではないとき
 	if (lines.size() != 2 || lines.at(0) != "listen")
@@ -118,10 +122,10 @@ int	readListen(Config &conf, std::string oneline)
 	//:があるかないか(IPの設定があるかないかを確認する)
 	if (status != std::string::npos)
 		checkProtocol(conf, lines.at(1));
-	else //:がないとき
+	else  //:がないとき
 		setPortNumber(conf, lines.at(1));
-	
-	//std::cout << BLUE "port: " << conf.getPort() << RESET << std::endl;
+
+	// std::cout << BLUE "port: " << conf.getPort() << RESET << std::endl;
 
 	return (0);
 }

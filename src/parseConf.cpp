@@ -12,11 +12,10 @@
 
 #include "ConfParser.hpp"
 
-Result<std::vector<Config>, bool>	parseConf(std::string filepath)
-{
-	std::vector<std::string>	list;
-	std::vector<Config>			confs;
-	Config						tmp;
+Result<std::vector<Config>, bool> parseConf(std::string filepath) {
+	std::vector<std::string> list;
+	std::vector<Config> confs;
+	Config tmp;
 
 	//まずポートごとにきりわける
 	Result<std::vector<std::string>, bool> res = cutConfByDirective(filepath);
@@ -26,18 +25,16 @@ Result<std::vector<Config>, bool>	parseConf(std::string filepath)
 		return Error<bool>(false);
 
 	//各ポートの設定ごとに、一つずつConfファイルを作り、Push_backしていく
-	for (size_t i = 0; i < list.size(); i ++)
-	{
+	for (size_t i = 0; i < list.size(); i++) {
 		Result<Config, bool> eachconf = parsePortVecs(list.at(i));
-		if (eachconf.isOK() == true)
-		{
+		if (eachconf.isOK() == true) {
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
 		}
 	}
-	
-	//return
-	return	Ok<std::vector<Config> >(confs);
+
+	// return
+	return Ok<std::vector<Config> >(confs);
 }
 
 // int main()
