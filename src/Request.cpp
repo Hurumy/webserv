@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 17:06:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:21:40 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ bool Request::loadPayload(CSocket &csocket) {
 					csocket.setPhase(CSocket::RECV);
 					return false;
 				}
+				break;
 			case Request::BODY:
 				body.append(csocket.getData(), 0, contentLength);
 				csocket.eraseData(contentLength);
