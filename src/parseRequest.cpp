@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/05 14:58:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/09 14:11:16 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 		offset = 0;
 		pos = 0;
 		while (1) {
+			while (origin.find(delim, offset) + delimlen ==
+				   origin.find(delim, offset + delimlen))
+				offset += delimlen;
 			pos = origin.find(delim, offset);
 			if ((unsigned long)pos == std::string::npos) {
 				list.push_back(origin.substr(offset));
