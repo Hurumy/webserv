@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 14:55:51 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:26:19 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static std::map<int, std::string> createResponse(SocketHandler &socketHandler, s
 
 	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
-			response[iter->getSockfd()] = std::string("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 12\r\n\r\nHello world!");
+			response[iter->getSockfd()] = std::string("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 14\r\n\r\nHello world!\r\n");
 			socketHandler.removeRequest(iter->getSockfd());
 		}
 	}
