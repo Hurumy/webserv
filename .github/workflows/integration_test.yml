@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/18 21:23:11 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/18 21:25:55 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,5 +41,5 @@ jobs:
           test_files=$(find . -type f -name '*.robot' -path "./test/robots/*")
           for file in $test_files; do
             echo "Running integration test for $file..."
-            robot -i "$file"
+            robot $file
           done
