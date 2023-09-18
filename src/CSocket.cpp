@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 15:27:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 16:51:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ std::string CSocket::popDataLine() {
 	std::string line;
 	
 	std::getline(iss, line);
-	data.erase(0, data.find("\n") + 1);
+	data.erase(0, data.find("\r\n") + 2);
 	return line;
 }
 
