@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 16:17:31 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:33:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ class	Config
 		Result<std::string, bool> const		getReqMethod(std::string key) const;
 		
 		//for test
-		bool								addAddresses(Address add);
+		bool								addAddresses(Address &add);
 		bool								addServerName(std::string name);
 		bool								setRootDir(std::string root);
 		bool								setMaxBodySize(unsigned long long siz);

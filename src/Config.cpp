@@ -6,17 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:13:11 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:32:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
-#include "Address.hpp"
-#include "Error.hpp"
-#include "Ok.hpp"
-#include "Result.hpp"
-#include "webserv.hpp"
 
 // Config::Config()
 // {
@@ -92,7 +86,7 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-bool Config::addAddresses(Address add){
+bool Config::addAddresses(Address &add){
 	this->addresses.push_back(add);
 	return (true);
 }

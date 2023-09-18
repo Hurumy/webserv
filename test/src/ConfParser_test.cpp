@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:14:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:29:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,21 @@
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
 
-// TEST(ConfigParserTest, pAddressesTest)
-// {
-// 	std::vector<Config>	tmp;
-// 	int					expected_1(8660);
-// 	int					expected_2(80);
-// 	int					expected_3(8080);
-// 	int					expected_4(80);
+TEST(ConfigParserTest, pAddressesTest)
+{
+	std::vector<Config>	tmp;
+	int					expected_1(8660);
+	int					expected_2(80);
+	int					expected_3(8080);
+	int					expected_4(80);
 	
-// 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-// 	tmp = res.getOk();
-// 	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getPort(), expected_1);
-// 	ASSERT_EQ(tmp.at(0).getAddresses().at(1).getPort(), expected_2);
-// 	ASSERT_EQ(tmp.at(1).getAddresses().at(0).getPort(), expected_3);
-// 	ASSERT_EQ(tmp.at(1).getAddresses().at(1).getPort(), expected_4);
-// }
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getPort(), expected_1);
+	ASSERT_EQ(tmp.at(0).getAddresses().at(1).getPort(), expected_2);
+	ASSERT_EQ(tmp.at(1).getAddresses().at(0).getPort(), expected_3);
+	ASSERT_EQ(tmp.at(1).getAddresses().at(1).getPort(), expected_4);
+}
 
 TEST(ConfigParserTest, pServerNameTest)
 {
