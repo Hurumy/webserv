@@ -6,13 +6,13 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/18 19:07:16 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/18 19:27:01 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:= google-unit-test
 CC				:= c++
-CFLAGS			:= -Wall -Wextra -Werror -std=c++14
+CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -fsanitize=address
 
 UNAME_OS		:= $(shell uname -s)
 
@@ -26,7 +26,7 @@ SRC_FILES		:= \
 					SSocket_test.cpp \
 					CSocket_test.cpp \
 					SocketHandler_test.cpp \
-					Request_test.cpp
+					Request_test.cpp \
 					ConfParser_test.cpp
 
 SRC_DIR			:= src
@@ -50,7 +50,6 @@ WS_SRC_FILES	:= \
 					SSocket.cpp \
 					CSocket.cpp \
 					SocketHandler.cpp \
-					Request.cpp
 					error.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
