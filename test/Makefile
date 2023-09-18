@@ -6,13 +6,13 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/15 18:17:37 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/18 16:00:42 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:= google-unit-test
 CC				:= c++
-CFLAGS			:= -Wall -Wextra -Werror -std=c++14
+CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -fsanitize=address
 
 UNAME_OS		:= $(shell uname -s)
 
@@ -23,7 +23,8 @@ SRC_FILES		:= \
 					Status_test.cpp \
 					Config_test.cpp \
 					Port_test.cpp \
-					ConfParser_test.cpp
+					ConfParser_test.cpp \
+					Address_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -38,6 +39,7 @@ DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
 					APayload.cpp \
+					Address.cpp \
 					Request.cpp \
 					Response.cpp \
 					Status.cpp \
