@@ -26,6 +26,14 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
+echo "${0}: install robotframework-requests."
+pip install robotframework-requests
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to install robotframework-requests: $status"
+  exit $status
+fi
+
 echo "${0}: compile sources."
 make re
 status=$?
