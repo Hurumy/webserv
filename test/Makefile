@@ -6,13 +6,13 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/18 19:27:01 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/18 21:05:47 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:= google-unit-test
 CC				:= c++
-CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -fsanitize=address
+CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -Wshadow-all
 
 UNAME_OS		:= $(shell uname -s)
 
@@ -103,6 +103,7 @@ all: $(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
+	@rm -rf $(WS_OBJ_DIR)
 
 fclean: clean
 	@rm -rf $(NAME)
