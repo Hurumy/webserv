@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Port.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:15:55 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:55:23 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 19:45:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ class	Port
 		size_t						getNumofPorts() const;
 
 		//for test
-		bool						addConf(int port, Config &conf);
+		bool						addConf(int port, Config &_conf);
 		bool						setHostPort(int port);
 };
 

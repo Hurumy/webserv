@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Port.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:19:15 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/08 11:55:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 19:45:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int Port::getHostPort() const { return (this->hostport); }
 
 size_t Port::getNumofPorts() const { return (this->conf.size()); }
 
-bool Port::addConf(int port, Config &conf) {
-	this->conf[port] = conf;
+bool Port::addConf(int port, Config &_conf) {
+	this->conf[port] = _conf;
 	return (true);
 }
 
