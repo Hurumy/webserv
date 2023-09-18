@@ -6,13 +6,13 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/18 21:05:47 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/18 21:08:25 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:= google-unit-test
 CC				:= c++
-CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -Wshadow-all
+CFLAGS			:= -Wall -Wextra -Werror -std=c++14
 
 UNAME_OS		:= $(shell uname -s)
 
