@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   initRes_isMatchHost.cpp                            :+:      :+:    :+:   */
+/*   Address.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/17 13:07:36 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 14:23:25 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/18 14:10:30 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/18 15:14:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "initResponse.hpp"
+#pragma once
 
-//configs.at(i) の i を返す
-// Result<int, bool>	isMatchHost(Response &res, Request req, std::vector<Config> configs)
-// {
-// 	for (size_t i = 0; i < configs.size(); i ++)
-// 	{
-// 		for (size_t t = 0; t < configs.at(i).getIpAddress().size; t ++)
-// 		{
-			
-// 		}
-// 	}
-// 	return ();
-// }
+#include "webserv.hpp"
+
+class	Address
+{
+	private:
+		std::string			ipaddress;
+		int					port;
+		int					ipvers;
+
+	protected:
+	public:
+		std::string const	getIpAddress() const;
+		int					getPort() const;
+		int					getIpVers() const;
+		bool				setIpAddress(std::string address);
+		bool				setPort(int address);
+		bool				setIpVers(int ipaddress);
+		Address();
+		Address(Address &add);
+};

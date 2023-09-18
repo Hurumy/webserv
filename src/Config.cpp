@@ -6,22 +6,40 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:57:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:13:11 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
+#include "Address.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
 
-std::vector<std::string> const Config::getIpAddress() const {
-	return (this->ipaddress);
-}
+// Config::Config()
+// {
+	
+// }
 
-std::vector<int> const Config::getPort() const { return (this->port); }
+// Config::Config(Config &conf)
+// {
+// 	for (size_t i = 0; i < conf.getAddresses().size(); i ++)
+// 		this->addAddresses(conf.getAddresses().at(i));
+// 	for (size_t i = 0; i < conf.getServerName().size(); i ++)
+// 		this->addServerName(conf.getServerName().at(i));
+// 	this->setRootDir(conf.getRootDir());
+// 	this->setMaxBodySize(conf.getMaxBodySize());
+// 	this->pushErrorPages(conf.pullErrorPages());
+
+
+// }
+
+std::vector<Address> const	Config::getAddresses() const
+{
+	return (this->addresses);
+}
 
 std::vector<std::string> const Config::getServerName() const {
 	return (this->servername);
@@ -74,13 +92,8 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-bool Config::addIpAddress(std::string address) {
-	this->ipaddress.push_back(address);
-	return (true);
-}
-
-bool Config::addPort(int port) {
-	this->port.push_back(port);
+bool Config::addAddresses(Address add){
+	this->addresses.push_back(add);
 	return (true);
 }
 
@@ -141,5 +154,16 @@ bool Config::setUploadPath(std::string path) {
 
 bool Config::addReqMethod(std::string key, bool val) {
 	this->reqmethod[key] = val;
+	return (true);
+}
+
+std::map<int, std::string>	Config::pullErrorPages() const
+{
+	return (this->errorpages);
+}
+
+bool	Config::pushErrorPages(std::map<int, std::string> map)
+{
+	this->errorpages = map;
 	return (true);
 }
