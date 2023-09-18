@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/12 01:18:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:54:12 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ bool SocketHandler::removeClosedCSockets() {
 			iter++;
 		}
 	}
+	return true;
+}
+
+bool SocketHandler::removeRequest(int const csockfd) {
+	std::map<int, Request>::iterator iter = requests.find(csockfd);
+	if (iter == requests.end()) {
+		return false;
+	}
+	requests.erase(iter);
 	return true;
 }
 
@@ -166,6 +175,27 @@ Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
 	return Ok<std::map<int, std::string> >(dataMap);
 }
 
+bool SocketHandler::recvCSocketsData() {
+	if (csockets.empty() == true) {
+		return false;
+	}
+	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if ((iter->getRevents() & POLLIN) == POLLIN && iter->getPhase() == CSocket::RECV) {
+			if (iter->readData() == false) {
+				return false;
+			}
+			std::string data = iter->_getData();
+			std::map<int, Request>::iterator reqiter = requests.find(iter->getSockfd());
+			if (reqiter != requests.end() && reqiter->second.getPhase() == Request::BODY) {
+				iter->setPhase(CSocket::LOAD);
+			} else if (data.find("\r\n") != std::string::npos) {
+				iter->setPhase(CSocket::LOAD);
+			}
+		}
+	}
+	return true;
+}
+
 bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) const {
 	if (dataMap.empty() == true) {
 		// error handling
@@ -187,4 +217,29 @@ bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) const
 		}
 	}
 	return true;
+}
+
+bool SocketHandler::loadRequests() {
+	Request request;
+
+	if (csockets.empty() == true) {
+		return false;
+	}
+	for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
+		if ((csockiter->getRevents() & POLLIN) == POLLIN && csockiter->getPhase() == CSocket::LOAD) {
+			std::map<int, Request>::iterator reqiter = requests.find(csockiter->getSockfd());
+			if (reqiter == requests.end()) {
+				requests[csockiter->getSockfd()] = request;
+			}
+			if (requests[csockiter->getSockfd()].loadPayload(*csockiter) == false) {
+				// error handling
+				// if request payload's format is invalid
+			}
+		}
+	}
+	return true;
+}
+
+std::map<int, Request> SocketHandler::getRequestsMap() const {
+	return requests;
 }
