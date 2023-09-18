@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:43:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:43:16 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 		setPortNumber(conf, lines.at(1));
 
 		// IPv4アドレスをセットする
-		conf.addIpAddress(lines.at(0));
+		conf.addIpAddress(oneline);
 	} else if (start != std::string::npos && end != std::string::npos &&
 			   start <= end) {
 		//プロトコルをIPv6にセットする
@@ -87,7 +87,7 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 		setPortNumber(conf, lines.at(1));
 
 		// IPv6アドレスをセットする
-		conf.addIpAddress(lines.at(0));
+		conf.addIpAddress(lines.at(0) + lines.at(1));
 	} else
 		errorInInit(
 			"Invalid string detected in http:server:listen directive "

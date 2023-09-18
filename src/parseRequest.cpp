@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/16 12:28:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:45:58 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,73 +41,73 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 	return (list);
 }
 
-// 1行目をパースしてRequestに中身をセットする
-static bool parseFirstLine(Request &req, std::string Firstline) {
-	std::vector<std::string> elems;
-	std::vector<std::string> tmp;
+// // 1行目をパースしてRequestに中身をセットする
+// static bool parseFirstLine(Request &req, std::string Firstline) {
+// 	std::vector<std::string> elems;
+// 	std::vector<std::string> tmp;
 
-	elems = lineSpliter(Firstline, " ");
-	if (elems.size() >= 3) {
-		req.setMethod(elems.at(0));
-		req.setUrl(elems.at(1));
-		tmp = lineSpliter(elems.at(2), "\r");
-		req.setVersion(tmp.at(0));
-	} else
-		return (false);
-	return (true);
-}
+// 	elems = lineSpliter(Firstline, " ");
+// 	if (elems.size() >= 3) {
+// 		req.setMethod(elems.at(0));
+// 		req.setUrl(elems.at(1));
+// 		tmp = lineSpliter(elems.at(2), "\r");
+// 		req.setVersion(tmp.at(0));
+// 	} else
+// 		return (false);
+// 	return (true);
+// }
 
-//ヘッダーのうち1行をもらい、RequestにHeaderとして詰める
-static bool addParsedLine(Request &req, std::string line) {
-	std::vector<std::string> tmp;
-	bool status;
+// //ヘッダーのうち1行をもらい、RequestにHeaderとして詰める
+// static bool addParsedLine(Request &req, std::string line) {
+// 	std::vector<std::string> tmp;
+// 	bool status;
 
-	tmp = lineSpliter(line, ": ");
-	if (tmp.size() != 2) return (false);
-	status = req.addHeader(tmp.at(0), tmp.at(1));
-	if (status == false) return (false);
-	return (true);
-}
+// 	tmp = lineSpliter(line, ": ");
+// 	if (tmp.size() != 2) return (false);
+// 	status = req.addHeader(tmp.at(0), tmp.at(1));
+// 	if (status == false) return (false);
+// 	return (true);
+// }
 
-static bool	getRequestBody(Request &req, std::vector<std::string> lines)
-{
-	std::stringstream	ss;
-	std::string			str;
-	unsigned long long	bytes = 0;
+// static bool	getRequestBody(Request &req, std::vector<std::string> lines)
+// {
+// 	std::stringstream	ss;
+// 	std::string			str;
+// 	unsigned long long	bytes = 0;
 
 
-	//Bodyが存在するかチェックする
-	//req.getHeader("Content-Type")
+// 	//Bodyが存在するかチェックする
+// 	//req.getHeader("Content-Type")
 	
-	//Bodyのバイト数を見る
-	Result<std::string, bool> result = getHeader("Content-Length");
-	if (result.isError() == true)
-		return (false);
+// 	//Bodyのバイト数を見る
+// 	Result<std::string, bool> result = req.getHeader("Content-Length");
+// 	if (result.isError() == true)
+// 		return (false);
 	
-	//バイト数分読み込んで詰める
-	str = result.getOk();
-	ss << str;
-	ss >> bytes;
+// 	//バイト数分読み込んで詰める
+// 	str = result.getOk();
+// 	ss << str;
+// 	ss >> bytes;
 
 
-}
+// }
 
-//リクエストをパースして参照に詰める
-bool parseRequest(Request &req, std::string rawData) {
-	std::vector<std::string> lines;
-	bool status;
+// //リクエストをパースして参照に詰める
+// bool parseRequest(Request &req, std::string rawData) {
+// 	std::vector<std::string> lines;
+// 	bool status;
 
-	lines = lineSpliter(rawData, "\n");
-	status = parseFirstLine(req, lines.at(0));
-	if (status == false) return (false);
-	for (unsigned long i = 1; i < lines.size(); i++) {
-		if (lines.at(i) == "")
-			break ;
-		status = addParsedLine(req, lines.at(i));
-	}
+// 	lines = lineSpliter(rawData, "\n");
+// 	status = parseFirstLine(req, lines.at(0));
+// 	if (status == false) return (false);
+// 	for (unsigned long i = 1; i < lines.size(); i++) {
+// 		if (lines.at(i) == "")
+// 			break ;
+// 		status = addParsedLine(req, lines.at(i));
+// 	}
 
-	return (true);
-}
+// 	return (true);
+// }
 
 /*
 int main()

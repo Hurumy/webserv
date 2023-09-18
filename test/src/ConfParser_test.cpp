@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:17:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:49:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ TEST(ConfigParserTest, pPortTest)
 TEST(ConfigParserTest, pIPTest)
 {
 	std::vector<Config>	tmp;
-	std::string			expected_1("111.108.92.125");
-	std::string			expected_2("::");
+	std::string			expected_1("111.108.92.125:8660");
+	std::string			expected_2("::80");
 	
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
