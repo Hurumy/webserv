@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 15:27:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:43:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class CSocket {
 		void setData(std::string const &_data);
 		std::string popDataLine();
 		std::string getDataLine() const;
-		bool sendData(std::string const &data) const;
+		bool sendData(std::string const &_data) const;
 		bool closeSockfd() const;
 		void setPhase(CSocket::tag _phase);
 		CSocket::tag getPhase() const;

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 16:51:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:42:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void CSocket::setIsFirst(bool _isFirst) {
 	isFirst = _isFirst;
 }
 
-bool CSocket::sendData(std::string const &data) const{
-	if (write(sockfd, data.c_str(), data.size()) == -1) {
+bool CSocket::sendData(std::string const &_data) const{
+	if (write(sockfd, _data.c_str(), _data.size()) == -1) {
 		return false;
 	}
 	return true;

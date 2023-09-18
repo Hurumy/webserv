@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:57:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:40:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ bool Config::addIpAddress(std::string address) {
 	return (true);
 }
 
-bool Config::addPort(int port) {
-	this->port.push_back(port);
+bool Config::addPort(int _port) {
+	this->port.push_back(_port);
 	return (true);
 }
 
@@ -129,8 +129,8 @@ bool Config::setDirlist(bool conf) {
 	return (true);
 }
 
-bool Config::addIndex(std::string index) {
-	this->index.push_back(index);
+bool Config::addIndex(std::string _index) {
+	this->index.push_back(_index);
 	return (true);
 }
 

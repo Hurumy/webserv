@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 17:21:40 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:38:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ const std::string Request::getLines() const {
 	return (line);
 }
 
-bool Request::setUrl(std::string url) {
-	this->url = url;
+bool Request::setUrl(std::string _url) {
+	this->url = _url;
 	return (true);
 }
 
 std::string const Request::getUrl(void) const { return (this->url); }
 
-bool Request::setMethod(std::string method) {
-	this->method = method;
+bool Request::setMethod(std::string _method) {
+	this->method = _method;
 	return (true);
 }
 

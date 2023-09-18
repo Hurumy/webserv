@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:30:58 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:38:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ class Request: public virtual APayload
 		Request();
 
 		const std::string	getLines() const;
-		bool				setUrl(std::string url);
+		bool				setUrl(std::string _url);
 		std::string const	getUrl(void) const;
-		bool				setMethod(std::string method);
+		bool				setMethod(std::string _method);
 		std::string const	getMethod(void) const;
 		const tag &getPhase() const;
 		bool loadPayload(CSocket &csocket);

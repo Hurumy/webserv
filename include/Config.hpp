@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Config.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:39:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:41:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ class	Config
 		
 		//for test
 		bool								addIpAddress(std::string address);
-		bool								addPort(int port);
+		bool								addPort(int _port);
 		bool								addServerName(std::string name);
 		bool								setRootDir(std::string root);
 		bool								setMaxBodySize(unsigned long long siz);
@@ -66,7 +66,7 @@ class	Config
 		bool								setReturnStatus(int status);
 		bool								setReturnUrl(std::string url);
 		bool								setDirlist(bool conf);
-		bool								addIndex(std::string index);
+		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
 };
