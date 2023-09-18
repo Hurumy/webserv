@@ -39,6 +39,10 @@ test/include
 test/lib
 google-unit-test
 
+# robotframework
+test/robots/*html
+test/robots/*xml
+
 # VS code
 .vscode
 
