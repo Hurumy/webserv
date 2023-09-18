@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/11 13:57:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:58:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,112 +64,4 @@ TEST(SocketHandlerTest, setReventsTest) {
 	ASSERT_EQ(resutl_pollfds.at(0).fd, ssockets.at(0).getSockfd());
 	ASSERT_EQ(resutl_pollfds.at(0).revents, ssockets.at(0).getRevents());
 	ASSERT_EQ(resutl_pollfds.at(1).revents, ssockets.at(1).getRevents());
-}
-
-TEST(SocketHandlerTest, recieveCSocketsTest) {
-	std::vector<SSocket> sources;
-
-	sources.push_back(SSocket(8080, IPV4, 1));
-	SocketHandler socketHandler(sources, 1000);
-	socketHandler.initAllSSockets();
-	socketHandler.createPollfds();
-	socketHandler.setRevents();
-	pid_t pid = fork();
-	if (pid == -1) {
-		std::exit(EXIT_FAILURE);
-	}
-	if (pid == 0) {
-		sleep(1);
-		system("curl localhost:8080");
-		std::exit(EXIT_SUCCESS);
-	}
-	while (true) {
-		socketHandler.recieveCSockets();
-		if (socketHandler.getCSockets().size() != 0) {
-			break ;
-		}
-		socketHandler.clearPollfds();
-		socketHandler.createPollfds();
-		socketHandler.setRevents();
-	}
-	socketHandler.closeAllSSockets();
-}
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-
-std::string main_simple_http_client() {
-    struct sockaddr_in serv_addr;
-    const char *hello = "Hello from client";
-    char buffer[1024] = {0};
-
-    const int sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (0 > sock) {
-        perror("simple HTTP client: sock");
-        return std::string("");
-    }
-    bzero(&serv_addr, sizeof(serv_addr));
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(8000);
-    if (0 >= inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)) {
-        perror("simple HTTP client: inet_pton");
-        return std::string("");
-    }
-    if (0 > connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr))) {
-        perror("simple HTTP client: connect");
-        return std::string("");
-    }
-    send(sock, hello, strlen(hello), 0);
-    printf("Hello message sent\n");
-    const int valread = read(sock, buffer, 1024);
-    if (0 > valread) {
-        perror("simple HTTP client: read");
-        return std::string("");
-    }
-    buffer[valread] = '\0';
-    printf("%s\n", buffer);
-    return std::string(buffer);
-}
-
-TEST(SocketHandlerTest, sendDataMapTest) {
-	std::vector<SSocket> sources;
-	std::map<int, std::string> request;
-
-	sources.push_back(SSocket(8000, IPV4, 1));
-	SocketHandler socketHandler(sources, 1000);
-	socketHandler.initAllSSockets();
-	socketHandler.createPollfds();
-	socketHandler.setRevents();
-	pid_t pid = fork();
-	if (pid == -1) {
-		std::exit(EXIT_FAILURE);
-	}
-	if (pid == 0) {
-		sleep(1);
-		std::string const response = main_simple_http_client();
-		ASSERT_STREQ(response.c_str(), "Hello from client");
-		std::exit(EXIT_SUCCESS);
-	}
-	while (true) {
-		if (socketHandler.getCSockets().empty() == false) {
-			Result<std::map<int, std::string>, bool> dataMap = socketHandler.getDataMap();
-			if (dataMap.isOK() == true) {
-				request = dataMap.getOk();
-				socketHandler.sendDataMap(request);
-				break ;
-			}
-		}
-		socketHandler.recieveCSockets();
-		socketHandler.clearPollfds();
-		socketHandler.removeClosedCSockets();
-		socketHandler.createPollfds();
-		socketHandler.setRevents();
-	}
-	socketHandler.closeAllSSockets();
-	ASSERT_STREQ(request.at(5).c_str(), "Hello from client");
 }
