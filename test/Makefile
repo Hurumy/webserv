@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/09 13:13:25 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/18 14:58:11 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,8 @@ SRC_FILES		:= \
 					Port_test.cpp \
 					SSocket_test.cpp \
 					CSocket_test.cpp \
-					SocketHandler_test.cpp
+					SocketHandler_test.cpp \
+					Request_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -46,7 +47,8 @@ WS_SRC_FILES	:= \
 					Port.cpp \
 					SSocket.cpp \
 					CSocket.cpp \
-					SocketHandler.cpp
+					SocketHandler.cpp \
+					Request.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
