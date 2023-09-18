@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/04 16:30:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 00:22:26 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
+
+APayload::~APayload() {}
 
 bool APayload::setVersion(std::string const &_version) {
 	version = _version;
@@ -46,3 +48,7 @@ bool APayload::addHeader(std::string const &key, std::string const &value) {
 std::string const &APayload::getVersion() const { return (version); }
 
 std::string const &APayload::getBody() const { return (body); }
+
+std::map<std::string, std::string> const &APayload::getAllHeader() const {
+	return header;
+}
