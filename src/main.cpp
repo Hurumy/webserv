@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/12 00:04:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 13:54:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 #include "Error.hpp"
 #include "SocketHandler.hpp"
 
-static std::map<int, std::string> createResponse(std::map<int, std::string> const &request) {
+static std::map<int, std::string> createResponse(std::vector<CSocket> const &csockets) {
 	std::map<int, std::string> response;
-	
-	for (std::map<int, std::string>::const_iterator iter = request.begin(); iter != request.end(); ++iter) {
-		response[iter->first] = std::string("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!");
+
+	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if (iter->getPhase() == CSocket::PASS) {
+			response[iter->getSockfd()] = std::string("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 12\r\n\r\nHello world!");
+		}
 	}
 	return response;
 }
@@ -39,12 +41,10 @@ int main() {
 	socketHandler.setRevents();
 	while (true) {
 		if (socketHandler.getCSockets().empty() == false) {
-			Result<std::map<int, std::string>, bool> dataMap = socketHandler.getDataMap();
-			if (dataMap.isOK() == true) {
-				request = dataMap.getOk();
-				response = createResponse(request);
-				socketHandler.sendDataMap(response);
-			}
+			socketHandler.recvCSocketsData();
+			socketHandler.loadRequests();
+			response = createResponse(socketHandler.getCSockets());
+			socketHandler.sendDataMap(response);
 		}
 		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
