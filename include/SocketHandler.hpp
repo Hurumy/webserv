@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 14:52:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:26:51 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ class SocketHandler {
 		std::vector<struct pollfd> const &getPollfds() const;
 		bool setRevents();
 		bool recieveCSockets();
-		Result<std::map<int, std::string>, bool> getDataMap() const;
 		std::map<int, Request> getRequestsMap() const;
 		bool recvCSocketsData();
 		bool sendDataMap(std::map<int, std::string> const &dataMap) const;

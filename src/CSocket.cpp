@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 00:38:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:27:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,34 +47,6 @@ void CSocket::setIsFirst(bool _isFirst) {
 	isFirst = _isFirst;
 }
 
-Result<std::string, bool> CSocket::getData() const {
-	std::string data;
-	char buff[BUFFER_SIZE];
-	ssize_t readLen;
-
-	if ((revents & POLLIN) != POLLIN) {
-		return Error<bool>(false);
-	}
-	while (true) {
-		if ((revents & POLLIN) != POLLIN) {
-			break ;
-		}
-		std::memset(buff, '\0', sizeof(char) * BUFFER_SIZE);
-		readLen = recv(sockfd, buff, BUFFER_SIZE, MSG_DONTWAIT);
-		if (readLen == -1) {
-			if (errno == EWOULDBLOCK) {	
-				return Ok<std::string>(data);
-			}
-			return Error<bool>(false);
-		}
-		if (readLen == 0) {
-			break ;
-		}
-		data.append(buff, readLen);
-	}
-	return Ok<std::string>(data);
-}
-
 bool CSocket::sendData(std::string const &data) const{
 	if (write(sockfd, data.c_str(), data.size()) == -1) {
 		return false;
@@ -104,7 +76,7 @@ bool CSocket::readData() {
 	return true;
 }
 
-std::string const &CSocket::_getData() const {
+std::string const &CSocket::getData() const {
 	return data;
 }
 

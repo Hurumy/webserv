@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 14:54:12 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:27:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,28 +153,6 @@ bool SocketHandler::recieveCSockets() {
 	return true;
 }
 
-Result<std::map<int, std::string>, bool> SocketHandler::getDataMap() const {
-	std::map<int, std::string> dataMap;
-
-	if (csockets.empty() == true) {
-		return Error<bool>(false);
-	}
-	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if ((iter->getRevents() & POLLIN) == POLLIN) {
-			Result<std::string, bool> data = iter->getData();
-			if (data.isOK() == true) {
-				dataMap[iter->getSockfd()] = data.getOk();
-			} else {
-				// error handling
-			}
-		}
-	}
-	if (dataMap.empty() == true) {
-		return Error<bool>(false);
-	}
-	return Ok<std::map<int, std::string> >(dataMap);
-}
-
 bool SocketHandler::recvCSocketsData() {
 	if (csockets.empty() == true) {
 		return false;
@@ -184,7 +162,7 @@ bool SocketHandler::recvCSocketsData() {
 			if (iter->readData() == false) {
 				return false;
 			}
-			std::string data = iter->_getData();
+			std::string data = iter->getData();
 			std::map<int, Request>::iterator reqiter = requests.find(iter->getSockfd());
 			if (reqiter != requests.end() && reqiter->second.getPhase() == Request::BODY) {
 				iter->setPhase(CSocket::LOAD);

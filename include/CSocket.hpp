@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 00:01:26 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:27:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ class CSocket {
 		void setRevents(short const _revents);
 		bool getIsFirst() const;
 		void setIsFirst(bool _isFirst);
-		Result<std::string, bool>  getData() const;
 		bool readData();
-		std::string const &_getData() const;
+		std::string const &getData() const;
 		void setData(std::string const &_data);
 		std::string popDataLine();
 		std::string getDataLine() const;

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 00:42:33 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:30:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,7 @@ class Request: public virtual APayload
 		tag phase;
 
 		static std::vector<std::string> initMethods();
-		bool setRequestLine(std::string const &line);
 		bool loadRequestLine(CSocket &csocket);
-		bool setHeader(std::string const &line);
 		bool loadHeader(CSocket const &csocket);
 		bool isMethod(std::string const &word);
 		bool isURL(std::string const &word);
