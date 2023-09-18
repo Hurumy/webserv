@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:31:05 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/18 17:06:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,11 @@ const std::string Request::getLines() const {
 	line += this->url;
 	line += " ";
 	line += this->version;
-	line += "\n";
+	line += "\r\n";
 	for (std::map<std::string, std::string>::const_iterator iter = header.begin(); iter != header.end(); ++iter) {
-		line += iter->first + ": " + iter->second + "\n";
+		line += iter->first + ": " + iter->second + "\r\n";
 	}
+	line += "\r\n";
 	line += this->body;
 	return (line);
 }
@@ -77,22 +78,26 @@ bool Request::loadPayload(CSocket &csocket) {
 			case Request::HEADER:
 				if (loadHeader(csocket) == true) {
 					if (csocket.getData().compare(0, 2, "\r\n") == 0) {
+						csocket.popDataLine();
 						std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
 						if (clengthiter != header.end()) {
 							std::stringstream ss(clengthiter->second);
 							ss >> contentLength;
-							return true;
+							phase = Request::BODY;
 						} else {
 							// error handling
+							phase = Request::BODY;
 						}
-						phase = Request::BODY;
+					} else {
+						break ;
 					}
 				} else {
+					// error handling
+					csocket.setPhase(CSocket::RECV);
 					return false;
 				}
-				break;
 			case Request::BODY:
-				body.append(csocket.getData(), contentLength);
+				body.append(csocket.getData(), 0, contentLength);
 				csocket.eraseData(contentLength);
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
