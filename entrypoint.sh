@@ -3,7 +3,7 @@
 set -e
 
 echo "${0}: install telnet."
-apt install telnet
+apt install -y telnet
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to install telnet: $status"
@@ -11,7 +11,7 @@ if [ $status -ne 0 ]; then
 fi
 
 echo "${0}: install siege."
-apt install siege
+apt install -y siege
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to install siege: $status"
