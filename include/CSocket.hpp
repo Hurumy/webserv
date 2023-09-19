@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 20:43:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:39:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ class CSocket {
 		int getSockfd() const;
 		short getRevents() const;
 		void setRevents(short const _revents);
-		bool getIsFirst() const;
-		void setIsFirst(bool _isFirst);
 		bool readData();
 		std::string const &getData() const;
 		void setData(std::string const &_data);
@@ -50,7 +48,6 @@ class CSocket {
 
 		int sockfd;
 		short revents;
-		bool isFirst;
 		std::string data;
 		tag phase;
 };

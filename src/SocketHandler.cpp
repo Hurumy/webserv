@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:38:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:39:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ bool SocketHandler::removeClosedCSockets() {
 			iter = csockets.erase(iter);
 			std::clog << "erase" << std::endl;
 		} else {
-			iter->setIsFirst(false);
 			iter++;
 		}
 	}

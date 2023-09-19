@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 20:42:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:39:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 
-CSocket::CSocket(int const _sockfd) : sockfd(_sockfd), revents(0), isFirst(true), phase(CSocket::RECV) {}
+CSocket::CSocket(int const _sockfd) : sockfd(_sockfd), revents(0), phase(CSocket::RECV) {}
 
 int CSocket::getSockfd() const {
 	return sockfd;
@@ -37,14 +37,6 @@ short CSocket::getRevents() const {
 
 void CSocket::setRevents(short const _revents) {
 	revents = _revents;
-}
-
-bool CSocket::getIsFirst() const {
-	return isFirst;
-}
-
-void CSocket::setIsFirst(bool _isFirst) {
-	isFirst = _isFirst;
 }
 
 bool CSocket::sendData(std::string const &_data) const{
