@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:24:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:25:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int main() {
 		}
 		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
-		socketHandler.removeClosedCSockets();
 		socketHandler.createPollfds();
 		socketHandler.setRevents();
+		socketHandler.removeClosedCSockets();
 	}
 	socketHandler.closeAllSSockets();
 	return 0;
