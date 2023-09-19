@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/19 13:26:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:52:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ bool Request::setMethod(std::string _method) {
 std::string const Request::getMethod(void) const { return (this->method); }
 
 bool Request::loadPayload(CSocket &csocket) {
+	bool isTrueLoadHeader;
+
 	while (true) {
 		switch (phase) {
 			case Request::REQLINE:
@@ -76,36 +78,18 @@ bool Request::loadPayload(CSocket &csocket) {
 				}
 				break;
 			case Request::HEADER:
-				if (loadHeader(csocket) == true) {
-					if (csocket.getData().compare(0, 2, "\r\n") == 0) {
-						csocket.popDataLine();
-						std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
-						if (clengthiter != header.end()) {
-							std::stringstream ss(clengthiter->second);
-							ss >> contentLength;
-							phase = Request::BODY;
-						} else {
-							// error handling
-							phase = Request::BODY;
-						}
-					} else {
-						break ;
+				isTrueLoadHeader = loadHeader(csocket);
+				if (csocket.getData().compare(0, 2, "\r\n") == 0) {
+					csocket.popDataLine();
+					std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
+					if (clengthiter != header.end()) {
+						std::stringstream ss(clengthiter->second);
+						ss >> contentLength;
 					}
-				} else {
-					// error handling
-					if (csocket.getData().compare(0, 2, "\r\n") == 0) {
-						csocket.popDataLine();
-						std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
-						if (clengthiter != header.end()) {
-							std::stringstream ss(clengthiter->second);
-							ss >> contentLength;
-							phase = Request::BODY;
-						} else {
-							// error handling
-							phase = Request::BODY;
-						}
-						break;
-					}
+					phase = Request::BODY;
+					break ;
+				}
+				if (isTrueLoadHeader == false) {
 					csocket.setPhase(CSocket::RECV);
 					return false;
 				}
