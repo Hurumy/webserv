@@ -12,34 +12,30 @@
 
 #include "CSocket.hpp"
 
-#include <unistd.h>
-#include <string>
-#include <cstring>
-#include <poll.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <sstream>
 #include <errno.h>
+#include <poll.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
 
-#include "Result.hpp"
-#include "Ok.hpp"
+#include <cstring>
+#include <sstream>
+#include <string>
+
 #include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
 
-CSocket::CSocket(int const _sockfd) : sockfd(_sockfd), revents(0), phase(CSocket::RECV) {}
+CSocket::CSocket(int const _sockfd)
+	: sockfd(_sockfd), revents(0), phase(CSocket::RECV) {}
 
-int CSocket::getSockfd() const {
-	return sockfd;
-}
+int CSocket::getSockfd() const { return sockfd; }
 
-short CSocket::getRevents() const {
-	return revents;
-}
+short CSocket::getRevents() const { return revents; }
 
-void CSocket::setRevents(short const _revents) {
-	revents = _revents;
-}
+void CSocket::setRevents(short const _revents) { revents = _revents; }
 
-bool CSocket::sendData(std::string const &_data) const{
+bool CSocket::sendData(std::string const &_data) const {
 	if (write(sockfd, _data.c_str(), _data.size()) == -1) {
 		return false;
 	}
@@ -56,7 +52,7 @@ bool CSocket::closeSockfd() const {
 bool CSocket::readData() {
 	char buff[BUFFER_SIZE] = {0};
 	ssize_t readLen;
-	
+
 	if ((revents & POLLIN) != POLLIN) {
 		return false;
 	}
@@ -68,18 +64,14 @@ bool CSocket::readData() {
 	return true;
 }
 
-std::string const &CSocket::getData() const {
-	return data;
-}
+std::string const &CSocket::getData() const { return data; }
 
-void CSocket::setData(std::string const &_data) {
-	data = _data;
-}
+void CSocket::setData(std::string const &_data) { data = _data; }
 
 std::string CSocket::popDataLine() {
 	std::istringstream iss(data);
 	std::string line;
-	
+
 	std::getline(iss, line);
 	data.erase(0, data.find("\r\n") + 2);
 	return line;
@@ -88,18 +80,14 @@ std::string CSocket::popDataLine() {
 std::string CSocket::getDataLine() const {
 	std::istringstream iss(data);
 	std::string line;
-	
+
 	std::getline(iss, line);
 	return line;
 }
 
-void CSocket::setPhase(CSocket::tag _phase) {
-	phase = _phase;
-}
+void CSocket::setPhase(CSocket::tag _phase) { phase = _phase; }
 
-CSocket::tag CSocket::getPhase() const{
-	return phase;
-}
+CSocket::tag CSocket::getPhase() const { return phase; }
 
 bool CSocket::eraseData(std::size_t until) {
 	data.erase(0, until);

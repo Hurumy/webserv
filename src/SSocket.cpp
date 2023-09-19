@@ -12,16 +12,18 @@
 
 #include "SSocket.hpp"
 
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <unistd.h>
+
 #include <cstring>
 
-SSocket::SSocket(int _port, ipvers _ipver, int _backlog) : port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
+SSocket::SSocket(int _port, ipvers _ipver, int _backlog)
+	: port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
 
 bool SSocket::init() {
-	struct  sockaddr_in s_addr;
+	struct sockaddr_in s_addr;
 	socklen_t addrsize;
 
 	std::memset(&s_addr, 0, sizeof(sockaddr_in));
@@ -59,26 +61,14 @@ bool SSocket::closeSockfd() {
 	return true;
 }
 
-int SSocket::getSockfd() const {
-	return sockfd;
-}
+int SSocket::getSockfd() const { return sockfd; }
 
-ipvers SSocket::getIpVer() const {
-	return ipver;
-}
+ipvers SSocket::getIpVer() const { return ipver; }
 
-int SSocket::getPort() const {
-	return port;
-}
+int SSocket::getPort() const { return port; }
 
-int SSocket::getBacklog() const {
-	return backlog;
-}
+int SSocket::getBacklog() const { return backlog; }
 
-short SSocket::getRevents() const {
-	return revents;
-}
+short SSocket::getRevents() const { return revents; }
 
-void SSocket::setRevents(short const _revents) {
-	revents = _revents;
-}
+void SSocket::setRevents(short const _revents) { revents = _revents; }

@@ -12,9 +12,9 @@
 
 #include <unistd.h>
 
-#include "Result.hpp"
-#include "Ok.hpp"
 #include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
 #include "SocketHandler.hpp"
 
 int main() {

@@ -12,10 +12,10 @@
 
 #include "Request.hpp"
 
-#include <vector>
 #include <algorithm>
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
 
 std::vector<std::string> const Request::methods = Request::initMethods();
 
@@ -32,7 +32,8 @@ std::vector<std::string> Request::initMethods() {
 	return _methods;
 }
 
-Request::Request() : contentLength(0), isCompleteHeader(false), phase(Request::REQLINE) {}
+Request::Request()
+	: contentLength(0), isCompleteHeader(false), phase(Request::REQLINE) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -43,7 +44,9 @@ const std::string Request::getLines() const {
 	line += " ";
 	line += this->version;
 	line += "\r\n";
-	for (std::map<std::string, std::string>::const_iterator iter = header.begin(); iter != header.end(); ++iter) {
+	for (std::map<std::string, std::string>::const_iterator iter =
+			 header.begin();
+		 iter != header.end(); ++iter) {
 		line += iter->first + ": " + iter->second + "\r\n";
 	}
 	line += "\r\n";
@@ -81,13 +84,14 @@ bool Request::loadPayload(CSocket &csocket) {
 				isTrueLoadHeader = loadHeader(csocket);
 				if (csocket.getData().compare(0, 2, "\r\n") == 0) {
 					csocket.popDataLine();
-					std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
+					std::map<std::string, std::string>::iterator clengthiter =
+						header.find("Content-Length");
 					if (clengthiter != header.end()) {
 						std::stringstream ss(clengthiter->second);
 						ss >> contentLength;
 					}
 					phase = Request::BODY;
-					break ;
+					break;
 				}
 				if (isTrueLoadHeader == false) {
 					csocket.setPhase(CSocket::RECV);
@@ -124,7 +128,7 @@ bool Request::loadRequestLine(CSocket &csocket) {
 		return false;
 	}
 	if (isVersion(_version) == false) {
-		return false;	
+		return false;
 	}
 	setMethod(_method);
 	setUrl(_url);
@@ -166,14 +170,10 @@ bool Request::isMethod(std::string const &word) {
 	return std::find(methods.begin(), methods.begin(), word) != methods.end();
 }
 
-bool Request::isURL(std::string const &word) {
-	return word.empty() == false;
-}
+bool Request::isURL(std::string const &word) { return word.empty() == false; }
 
 bool Request::isVersion(std::string const &word) {
 	return word.empty() == false;
 }
 
-const Request::tag &Request::getPhase() const {
-	return phase;
-}
+const Request::tag &Request::getPhase() const { return phase; }
