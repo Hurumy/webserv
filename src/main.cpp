@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/18 16:26:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:24:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,6 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 #include "SocketHandler.hpp"
-
-static std::map<int, std::string> createResponse(SocketHandler &socketHandler, std::vector<CSocket> const &csockets) {
-	std::map<int, std::string> response;
-
-	for (std::vector<CSocket>::const_iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if (iter->getPhase() == CSocket::PASS) {
-			response[iter->getSockfd()] = std::string("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 14\r\n\r\nHello world!\r\n");
-			socketHandler.removeRequest(iter->getSockfd());
-		}
-	}
-	return response;
-}
 
 int main() {
 	std::vector<SSocket> sources;
@@ -41,11 +29,12 @@ int main() {
 	socketHandler.createPollfds();
 	socketHandler.setRevents();
 	while (true) {
-		usleep(10000);
+		// for siege command
+		// usleep(10000);
 		if (socketHandler.getCSockets().empty() == false) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
-			response = createResponse(socketHandler, socketHandler.getCSockets());
+			response = socketHandler.createResponse();
 			socketHandler.sendDataMap(response);
 		}
 		socketHandler.recieveCSockets();
