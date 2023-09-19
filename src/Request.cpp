@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:38:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:26:34 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,19 @@ bool Request::loadPayload(CSocket &csocket) {
 					}
 				} else {
 					// error handling
+					if (csocket.getData().compare(0, 2, "\r\n") == 0) {
+						csocket.popDataLine();
+						std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
+						if (clengthiter != header.end()) {
+							std::stringstream ss(clengthiter->second);
+							ss >> contentLength;
+							phase = Request::BODY;
+						} else {
+							// error handling
+							phase = Request::BODY;
+						}
+						break;
+					}
 					csocket.setPhase(CSocket::RECV);
 					return false;
 				}
@@ -133,6 +146,8 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	setUrl(_url);
 	setVersion(_version);
 	csocket.popDataLine();
+	std::clog << method << " " << url << " " << version << std::endl;
+	std::clog << csocket.getDataLine() << std::endl;
 	return true;
 }
 
@@ -141,13 +156,16 @@ bool Request::loadHeader(CSocket &csocket) {
 	std::string key;
 	std::string value;
 
+	std::clog << csocket.getDataLine() << std::endl;
 	iss >> key;
+	std::clog << key << std::endl;
 	if (key.empty() == false) {
 		key.resize(key.size() - 1);
 	} else {
 		return false;
 	}
 	iss >> value;
+	std::clog << value << std::endl;
 	if (value.empty() == false) {
 		header[key] = value;
 	} else {
