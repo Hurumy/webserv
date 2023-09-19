@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/08 11:56:24 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/11 20:48:35 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= webserv
 CC			:= c++
-CFLAGS		:= -Wall -Wextra -Werror -std=c++98
+CFLAGS		:= -Wall -Wextra -Werror -std=c++98 -fsanitize=address
 
 SRC_FILES	:= \
 				main.cpp \
@@ -29,7 +29,10 @@ SRC_FILES	:= \
 				method_delete.cpp \
 				method_unacceptable.cpp \
 				Config.cpp \
-				Port.cpp
+				Port.cpp \
+				CSocket.cpp \
+				SSocket.cpp \
+				SocketHandler.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj

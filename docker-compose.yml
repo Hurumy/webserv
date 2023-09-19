@@ -1,0 +1,33 @@
+version: '3'
+services:
+  locust:
+    container_name: webserv_locust
+    image: python:latest
+    volumes:
+      - ./test/loadtest:/code
+    working_dir: /code
+    command: >
+      /bin/sh -c "
+        pip install locust &&
+        locust
+      "
+    ports:
+      - '8089:8089'
+    networks:
+      - webserv_net
+
+  webserv:
+    container_name: webserv
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - '8000:8000'
+      - '8080:8080'
+    command: /bin/sh -c "/code/entrypoint.sh"
+    networks:
+      - webserv_net
+
+networks:
+  webserv_net:
+    driver: bridge
