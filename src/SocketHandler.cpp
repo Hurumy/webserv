@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:36:40 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/19 13:37:19 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,6 @@ bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) const
 					if (csockiter->closeSockfd() == false) {
 						// error handling
 					}
-					std::clog << "test" << std::endl;
 					break ;
 				}
 			}
