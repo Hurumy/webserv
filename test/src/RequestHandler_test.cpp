@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 18:27:28 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:31:44 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
 
+//ポート番号の有無などの差にも対応するようにする
 TEST(RequestHandlerTest, searchMatchHostTest)
 {
 	std::vector<Config>			tmp;
@@ -40,5 +41,23 @@ TEST(RequestHandlerTest, searchMatchHostTest)
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
 }
+
+// TEST(RequestHandlerTest, searchMatchHostTest)
+// {
+// 	std::vector<Config>			tmp;
+// 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+// 	tmp = res.getOk();
+// 	Request						req;
+// 	int							expected(1);
+
+// 	req.setVersion("HTTP/1.1");
+// 	req.setMethod("GET");
+// 	req.addHeader("Host", "kawaii.test");
+
+// 	RequestHandler handler = RequestHandler(tmp, req);
+// 	Result<int, bool> result_1 = handler.searchMatchHost();
+// 	ASSERT_EQ(result_1.getOk(), expected);
+// }
+
 
 
