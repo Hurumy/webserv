@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 11:40:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/04 15:32:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/15 17:53:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Result<int, std::string> parse_digit(char c) {
   return Ok<int>(c - '0');
 }
 
-TEST(RequesTest, OkTest) {
+TEST(ResultTest, OkTest) {
 	Result<int, std::string> result = parse_digit('0');
 	
 	ASSERT_EQ(result.isOK(), true);
@@ -34,7 +34,7 @@ TEST(RequesTest, OkTest) {
 	ASSERT_EQ(result.getOk(), 0);
 }
 
-TEST(RequesTest, ErrorTest) {
+TEST(ResultTest, ErrorTest) {
 	Result<int, std::string> result = parse_digit('a');
 	std::string expected("invalid character");
 	
@@ -43,7 +43,7 @@ TEST(RequesTest, ErrorTest) {
 	ASSERT_STREQ(result.getError().c_str(), expected.c_str());
 }
 
-TEST(RequesTest, CopyTest) {
+TEST(ResultTest, CopyTest) {
 	Result<int, std::string> result = parse_digit('a');
 	std::string expected("invalid charactertest");
 	std::string str = result.getError();

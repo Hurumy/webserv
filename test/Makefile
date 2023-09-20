@@ -3,10 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2023/09/18 16:00:42 by komatsud         ###   ########.fr        #
+=======
+#    Updated: 2023/09/18 21:08:25 by shtanemu         ###   ########.fr        #
+>>>>>>> main
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +29,10 @@ SRC_FILES		:= \
 					Port_test.cpp \
 					ConfParser_test.cpp \
 					Address_test.cpp
+					SSocket_test.cpp \
+					CSocket_test.cpp \
+					SocketHandler_test.cpp \
+					Request_test.cpp \
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -45,6 +53,9 @@ WS_SRC_FILES	:= \
 					Status.cpp \
 					Config.cpp \
 					Port.cpp \
+					SSocket.cpp \
+					CSocket.cpp \
+					SocketHandler.cpp \
 					error.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
@@ -62,7 +73,7 @@ WS_SRC_FILES	:= \
 					pC_maxbodysize.cpp \
 					pC_index.cpp \
 					pC_uploadpath.cpp \
-					pC_allowedmethods.cpp \
+					pC_allowedmethods.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
@@ -98,6 +109,7 @@ all: $(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
+	@rm -rf $(WS_OBJ_DIR)
 
 fclean: clean
 	@rm -rf $(NAME)

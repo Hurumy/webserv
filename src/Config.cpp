@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:32:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:19:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ bool Config::setDirlist(bool conf) {
 	return (true);
 }
 
-bool Config::addIndex(std::string index) {
-	this->index.push_back(index);
+bool Config::addIndex(std::string _index) {
+	this->index.push_back(_index);
 	return (true);
 }
 

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:33:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:19:08 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class	Config
 		bool								setReturnStatus(int status);
 		bool								setReturnUrl(std::string url);
 		bool								setDirlist(bool conf);
-		bool								addIndex(std::string index);
+		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   APayload.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/07 15:02:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:19:16 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
+
+APayload::~APayload() {}
 
 bool APayload::setVersion(std::string const &_version) {
 	version = _version;
@@ -46,3 +48,7 @@ bool APayload::addHeader(std::string const &key, std::string const &value) {
 std::string const &APayload::getVersion() const { return (version); }
 
 std::string const &APayload::getBody() const { return (body); }
+
+std::map<std::string, std::string> const &APayload::getAllHeader() const {
+	return header;
+}
