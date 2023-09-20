@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/20 12:45:37 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/20 18:27:57 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ SRC_FILES		:= \
 					CSocket_test.cpp \
 					SocketHandler_test.cpp \
 					Request_test.cpp \
+					RequestHandler_test.cpp \
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -69,7 +70,8 @@ WS_SRC_FILES	:= \
 					pC_maxbodysize.cpp \
 					pC_index.cpp \
 					pC_uploadpath.cpp \
-					pC_allowedmethods.cpp
+					pC_allowedmethods.cpp \
+					RequestHandler.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 13:13:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 13:45:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 15:28:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,10 @@ Response	initResponse(Response &res, Request req, std::vector<Config> configs)
 	if (res_2.isOK() == false)
 		return (res);
 
-	//3. 入りうるヘッダを全て見て、それぞれ対応する
+	//3. methodに合わせて処理を行う！！！！！また、その際に気にしなければならないヘッダを気にする
+
+	//4. 入りうるヘッダを全て見て、それぞれ対応する
+	
 
 	//拾った情報に合わせてレスポンスを作る
 
