@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:39:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/20 14:35:37 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ bool SocketHandler::removeClosedCSockets() {
 				(POLLIN | POLLOUT | POLLHUP) ||
 			(iter->getPhase() == CSocket::CLOSE)) {
 			iter = csockets.erase(iter);
-			std::clog << "erase" << std::endl;
 		} else {
 			iter++;
 		}
@@ -207,7 +206,6 @@ bool SocketHandler::sendDataMap(
 					if (csockiter->closeSockfd() == false) {
 						// error handling
 					}
-					std::clog << "test" << std::endl;
 					break;
 				}
 			}

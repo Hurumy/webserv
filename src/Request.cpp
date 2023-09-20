@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/19 13:52:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/20 14:35:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,6 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	setUrl(_url);
 	setVersion(_version);
 	csocket.popDataLine();
-	std::clog << method << " " << url << " " << version << std::endl;
-	std::clog << csocket.getDataLine() << std::endl;
 	return true;
 }
 
@@ -144,16 +142,13 @@ bool Request::loadHeader(CSocket &csocket) {
 	std::string key;
 	std::string value;
 
-	std::clog << csocket.getDataLine() << std::endl;
 	iss >> key;
-	std::clog << key << std::endl;
 	if (key.empty() == false) {
 		key.resize(key.size() - 1);
 	} else {
 		return false;
 	}
 	iss >> value;
-	std::clog << value << std::endl;
 	if (value.empty() == false) {
 		header[key] = value;
 	} else {
