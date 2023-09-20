@@ -3,20 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-<<<<<<< HEAD
-#    Updated: 2023/09/18 16:00:42 by komatsud         ###   ########.fr        #
-=======
-#    Updated: 2023/09/18 21:08:25 by shtanemu         ###   ########.fr        #
->>>>>>> main
+#    Updated: 2023/09/20 12:45:37 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME			:= google-unit-test
 CC				:= c++
-CFLAGS			:= -Wall -Wextra -Werror -std=c++14 -fsanitize=address
+CFLAGS			:= -Wall -Wextra -Werror -std=c++14
 
 UNAME_OS		:= $(shell uname -s)
 
@@ -28,7 +24,7 @@ SRC_FILES		:= \
 					Config_test.cpp \
 					Port_test.cpp \
 					ConfParser_test.cpp \
-					Address_test.cpp
+					Address_test.cpp \
 					SSocket_test.cpp \
 					CSocket_test.cpp \
 					SocketHandler_test.cpp \

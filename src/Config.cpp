@@ -6,29 +6,11 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 12:19:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:45:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
-// Config::Config()
-// {
-	
-// }
-
-// Config::Config(Config &conf)
-// {
-// 	for (size_t i = 0; i < conf.getAddresses().size(); i ++)
-// 		this->addAddresses(conf.getAddresses().at(i));
-// 	for (size_t i = 0; i < conf.getServerName().size(); i ++)
-// 		this->addServerName(conf.getServerName().at(i));
-// 	this->setRootDir(conf.getRootDir());
-// 	this->setMaxBodySize(conf.getMaxBodySize());
-// 	this->pushErrorPages(conf.pullErrorPages());
-
-
-// }
 
 std::vector<Address> const	Config::getAddresses() const
 {

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:10:30 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:14:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:25:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ class	Address
 		bool				setPort(int address);
 		bool				setIpVers(int ipaddress);
 		Address();
-		Address(Address &add);
+		Address(Address const &add);
 };

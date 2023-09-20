@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:24:50 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:34:02 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:25:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Address::Address()
 	this->ipvers = -1;
 }
 
-Address::Address(Address &add)
+Address::Address(Address const &add)
 {
 	this->ipaddress = add.getIpAddress();
 	this->port = add.getPort();

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 12:19:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 12:45:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ class	Config
 	protected:
 	
 	public:
-		Config();
-		Config(Config &conf);
 		std::vector<Address> const			getAddresses() const;
 		std::vector<std::string> const		getServerName() const;
 		std::string const					getRootDir() const;

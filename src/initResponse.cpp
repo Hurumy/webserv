@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 13:13:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 12:58:58 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 13:45:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,15 +94,19 @@ Response	initResponse(Response &res, Request req, std::vector<Config> configs)
 	//エラーが発生していた場合、その場所でステータスコードなどを詰めて帰って来るので、そのまま返る
 
 
-	//Hostをチェックして該当するConfがあることを確かめる
-	
-	
-	//必須のヘッダがあることを確かめる
-	Result<std::string, bool> res_1 = checkRequiredHeader(req, res, conf);
+	//1. Hostをチェックして該当するConfがあることを確かめる
+	Result<int, bool>	res_1 = isMatchHost(res, req, configs);
 	if (res_1.isOK() == false)
 		return (res);
+	else
+		conf = configs.at(res_1.getOk());
 
-	//入りうるヘッダを全て見て、それぞれ対応する
+	//2. 必須のヘッダがあることを確かめる
+	Result<std::string, bool> res_2 = checkRequiredHeader(req, res, conf);
+	if (res_2.isOK() == false)
+		return (res);
+
+	//3. 入りうるヘッダを全て見て、それぞれ対応する
 
 	//拾った情報に合わせてレスポンスを作る
 
