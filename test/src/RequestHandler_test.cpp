@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/21 10:27:44 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/21 12:57:31 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,47 @@ TEST(RequestHandlerTest, searchMatchHostTest)
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(false);
+	unsigned int				expected_status(400);
+	std::string					expected_string("Bad Request");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "wronghost.test.net");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isOK(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(false);
+	unsigned int				expected_status(400);
+	std::string					expected_string("Bad Request");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isOK(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
 TEST(RequestHandlerTest, checkRequiedHeaderTest)
@@ -80,17 +121,17 @@ TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion)
+TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_AllowedMethod)
 {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config>			tmp = res.getOk();
 	Request						req;
 	bool						expected(false);
-	unsigned int				expected_status(505);
-	std::string					expected_string("HTTP Version Not Supported");
+	unsigned int				expected_status(405);
+	std::string					expected_string("Method Not Allowed");
 
-	req.setVersion("HTTP/2.0");
-	req.setMethod("GET");
+	req.setVersion("HTTP/1.1");
+	req.setMethod("PET");
 	req.addHeader("Host", "kawaii.test");
 
 	RequestHandler handler = RequestHandler(tmp, req);
@@ -101,3 +142,23 @@ TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
+TEST(RequestHandlerTest, getResponseTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config>			tmp = res.getOk();
+	Request						req;
+	bool						expected(false);
+	unsigned int				expected_status(405);
+	std::string					expected_string("Method Not Allowed");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("PET");
+	req.addHeader("Host", "kawaii.test");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	ASSERT_EQ(result_1.isOK(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+}

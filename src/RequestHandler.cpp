@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/21 10:25:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:25:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ Result<int, bool>	RequestHandler::searchMatchHost()
 			}
 		}
 	}
+	res.setStatus(400);
+	res.setStatusMessage("Bad Request");
 	return Error<bool>(false);
 }
 
