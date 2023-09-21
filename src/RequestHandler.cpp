@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 18:29:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:25:13 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ Result<int, bool>	RequestHandler::searchMatchHost()
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t ++)
 		{
 			if (configs.at(i).getServerName().at(t) == hostname)
+			{
+				this->confnum = i;
 				return Ok<int>(i);
+			}
 		}
 	}
 	return Error<bool>(false);
@@ -53,7 +56,7 @@ Result<int, bool>	RequestHandler::checkRequiedHeader()
 		res.setStatusMessage("HTTP Version Not Supported");
 		return Error<bool>(false);
 	}
-	if (configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false)
+	if (this->confnum < configs.size() && configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false)
 	{
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
@@ -83,6 +86,11 @@ Result<int, bool>	RequestHandler::routeMethod()
 		return Error<bool>(false);
 	}
 	return Error<bool>(false);
+}
+
+Response	RequestHandler::getResponse()
+{
+	return (this->res);
 }
 
 
