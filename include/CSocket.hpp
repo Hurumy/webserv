@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:39:20 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/22 22:49:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #define BUFFER_SIZE 1000
 
 #include <string>
+#include <ctime>
 
 #include "Result.hpp"
 
@@ -43,6 +44,8 @@ class CSocket {
 		void setPhase(CSocket::tag _phase);
 		CSocket::tag getPhase() const;
 		bool eraseData(std::size_t until);
+		std::time_t const &getLasttime() const;
+		void setLasttime(std::time_t const &_lasttime);
 	private:
 		CSocket();
 
@@ -50,4 +53,5 @@ class CSocket {
 		short revents;
 		std::string data;
 		tag phase;
+		std::time_t lasttime;
 };

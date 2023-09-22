@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/20 14:35:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/22 23:38:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <algorithm>
 #include <map>
 #include <vector>
+#include <ctime>
 
 #include "CSocket.hpp"
 #include "Error.hpp"
@@ -26,8 +27,8 @@
 #include "Result.hpp"
 #include "SSocket.hpp"
 
-SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, int _timeout)
-	: timeout(_timeout), ssockets(_ssockets) {}
+SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, std::size_t const _timeout, int _pollTimeout)
+	: ssockets(_ssockets), timeout(_timeout), pollTimeout(_pollTimeout) {}
 
 bool SocketHandler::initAllSSockets() {
 	for (std::vector<SSocket>::iterator iter = ssockets.begin();
@@ -80,7 +81,7 @@ std::vector<CSocket> const &SocketHandler::getCSockets() const {
 	return csockets;
 }
 
-int SocketHandler::getTimeout() const { return timeout; }
+int SocketHandler::getTimeout() const { return pollTimeout; }
 
 void SocketHandler::addCSocket(CSocket const &_csocket) {
 	csockets.push_back(_csocket);
@@ -116,7 +117,7 @@ std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 }
 
 bool SocketHandler::setRevents() {
-	if (poll(pollfds.data(), pollfds.size(), timeout) == -1) {
+	if (poll(pollfds.data(), pollfds.size(), pollTimeout) == -1) {
 		return false;
 	}
 	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin();
@@ -189,23 +190,21 @@ bool SocketHandler::recvCSocketsData() {
 }
 
 bool SocketHandler::sendDataMap(
-	std::map<int, std::string> const &dataMap) const {
+	std::map<int, std::string> const &dataMap) {
 	if (dataMap.empty() == true) {
 		// error handling
 		return false;
 	}
 	for (std::map<int, std::string>::const_iterator dataiter = dataMap.begin();
 		 dataiter != dataMap.end(); ++dataiter) {
-		for (std::vector<CSocket>::const_iterator csockiter = csockets.begin();
+		for (std::vector<CSocket>::iterator csockiter = csockets.begin();
 			 csockiter != csockets.end(); ++csockiter) {
 			if ((csockiter->getRevents() & POLLOUT) == POLLOUT) {
 				if (dataiter->first == csockiter->getSockfd()) {
 					if (csockiter->sendData(dataiter->second) == false) {
 						// error handling
 					}
-					if (csockiter->closeSockfd() == false) {
-						// error handling
-					}
+					csockiter->setPhase(CSocket::RECV);
 					break;
 				}
 			}
@@ -234,6 +233,7 @@ bool SocketHandler::loadRequests() {
 				// error handling
 				// if request payload's format is invalid
 			}
+			csockiter->setLasttime(std::time(NULL));
 		}
 	}
 	return true;
@@ -253,8 +253,22 @@ std::map<int, std::string> SocketHandler::createResponse() {
 				"HTTP/1.1 200 OK\r\nContent-Type: "
 				"text/plain\r\nContent-Length: 14\r\n\r\nHello world!\r\n");
 			removeRequest(iter->getSockfd());
-			iter->setPhase(CSocket::CLOSE);
 		}
 	}
 	return response;
+}
+
+bool SocketHandler::closeTimeoutCSockets() {
+	if (csockets.empty() == true) {
+		return true;
+	}
+	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
+			iter->setPhase(CSocket::CLOSE);
+			if (iter->closeSockfd() == false) {
+				return false;
+			}
+		}
+	}
+	return true;
 }

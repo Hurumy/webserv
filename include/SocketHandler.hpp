@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 12:32:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/22 23:30:33 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,16 @@ class SocketHandler {
 	private:
 		SocketHandler();
 
-		int timeout;
 		std::vector<SSocket> ssockets;
 		std::vector<CSocket> csockets;
+		std::size_t timeout;
+		int pollTimeout;
 		std::vector<struct pollfd> pollfds;
 		std::map<int, Request> requests;
 
 	protected:
 	public:
-		SocketHandler(std::vector<SSocket> &_ssockets, int const _timeout);
+		SocketHandler(std::vector<SSocket> &_ssockets, std::size_t const _timeout, int _pollTimeout);
 
 		bool initAllSSockets();
 		bool closeAllSSockets();
@@ -51,7 +52,8 @@ class SocketHandler {
 		bool recieveCSockets();
 		std::map<int, Request> getRequestsMap() const;
 		bool recvCSocketsData();
-		bool sendDataMap(std::map<int, std::string> const &dataMap) const;
+		bool sendDataMap(std::map<int, std::string> const &dataMap);
 		bool loadRequests();
 		std::map<int, std::string> createResponse();
+		bool closeTimeoutCSockets();
 };
