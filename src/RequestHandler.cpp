@@ -6,13 +6,14 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 10:46:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:57:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RequestHandler.hpp"
 #include "AMethod.hpp"
 #include "MethodGet.hpp"
+#include "MethodPost.hpp"
 
 RequestHandler::RequestHandler(std::vector<Config> const _conf, Request const _req)
 {
@@ -84,6 +85,13 @@ Result<int, bool>	RequestHandler::routeMethod()
 	else if (req.getMethod() == "POST")
 	{
 		//クラス呼ぶ
+		MethodPost post(configs.at(confnum), req, res);
+		Result<int, bool> res_get = post.act();
+		if (res_get.isOK() == false)
+			return Error<bool>(false);
+		else
+			return Ok<int>(0);
+		
 	}
 	else if (req.getMethod() == "DELETE")
 	{

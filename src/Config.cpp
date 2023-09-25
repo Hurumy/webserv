@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 12:45:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:02:58 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ std::string const Config::getUploadPath() const { return (this->uploadpath); }
 Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 	if (this->reqmethod.empty() == true)
 		return Ok<std::string>("");
-	else if (this->reqmethod.find(key) == this->reqmethod.end()) {
+	else if (reqmethod.find(key) == reqmethod.end()) {
 		return Error<bool>(false);
 	} else
 		return Ok<std::string>("");

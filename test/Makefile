@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 10:59:50 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/25 12:01:41 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ SRC_FILES		:= \
 					SocketHandler_test.cpp \
 					Request_test.cpp \
 					RequestHandler_test.cpp \
-					MethodGet_test.cpp
+					MethodGet_test.cpp \
+					MethodPost_test.cpp
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -75,6 +76,7 @@ WS_SRC_FILES	:= \
 					RequestHandler.cpp \
 					AMethod.cpp \
 					MethodGet.cpp \
+					MethodPost.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
