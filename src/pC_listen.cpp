@@ -6,13 +6,13 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:43:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:52:02 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-static int setPortNumber(Config &conf, std::string line) {
+static int setPortNumber(std::string line, Address &add) {
 	int tmp;
 	unsigned long long port;
 	std::stringstream ss;
@@ -32,12 +32,12 @@ static int setPortNumber(Config &conf, std::string line) {
 			"Invalid Port Number detected in http:server:listen directive! ⊂(  "
 			"っ☉ω☉)っ\n");
 
-	conf.addPort(port);
+	add.setPort(port);
 	return (0);
 }
 
 //このOnelineの中身はポート番号のみ
-static int checkProtocol(Config &conf, std::string &oneline) {
+static int checkProtocol(std::string &oneline, Address &add) {
 	size_t start;
 	size_t end;
 	size_t tmp;
@@ -55,6 +55,7 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 
 	if (start == std::string::npos && end == std::string::npos) {
 		//プロトコルをIPv4にセットする
+		add.setIpVers(0);
 
 		// v4アドレス部分とポート番号部分に分ける
 		lines = lineSpliter(oneline, ":");
@@ -65,13 +66,14 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 				"directive Σ(・ω・ノ)ノ\n");
 
 		//ポートをセットする
-		setPortNumber(conf, lines.at(1));
+		setPortNumber(lines.at(1), add);
 
 		// IPv4アドレスをセットする
-		conf.addIpAddress(lines.at(0));
+		add.setIpAddress(lines.at(0));
 	} else if (start != std::string::npos && end != std::string::npos &&
 			   start <= end) {
 		//プロトコルをIPv6にセットする
+		add.setIpVers(1);
 
 		//"["を消し、"]"で文字列を切り分ける(v6アドレスとポートに分かれる)
 		replaceStr(oneline, "[", "");
@@ -84,10 +86,10 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 
 		//ポートをセットするために、ポート番号の前にある:を消し、関数に送る
 		replaceStr(lines.at(1), ":", "");
-		setPortNumber(conf, lines.at(1));
+		setPortNumber(lines.at(1), add);
 
 		// IPv6アドレスをセットする
-		conf.addIpAddress(lines.at(0));
+		add.setIpAddress(lines.at(0));
 	} else
 		errorInInit(
 			"Invalid string detected in http:server:listen directive "
@@ -98,6 +100,7 @@ static int checkProtocol(Config &conf, std::string &oneline) {
 
 int readListen(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
+	Address add;
 	unsigned long long status;
 
 	// IP設定の有無を確認
@@ -121,11 +124,13 @@ int readListen(Config &conf, std::string oneline) {
 
 	//:があるかないか(IPの設定があるかないかを確認する)
 	if (status != std::string::npos)
-		checkProtocol(conf, lines.at(1));
+		checkProtocol(lines.at(1), add);
 	else  //:がないとき
-		setPortNumber(conf, lines.at(1));
+		setPortNumber(lines.at(1), add);
 
-	// std::cout << BLUE "port: " << conf.getPort() << RESET << std::endl;
+	conf.addAddresses(add);
+	// std::cout << BLUE "port: " << conf.getAddresses().at(0).getPort() <<
+	// RESET << std::endl;
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:17:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 20:29:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "webserv.hpp"
 #include "ConfParser.hpp"
+#include "Address.hpp"
 #include "Config.hpp"
 #include "Result.hpp"
 #include "Ok.hpp"
@@ -21,7 +22,7 @@
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
 
-TEST(ConfigParserTest, pPortTest)
+TEST(ConfigParserTest, pAddressesTest)
 {
 	std::vector<Config>	tmp;
 	int					expected_1(8660);
@@ -31,22 +32,10 @@ TEST(ConfigParserTest, pPortTest)
 	
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	ASSERT_EQ(tmp.at(0).getPort().at(0), expected_1);
-	ASSERT_EQ(tmp.at(0).getPort().at(1), expected_2);
-	ASSERT_EQ(tmp.at(1).getPort().at(0), expected_3);	
-	ASSERT_EQ(tmp.at(1).getPort().at(1), expected_4);
-}
-
-TEST(ConfigParserTest, pIPTest)
-{
-	std::vector<Config>	tmp;
-	std::string			expected_1("111.108.92.125");
-	std::string			expected_2("::");
-	
-	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	tmp = res.getOk();
-	ASSERT_EQ(tmp.at(0).getIpAddress().at(0), expected_1);
-	ASSERT_EQ(tmp.at(0).getIpAddress().at(1), expected_2);
+	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getPort(), expected_1);
+	ASSERT_EQ(tmp.at(0).getAddresses().at(1).getPort(), expected_2);
+	ASSERT_EQ(tmp.at(1).getAddresses().at(0).getPort(), expected_3);
+	ASSERT_EQ(tmp.at(1).getAddresses().at(1).getPort(), expected_4);
 }
 
 TEST(ConfigParserTest, pServerNameTest)
@@ -66,15 +55,13 @@ TEST(ConfigParserTest, pServerNameTest)
 TEST(ConfigParserTest, pRootTest)
 {
 	std::vector<Config>	tmp;
-	std::string			expected_1("_");
-	std::string			expected_2("kawaii.test");
-	std::string			expected_3("www.kawaii.test");
+	std::string			expected_1("/usr/share/nginx/html");
+	std::string			expected_2("/content");
 	
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	ASSERT_EQ(tmp.at(0).getServerName().at(0), expected_1);
-	ASSERT_EQ(tmp.at(1).getServerName().at(0), expected_2);
-	ASSERT_EQ(tmp.at(1).getServerName().at(1), expected_3);
+	ASSERT_EQ(tmp.at(0).getRootDir(), expected_1);
+	ASSERT_EQ(tmp.at(1).getRootDir(), expected_2);
 }
 
 TEST(ConfigParserTest, pMaxBodySize)

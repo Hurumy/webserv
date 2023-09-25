@@ -52,3 +52,6 @@ dir/*
 
 # Python
 __pycache__
+
+# FilesNoPerm
+NoPermToRead.txt
