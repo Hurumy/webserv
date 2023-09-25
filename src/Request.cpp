@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 18:27:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:14:10 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include "Version.hpp"
 
 std::vector<std::string> const Request::methods = Request::initMethods();
 
@@ -136,7 +138,13 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	if (isURL(_url) == false) {
 		return false;
 	}
-	if (isVersion(_version) == false) {
+	if (_version.empty() == true) {
+		_version = "HTTP/1.1";
+	}
+	else if (isVersion(_version) == false) {
+		// Should return error page 
+		csocket.closeSockfd();
+		csocket.setPhase(CSocket::CLOSE);
 		return false;
 	}
 	setMethod(_method);
@@ -177,7 +185,11 @@ bool Request::isMethod(std::string const &word) {
 bool Request::isURL(std::string const &word) { return word.empty() == false; }
 
 bool Request::isVersion(std::string const &word) {
-	return word.empty() == false;
+	if (word.empty() == false) {
+		return false;
+	}
+	Result<std::string, bool> result = Version::getVersion(word);
+	return result.isOK() == true;
 }
 
 const Request::tag &Request::getPhase() const { return phase; }
