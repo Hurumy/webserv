@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 18:12:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:13:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
 				// for debugging
-				std::clog << getLines() << std::endl;
+				std::clog << getLines() << std::endl;/
 				return true;
 		}
 	}
