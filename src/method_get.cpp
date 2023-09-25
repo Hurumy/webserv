@@ -134,10 +134,9 @@ int methodGet(Request req, Response &res) {
 
 	filename = req.getUrl().substr(1, req.getUrl().size());
 
-	//debug
-	if (filename == "")
-		filename = "content/readme.html"; 
-	
+	// debug
+	if (filename == "") filename = "content/readme.html";
+
 	//拡張子を見てContentTypeを判断しResponseにセット
 	setContentType(res, filename);
 

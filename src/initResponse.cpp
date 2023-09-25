@@ -12,8 +12,7 @@
 
 #include "initResponse.hpp"
 
-std::vector<std::string>	genHeadersArray(void)
-{
+std::vector<std::string> genHeadersArray(void) {
 	std::vector<std::string> res;
 
 	res.push_back("Cache-Control");
@@ -26,9 +25,8 @@ std::vector<std::string>	genHeadersArray(void)
 	return (res);
 }
 
-std::vector<std::string>	reqHeadersArray(void)
-{
-	std::vector<std::string>	res;
+std::vector<std::string> reqHeadersArray(void) {
+	std::vector<std::string> res;
 
 	res.push_back("Accept");
 	res.push_back("Accept-Charset");
@@ -50,9 +48,8 @@ std::vector<std::string>	reqHeadersArray(void)
 	return (res);
 }
 
-std::vector<std::string>	resHeadersArray(void)
-{
-	std::vector<std::string>	res;
+std::vector<std::string> resHeadersArray(void) {
+	std::vector<std::string> res;
 
 	res.push_back("Age");
 	res.push_back("Location");
@@ -66,9 +63,8 @@ std::vector<std::string>	resHeadersArray(void)
 	return (res);
 }
 
-std::vector<std::string>	entHeadersArray(void)
-{
-	std::vector<std::string>	res;
+std::vector<std::string> entHeadersArray(void) {
+	std::vector<std::string> res;
 
 	res.push_back("Allow");
 	res.push_back("Content-Base");
@@ -85,34 +81,27 @@ std::vector<std::string>	entHeadersArray(void)
 	return (res);
 }
 
-Response	initResponse(Response &res, Request req, std::vector<Config> configs)
-{
-	Config	conf;
+Response initResponse(Response &res, Request req, std::vector<Config> configs) {
+	Config conf;
 
-
-	//requestの中身を参照しつつ、一つ一つ詰める
+	// requestの中身を参照しつつ、一つ一つ詰める
 	//エラーが発生していた場合、その場所でステータスコードなどを詰めて帰って来るので、そのまま返る
 
-
-	//1. Hostをチェックして該当するConfがあることを確かめる
-	Result<int, bool>	res_1 = isMatchHost(res, req, configs);
+	// 1. Hostをチェックして該当するConfがあることを確かめる
+	Result<int, bool> res_1 = isMatchHost(res, req, configs);
 	if (res_1.isOK() == false)
 		return (res);
 	else
 		conf = configs.at(res_1.getOk());
 
-	//2. 必須のヘッダがあることを確かめる
+	// 2. 必須のヘッダがあることを確かめる
 	Result<std::string, bool> res_2 = checkRequiredHeader(req, res, conf);
-	if (res_2.isOK() == false)
-		return (res);
+	if (res_2.isOK() == false) return (res);
 
-	//3. methodに合わせて処理を行う！！！！！また、その際に気にしなければならないヘッダを気にする
+	// 3.
+	// methodに合わせて処理を行う！！！！！また、その際に気にしなければならないヘッダを気にする
 
-	//4. 入りうるヘッダを全て見て、それぞれ対応する
-	
+	// 4. 入りうるヘッダを全て見て、それぞれ対応する
 
 	//拾った情報に合わせてレスポンスを作る
-
 }
-
-

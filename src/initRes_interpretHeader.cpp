@@ -12,8 +12,8 @@
 
 #include "initResponse.hpp"
 
-Result<int, bool>	interpretHeader(Request req, Response &res, Config conf, std::vector<std::string> requestheader)
-{
+Result<int, bool> interpretHeader(Request req, Response &res, Config conf,
+								  std::vector<std::string> requestheader) {
 	// if (req.getHeader("Accept").isOK() == true)
 	// {
 	// }
@@ -44,7 +44,7 @@ Result<int, bool>	interpretHeader(Request req, Response &res, Config conf, std::
 	// }
 	// if (req.getHeader("If-Match"))
 	// {
-		
+
 	// }
 	// if (req.getHeader("If-None-Match"))
 	// if (req.getHeader("If-Range"))

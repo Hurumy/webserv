@@ -10,13 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
-#include "AMethod.hpp"
 #include "MethodPost.hpp"
 
-MethodPost::MethodPost(Config _conf, Request _req, Response &_res): AMethod(_conf, _req, _res){}
+#include "AMethod.hpp"
+#include "webserv.hpp"
 
-MethodPost::~MethodPost(){}
+MethodPost::MethodPost(Config _conf, Request _req, Response &_res)
+	: AMethod(_conf, _req, _res) {}
+
+MethodPost::~MethodPost() {}
 
 int MethodPost::writeToFile(int fd) {
 	int status;
@@ -37,9 +39,8 @@ int MethodPost::writeToFile(int fd) {
 	ss >> filesize;
 
 	//ファイルに書き込みをする
-	size_t	i = filesize;
-	while (i > 0)
-	{
+	size_t i = filesize;
+	while (i > 0) {
 		status = write(fd, req.getBody().c_str(), i);
 		if (status == -1) {
 			res.setStatus(500);
@@ -78,15 +79,13 @@ std::string MethodPost::makeFilename() {
 	return (filename);
 }
 
-Result<int, bool>	MethodPost::checkMaxBodySize()
-{
-	std::stringstream	ss;
-	unsigned long long	filesize;
+Result<int, bool> MethodPost::checkMaxBodySize() {
+	std::stringstream ss;
+	unsigned long long filesize;
 
 	Result<std::string, bool> header = req.getHeader("Content-Length");
-	
-	if (header.isOK() == false)
-	{
+
+	if (header.isOK() == false) {
 		res.setStatus(411);
 		res.setStatusMessage("Length Required");
 		return Error<bool>(false);
@@ -95,8 +94,7 @@ Result<int, bool>	MethodPost::checkMaxBodySize()
 	ss << header.getOk();
 	ss >> filesize;
 
-	if (filesize > conf.getMaxBodySize())
-	{
+	if (filesize > conf.getMaxBodySize()) {
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
@@ -118,10 +116,9 @@ int MethodPost::openPostResource() {
 		return (401);
 	}
 
-	//Configで指定されているMaxBodySizeを超えていないかしらべる
-	Result<int, bool>		res_size = checkMaxBodySize();
-	if (res_size.isOK() == false)
-		return (413);
+	// Configで指定されているMaxBodySizeを超えていないかしらべる
+	Result<int, bool> res_size = checkMaxBodySize();
+	if (res_size.isOK() == false) return (413);
 
 	//被りのないファイル名を調べる
 	filename = makeFilename();
@@ -146,18 +143,14 @@ int MethodPost::openPostResource() {
 		return (status);
 }
 
-Result<int, bool>	MethodPost::act()
-{
+Result<int, bool> MethodPost::act() {
 	int status;
 
 	status = openPostResource();
-	if (status >= 200 && status <= 299)
-	{
+	if (status >= 200 && status <= 299) {
 		res.addHeader("Location", filename);
 		return Ok<int>(status);
-	}
-	else
-	{
+	} else {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
