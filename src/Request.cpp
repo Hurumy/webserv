@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 18:14:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:27:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				isTrueLoadHeader = loadHeader(csocket);
 				if (csocket.getData().compare(0, 2, "\r\n") == 0) {
 					csocket.popDataLine();
-					std::map<std::string, std::string>::iterator clengthiter =
-						header.find("Content-Length");
+					std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
 					if (clengthiter != header.end()) {
 						std::stringstream ss(clengthiter->second);
 						ss >> contentLength;
@@ -113,7 +112,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
 				// for debugging
-				std::clog << getLines() << std::endl;/
+				// std::clog << getLines() << std::endl;
 				return true;
 		}
 	}
@@ -129,7 +128,9 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	iss >> _method;
 	iss >> _url;
 	iss >> _version;
-	if (isMethod(_method) == false) {
+	if (_method.empty() == true) {
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::RECV);
 		return false;
 	}
 	if (isURL(_url) == false) {
