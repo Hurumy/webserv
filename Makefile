@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 15:09:50 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/25 19:11:48 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ SRC_FILES	:= \
 				APayload.cpp \
 				Response.cpp \
 				Request.cpp \
+				Version.cpp \
 				parseRequest.cpp \
 				test.cpp \
 				makeStatusMap.cpp \
