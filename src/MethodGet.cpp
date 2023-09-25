@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 10:36:48 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:04:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 //部分Get
 //Range
 
-MethodGet::MethodGet(Config _conf, Request _req, Response _res): AMethod(_conf, _req, _res){};
+MethodGet::MethodGet(Config _conf, Request _req, Response &_res): AMethod(_conf, _req, _res){};
 
 MethodGet::~MethodGet(){};
 
@@ -146,7 +146,12 @@ Result<int, bool>	MethodGet::act()
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
-
+	else
+	{
+		res.setStatus(200);
+		res.setStatusMessage("OK");
+		return Ok<int>(0);
+	}
 	return Ok<int>(0);
 }
 

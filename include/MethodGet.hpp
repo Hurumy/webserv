@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:04:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 10:09:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 11:03:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class	MethodGet: private AMethod
 		Result<int, bool>	checkGetSemantics();
 	protected:
 	public:
-		MethodGet(Config _conf, Request _req, Response _res);
+		MethodGet(Config _conf, Request _req, Response &_res);
 		~MethodGet();
 		Result<int, bool>	act();
 };
