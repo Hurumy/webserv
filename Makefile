@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/11 20:48:35 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/25 15:09:50 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,12 @@ SRC_FILES	:= \
 				Port.cpp \
 				CSocket.cpp \
 				SSocket.cpp \
-				SocketHandler.cpp
+				SocketHandler.cpp \
+				Address.cpp \
+				AMethod.cpp \
+				MethodGet.cpp \
+				MethodPost.cpp \
+				MethodDelete.cpp \
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
