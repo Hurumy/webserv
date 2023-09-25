@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 16:47:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 18:12:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::size_t afterSize = body.size();
 				csocket.eraseData(afterSize - beforeSize);
 				lastContentLength -= afterSize - beforeSize;
-				if (lastContentLength != 0) {\
-					std::clog << "last content length: " << lastContentLength << std::endl; 
-					std::clog << "body: \n" << body << std::endl; 
+				if (lastContentLength != 0) {
 					csocket.setPhase(CSocket::RECV);
 					return true;
 				}
