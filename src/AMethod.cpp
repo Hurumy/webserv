@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 10:23:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:26:49 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ Result<std::string, bool> const	AMethod::_openFile(std::string filename)
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
-		buf[status] = '\0';
 		if (status != -1)
 		{
+			buf[status] = '\0';
 			body += buf;
 			bodysize += status;
 		}
