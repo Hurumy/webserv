@@ -3,25 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:40:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:02:58 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-#include "Error.hpp"
-#include "Ok.hpp"
-#include "Result.hpp"
-#include "webserv.hpp"
-
-std::vector<std::string> const Config::getIpAddress() const {
-	return (this->ipaddress);
+std::vector<Address> const	Config::getAddresses() const
+{
+	return (this->addresses);
 }
-
-std::vector<int> const Config::getPort() const { return (this->port); }
 
 std::vector<std::string> const Config::getServerName() const {
 	return (this->servername);
@@ -68,19 +62,14 @@ std::string const Config::getUploadPath() const { return (this->uploadpath); }
 Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 	if (this->reqmethod.empty() == true)
 		return Ok<std::string>("");
-	else if (this->reqmethod.find(key) == this->reqmethod.end()) {
+	else if (reqmethod.find(key) == reqmethod.end()) {
 		return Error<bool>(false);
 	} else
 		return Ok<std::string>("");
 }
 
-bool Config::addIpAddress(std::string address) {
-	this->ipaddress.push_back(address);
-	return (true);
-}
-
-bool Config::addPort(int _port) {
-	this->port.push_back(_port);
+bool Config::addAddresses(Address &add){
+	this->addresses.push_back(add);
 	return (true);
 }
 
@@ -141,5 +130,16 @@ bool Config::setUploadPath(std::string path) {
 
 bool Config::addReqMethod(std::string key, bool val) {
 	this->reqmethod[key] = val;
+	return (true);
+}
+
+std::map<int, std::string>	Config::pullErrorPages() const
+{
+	return (this->errorpages);
+}
+
+bool	Config::pushErrorPages(std::map<int, std::string> map)
+{
+	this->errorpages = map;
 	return (true);
 }

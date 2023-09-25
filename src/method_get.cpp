@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 17:03:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/06 17:15:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/20 18:10:11 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,10 @@ int methodGet(Request req, Response &res) {
 
 	filename = req.getUrl().substr(1, req.getUrl().size());
 
+	//debug
+	if (filename == "")
+		filename = "content/readme.html"; 
+	
 	//拡張子を見てContentTypeを判断しResponseにセット
 	setContentType(res, filename);
 

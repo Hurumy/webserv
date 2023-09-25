@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:42:47 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 14:53:42 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,25 @@
 
 #include <string>
 #include "Config.hpp"
+#include "Address.hpp"
 
-TEST(ConfigTest, ipaddressTest)
+TEST(ConfigTest, addressesTest)
 {
-	Config config;
-	std::vector<std::string>	res;
-	std::string	expected("111.108.92.125");
+	Config					config;
+	Address					add;
+	std::vector<Address>	res;
+	std::string				expected("111.108.92.125");
+	int						expected_port(8080);
+	int						expected_ver(0);
 
-	config.addIpAddress(expected);
-	res = config.getIpAddress();
-	ASSERT_EQ(res.at(0), expected);
-}
-
-TEST(ConfigTest, portTest)
-{
-	Config config;
-	std::vector<int>	res;
-	int	expected(8080);
-
-	config.addPort(expected);
-	res = config.getPort();
-	ASSERT_EQ(res.at(0), expected);
+	add.setIpAddress(expected);
+	add.setPort(expected_port);
+	add.setIpVers(expected_ver);
+	config.addAddresses(add);
+	res = config.getAddresses();
+	ASSERT_EQ(res.at(0).getIpAddress(), expected);
+	ASSERT_EQ(res.at(0).getPort(), expected_port);
+	ASSERT_EQ(res.at(0).getIpVers(), expected_ver);
 }
 
 TEST(ConfigTest, servernameTest)

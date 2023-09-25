@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:11:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/18 15:13:50 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "Result.hpp"
 #include "Ok.hpp"
 #include "Error.hpp"
+#include "Address.hpp"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);
