@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 20:14:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 21:01:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,10 @@ bool Request::loadRequestLine(CSocket &csocket) {
 		csocket.setPhase(CSocket::RECV);
 		return false;
 	}
-	if (isURL(_url) == false) {
+	if (isValidURL(_url) == false) {
+		// Should return error page 
+		csocket.closeSockfd();
+		csocket.setPhase(CSocket::CLOSE);
 		return false;
 	}
 	if (_version.empty() == true) {
@@ -182,10 +185,33 @@ bool Request::isMethod(std::string const &word) {
 	return std::find(methods.begin(), methods.begin(), word) != methods.end();
 }
 
-bool Request::isURL(std::string const &word) { return word.empty() == false; }
+bool Request::isValidURL(std::string const &word) {
+	std::istringstream iss(word);
+	std::string pathElem;
+	long pos(0);
+
+	if (word.empty() == true) {
+		return false;
+	}
+	if (word[0] != '/') {
+		return false;
+	}
+	while (iss.eof() == false) {
+		std::getline(iss, pathElem, '/');
+		if (pathElem.compare("..") == 0) {
+			pos--;
+		} else if (pathElem.empty() == false && pathElem.compare(".") != 0) {
+			pos++;
+		}
+		if (0 > pos) {
+			return false;
+		}
+	}
+	return true;
+}
 
 bool Request::isVersion(std::string const &word) {
-	if (word.empty() == false) {
+	if (word.empty() == true) {
 		return false;
 	}
 	Result<std::string, bool> result = Version::getVersion(word);

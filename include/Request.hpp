@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/23 15:51:58 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:33:09 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ class Request: public virtual APayload
 		bool loadRequestLine(CSocket &csocket);
 		bool loadHeader(CSocket const &csocket);
 		bool isMethod(std::string const &word);
-		bool isURL(std::string const &word);
+		bool isValidURL(std::string const &word);
 		bool isVersion(std::string const &word);
 };
