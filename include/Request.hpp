@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:38:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/23 15:51:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class Request: public virtual APayload
 		std::string	url;
 		std::string method;
 		std::size_t contentLength;
+		std::size_t lastContentLength;
 		bool isCompleteHeader;
 		static std::vector<std::string> const methods;
 		tag phase;

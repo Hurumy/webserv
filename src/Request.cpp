@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 14:35:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/23 16:26:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ std::vector<std::string> Request::initMethods() {
 }
 
 Request::Request()
-	: contentLength(0), isCompleteHeader(false), phase(Request::REQLINE) {}
+	: contentLength(0), lastContentLength(contentLength), isCompleteHeader(false), phase(Request::REQLINE) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -89,6 +89,8 @@ bool Request::loadPayload(CSocket &csocket) {
 					if (clengthiter != header.end()) {
 						std::stringstream ss(clengthiter->second);
 						ss >> contentLength;
+						lastContentLength = contentLength;
+						std::clog << "content length: " << contentLength << std::endl;
 					}
 					phase = Request::BODY;
 					break;
@@ -99,14 +101,23 @@ bool Request::loadPayload(CSocket &csocket) {
 				}
 				break;
 			case Request::BODY:
-				body.append(csocket.getData(), 0, contentLength);
-				csocket.eraseData(contentLength);
+				std::string const csockData = csocket.getData();
+				std::size_t beforeSize = body.size();
+				body.append(csockData, 0, lastContentLength);
+				std::size_t afterSize = body.size();
+				csocket.eraseData(afterSize - beforeSize);
+				lastContentLength -= afterSize - beforeSize;
+				if (lastContentLength != 0) {\
+					std::clog << "last content length: " << lastContentLength << std::endl; 
+					std::clog << "body: \n" << body << std::endl; 
+					csocket.setPhase(CSocket::RECV);
+					return true;
+				}
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
 				// for debugging
 				std::clog << getLines() << std::endl;
 				return true;
-				break;
 		}
 	}
 	return true;
