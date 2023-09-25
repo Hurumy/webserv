@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BaseMethod.cpp                                     :+:      :+:    :+:   */
+/*   AMethod.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/22 13:53:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 10:23:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "BaseMethod.hpp"
+#include "AMethod.hpp"
 
-BaseMethod::BaseMethod(Config _conf, Request _req, Response &_res): conf(_conf), req(_req), res(_res)
+AMethod::AMethod(Config _conf, Request _req, Response &_res): conf(_conf), req(_req), res(_res)
 {}
 
-BaseMethod::~BaseMethod()
+AMethod::~AMethod()
 {}
 
-Result<std::string, bool> const	BaseMethod::_openFile(std::string filename)
+Result<std::string, bool> const	AMethod::_openFile(std::string filename)
 {
 	int 				fd;
 	unsigned long long	bodysize = 0;
@@ -66,8 +66,7 @@ Result<std::string, bool> const	BaseMethod::_openFile(std::string filename)
 	return Ok<std::string>(body);
 }
 
-
-void		BaseMethod::setErrorPageBody()
+void		AMethod::setErrorPageBody()
 {
 	unsigned int				prevstatus = res.getStatus();
 	Result<std::string, bool>	res_1 = conf.getErrorPages(res.getStatus());
@@ -98,5 +97,4 @@ void		BaseMethod::setErrorPageBody()
 	}
 	return ;
 }
-
 

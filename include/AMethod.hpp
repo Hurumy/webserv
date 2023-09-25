@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/22 13:53:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:00:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,17 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 
-class	BaseMethod
+class	AMethod
 {
 	private:
 	protected:
-		BaseMethod(Config _conf, Request _req, Response &_res);
-		~BaseMethod();
+		AMethod(Config _conf, Request _req, Response &_res);
+		~AMethod();
 		Config								conf;
 		Request								req;
 		Response							&res;
 		Result<std::string, bool>	const	_openFile(std::string filename);
 		void								setErrorPageBody();
 	public:
+		virtual Result<int, bool>			act() = 0;				
 };
