@@ -75,20 +75,18 @@ std::vector<std::string> lineSpliter(std::string origin, std::string delim) {
 // 	std::string			str;
 // 	unsigned long long	bytes = 0;
 
-
 // 	//Bodyが存在するかチェックする
 // 	//req.getHeader("Content-Type")
-	
+
 // 	//Bodyのバイト数を見る
 // 	Result<std::string, bool> result = req.getHeader("Content-Length");
 // 	if (result.isError() == true)
 // 		return (false);
-	
+
 // 	//バイト数分読み込んで詰める
 // 	str = result.getOk();
 // 	ss << str;
 // 	ss >> bytes;
-
 
 // }
 

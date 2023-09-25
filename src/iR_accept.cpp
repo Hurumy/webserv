@@ -12,8 +12,7 @@
 
 #include "initResponse.hpp"
 
-static std::vector<std::string>	makeContentTypeVector()
-{
+static std::vector<std::string> makeContentTypeVector() {
 	std::vector<std::string> vec;
 
 	vec.push_back("*/*");
@@ -70,19 +69,21 @@ static std::vector<std::string>	makeContentTypeVector()
 	vec.push_back("application/vnd.oasis.opendocument.presentation");
 	vec.push_back("application/vnd.oasis.opendocument.graphics");
 	vec.push_back("application/vnd.ms-excel");
-	vec.push_back("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	vec.push_back(
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 	vec.push_back("application/vnd.ms-powerpoint");
-	vec.push_back("application/vnd.openxmlformats-officedocument.presentationml.presentation");
+	vec.push_back(
+		"application/"
+		"vnd.openxmlformats-officedocument.presentationml.presentation");
 	vec.push_back("application/msword");
-	vec.push_back("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+	vec.push_back(
+		"application/"
+		"vnd.openxmlformats-officedocument.wordprocessingml.document");
 	vec.push_back("application/vnd.mozilla.xul+xml");
-	
+
 	return (vec);
 }
 
-static	std::map<>
+static std::map<>
 
-int	iR_accept(Request req, Response &res, Config conf)
-{
-	
-}
+	int iR_accept(Request req, Response &res, Config conf) {}

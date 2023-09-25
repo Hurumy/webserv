@@ -11,26 +11,25 @@
 /* ************************************************************************** */
 
 #include "RequestHandler.hpp"
+
 #include "AMethod.hpp"
+#include "MethodDelete.hpp"
 #include "MethodGet.hpp"
 #include "MethodPost.hpp"
-#include "MethodDelete.hpp"
 
-RequestHandler::RequestHandler(std::vector<Config> const _conf, Request const _req)
-{
+RequestHandler::RequestHandler(std::vector<Config> const _conf,
+							   Request const _req) {
 	this->configs = _conf;
 	this->req = _req;
 	this->res = Response();
 }
 
-//configs.at(i) の i を返す
-Result<int, bool>	RequestHandler::searchMatchHost()
-{
-	Result<std::string, bool> 	result_1 = req.getHeader("Host");
-	std::string					hostname;
+// configs.at(i) の i を返す
+Result<int, bool> RequestHandler::searchMatchHost() {
+	Result<std::string, bool> result_1 = req.getHeader("Host");
+	std::string hostname;
 
-	if (result_1.isOK() == false)
-	{
+	if (result_1.isOK() == false) {
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		return Error<bool>(false);
@@ -38,12 +37,9 @@ Result<int, bool>	RequestHandler::searchMatchHost()
 
 	hostname = result_1.getOk();
 
-	for (size_t i = 0; i < configs.size(); i ++)
-	{
-		for (size_t t = 0; t < configs.at(i).getServerName().size(); t ++)
-		{
-			if (configs.at(i).getServerName().at(t) == hostname)
-			{
+	for (size_t i = 0; i < configs.size(); i++) {
+		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
+			if (configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
 				return Ok<int>(i);
 			}
@@ -54,16 +50,14 @@ Result<int, bool>	RequestHandler::searchMatchHost()
 	return Error<bool>(false);
 }
 
-Result<int, bool>	RequestHandler::checkRequiedHeader()
-{
-	if (req.getVersion() != "HTTP/1.1")
-	{
+Result<int, bool> RequestHandler::checkRequiedHeader() {
+	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
 		return Error<bool>(false);
 	}
-	if (this->confnum < configs.size() && configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false)
-	{
+	if (this->confnum < configs.size() &&
+		configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false) {
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		return Error<bool>(false);
@@ -71,10 +65,8 @@ Result<int, bool>	RequestHandler::checkRequiedHeader()
 	return Ok<int>(0);
 }
 
-Result<int, bool>	RequestHandler::routeMethod()
-{
-	if (req.getMethod() == "GET")
-	{
+Result<int, bool> RequestHandler::routeMethod() {
+	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 		Result<int, bool> res_get = get.act();
@@ -82,9 +74,7 @@ Result<int, bool>	RequestHandler::routeMethod()
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else if (req.getMethod() == "POST")
-	{
+	} else if (req.getMethod() == "POST") {
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 		Result<int, bool> res_get = post.act();
@@ -92,10 +82,8 @@ Result<int, bool>	RequestHandler::routeMethod()
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-		
-	}
-	else if (req.getMethod() == "DELETE")
-	{
+
+	} else if (req.getMethod() == "DELETE") {
 		//クラス呼ぶ
 		MethodDelete del(configs.at(confnum), req, res);
 		Result<int, bool> res_get = del.act();
@@ -103,9 +91,7 @@ Result<int, bool>	RequestHandler::routeMethod()
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else
-	{
+	} else {
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		return Error<bool>(false);
@@ -113,13 +99,12 @@ Result<int, bool>	RequestHandler::routeMethod()
 	return Error<bool>(false);
 }
 
-Result<std::string, bool>	RequestHandler::_openFile(std::string filename)
-{
-	int 				fd;
-	unsigned long long	bodysize = 0;
-	int 				status = 1;
-	std::string 		body;
-	char 				buf[FILE_READ_SIZE];
+Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
+	int fd;
+	unsigned long long bodysize = 0;
+	int status = 1;
+	std::string body;
+	char buf[FILE_READ_SIZE];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
@@ -137,8 +122,7 @@ Result<std::string, bool>	RequestHandler::_openFile(std::string filename)
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
 		buf[status] = '\0';
-		if (status != -1)
-		{
+		if (status != -1) {
 			body += buf;
 			bodysize += status;
 		}
@@ -151,9 +135,9 @@ Result<std::string, bool>	RequestHandler::_openFile(std::string filename)
 		return Error<bool>(false);
 	}
 
-	//Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
-	std::stringstream		ss;
-	std::string				length;
+	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
+	std::stringstream ss;
+	std::string length;
 	ss << bodysize;
 	ss >> length;
 	res.addHeader("Content-Length", length);
@@ -161,41 +145,32 @@ Result<std::string, bool>	RequestHandler::_openFile(std::string filename)
 	return Ok<std::string>(body);
 }
 
-void		RequestHandler::setErrorPageBody()
-{
-	unsigned int				prevstatus = res.getStatus();
-	Result<std::string, bool>	res_1 = configs.at(confnum).getErrorPages(res.getStatus());
-	
-	if (res_1.isOK() == false)
-		return ;
+void RequestHandler::setErrorPageBody() {
+	unsigned int prevstatus = res.getStatus();
+	Result<std::string, bool> res_1 =
+		configs.at(confnum).getErrorPages(res.getStatus());
 
-	std::string					filename = res_1.getOk();
+	if (res_1.isOK() == false) return;
 
-	//bodyをセットする。成功したら抜けるループ
-	//bodyのセットに失敗した場合は、失敗した後のステータスが変わっていればもう一度ファイルを検索する
+	std::string filename = res_1.getOk();
+
+	// bodyをセットする。成功したら抜けるループ
+	// bodyのセットに失敗した場合は、失敗した後のステータスが変わっていればもう一度ファイルを検索する
 	//変わっていなければBodyなしでヘッダだけ送付する
-	while (1)
-	{
+	while (1) {
 		Result<std::string, bool> res_2 = _openFile(filename);
 		if (res_2.isOK() == true)
-			break ;
-		else if (res_2.isOK() == false && prevstatus != res.getStatus())
-		{
+			break;
+		else if (res_2.isOK() == false && prevstatus != res.getStatus()) {
 			prevstatus = res.getStatus();
-			Result<std::string, bool>	res_3 = configs.at(confnum).getErrorPages(res.getStatus());
-			if (res_3.isOK() == false)
-				break ;
+			Result<std::string, bool> res_3 =
+				configs.at(confnum).getErrorPages(res.getStatus());
+			if (res_3.isOK() == false) break;
 			filename = res_3.getOk();
-		}
-		else
-			break ;
+		} else
+			break;
 	}
-	return ;
+	return;
 }
 
-Response	RequestHandler::getResponse()
-{
-	return (this->res);
-}
-
-
+Response RequestHandler::getResponse() { return (this->res); }

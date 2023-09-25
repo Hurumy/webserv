@@ -10,18 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "APayload.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "Result.hpp"
-
+#include "webserv.hpp"
 
 // Result<size_t, int>	readReqHeader(Request req, Result &res)
 // {
 // 	//ifを並べて判定する
 // 	if ()
 // }
-

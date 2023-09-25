@@ -12,8 +12,7 @@
 
 #include "Config.hpp"
 
-std::vector<Address> const	Config::getAddresses() const
-{
+std::vector<Address> const Config::getAddresses() const {
 	return (this->addresses);
 }
 
@@ -68,7 +67,7 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-bool Config::addAddresses(Address &add){
+bool Config::addAddresses(Address &add) {
 	this->addresses.push_back(add);
 	return (true);
 }
@@ -133,13 +132,11 @@ bool Config::addReqMethod(std::string key, bool val) {
 	return (true);
 }
 
-std::map<int, std::string>	Config::pullErrorPages() const
-{
+std::map<int, std::string> Config::pullErrorPages() const {
 	return (this->errorpages);
 }
 
-bool	Config::pushErrorPages(std::map<int, std::string> map)
-{
+bool Config::pushErrorPages(std::map<int, std::string> map) {
 	this->errorpages = map;
 	return (true);
 }

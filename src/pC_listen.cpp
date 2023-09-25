@@ -100,7 +100,7 @@ static int checkProtocol(std::string &oneline, Address &add) {
 
 int readListen(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
-	Address				add;
+	Address add;
 	unsigned long long status;
 
 	// IP設定の有無を確認
@@ -129,7 +129,8 @@ int readListen(Config &conf, std::string oneline) {
 		setPortNumber(lines.at(1), add);
 
 	conf.addAddresses(add);
-	//std::cout << BLUE "port: " << conf.getAddresses().at(0).getPort() << RESET << std::endl;
+	// std::cout << BLUE "port: " << conf.getAddresses().at(0).getPort() <<
+	// RESET << std::endl;
 
 	return (0);
 }
