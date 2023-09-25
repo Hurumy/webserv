@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:24:50 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 12:25:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/25 16:28:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ bool	Address::setIpAddress(std::string address)
 	return (true);
 }
 
-bool	Address::setPort(int port)
+bool	Address::setPort(int _port)
 {
-	this->port = port;
+	this->port = _port;
 	return (true);
 }
 
-bool	Address::setIpVers(int protocol)
+bool	Address::setIpVers(int _protocol)
 {
-	this->ipvers = protocol;
+	this->ipvers = _protocol;
 	return (true);
 }
