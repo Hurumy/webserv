@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 21:01:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/26 11:04:37 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,6 @@
 #include <vector>
 
 #include "Version.hpp"
-
-std::vector<std::string> const Request::methods = Request::initMethods();
-
-std::vector<std::string> Request::initMethods() {
-	std::vector<std::string> _methods;
-	_methods.push_back("GET");
-	_methods.push_back("HEAD");
-	_methods.push_back("POST");
-	_methods.push_back("PUT");
-	_methods.push_back("DELETE");
-	_methods.push_back("CONNECT");
-	_methods.push_back("OPTIONS");
-	_methods.push_back("TRACE");
-	return _methods;
-}
 
 Request::Request()
 	: contentLength(0), lastContentLength(contentLength), isCompleteHeader(false), phase(Request::REQLINE) {}
@@ -182,7 +167,7 @@ bool Request::loadHeader(CSocket &csocket) {
 }
 
 bool Request::isMethod(std::string const &word) {
-	return std::find(methods.begin(), methods.begin(), word) != methods.end();
+	return word.empty() == false;
 }
 
 bool Request::isValidURL(std::string const &word) {

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 20:33:09 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/26 11:03:56 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ class Request: public virtual APayload
 		std::size_t contentLength;
 		std::size_t lastContentLength;
 		bool isCompleteHeader;
-		static std::vector<std::string> const methods;
 		tag phase;
 
 		static std::vector<std::string> initMethods();
