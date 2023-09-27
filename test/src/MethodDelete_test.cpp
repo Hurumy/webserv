@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:23:41 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:43:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:10:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "RequestHandler.hpp"
 #include "ConfParser.hpp"
 
-#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define	CONF_FILE_PATH "testconfs/method_delete.conf"
 
 TEST (MethodDeleteTest, deletePostedFileTest)
 {
@@ -30,7 +30,7 @@ TEST (MethodDeleteTest, deletePostedFileTest)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
 	req.addHeader("Host", "_");
-	req.setUrl("./post/0");
+	req.setUrl("/post/0");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -55,7 +55,7 @@ TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
 	req.addHeader("Host", "_");
-	req.setUrl("./dummy/thereisnofile.html");
+	req.setUrl("/dummy/thereisnofile.html");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
