@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/27 14:39:35 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/27 19:16:37 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,11 +23,6 @@ SRC_FILES	:= \
 				test.cpp \
 				makeStatusMap.cpp \
 				Status.cpp \
-				method_get.cpp \
-				method_put.cpp \
-				method_post.cpp \
-				method_delete.cpp \
-				method_unacceptable.cpp \
 				Config.cpp \
 				Port.cpp \
 				CSocket.cpp \
