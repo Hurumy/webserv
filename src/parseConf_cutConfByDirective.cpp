@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 16:43:25 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:01:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static Result<std::string, bool> openAndReadConf(std::string filepath) {
 	int 		fd;
 	ssize_t 	status;
-	char 		buf[FILE_READ_SIZE];
+	char 		buf[FILE_READ_SIZE + 1];
 	std::string rawdata; 
 
 	fd = open(filepath.c_str(), O_RDONLY);
@@ -26,7 +26,7 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status > 0) 
 		{
-			buf[status - 1] = '\0';
+			buf[status] = '\0';
 			rawdata.append(buf);
 			//std::cout << RED << buf << RESET;
 		}

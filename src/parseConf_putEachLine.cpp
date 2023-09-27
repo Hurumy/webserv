@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:11:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:02:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ static int isServerSetting(std::string raw) {
 	unsigned long pos;
 	std::vector<std::string> lines = lineSpliter(raw, "{");
 	std::string line = lines.at(0);
+
+	// for (size_t i = 0; i < lines.size(); i ++)
+	// 	std::cout << BLUE << lines.at(i) << RESET <<  std::endl;
 
 	pos = line.find("server", 0);
 
@@ -33,7 +36,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		// std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		//std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 
 		if (lines.at(i).empty() == false) {
 			if (lines.at(i) == "listen") {
@@ -61,6 +64,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 				status = readMaxBodySize(conf, oneline);
 				break;
 			} else if (lines.at(i) == "index") {
+				//std::cout << "reading index!!" << std::endl;
 				status = readIndex(conf, oneline);
 				break;
 			} else if (lines.at(i) == "upload_path") {
