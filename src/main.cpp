@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/22 23:11:01 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:41:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
 
 int main() {
 	std::vector<SSocket> sources;
-	std::map<int, std::string> request;
-	std::map<int, std::string> response;
-
+	std::map<int, std::string> responses;
+	
 	sources.push_back(SSocket(8080, IPV4, 1000));
 	sources.push_back(SSocket(8000, IPV4, 1000));
 	SocketHandler socketHandler(sources, 10, 10);
@@ -34,8 +33,8 @@ int main() {
 		if (socketHandler.getCSockets().empty() == false) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
-			response = socketHandler.createResponse();
-			socketHandler.sendDataMap(response);
+			responses = socketHandler.createResponse();
+			socketHandler.sendDataMap(responses);
 		}
 		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
