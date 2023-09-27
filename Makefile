@@ -6,13 +6,13 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 19:11:48 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/27 14:35:45 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= webserv
 CC			:= c++
-CFLAGS		:= -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CFLAGS		:= -Wall -Wextra -Werror -std=c++98 -fsanitize=address -g
 
 SRC_FILES	:= \
 				main.cpp \
@@ -20,7 +20,6 @@ SRC_FILES	:= \
 				Response.cpp \
 				Request.cpp \
 				Version.cpp \
-				parseRequest.cpp \
 				test.cpp \
 				makeStatusMap.cpp \
 				Status.cpp \
@@ -39,6 +38,25 @@ SRC_FILES	:= \
 				MethodGet.cpp \
 				MethodPost.cpp \
 				MethodDelete.cpp \
+				error.cpp \
+				parseRequest.cpp \
+				stringCleaner.cpp \
+				parseConf.cpp \
+				parseConf_cutConfByDirective.cpp \
+				parseConf_cutConfToEachPort.cpp \
+				parseConf_putEachLine.cpp \
+				pC_listen.cpp \
+				pC_return.cpp \
+				pC_root.cpp \
+				pC_rewrite.cpp \
+				pC_servername.cpp \
+				pC_autoindex.cpp \
+				pC_errorpage.cpp \
+				pC_maxbodysize.cpp \
+				pC_index.cpp \
+				pC_uploadpath.cpp \
+				pC_allowedmethods.cpp \
+				RequestHandler.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj

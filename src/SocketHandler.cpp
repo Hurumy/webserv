@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/27 16:41:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:55:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
+#include "ConfParser.hpp"
+#include "RequestHandler.hpp"
 
 SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, std::size_t const _timeout, int _pollTimeout)
 	: ssockets(_ssockets), timeout(_timeout), pollTimeout(_pollTimeout) {}
@@ -71,6 +73,15 @@ bool SocketHandler::removeRequest(int const csockfd) {
 		return false;
 	}
 	requests.erase(iter);
+	return true;
+}
+
+bool SocketHandler::removeResponse(int const csockfd) {
+	std::map<int, Response>::iterator iter = responses.find(csockfd);
+	if (iter == responses.end()) {
+		return false;
+	}
+	responses.erase(iter);
 	return true;
 }
 
@@ -214,6 +225,22 @@ bool SocketHandler::sendDataMap(
 	return true;
 }
 
+bool SocketHandler::sendResponses() {
+	if (responses.empty() == true) {
+		return false;
+	}
+	for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
+		if (csockiter->getPhase() == CSocket::SEND && (csockiter->getRevents() & POLLOUT) == POLLOUT) {
+			if (csockiter->sendData(responses[csockiter->getSockfd()].getLines()) == false) {
+				// error handling
+			}
+			csockiter->setPhase(CSocket::RECV);
+			removeResponse(csockiter->getSockfd());
+		}
+	}
+	return true;
+}
+
 bool SocketHandler::loadRequests() {
 	Request request;
 
@@ -257,6 +284,26 @@ std::map<int, std::string> SocketHandler::createResponse() {
 		}
 	}
 	return response;
+}
+
+#define	CONF_FILE_PATH "conf_files/test.conf"
+
+bool SocketHandler::loadResponses() {
+	// temporarily
+	Result<std::vector<Config>, bool> result = parseConf(CONF_FILE_PATH);
+	std::vector<Config> configs = result.getOk();
+
+	for (std::vector<CSocket>::iterator iter = csockets.begin();
+		 iter != csockets.end(); ++iter) {
+		if (iter->getPhase() == CSocket::PASS) {
+			RequestHandler requestHandler = RequestHandler(configs, requests[iter->getSockfd()]);
+			requestHandler.searchMatchHost();
+			responses[iter->getSockfd()] = requestHandler.getResponse();
+			iter->setPhase(CSocket::SEND);
+			removeRequest(iter->getSockfd());
+		}
+	}
+	return true;
 }
 
 bool SocketHandler::closeTimeoutCSockets() {
