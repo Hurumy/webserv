@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BaseMethod.hpp                                     :+:      :+:    :+:   */
+/*   AMethod.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/22 14:00:48 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:21:07 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ class	AMethod
 		Config								conf;
 		Request								req;
 		Response							&res;
+		std::string							uri;
 		Result<std::string, bool>	const	_openFile(std::string filename);
+		Result<int, bool>					checkURI();
+		void								setURI();
 		void								setErrorPageBody();
 	public:
 		virtual Result<int, bool>			act() = 0;				

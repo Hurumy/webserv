@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 12:58:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:38:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ std::string MethodPost::makeFilename() {
 	do {
 		ss.str("");
 		ss.clear(std::stringstream::goodbit);
-		ss << req.getUrl();
+		ss << uri;
 		ss << "/";
 		ss << number;
 		filename = ss.str();
@@ -103,13 +103,12 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 	return Ok<int>(0);
 }
 
-// getUrlを後でいい感じの変換後のパスに置き換えたい
 int MethodPost::openPostResource() {
 	int status = 0;
 	int fd;
 
 	//パス自体へのアクセスを調べる
-	status = access(req.getUrl().c_str(), W_OK);
+	status = access(uri.c_str(), W_OK);
 	if (status == -1) {
 		res.setStatus(401);
 		res.setStatusMessage("Unauthorized");
@@ -122,6 +121,7 @@ int MethodPost::openPostResource() {
 
 	//被りのないファイル名を調べる
 	filename = makeFilename();
+	//std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
 	status = open(filename.c_str(), O_WRONLY | O_CREAT, 0777);
@@ -146,9 +146,18 @@ int MethodPost::openPostResource() {
 Result<int, bool> MethodPost::act() {
 	int status;
 
+	//URIを確認します
+	Result<int, bool>	res_uri = checkURI();
+	if (res_uri.isOK() == false)
+	{
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+	setURI();
+
 	status = openPostResource();
 	if (status >= 200 && status <= 299) {
-		res.addHeader("Location", filename);
+		res.addHeader("Location", filename.substr(1, filename.size() - 1));
 		return Ok<int>(status);
 	} else {
 		setErrorPageBody();

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 11:24:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 15:52:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "AMethod.hpp"
 #include "MethodGet.hpp"
 
-#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define	CONF_FILE_PATH "testconfs/method_get.conf"
 
 TEST (MethodGetTest, getHtmlTest)
 {
@@ -41,7 +41,7 @@ TEST (MethodGetTest, getHtmlTest)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/test.html");
+	req.setUrl("/test.html");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -71,7 +71,7 @@ TEST (MethodGetTest, getTxtTest)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/wtf.txt");
+	req.setUrl("/wtf.txt");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -101,7 +101,7 @@ TEST (MethodGetTest, getMysteryFileTest)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/mystery_file");
+	req.setUrl("/mystery_file");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -128,7 +128,7 @@ TEST (MethodGetTest, getActTest_Error_NotFound)
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/there_is_no_file.txtxt");
+	req.setUrl("/there_is_no_file.txtxt");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();

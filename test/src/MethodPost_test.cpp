@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:11:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 16:55:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static std::string	__openFile(std::string filename)
 	unsigned long long	bodysize = 0;
 	int 				status = 1;
 	std::string 		body;
-	char 				buf[FILE_READ_SIZE];
+	char 				buf[FILE_READ_SIZE + 1];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
@@ -34,9 +34,9 @@ static std::string	__openFile(std::string filename)
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
-		buf[status] = '\0';
 		if (status != -1)
 		{
+			buf[status] = '\0';
 			body += buf;
 			bodysize += status;
 		}
@@ -66,7 +66,7 @@ TEST (MethodPostTest, postTextFileTest)
 	req.addHeader("Host", "_");
 	req.setBody(expected_content);
 	req.addHeader("Content-Length", "11");
-	req.setUrl("./post");
+	req.setUrl("/post");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -81,6 +81,8 @@ TEST (MethodPostTest, postTextFileTest)
 	
 	Result<std::string, bool> res_loc = handler.getResponse().getHeader("Location");
 	std::string	filename = res_loc.getOk();
+	filename = "." + filename;
+	//std::cout << filename << std::endl;
 	std::string body = __openFile(filename);
 
 	ASSERT_EQ(body, expected_content);
@@ -101,7 +103,7 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 	req.addHeader("Host", "met_not_allowed.com");
 	req.setBody(expected_content);
 	req.addHeader("Content-Length", "40");
-	req.setUrl("./post");
+	req.setUrl("/post");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();

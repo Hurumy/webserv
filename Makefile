@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 15:09:50 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/27 14:39:35 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,25 @@ SRC_FILES	:= \
 				MethodGet.cpp \
 				MethodPost.cpp \
 				MethodDelete.cpp \
+				parseConf.cpp \
+				parseConf_putEachLine.cpp \
+				parseConf_cutConfToEachPort.cpp \
+				parseConf_cutConfByDirective.cpp \
+				pC_listen.cpp \
+				pC_return.cpp \
+				pC_root.cpp \
+				pC_rewrite.cpp \
+				pC_servername.cpp \
+				pC_autoindex.cpp \
+				pC_errorpage.cpp \
+				pC_maxbodysize.cpp \
+				pC_index.cpp \
+				pC_uploadpath.cpp \
+				pC_allowedmethods.cpp \
+				RequestHandler.cpp \
+				error.cpp \
+				stringCleaner.cpp \
+				
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
