@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 14:24:17 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/27 19:35:06 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ WS_SRC_FILES	:= \
 					SSocket.cpp \
 					CSocket.cpp \
 					SocketHandler.cpp \
-					error.cpp \
+					puterror.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
 					parseConf.cpp \

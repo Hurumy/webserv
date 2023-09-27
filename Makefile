@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/27 14:35:45 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/09/27 19:35:06 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ SRC_FILES	:= \
 				MethodGet.cpp \
 				MethodPost.cpp \
 				MethodDelete.cpp \
-				error.cpp \
+				puterror.cpp \
 				parseRequest.cpp \
 				stringCleaner.cpp \
 				parseConf.cpp \
