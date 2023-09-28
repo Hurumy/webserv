@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:07:03 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:38:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,13 @@ Result<int, bool> MethodDelete::act() {
 
 	status = openResourceDelete();
 	if (200 <= status && status <= 299)
+	{
+		res.addHeader("Content-Length", "0");
 		return Ok<int>(status);
+	}
 	else
+	{
+		setErrorPageBody();
 		return Error<bool>(false);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 16:56:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:30:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,10 @@ void AMethod::setErrorPageBody() {
 				conf.getErrorPages(res.getStatus());
 			if (res_3.isOK() == false) break;
 			filename = res_3.getOk();
-		} else
-			break;
+		} else {
+			res.addHeader("Content-Length", "0");
+			break ;
+		}
 	}
 	return;
 }

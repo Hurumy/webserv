@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:23:16 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:49:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ RequestHandler::RequestHandler(std::vector<Config> const _conf,
 }
 
 // configs.at(i) の i を返す
+// まだホストが見つかってもいないので、エラーページをセットすることが不可能。ステータスのみ返す
 Result<int, bool> RequestHandler::searchMatchHost() {
 	Result<std::string, bool> result_1 = req.getHeader("Host");
 	std::string hostname;
@@ -32,6 +33,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	if (result_1.isOK() == false) {
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
+		res.addHeader("Content-Length", "0");
 		return Error<bool>(false);
 	}
 
@@ -47,6 +49,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	}
 	res.setStatus(400);
 	res.setStatusMessage("Bad Request");
+	res.addHeader("Content-Length", "0");
 	return Error<bool>(false);
 }
 
@@ -54,17 +57,20 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
+		setErrorPageBody();
 		return Error<bool>(false);
 	}
 	if (this->confnum < configs.size() &&
 		configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false) {
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
+		setErrorPageBody();
 		return Error<bool>(false);
 	}
 	return Ok<int>(0);
 }
 
+//ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
 Result<int, bool> RequestHandler::routeMethod() {
 	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
@@ -91,12 +97,14 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	} else {
+	}
+	else
+	{
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
+		setErrorPageBody();
 		return Error<bool>(false);
 	}
-	return Error<bool>(false);
 }
 
 Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
@@ -150,7 +158,11 @@ void RequestHandler::setErrorPageBody() {
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false) return;
+	if (res_1.isOK() == false) 
+	{
+		res.addHeader("Content-Length", "0");
+		return ;
+	}
 
 	std::string filename = res_1.getOk();
 
@@ -165,10 +177,18 @@ void RequestHandler::setErrorPageBody() {
 			prevstatus = res.getStatus();
 			Result<std::string, bool> res_3 =
 				configs.at(confnum).getErrorPages(res.getStatus());
-			if (res_3.isOK() == false) break;
+			if (res_3.isOK() == false)
+			{
+				res.addHeader("Content-Length", "0");
+				break;
+			}
 			filename = res_3.getOk();
-		} else
+		}
+		else
+		{
+			res.addHeader("Content-Length", "0");
 			break;
+		}
 	}
 	return;
 }

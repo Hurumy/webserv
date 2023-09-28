@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 16:55:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:37:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ TEST (MethodPostTest, postTextFileTest)
 	std::string					expected_string("Created");
 	bool						expected_status_location(true);
 	std::string					expected_content("post file!!");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
@@ -78,6 +79,7 @@ TEST (MethodPostTest, postTextFileTest)
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(), expected_status_location);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 	
 	Result<std::string, bool> res_loc = handler.getResponse().getHeader("Location");
 	std::string	filename = res_loc.getOk();
@@ -97,6 +99,7 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 	unsigned int				expected_status(405);
 	std::string					expected_string("Method Not Allowed");
 	std::string					expected_content("huowadwasdhjwahjdkwhujwaduhjadwuhjdwauij");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
@@ -112,4 +115,5 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }

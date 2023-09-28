@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 16:38:05 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:39:09 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,10 +156,14 @@ Result<int, bool> MethodPost::act() {
 	setURI();
 
 	status = openPostResource();
-	if (status >= 200 && status <= 299) {
+	if (status >= 200 && status <= 299)
+	{
 		res.addHeader("Location", filename.substr(1, filename.size() - 1));
+		res.addHeader("Content-Length", "0");
 		return Ok<int>(status);
-	} else {
+	}
+	else
+	{
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
