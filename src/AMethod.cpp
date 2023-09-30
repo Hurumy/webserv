@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:30:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/30 11:31:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,3 +154,17 @@ void	AMethod::setURI()
 
 	return ;
 }
+
+// Result<int, bool>	AMethod::searchSettingsOfURI()
+// {
+// 	//return
+// 	if (conf.isReturn() == true)
+// 	{
+		
+// 	}
+
+// 	//rewrite
+	
+	
+// }
+
