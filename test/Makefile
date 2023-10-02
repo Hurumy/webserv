@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/25 14:24:17 by komatsud         ###   ########.fr        #
+#    Updated: 2023/09/30 11:37:11 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ SRC_FILES		:= \
 					MethodGet_test.cpp \
 					MethodPost_test.cpp \
 					MethodDelete_test.cpp \
+					MakeDirListHTML_test.cpp \
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
@@ -79,6 +80,7 @@ WS_SRC_FILES	:= \
 					MethodGet.cpp \
 					MethodPost.cpp \
 					MethodDelete.cpp \
+					MakeDirlistHTML.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 11:24:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:36:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 #include "AMethod.hpp"
 #include "MethodGet.hpp"
 
-#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define	CONF_FILE_PATH "testconfs/method_get.conf"
 
 TEST (MethodGetTest, getHtmlTest)
 {
@@ -37,11 +37,12 @@ TEST (MethodGetTest, getHtmlTest)
 	std::string					expected_body("<p>Its VRry htMl fiLe fOr Test!!</p>");
 	std::string					expected_content_length("36");
 	std::string					expected_content_type("text/html");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/test.html");
+	req.setUrl("/test.html");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -54,6 +55,7 @@ TEST (MethodGetTest, getHtmlTest)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Type").getOk(), expected_content_type);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 TEST (MethodGetTest, getTxtTest)
@@ -67,11 +69,12 @@ TEST (MethodGetTest, getTxtTest)
 	std::string					expected_body("What the fuck....");
 	std::string					expected_content_length("17");
 	std::string					expected_content_type("text/plain");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/wtf.txt");
+	req.setUrl("/wtf.txt");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -84,6 +87,7 @@ TEST (MethodGetTest, getTxtTest)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Type").getOk(), expected_content_type);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 TEST (MethodGetTest, getMysteryFileTest)
@@ -97,11 +101,12 @@ TEST (MethodGetTest, getMysteryFileTest)
 	std::string					expected_body("???\n01010101");
 	std::string					expected_content_length("14");
 	std::string					expected_content_type("text/plain");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/mystery_file");
+	req.setUrl("/mystery_file");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -114,6 +119,7 @@ TEST (MethodGetTest, getMysteryFileTest)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Type").getOk(), expected_content_type);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 TEST (MethodGetTest, getActTest_Error_NotFound)
@@ -124,11 +130,12 @@ TEST (MethodGetTest, getActTest_Error_NotFound)
 	bool						expected(true);
 	unsigned int				expected_status(404);
 	std::string					expected_string("Not Found");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("./www/content/there_is_no_file.txtxt");
+	req.setUrl("/there_is_no_file.txtxt");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -139,6 +146,7 @@ TEST (MethodGetTest, getActTest_Error_NotFound)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 // TEST (MethodGetTest, getActTest_Error_PermDenied)

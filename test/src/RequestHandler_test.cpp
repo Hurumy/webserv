@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/21 18:34:28 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 13:12:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
 
-//ポート番号の有無などの差にも対応するようにする
 TEST(RequestHandlerTest, searchMatchHostTest)
 {
 	std::vector<Config>			tmp;
@@ -40,6 +39,103 @@ TEST(RequestHandlerTest, searchMatchHostTest)
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_withPort)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "kawaii.test:80");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isOK(), expected);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_withPort_2)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_:8660");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isOK(), expected);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(true);
+	unsigned int				expected_status(400);
+	std::string					expected_statusMessage("Bad Request");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "kawaii.test:28282");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isError(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(true);
+	unsigned int				expected_status(400);
+	std::string					expected_statusMessage("Bad Request");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "www.kawaii.test:9999");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isError(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
+}
+
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3)
+{
+	std::vector<Config>			tmp;
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	Request						req;
+	bool						expected(true);
+	unsigned int				expected_status(400);
+	std::string					expected_statusMessage("Bad Request");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_:9999");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_1 = handler.searchMatchHost();
+	ASSERT_EQ(result_1.isError(), expected);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost)

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:33:31 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:38:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ MethodDelete::~MethodDelete() {}
 int MethodDelete::deleteFile() {
 	int status;
 
-	status = unlink(req.getUrl().c_str());
+	status = unlink(uri.c_str());
 	if (status == -1) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
@@ -36,10 +36,10 @@ int MethodDelete::openResourceDelete() {
 	int status;
 
 	//存在するかどうか
-	status = access(req.getUrl().c_str(), F_OK);
+	status = access(uri.c_str(), F_OK);
 	if (status == 0) {
 		//存在した場合、書き込み許可があるかどうか
-		status = access(req.getUrl().c_str(), W_OK);
+		status = access(uri.c_str(), W_OK);
 		if (status != -1) {
 			status = deleteFile();
 			return (status);
@@ -58,9 +58,24 @@ int MethodDelete::openResourceDelete() {
 Result<int, bool> MethodDelete::act() {
 	int status;
 
+	//URIを確認します
+	Result<int, bool>	res_uri = checkURI();
+	if (res_uri.isOK() == false)
+	{
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+	setURI();
+
 	status = openResourceDelete();
 	if (200 <= status && status <= 299)
+	{
+		res.addHeader("Content-Length", "0");
 		return Ok<int>(status);
+	}
 	else
+	{
+		setErrorPageBody();
 		return Error<bool>(false);
+	}
 }

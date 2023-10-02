@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:25:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/27 14:43:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SocketHandler.hpp"
+#include "Config.hpp"
+#include "ConfParser.hpp"
 
 int main() {
 	std::vector<SSocket> sources;
@@ -44,5 +46,6 @@ int main() {
 		socketHandler.removeClosedCSockets();
 	}
 	socketHandler.closeAllSSockets();
+
 	return 0;
 }

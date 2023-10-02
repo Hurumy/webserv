@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:42:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:01:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,26 @@
 
 // Configファイルを開いて一本のStringにする
 static Result<std::string, bool> openAndReadConf(std::string filepath) {
-	int fd;
-	int status;
-	char buf[FILE_READ_SIZE];
-	std::string rawdata;
+	int 		fd;
+	ssize_t 	status;
+	char 		buf[FILE_READ_SIZE + 1];
+	std::string rawdata; 
 
 	fd = open(filepath.c_str(), O_RDONLY);
 	if (fd < 0) return Error<bool>(false);
 
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
-		buf[status] = '\0';
-		if (status > 0) rawdata += buf;
+		if (status > 0) 
+		{
+			buf[status] = '\0';
+			rawdata.append(buf);
+			//std::cout << RED << buf << RESET;
+		}
 	} while (status > 0);
 
-	if (status == -1) return Error<bool>(false);
+	if (status == -1)
+	{return Error<bool>(false);}
 
 	// std::cout << rawdata << std::endl;
 
@@ -116,15 +121,16 @@ static std::vector<std::string> cutPorts(std::string rawdata, std::string start,
 }
 
 //読み込んだConfファイルを、ディレクティブごとに分けてVectorで返す
-Result<std::vector<std::string>, bool> cutConfByDirective(
-	std::string filepath) {
-	bool status;
-	std::string rawdata;
-	std::vector<std::string> firstlayer;
+Result<std::vector<std::string>, bool> cutConfByDirective(std::string filepath)
+{
+	bool 						status;
+	std::string 				rawdata;
+	std::vector<std::string> 	firstlayer;
 
 	Result<std::string, bool> res = openAndReadConf(filepath);
 
-	if (res.isError() == true) return Error<bool>(false);
+	if (res.isOK() == false)
+		return Error<bool>(false);
 
 	rawdata = res.getOk();
 
