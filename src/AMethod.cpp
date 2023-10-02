@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/30 11:31:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:33:52 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,15 @@ void	AMethod::setURI()
 // 	//return
 // 	if (conf.isReturn() == true)
 // 	{
-		
+// 		if (conf.getReturnUrl().empty() == false)
+// 		{
+			
+// 		}
+// 		else
+// 		{
+// 			res.setStatus(conf.getReturnStatus());
+			
+// 		}
 // 	}
 
 // 	//rewrite

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 13:28:24 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:40:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ Result<int, bool> RequestHandler::searchMatchHost()
 	std::string					without_port;
 	bool						portflag;
 	int							portnum;
+
+	//レスポンスに最低限をセットする
+	res.setVersion("HTTP/1.1");
+
 
 	//Hostヘッダー自体が含まれていない場合(どうにもならない)
 	if (result_1.isOK() == false)
@@ -72,6 +76,7 @@ Result<int, bool> RequestHandler::searchMatchHost()
 			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
 			{
 				this->confnum = i;
+				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
 			}
 			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
@@ -82,6 +87,7 @@ Result<int, bool> RequestHandler::searchMatchHost()
 					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
 					{
 						this->confnum = i;
+						res.addHeader("Server", configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
