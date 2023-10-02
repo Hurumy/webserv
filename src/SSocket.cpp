@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/27 19:43:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/28 00:29:07 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,16 @@ bool SSocket::init() {
 		// error output
 		putSytemError("socket");
 		std::exit(EXIT_FAILURE);
-		return false;
 	}
 	if (bind(sockfd, (const struct sockaddr *)&s_addr, addrsize) == -1) {
 		// error output
 		putSytemError("bind");
 		std::exit(EXIT_FAILURE);
-		return false;
 	}
 	if (listen(sockfd, backlog) == -1) {
 		// error output
 		putSytemError("listen");
 		std::exit(EXIT_FAILURE);
-		return false;
 	}
 	return true;
 }

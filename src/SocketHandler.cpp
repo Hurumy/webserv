@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/27 16:55:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/28 00:29:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 
 bool SocketHandler::setRevents() {
 	if (poll(pollfds.data(), pollfds.size(), pollTimeout) == -1) {
-		return false;
+		putSytemError("poll");
+		std::exit(EXIT_FAILURE);
 	}
 	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin();
 		 polliter != pollfds.end(); ++polliter) {
