@@ -51,6 +51,7 @@ SRC_FILES	:= \
 				RequestHandler.cpp \
 				error.cpp \
 				stringCleaner.cpp \
+				MakeDirlistHTML.cpp \
 				
 
 SRC_DIR		:= src

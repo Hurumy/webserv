@@ -46,5 +46,6 @@ int main() {
 		socketHandler.removeClosedCSockets();
 	}
 	socketHandler.closeAllSSockets();
+
 	return 0;
 }

@@ -68,7 +68,7 @@ Result<std::string, bool>	MakeDirlistHTML::returnHTML()
 		status = stat(tmpfilepath.c_str(), &sstat);
 		if (status == -1)
 			return Error<bool>(false);
-		stime = sstat.st_mtimespec;
+		stime = sstat.st_mtim;
 		strftime(buf, sizeof(buf), "%d-%b-%Y %R", gmtime(&stime.tv_sec));
 		html += buf;
 		bzero(buf, bufsize);
