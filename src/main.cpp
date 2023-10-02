@@ -12,12 +12,12 @@
 
 #include <unistd.h>
 
+#include "ConfParser.hpp"
+#include "Config.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SocketHandler.hpp"
-#include "Config.hpp"
-#include "ConfParser.hpp"
 
 int main() {
 	std::vector<SSocket> sources;

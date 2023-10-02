@@ -12,8 +12,7 @@
 
 #include "ConfParser.hpp"
 
-int readIndex(Config &conf, std::string oneline)
-{
+int readIndex(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -23,15 +22,13 @@ int readIndex(Config &conf, std::string oneline)
 	if (lines.at(0) != "index")
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (lines.size() < 2)
-		errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
+	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (conf.getIndex().empty() == false) errorInInit("Too many index declare");
 
-	//std::cout << lines.size() << std::endl;
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
-		//std::cout << lines.at(i) << std::endl;
+	// std::cout << lines.size() << std::endl;
+	for (size_t i = 1; i < lines.size(); i++) {
+		// std::cout << lines.at(i) << std::endl;
 		conf.addIndex(lines.at(i));
 	}
 

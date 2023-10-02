@@ -22,10 +22,9 @@
 //部分Get
 // Range
 
-const	std::map<std::string, std::string>	MethodGet::ext = initExtMap();
+const std::map<std::string, std::string> MethodGet::ext = initExtMap();
 
-std::map<std::string, std::string>	MethodGet::initExtMap()
-{
+std::map<std::string, std::string> MethodGet::initExtMap() {
 	std::map<std::string, std::string> tmp;
 	tmp["html"] = "text/html";
 	tmp["csv"] = "text/csv";
@@ -127,11 +126,9 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 }
 
 Result<int, bool> MethodGet::act() {
-
-	//URIを確認します
-	Result<int, bool>	res_uri = checkURI();
-	if (res_uri.isOK() == false)
-	{
+	// URIを確認します
+	Result<int, bool> res_uri = checkURI();
+	if (res_uri.isOK() == false) {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
@@ -150,9 +147,7 @@ Result<int, bool> MethodGet::act() {
 	if (res_read.isError() == true) {
 		setErrorPageBody();
 		return Error<bool>(false);
-	}
-	else
-	{
+	} else {
 		res.setStatus(200);
 		res.setStatusMessage("OK");
 		return Ok<int>(0);

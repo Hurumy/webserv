@@ -17,29 +17,27 @@
 #include "MethodGet.hpp"
 #include "MethodPost.hpp"
 
-RequestHandler::RequestHandler(std::vector<Config> const &_conf, Request const _req): configs(_conf)
-{
+RequestHandler::RequestHandler(std::vector<Config> const &_conf,
+							   Request const _req)
+	: configs(_conf) {
 	this->req = _req;
 	this->res = Response();
 }
 
 // configs.at(i) の i を返す
 // まだホストが見つかってもいないので、エラーページをセットすることが不可能。ステータスのみ返す
-Result<int, bool> RequestHandler::searchMatchHost()
-{
+Result<int, bool> RequestHandler::searchMatchHost() {
 	Result<std::string, bool> result_1 = req.getHeader("Host");
-	std::string 				hostname;
-	std::string					without_port;
-	bool						portflag;
-	int							portnum;
+	std::string hostname;
+	std::string without_port;
+	bool portflag;
+	int portnum;
 
 	//レスポンスに最低限をセットする
 	res.setVersion("HTTP/1.1");
 
-
-	//Hostヘッダー自体が含まれていない場合(どうにもならない)
-	if (result_1.isOK() == false)
-	{
+	// Hostヘッダー自体が含まれていない場合(どうにもならない)
+	if (result_1.isOK() == false) {
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -48,12 +46,11 @@ Result<int, bool> RequestHandler::searchMatchHost()
 
 	hostname = result_1.getOk();
 
-	//std::cout << YELLOW << "hostname: " << hostname << RESET << std::endl;
+	// std::cout << YELLOW << "hostname: " << hostname << RESET << std::endl;
 
-	//Requestで指定されているhostnameの中にPortの指定が存在するかどうかを確認する
-	if (hostname.find(':') != std::string::npos)
-	{
-		std::stringstream	ss;
+	// Requestで指定されているhostnameの中にPortの指定が存在するかどうかを確認する
+	if (hostname.find(':') != std::string::npos) {
+		std::stringstream ss;
 
 		portflag = true;
 		ss << hostname;
@@ -61,33 +58,29 @@ Result<int, bool> RequestHandler::searchMatchHost()
 		// std::cout << "hostname: " << hostname << std::endl;
 		// std::cout << "without_port: " << without_port << std::endl;
 		ss >> portnum;
-		//std::cout << portnum << std::endl;
-	}
-	else
-	{
+		// std::cout << portnum << std::endl;
+	} else {
 		portflag = false;
 	}
 
-	//Configの中からHostが一致するものを探す
-	for (size_t i = 0; i < configs.size(); i ++)
-	{
-		for (size_t t = 0; t < configs.at(i).getServerName().size(); t ++)
-		{
-			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
-			{
+	// Configの中からHostが一致するものを探す
+	for (size_t i = 0; i < configs.size(); i++) {
+		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
+			if (portflag == false &&
+				configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
-			}
-			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
-			{
+			} else if (portflag == true &&
+					   configs.at(i).getServerName().at(t) == without_port) {
 				//そのサーバーネームに対してポートが合っているか確認する
-				for (size_t	j = 0; j < configs.at(i).getAddresses().size(); j ++)
-				{
-					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
-					{
+				for (size_t j = 0; j < configs.at(i).getAddresses().size();
+					 j++) {
+					if (configs.at(i).getAddresses().at(j).getPort() ==
+						portnum) {
 						this->confnum = i;
-						res.addHeader("Server", configs.at(i).getServerName().at(t));
+						res.addHeader("Server",
+									  configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
@@ -144,9 +137,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else
-	{
+	} else {
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		setErrorPageBody();
@@ -205,10 +196,9 @@ void RequestHandler::setErrorPageBody() {
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false) 
-	{
+	if (res_1.isOK() == false) {
 		res.addHeader("Content-Length", "0");
-		return ;
+		return;
 	}
 
 	std::string filename = res_1.getOk();
@@ -224,15 +214,12 @@ void RequestHandler::setErrorPageBody() {
 			prevstatus = res.getStatus();
 			Result<std::string, bool> res_3 =
 				configs.at(confnum).getErrorPages(res.getStatus());
-			if (res_3.isOK() == false)
-			{
+			if (res_3.isOK() == false) {
 				res.addHeader("Content-Length", "0");
 				break;
 			}
 			filename = res_3.getOk();
-		}
-		else
-		{
+		} else {
 			res.addHeader("Content-Length", "0");
 			break;
 		}

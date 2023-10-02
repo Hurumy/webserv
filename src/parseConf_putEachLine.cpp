@@ -36,7 +36,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		//std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		// std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 
 		if (lines.at(i).empty() == false) {
 			if (lines.at(i) == "listen") {
@@ -64,7 +64,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 				status = readMaxBodySize(conf, oneline);
 				break;
 			} else if (lines.at(i) == "index") {
-				//std::cout << "reading index!!" << std::endl;
+				// std::cout << "reading index!!" << std::endl;
 				status = readIndex(conf, oneline);
 				break;
 			} else if (lines.at(i) == "upload_path") {
