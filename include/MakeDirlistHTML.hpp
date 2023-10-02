@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   makeDirlistHTML.hpp                                :+:      :+:    :+:   */
+/*   MakeDirlistHTML.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:42:15 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/30 11:36:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/02 14:52:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 # include <dirent.h>
+# include <string.h>
 # include <time.h>
 # include <ctime>
 
