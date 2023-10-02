@@ -20,35 +20,31 @@
 #include "ConfParser.hpp"
 
 int main() {
-	// std::vector<SSocket> sources;
-	// std::map<int, std::string> request;
-	// std::map<int, std::string> response;
+	std::vector<SSocket> sources;
+	std::map<int, std::string> request;
+	std::map<int, std::string> response;
 
-	// sources.push_back(SSocket(8080, IPV4, 1000));
-	// sources.push_back(SSocket(8000, IPV4, 1000));
-	// SocketHandler socketHandler(sources, 10);
-	// socketHandler.initAllSSockets();
-	// socketHandler.createPollfds();
-	// socketHandler.setRevents();
-	// while (true) {
-	// 	// for siege command
-	// 	// usleep(10000);
-	// 	if (socketHandler.getCSockets().empty() == false) {
-	// 		socketHandler.recvCSocketsData();
-	// 		socketHandler.loadRequests();
-	// 		response = socketHandler.createResponse();
-	// 		socketHandler.sendDataMap(response);
-	// 	}
-	// 	socketHandler.recieveCSockets();
-	// 	socketHandler.clearPollfds();
-	// 	socketHandler.createPollfds();
-	// 	socketHandler.setRevents();
-	// 	socketHandler.removeClosedCSockets();
-	// }
-	// socketHandler.closeAllSSockets();
-	// return 0;
-	
-	Result<std::vector<Config>, bool> tmp = parseConf("./conf_files/test.conf");
-	//std::cout << tmp.isOK() << std::endl;
+	sources.push_back(SSocket(8080, IPV4, 1000));
+	sources.push_back(SSocket(8000, IPV4, 1000));
+	SocketHandler socketHandler(sources, 10);
+	socketHandler.initAllSSockets();
+	socketHandler.createPollfds();
+	socketHandler.setRevents();
+	while (true) {
+		// for siege command
+		// usleep(10000);
+		if (socketHandler.getCSockets().empty() == false) {
+			socketHandler.recvCSocketsData();
+			socketHandler.loadRequests();
+			response = socketHandler.createResponse();
+			socketHandler.sendDataMap(response);
+		}
+		socketHandler.recieveCSockets();
+		socketHandler.clearPollfds();
+		socketHandler.createPollfds();
+		socketHandler.setRevents();
+		socketHandler.removeClosedCSockets();
+	}
+	socketHandler.closeAllSSockets();
 	return 0;
 }
