@@ -55,3 +55,6 @@ __pycache__
 
 # FilesNoPerm
 NoPermToRead.txt
+
+# Files created by file system on MacOS of the cluster
+._*

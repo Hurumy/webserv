@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:23:41 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:43:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:50:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include "RequestHandler.hpp"
 #include "ConfParser.hpp"
 
-#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define	CONF_FILE_PATH "testconfs/method_delete.conf"
 
 TEST (MethodDeleteTest, deletePostedFileTest)
 {
@@ -26,11 +26,12 @@ TEST (MethodDeleteTest, deletePostedFileTest)
 	bool						expected(true);
 	unsigned int				expected_status(204);
 	std::string					expected_string("No Content");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
 	req.addHeader("Host", "_");
-	req.setUrl("./post/0");
+	req.setUrl("/post/0");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -41,6 +42,7 @@ TEST (MethodDeleteTest, deletePostedFileTest)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
@@ -51,11 +53,12 @@ TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
 	bool						expected(true);
 	unsigned int				expected_status(404);
 	std::string					expected_string("Not Found");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
 	req.addHeader("Host", "_");
-	req.setUrl("./dummy/thereisnofile.html");
+	req.setUrl("/dummy/thereisnofile.html");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -66,4 +69,5 @@ TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }

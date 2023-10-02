@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 20:29:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/27 19:04:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,11 @@ TEST(ConfigParserTest, pIndexTest)
 	std::string			expected_3("index.test");
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	//std::cout << res.isOK() << std::endl;
 	tmp = res.getOk();
+	//std::cout << tmp.at(0).getUploadPath() << std::endl;
+	// if (tmp.at(0).getIndex().empty() == true)
+	// 	std::cout << "its empty!!" << std::endl;
 	ASSERT_EQ(tmp.at(0).getIndex().at(0), expected_1);
 	ASSERT_EQ(tmp.at(1).getIndex().at(0), expected_2);
 	ASSERT_EQ(tmp.at(1).getIndex().at(1), expected_3);

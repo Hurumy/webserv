@@ -6,12 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/27 16:41:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/02 15:45:33 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 
+#include "ConfParser.hpp"
+#include "Config.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
@@ -44,5 +46,6 @@ int main() {
 		socketHandler.removeClosedCSockets();
 	}
 	socketHandler.closeAllSSockets();
+
 	return 0;
 }

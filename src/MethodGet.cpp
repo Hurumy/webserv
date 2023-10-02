@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 11:04:05 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:31:45 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,50 +22,55 @@
 //部分Get
 // Range
 
+const std::map<std::string, std::string> MethodGet::ext = initExtMap();
+
+std::map<std::string, std::string> MethodGet::initExtMap() {
+	std::map<std::string, std::string> tmp;
+	tmp["html"] = "text/html";
+	tmp["csv"] = "text/csv";
+	tmp["css"] = "text/css";
+	tmp["js"] = "text/javascript";
+	tmp["json"] = "application/json";
+	tmp["pdf"] = "application/pdf";
+	tmp["xls"] = "application/vnd.ms-excel";
+	tmp["xlsx"] =
+		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+	tmp["ppt"] = "application/vnd.ms-powerpoint";
+	tmp["pptx"] =
+		"application/"
+		"vnd.openxmlformats-officedocument.presentationml.presentation";
+	tmp["doc"] = "application/msword";
+	tmp["docx"] =
+		"application/"
+		"vnd.openxmlformats-officedocument.wordprocessingml.document";
+	tmp["jpg"] = "image/jpeg";
+	tmp["jpeg"] = "image/jpeg";
+	tmp["png"] = "image/png";
+	tmp["gif"] = "image/gif";
+	tmp["bmp"] = "image/bmp";
+	tmp["dib"] = "image/bmp";
+	tmp["svg"] = "image/svg+xml";
+	tmp["zip"] = "application/zip";
+	tmp["lzh"] = "application/x-lzh";
+	tmp["tar"] = "application/x-tar";
+	tmp["gz"] = "application/x-tar";
+	tmp["mp3"] = "audio/mpeg";
+	tmp["mp4"] = "video/mp4";
+	tmp["mpeg"] = "video/mpeg";
+	tmp["exe"] = "application/octet-stream";
+	tmp["out"] = "application/octet-stream";
+	tmp["txt"] = "text/plain";
+	return (tmp);
+}
+
 MethodGet::MethodGet(Config _conf, Request _req, Response &_res)
 	: AMethod(_conf, _req, _res){};
 
 MethodGet::~MethodGet(){};
 
 Result<int, bool> MethodGet::setContentType(std::string filename) {
-	std::map<std::string, std::string> ext;
 	std::vector<std::string> list;
 	std::string contenttype;
-
-	ext["html"] = "text/html";
-	ext["csv"] = "text/csv";
-	ext["css"] = "text/css";
-	ext["js"] = "text/javascript";
-	ext["json"] = "application/json";
-	ext["pdf"] = "application/pdf";
-	ext["xls"] = "application/vnd.ms-excel";
-	ext["xlsx"] =
-		"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-	ext["ppt"] = "application/vnd.ms-powerpoint";
-	ext["pptx"] =
-		"application/"
-		"vnd.openxmlformats-officedocument.presentationml.presentation";
-	ext["doc"] = "application/msword";
-	ext["docx"] =
-		"application/"
-		"vnd.openxmlformats-officedocument.wordprocessingml.document";
-	ext["jpg"] = "image/jpeg";
-	ext["jpeg"] = "image/jpeg";
-	ext["png"] = "image/png";
-	ext["gif"] = "image/gif";
-	ext["bmp"] = "image/bmp";
-	ext["dib"] = "image/bmp";
-	ext["svg"] = "image/svg+xml";
-	ext["zip"] = "application/zip";
-	ext["lzh"] = "application/x-lzh";
-	ext["tar"] = "application/x-tar";
-	ext["gz"] = "application/x-tar";
-	ext["mp3"] = "audio/mpeg";
-	ext["mp4"] = "video/mp4";
-	ext["mpeg"] = "video/mpeg";
-	ext["exe"] = "application/octet-stream";
-	ext["out"] = "application/octet-stream";
-	ext["txt"] = "text/plain";
 
 	std::stringstream ss;
 	std::string tmp;
@@ -121,16 +126,24 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 }
 
 Result<int, bool> MethodGet::act() {
-	std::string filename = req.getUrl();
+	// URIを確認します
+	Result<int, bool> res_uri = checkURI();
+	if (res_uri.isOK() == false) {
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+	setURI();
 
 	// Getの条件を確認する
 	checkGetSemantics();
 
 	//拡張子を見てContentTypeを判断しResponseにセット
-	setContentType(filename);
+	setContentType(uri);
+
+	//リダイレクトなどを確認する
 
 	//ファイルの中身を読み込んでBodyに詰める
-	Result<std::string, bool> const res_read = _openFile(filename);
+	Result<std::string, bool> const res_read = _openFile(uri);
 	if (res_read.isError() == true) {
 		setErrorPageBody();
 		return Error<bool>(false);

@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   method_unacceptable.cpp                            :+:      :+:    :+:   */
+/*   MakeDirlistHTML.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/06 15:23:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/06 16:58:54 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/29 18:42:15 by komatsud          #+#    #+#             */
+/*   Updated: 2023/10/02 14:52:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "APayload.hpp"
-#include "Error.hpp"
-#include "Ok.hpp"
-#include "Request.hpp"
-#include "Response.hpp"
-#include "Result.hpp"
 #include "webserv.hpp"
+#include "Result.hpp"
+#include "Ok.hpp"
+#include "Error.hpp"
+# include <dirent.h>
+# include <string.h>
+# include <time.h>
+# include <ctime>
 
-bool methodUnAcceptable(Request req, Response &res) {
-	std::cout << RED "Unacceptable method: " << req.getMethod() << RESET
-			  << std::endl;
-	res.setStatus(405);
-	res.setStatusMessage("Method Not Allowed");
-	return (true);
-}
+class MakeDirlistHTML
+{
+	private:
+		std::string					path;
+		std::string					html;
+		static const std::string	header;
+		static const size_t			bufsize;
+	protected:
+	public:
+		MakeDirlistHTML(std::string _path);
+		~MakeDirlistHTML();
+		Result<std::string, bool>	returnHTML();
+};
+
+
+

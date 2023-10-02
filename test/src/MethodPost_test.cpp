@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 14:11:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/09/28 11:37:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static std::string	__openFile(std::string filename)
 	unsigned long long	bodysize = 0;
 	int 				status = 1;
 	std::string 		body;
-	char 				buf[FILE_READ_SIZE];
+	char 				buf[FILE_READ_SIZE + 1];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
@@ -34,9 +34,9 @@ static std::string	__openFile(std::string filename)
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
-		buf[status] = '\0';
 		if (status != -1)
 		{
+			buf[status] = '\0';
 			body += buf;
 			bodysize += status;
 		}
@@ -60,13 +60,14 @@ TEST (MethodPostTest, postTextFileTest)
 	std::string					expected_string("Created");
 	bool						expected_status_location(true);
 	std::string					expected_content("post file!!");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
 	req.addHeader("Host", "_");
 	req.setBody(expected_content);
 	req.addHeader("Content-Length", "11");
-	req.setUrl("./post");
+	req.setUrl("/post");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -78,9 +79,12 @@ TEST (MethodPostTest, postTextFileTest)
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(), expected_status_location);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 	
 	Result<std::string, bool> res_loc = handler.getResponse().getHeader("Location");
 	std::string	filename = res_loc.getOk();
+	filename = "." + filename;
+	//std::cout << filename << std::endl;
 	std::string body = __openFile(filename);
 
 	ASSERT_EQ(body, expected_content);
@@ -95,13 +99,14 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 	unsigned int				expected_status(405);
 	std::string					expected_string("Method Not Allowed");
 	std::string					expected_content("huowadwasdhjwahjdkwhujwaduhjadwuhjdwauij");
+	bool						expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
 	req.addHeader("Host", "met_not_allowed.com");
 	req.setBody(expected_content);
 	req.addHeader("Content-Length", "40");
-	req.setUrl("./post");
+	req.setUrl("/post");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -110,4 +115,5 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
