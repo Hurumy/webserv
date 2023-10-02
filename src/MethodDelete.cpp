@@ -58,23 +58,19 @@ int MethodDelete::openResourceDelete() {
 Result<int, bool> MethodDelete::act() {
 	int status;
 
-	//URIを確認します
-	Result<int, bool>	res_uri = checkURI();
-	if (res_uri.isOK() == false)
-	{
+	// URIを確認します
+	Result<int, bool> res_uri = checkURI();
+	if (res_uri.isOK() == false) {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
 	setURI();
 
 	status = openResourceDelete();
-	if (200 <= status && status <= 299)
-	{
+	if (200 <= status && status <= 299) {
 		res.addHeader("Content-Length", "0");
 		return Ok<int>(status);
-	}
-	else
-	{
+	} else {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}

@@ -121,7 +121,7 @@ int MethodPost::openPostResource() {
 
 	//被りのないファイル名を調べる
 	filename = makeFilename();
-	//std::cout << BLUE << filename << RESET << std::endl;
+	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
 	status = open(filename.c_str(), O_WRONLY | O_CREAT, 0777);
@@ -146,24 +146,20 @@ int MethodPost::openPostResource() {
 Result<int, bool> MethodPost::act() {
 	int status;
 
-	//URIを確認します
-	Result<int, bool>	res_uri = checkURI();
-	if (res_uri.isOK() == false)
-	{
+	// URIを確認します
+	Result<int, bool> res_uri = checkURI();
+	if (res_uri.isOK() == false) {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
 	setURI();
 
 	status = openPostResource();
-	if (status >= 200 && status <= 299)
-	{
+	if (status >= 200 && status <= 299) {
 		res.addHeader("Location", filename.substr(1, filename.size() - 1));
 		res.addHeader("Content-Length", "0");
 		return Ok<int>(status);
-	}
-	else
-	{
+	} else {
 		setErrorPageBody();
 		return Error<bool>(false);
 	}

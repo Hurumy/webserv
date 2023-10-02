@@ -86,48 +86,40 @@ void AMethod::setErrorPageBody() {
 			filename = res_3.getOk();
 		} else {
 			res.addHeader("Content-Length", "0");
-			break ;
+			break;
 		}
 	}
 	return;
 }
 
-Result<int, bool>	AMethod::checkURI()
-{
-	std::string	origin = req.getUrl();
-	std::string	rel;
+Result<int, bool> AMethod::checkURI() {
+	std::string origin = req.getUrl();
+	std::string rel;
 
 	//絶対URIか相対URIか判定する
-	if (origin.find("http://") == 0 || origin.find("https://") == 0)
-	{
-		std::string			tmp;
-		std::stringstream	ss;
-		size_t				i = 0;
+	if (origin.find("http://") == 0 || origin.find("https://") == 0) {
+		std::string tmp;
+		std::stringstream ss;
+		size_t i = 0;
 
 		ss << origin;
-		while (std::getline(ss, tmp, '/'))
-		{
-			if (i > 2 && tmp.empty() == false)
-			{
+		while (std::getline(ss, tmp, '/')) {
+			if (i > 2 && tmp.empty() == false) {
 				rel += '/';
 				rel += tmp;
 			}
-			i ++;
+			i++;
 		}
-		//std::cout << rel << std::endl;
-		
-	}
-	else if (origin.find("/") == 0)
-	{
+		// std::cout << rel << std::endl;
+
+	} else if (origin.find("/") == 0) {
 		rel = req.getUrl();
-	}
-	else
-	{
+	} else {
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		return Error<bool>(false);
 	}
-	
+
 	//　サーバー自体のルートより上を見ようとしていないか、
 	//　変な指定がないかなどのチェックを足す
 
@@ -135,13 +127,11 @@ Result<int, bool>	AMethod::checkURI()
 	return Ok<int>(0);
 }
 
-void	AMethod::setURI()
-{
-	std::string	tmp;
+void AMethod::setURI() {
+	std::string tmp;
 
-	//ROOTを見る
-	if (conf.getRootDir().empty() == false)
-	{
+	// ROOTを見る
+	if (conf.getRootDir().empty() == false) {
 		tmp = conf.getRootDir() + uri;
 		uri = tmp;
 	}
@@ -150,9 +140,9 @@ void	AMethod::setURI()
 	tmp = "." + uri;
 	uri = tmp;
 
-	//std::cout << YELLOW << uri << RESET << std::endl;
+	// std::cout << YELLOW << uri << RESET << std::endl;
 
-	return ;
+	return;
 }
 
 // Result<int, bool>	AMethod::searchSettingsOfURI()
@@ -162,17 +152,15 @@ void	AMethod::setURI()
 // 	{
 // 		if (conf.getReturnUrl().empty() == false)
 // 		{
-			
+
 // 		}
 // 		else
 // 		{
 // 			res.setStatus(conf.getReturnStatus());
-			
+
 // 		}
 // 	}
 
 // 	//rewrite
-	
-	
-// }
 
+// }
