@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/20 12:45:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/02 18:03:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,5 @@ class	Config
 		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
-
-		//for copy
-		std::map<int, std::string>			pullErrorPages() const;
-		bool								pushErrorPages(std::map<int, std::string> map);
 };
 

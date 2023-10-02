@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 17:03:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/02 18:03:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,14 +129,5 @@ bool Config::setUploadPath(std::string path) {
 
 bool Config::addReqMethod(std::string key, bool val) {
 	this->reqmethod[key] = val;
-	return (true);
-}
-
-std::map<int, std::string> Config::pullErrorPages() const {
-	return (this->errorpages);
-}
-
-bool Config::pushErrorPages(std::map<int, std::string> map) {
-	this->errorpages = map;
 	return (true);
 }
