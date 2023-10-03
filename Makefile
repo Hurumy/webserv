@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/27 19:16:37 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/03 11:51:31 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRC_FILES	:= \
 				error.cpp \
 				stringCleaner.cpp \
 				MakeDirlistHTML.cpp \
+				Location.cpp \
 				
 
 SRC_DIR		:= src

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 17:56:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:28:00 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		tmpfilepath = path + st->d_name;
 		status = stat(tmpfilepath.c_str(), &sstat);
 		if (status == -1) return Error<bool>(false);
-		stime = sstat.st_mtim;
+
+		// stime = sstat.st_mtim;
+		// stime = sstat.st_mtimespec;
+
 		strftime(buf, sizeof(buf), "%d-%b-%Y %R", gmtime(&stime.tv_sec));
 		html += buf;
 		bzero(buf, bufsize);
