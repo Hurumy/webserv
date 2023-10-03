@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 13:31:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/03 20:14:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ bool SocketHandler::closeAllSSockets() {
 bool SocketHandler::removeClosedCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
-		if ((iter->getRevents() & (POLLIN | POLLOUT | POLLHUP)) ==
-				(POLLIN | POLLOUT | POLLHUP) ||
+		if ((iter->getRevents() & POLLHUP) ==
+				POLLHUP ||
 			(iter->getPhase() == CSocket::CLOSE)) {
 			iter->closeSockfd();
 			iter = csockets.erase(iter);
