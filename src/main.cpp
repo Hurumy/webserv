@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 19:56:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/03 21:57:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,18 @@
 
 #define	CONF_FILE_PATH "./conf_files/test.conf"
 
-int main() {
+int main(const int argc, const char **argv) {
+	if (argc != 2) {
+		return 1;
+	}
 	std::vector<SSocket> sources;
 	std::map<int, std::string> responses;
-	Result<std::vector<Config>, bool> result = parseConf(CONF_FILE_PATH);
+	Result<std::vector<Config>, bool> result = parseConf(std::string(argv[1]));
 	std::vector<Config> configs = result.getOk();
 
 	sources.push_back(SSocket(8080, IPV4, 1000));
 	sources.push_back(SSocket(8000, IPV4, 1000));
-	SocketHandler socketHandler(sources, 10, 10);
+	SocketHandler socketHandler(sources, 10, 30);
 	socketHandler.initAllSSockets();
 	socketHandler.createPollfds();
 	socketHandler.setRevents();
