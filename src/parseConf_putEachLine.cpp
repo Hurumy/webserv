@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 12:55:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:01:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		//std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 
 		if (lines.at(i).empty() == false) {
 			if (lines.at(i) == "server") {
@@ -67,7 +67,6 @@ static int checkSettings(Config &conf, std::string oneline) {
 				status = readMaxBodySize(conf, oneline);
 				break;
 			} else if (lines.at(i) == "index") {
-				// std::cout << "reading index!!" << std::endl;
 				status = readIndex(conf, oneline);
 				break;
 			} else if (lines.at(i) == "upload_path") {
@@ -104,6 +103,13 @@ Result<Config, bool> parsePortVecs(std::string port) {
 
 	// for (size_t i = 0; i < line.size(); i ++)
 	// 	std::cout << BLUE << line.at(i) << RESET << std::endl;
+	
+
+	
+	//ここでLocationディレクティブを切り出していき、Locationに詰め、Configのベクターにしまう
+	//後に流すstd::vector<std::string>にはLocationのディレクティブは含まれないようにする
+
+
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {

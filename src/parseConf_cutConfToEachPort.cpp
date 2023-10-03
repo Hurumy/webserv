@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:11:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 12:56:18 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:58:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ std::vector<std::string> cutConfToEachPort(std::string raw) {
 	// delete&ignore comments
 	cutOffStr(raw, "#", "\n");
 
-	std::cout << raw << std::endl;
+	//std::cout << raw << std::endl;
 
 	// interpret spaces as " "
 	replaceStr(raw, "\n", " ");
