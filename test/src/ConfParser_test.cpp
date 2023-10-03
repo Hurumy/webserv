@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:04:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:36:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include "Error.hpp"
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
+#define CONF_FILE_PATH_2 "testconfs/location_dir.conf"
 
 TEST(ConfigParserTest, pAddressesTest)
 {
@@ -191,3 +192,28 @@ TEST(ConfigParserTest, pAllowedMethodsTest)
 	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
 	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
 }
+
+TEST(ConfigParserTest, parsingSomeLocationDirectivesTest)
+{
+	std::vector<Config>	tmp;
+	bool			expected_1(true);
+	bool			expected_2(true);
+	bool			expected_3(true);
+	bool			expected_4(false);
+	bool			expected_5(true);
+	bool			expected_6(true);
+	bool			expected_7(false);
+	bool			expected_8(false);	
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH_2);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getReqMethod("GET").isOK(), expected_1);
+	ASSERT_EQ(tmp.at(0).getReqMethod("POST").isOK(), expected_2);
+	ASSERT_EQ(tmp.at(0).getReqMethod("DELETE").isOK(), expected_3);
+	ASSERT_EQ(tmp.at(0).getReqMethod("PUT").isOK(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReqMethod("GET").isOK(), expected_5);
+	ASSERT_EQ(tmp.at(1).getReqMethod("POST").isOK(), expected_6);
+	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
+	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
+}
+

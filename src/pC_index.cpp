@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:20:57 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:03:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:38:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int readIndex(Config &conf, std::string oneline) {
 
 	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (conf.getIndex().empty() == false) errorInInit("Too many index declare");
+	if (conf.getIndex().empty() == false) errorInInit("Too many index declare(´-ω-`)");
 
 	// std::cout << lines.size() << std::endl;
 	for (size_t i = 1; i < lines.size(); i++) {

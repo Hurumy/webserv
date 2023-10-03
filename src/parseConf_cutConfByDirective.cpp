@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:01:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:37:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 		return Error<bool>(false);
 	}
 
-	// std::cout << rawdata << std::endl;
+	//std::cout << rawdata << std::endl;
 
 	return Ok<std::string>(rawdata);
 }
@@ -141,8 +141,10 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 	firstlayer = cutPorts(rawdata, "{", "}");
 
 	// for(size_t i = 0; i < firstlayer.size(); i ++)
-	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET
-	// << std::endl;
+	// {
+	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
+	// 	std::cout << RED "===ONE DIRECTIVE END===" << RESET << std::endl;
+	// }
 
 	return Ok<std::vector<std::string> >(firstlayer);
 }
