@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/28 00:29:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:31:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "SSocket.hpp"
 #include "ConfParser.hpp"
 #include "RequestHandler.hpp"
+#include "puterror.hpp"
 
 SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, std::size_t const _timeout, int _pollTimeout)
 	: ssockets(_ssockets), timeout(_timeout), pollTimeout(_pollTimeout) {}
