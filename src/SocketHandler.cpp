@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 20:14:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/03 20:13:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,21 +288,35 @@ std::map<int, std::string> SocketHandler::createResponse() {
 	return response;
 }
 
-#define	CONF_FILE_PATH "conf_files/test.conf"
-
-bool SocketHandler::loadResponses() {
+bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 	// temporarily
-	Result<std::vector<Config>, bool> result = parseConf(CONF_FILE_PATH);
-	std::vector<Config> configs = result.getOk();
-
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
 			RequestHandler requestHandler = RequestHandler(configs, requests[iter->getSockfd()]);
-			requestHandler.searchMatchHost();
-			responses[iter->getSockfd()] = requestHandler.getResponse();
-			iter->setPhase(CSocket::SEND);
-			removeRequest(iter->getSockfd());
+			if (requestHandler.searchMatchHost().isError() == true) {
+				// error handling	
+				responses[iter->getSockfd()] = requestHandler.getResponse();
+				iter->setPhase(CSocket::SEND);
+				removeRequest(iter->getSockfd());
+			}
+			else if (requestHandler.checkRequiedHeader().isError() == true) {
+				// error handling	
+				responses[iter->getSockfd()] = requestHandler.getResponse();
+				iter->setPhase(CSocket::SEND);
+				removeRequest(iter->getSockfd());
+			}
+			else if (requestHandler.routeMethod().isError() == true) {
+				// error handling	
+				responses[iter->getSockfd()] = requestHandler.getResponse();
+				iter->setPhase(CSocket::SEND);
+				removeRequest(iter->getSockfd());
+			} else {
+				responses[iter->getSockfd()] = requestHandler.getResponse();
+				iter->setPhase(CSocket::SEND);
+				removeRequest(iter->getSockfd());
+				
+			}
 		}
 	}
 	return true;

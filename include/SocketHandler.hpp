@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/27 14:03:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/03 19:54:48 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "Result.hpp"
 #include "SSocket.hpp"
 #include "CSocket.hpp"
+#include "Config.hpp"
 
 class SocketHandler {
 	private:
@@ -59,6 +60,6 @@ class SocketHandler {
 		bool sendResponses();
 		bool loadRequests();
 		std::map<int, std::string> createResponse();
-		bool loadResponses();
+		bool loadResponses(std::vector<Config> const &configs);
 		bool closeTimeoutCSockets();
 };
