@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 18:01:52 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 13:11:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:13:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int readAllowedMethods(Config &conf, std::string oneline) {
 			status = conf.addReqMethod(lines.at(i), true);
 			if (status == false)
 			{
-				errorInInit("Too many allowMethod is declare(´-ω-`)");
+				errorInInit("Too many allowedMethod is declare(´-ω-`)");
 			}
 		}
 		else
