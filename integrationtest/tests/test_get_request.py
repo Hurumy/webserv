@@ -21,3 +21,16 @@ class TestGetRequest(unittest.TestCase):
 		print('Response:\n', self.client.response)
 		print('Status: ', self.client.status)
 		self.assertEqual(self.client.status, '404')
+
+	def test_send_little_by_little(self):
+		print('\n===========================')
+		print('TEST: test little by little')
+		print('===========================\n')
+		self.client.send('GET /nos')
+		self.client.send('uchpage HTTP/1.1\r\nHo')
+		self.client.send('st: ' + HOST_NAME + ':' + PORT + '\r\n\r\n')
+		self.client.recv()
+		self.client.close()
+		print('Response:\n', self.client.response)
+		print('Status: ', self.client.status)
+		self.assertEqual(self.client.status, '404')
