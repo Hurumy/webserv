@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 16:40:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/04 20:57:50 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,17 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	std::string _method;
 	std::string _url;
 	std::string _version;
+	std::string extra;
 
 	iss >> _method;
 	iss >> _url;
 	iss >> _version;
+	iss >> extra;
+	if (extra.empty() == false) {
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::CLOSE);
+		return false;
+	}
 	if (_method.empty() == true) {
 		csocket.popDataLine();
 		csocket.setPhase(CSocket::RECV);
