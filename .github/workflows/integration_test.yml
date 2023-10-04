@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/03 21:57:27 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/04 18:08:18 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,15 +31,10 @@ jobs:
       - name: build
         run: make
 
-      - name: Install Robot Framework
-        run: python -m pip install --upgrade pip setuptools && pip install robotframework && pip install robotframework-requests
+      - name: Install libraries
+        run: python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
 
       - name: Run test
         run: |
-          ./webserv ./conf_files/test.conf &
-          sleep 3
-          test_files=$(find . -type f -name '*.robot' -path "./test/robots/*")
-          for file in $test_files; do
-            echo "Running integration test for $file..."
-            robot $file
-          done
+          cd /code/integrationtest
+          python runner.py tests
