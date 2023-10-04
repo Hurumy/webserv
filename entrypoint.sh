@@ -34,6 +34,14 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
+echo "${0}: install python-dotenv."
+pip install python-dotenv
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to install python-dotenv: $status"
+  exit $status
+fi
+
 echo "${0}: compile sources."
 make re
 status=$?
@@ -42,10 +50,4 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
-echo "${0}: running webserv."
-./webserv ./conf_files/test.conf
-status=$?
-if [ $status -ne 0 ]; then
-  echo "Failed to start webserv: $status"
-  exit $status
-fi
+sleep infinity

@@ -4,3 +4,4 @@ RUN mkdir /code
 WORKDIR /code
 COPY . /code/
 RUN chmod +x entrypoint.sh
+ENTRYPOINT ["/code/entrypoint.sh"]
