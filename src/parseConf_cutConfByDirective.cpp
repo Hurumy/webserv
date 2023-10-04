@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 12:37:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 10:13:30 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 	std::string rawdata;
 
 	fd = open(filepath.c_str(), O_RDONLY);
-	if (fd < 0) return Error<bool>(false);
+	if (fd < 0) 
+	{
+		errorInInit("Failed to open the config file｡°(´ฅωฅ`)°｡");
+		return Error<bool>(false);
+	}
 
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
@@ -31,7 +35,9 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 		}
 	} while (status > 0);
 
-	if (status == -1) {
+	if (status == -1)
+	{
+		errorInInit("Failed to read the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
@@ -68,7 +74,10 @@ static bool countParentheses(std::string rawdata, std::string start,
 	if (num_of_start == num_of_end)
 		return (true);
 	else
+	{
+		errorInInit("Inconsistent number of parentheses in the Config file（＞Д＜）");
 		return (false);
+	}
 }
 
 //第1層をパース
@@ -129,13 +138,15 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 
 	Result<std::string, bool> res = openAndReadConf(filepath);
 
-	if (res.isOK() == false) return Error<bool>(false);
+	if (res.isOK() == false)
+		return Error<bool>(false);
 
 	rawdata = res.getOk();
 
 	//カッコの数を数えて{==}でなければ弾く
 	status = countParentheses(rawdata, "{", "}");
-	if (status == false) return Error<bool>(false);
+	if (status == false)
+		return Error<bool>(false);
 
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
