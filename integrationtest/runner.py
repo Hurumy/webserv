@@ -22,12 +22,5 @@ if __name__ == '__main__':
 		print('usage: %s path' % sys.argv[0])
 		sys.exit(1)
 
-	print('Run webserv')
-	proc = subprocess.Popen([WEBSERV, CONFFILE])
-	sleep(1)
-
 	print('Run Test')
 	main(sys.argv[1])
-
-	print('Terminate webserv')
-	proc.terminate()
