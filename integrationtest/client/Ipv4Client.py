@@ -21,7 +21,9 @@ class BaseClient:
 
 	def recv(self):
 		self.response = self.__socket.recv(self.__buffer).decode('utf-8')
-		self.status = self.response.split(' ')[1]
+		reqline_list = self.response.split(' ')
+		if 3 > len(reqline_list): return
+		self.status = reqline_list[1]
 
 	def close(self):
 		self.__socket.shutdown(socket.SHUT_RDWR)
