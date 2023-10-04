@@ -3,14 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   MakeDirlistHTML.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/30 11:44:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:52:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MakeDirlistHTML.hpp"
+#if defined(__APPLE__) || defined(__NetBSD__) 
+# define st_atim st_atimespec
+# define st_ctim st_ctimespec
+# define st_mtim st_mtimespec
+#endif
 
 const std::string MakeDirlistHTML::header = "<html>\n";
 const size_t MakeDirlistHTML::bufsize = 200;

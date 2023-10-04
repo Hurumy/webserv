@@ -6,13 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 18:32:26 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/25 19:13:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/04 14:21:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <vector>
+#include <string>
 
 #include "Result.hpp"
 
