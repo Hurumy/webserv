@@ -12,35 +12,29 @@
 
 #pragma once
 
-#include "webserv.hpp"
 #include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 #include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
+#include "webserv.hpp"
 
-class RequestHandler
-{
-	private:
-		std::vector<Config> const			&configs;
-		Request								req;
-		Response							res;
-		size_t								confnum;
-		//RequestHandler();
-		Result<std::string, bool>			_openFile(std::string filename);
-	protected:
-	public:
-		RequestHandler(std::vector<Config> const &_conf, Request const _req);
-		Result<int, bool>	searchMatchHost();
-		Result<int, bool>	checkRequiedHeader();
-		Result<int, bool>	routeMethod();
-		void				setErrorPageBody();
-		Response			getResponse();
+class RequestHandler {
+   private:
+	std::vector<Config> const &configs;
+	Request req;
+	Response res;
+	size_t confnum;
+	// RequestHandler();
+	Result<std::string, bool> _openFile(std::string filename);
+
+   protected:
+   public:
+	RequestHandler(std::vector<Config> const &_conf, Request const _req);
+	Result<int, bool> searchMatchHost();
+	Result<int, bool> checkRequiedHeader();
+	Result<int, bool> routeMethod();
+	void setErrorPageBody();
+	Response getResponse();
 };
-
-
-
-
-
-

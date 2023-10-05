@@ -10,27 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "RequestHandler.hpp"
+
 #include <gtest/gtest.h>
 
-#include "RequestHandler.hpp"
-#include "webserv.hpp"
-#include "Response.hpp"
-#include "Request.hpp"
-#include "Config.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "ConfParser.hpp"
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "Result.hpp"
+#include "webserv.hpp"
 
-#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define CONF_FILE_PATH "testconfs/simple.conf"
 
-TEST(RequestHandlerTest, searchMatchHostTest)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	int							expected(1);
+	Request req;
+	int expected(1);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -41,13 +41,12 @@ TEST(RequestHandlerTest, searchMatchHostTest)
 	ASSERT_EQ(result_1.getOk(), expected);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_withPort)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_withPort) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
+	Request req;
+	bool expected(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -58,13 +57,12 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort)
 	ASSERT_EQ(result_1.isOK(), expected);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_withPort_2)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_withPort_2) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
+	Request req;
+	bool expected(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -75,15 +73,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort_2)
 	ASSERT_EQ(result_1.isOK(), expected);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(400);
-	std::string					expected_statusMessage("Bad Request");
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(400);
+	std::string expected_statusMessage("Bad Request");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -96,15 +93,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(400);
-	std::string					expected_statusMessage("Bad Request");
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(400);
+	std::string expected_statusMessage("Bad Request");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -117,15 +113,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(400);
-	std::string					expected_statusMessage("Bad Request");
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(400);
+	std::string expected_statusMessage("Bad Request");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -138,15 +133,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(400);
-	std::string					expected_string("Bad Request");
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(400);
+	std::string expected_string("Bad Request");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -159,15 +153,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest)
-{
-	std::vector<Config>			tmp;
+TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest) {
+	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(400);
-	std::string					expected_string("Bad Request");
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(400);
+	std::string expected_string("Bad Request");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -179,12 +172,11 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, checkRequiedHeaderTest)
-{
+TEST(RequestHandlerTest, checkRequiedHeaderTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -196,14 +188,13 @@ TEST(RequestHandlerTest, checkRequiedHeaderTest)
 	ASSERT_EQ(result_1.isOK(), expected);
 }
 
-TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion)
-{
+TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(505);
-	std::string					expected_string("HTTP Version Not Supported");
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(505);
+	std::string expected_string("HTTP Version Not Supported");
 
 	req.setVersion("HTTP/2.0");
 	req.setMethod("GET");
@@ -217,14 +208,13 @@ TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_HTTPVersion)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_AllowedMethod)
-{
+TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_AllowedMethod) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(405);
-	std::string					expected_string("Method Not Allowed");
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(405);
+	std::string expected_string("Method Not Allowed");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("PET");
@@ -238,14 +228,13 @@ TEST(RequestHandlerTest, checkRequiedHeaderTest_Error_AllowedMethod)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, getResponseTest)
-{
+TEST(RequestHandlerTest, getResponseTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(405);
-	std::string					expected_string("Method Not Allowed");
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(405);
+	std::string expected_string("Method Not Allowed");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("PET");
@@ -259,16 +248,17 @@ TEST(RequestHandlerTest, getResponseTest)
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 }
 
-TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion)
-{
+TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(505);
-	std::string					expected_string("HTTP Version Not Supported");
-	std::string					expected_body("<H1>HTTP 505 HTTP Version Not Supported</H1>\n\n<p>This webserv supports only HTTP/1.1...</p>");
-	std::string					expected_content_length("91");
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(505);
+	std::string expected_string("HTTP Version Not Supported");
+	std::string expected_body(
+		"<H1>HTTP 505 HTTP Version Not Supported</H1>\n\n<p>This webserv "
+		"supports only HTTP/1.1...</p>");
+	std::string expected_content_length("91");
 
 	req.setVersion("HTTP/2.0");
 	req.setMethod("GET");
@@ -279,10 +269,11 @@ TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion)
 	Result<int, bool> result_1 = handler.checkRequiedHeader();
 	ASSERT_EQ(result_1.isOK(), expected);
 
-	//errorPageBody
+	// errorPageBody
 	handler.setErrorPageBody();
-	Result<std::string, bool>	res_1 = handler.getResponse().getHeader("Content-Length");
-	std::string					content_len = res_1.getOk();
+	Result<std::string, bool> res_1 =
+		handler.getResponse().getHeader("Content-Length");
+	std::string content_len = res_1.getOk();
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);

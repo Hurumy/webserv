@@ -10,14 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Port.hpp"
+
 #include <gtest/gtest.h>
 
-#include "Port.hpp"
-#include "Config.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include <string>
+
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
 
 // TEST(PortTest, getConfTest)
 // {
@@ -33,7 +35,7 @@
 // 	conf_b.addServerName(b_name);
 // 	port.addConf(a_port, conf_a);
 // 	port.addConf(b_port, conf_b);
-	
+
 // 	Result<Config, bool> res = port.getConf(a_port);
 // 	ASSERT_EQ(res.isOK(), true);
 // 	ASSERT_EQ(res.getOk().getServerName().at(0), a_name);
@@ -56,7 +58,7 @@
 // 	conf_b.addServerName(b_name);
 // 	port.addConf(a_port, conf_a);
 // 	port.addConf(b_port, conf_b);
-	
+
 // 	port.setHostPort(a_port);
 
 // 	int	host = port.getHostPort();
@@ -75,7 +77,7 @@
 // 	size_t	ports = 0;
 
 // 	ASSERT_EQ(port.getNumofPorts(), ports);
-	
+
 // 	port.addConf(a_port, conf_a);
 // 	ports ++;
 
@@ -84,5 +86,5 @@
 // 	port.addConf(b_port, conf_b);
 // 	ports ++;
 
-// 	ASSERT_EQ(port.getNumofPorts(), ports);	
+// 	ASSERT_EQ(port.getNumofPorts(), ports);
 // }

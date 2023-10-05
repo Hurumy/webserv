@@ -10,10 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Response.hpp"
+
 #include <gtest/gtest.h>
 
 #include <string>
-#include "Response.hpp"
 
 TEST(ResponseTest, versionTest) {
 	Response response;
@@ -54,7 +55,8 @@ TEST(ResponseTest, headerTest01) {
 	response.addHeader("Content-Type", expected);
 	ASSERT_EQ(response.getHeader("Content-Type").isOK(), true);
 	ASSERT_EQ(response.getHeader("Content-Type").isError(), false);
-	ASSERT_STREQ(response.getHeader("Content-Type").getOk().c_str(), expected.c_str());
+	ASSERT_STREQ(response.getHeader("Content-Type").getOk().c_str(),
+				 expected.c_str());
 }
 
 TEST(ResponseTest, headerTest02) {
@@ -84,7 +86,8 @@ TEST(ResponseTest, headerTest04) {
 	ASSERT_EQ(result.getError(), false);
 }
 
-#define EXPECTED "\
+#define EXPECTED \
+	"\
 HTTP/1.1 200 OK\r\n\
 Content-Length: 14\r\n\
 Content-Type: text/html;charset=UTF-8\r\n\

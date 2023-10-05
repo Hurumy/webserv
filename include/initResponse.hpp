@@ -12,14 +12,16 @@
 
 #pragma once
 
-#include "webserv.hpp"
 #include "APayload.hpp"
-#include "Response.hpp"
-#include "Request.hpp"
 #include "Config.hpp"
-#include "Result.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
+#include "Result.hpp"
+#include "webserv.hpp"
 
-Result<int, bool>	isMatchHost(Response &res, Request req, std::vector<Config> configs);
-Result<std::string, bool>	checkRequiredHeader(Request req, Response &res, Config conf);
+Result<int, bool> isMatchHost(Response &res, Request req,
+							  std::vector<Config> configs);
+Result<std::string, bool> checkRequiredHeader(Request req, Response &res,
+											  Config conf);

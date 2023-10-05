@@ -10,14 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <gtest/gtest.h>
-
 #include "MakeDirlistHTML.hpp"
 
-TEST(MakeDirListHTMLTest, writeOutTest)
-{
-	MakeDirlistHTML	tmp("./www/content/");
-	
+#include <gtest/gtest.h>
+
+TEST(MakeDirListHTMLTest, writeOutTest) {
+	MakeDirlistHTML tmp("./www/content/");
+
 	std::cout << tmp.returnHTML().getOk() << std::endl;
 }
-

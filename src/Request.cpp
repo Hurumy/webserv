@@ -20,7 +20,10 @@
 #include "Version.hpp"
 
 Request::Request()
-	: contentLength(0), lastContentLength(contentLength), isCompleteHeader(false), phase(Request::REQLINE) {}
+	: contentLength(0),
+	  lastContentLength(contentLength),
+	  isCompleteHeader(false),
+	  phase(Request::REQLINE) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -71,7 +74,8 @@ bool Request::loadPayload(CSocket &csocket) {
 				isTrueLoadHeader = loadHeader(csocket);
 				if (csocket.getData().compare(0, 2, "\r\n") == 0) {
 					csocket.popDataLine();
-					std::map<std::string, std::string>::iterator clengthiter = header.find("Content-Length");
+					std::map<std::string, std::string>::iterator clengthiter =
+						header.find("Content-Length");
 					if (clengthiter != header.end()) {
 						std::stringstream ss(clengthiter->second);
 						ss >> contentLength;
@@ -127,11 +131,10 @@ bool Request::loadRequestLine(CSocket &csocket) {
 		return false;
 	}
 	if (isValidURL(_url) == false) {
-		// Should return error page 
+		// Should return error page
 		csocket.setPhase(CSocket::CLOSE);
 		return false;
-	}
-	else if (isVersion(_version) == false) {
+	} else if (isVersion(_version) == false) {
 		// Should return error page
 		csocket.setPhase(CSocket::CLOSE);
 		return false;

@@ -10,17 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Status.hpp"
+
 #include <gtest/gtest.h>
 
 #include <string>
-#include "Status.hpp"
 
 TEST(StatusTest, statusTest) {
 	std::string expected("OK");
 
 	ASSERT_EQ(Status::getStatusMessage(200).isOK(), true);
 	ASSERT_EQ(Status::getStatusMessage(200).isError(), false);
-	ASSERT_STREQ(Status::getStatusMessage(200).getOk().c_str(), expected.c_str());
+	ASSERT_STREQ(Status::getStatusMessage(200).getOk().c_str(),
+				 expected.c_str());
 }
 
 TEST(StatusTest, statusErrorTest) {

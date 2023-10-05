@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "MakeDirlistHTML.hpp"
-#if defined(__APPLE__) || defined(__NetBSD__) 
-# define st_atim st_atimespec
-# define st_ctim st_ctimespec
-# define st_mtim st_mtimespec
+#if defined(__APPLE__) || defined(__NetBSD__)
+#define st_atim st_atimespec
+#define st_ctim st_ctimespec
+#define st_mtim st_mtimespec
 #endif
 
 const std::string MakeDirlistHTML::header = "<html>\n";

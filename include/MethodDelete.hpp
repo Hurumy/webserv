@@ -10,18 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "AMethod.hpp"
+#include "webserv.hpp"
 
-class	MethodDelete: public AMethod
-{
-	private:
-		int	openResourceDelete();
-		int	deleteFile();
-	protected:
-	public:
-		MethodDelete(Config _conf, Request _req, Response &_res);
-		~MethodDelete();
-		Result<int, bool>	act();
+class MethodDelete : public AMethod {
+   private:
+	int openResourceDelete();
+	int deleteFile();
+
+   protected:
+   public:
+	MethodDelete(Config _conf, Request _req, Response &_res);
+	~MethodDelete();
+	Result<int, bool> act();
 };
-

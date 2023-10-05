@@ -1,7 +1,8 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   puterror.cpp                                          :+:      :+:    :+:   */
+/*   puterror.cpp                                          :+:      :+:    :+:
+ */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -21,11 +22,6 @@ int errorInInit(std::string errormessage) {
 }
 
 void putSytemError(char const *msg) {
-	std::cerr << RED
-		<< "webserv: error: "
-		<< msg
-		<< ": "
-		<< strerror(errno)
-		<< RESET
-		<< std::endl;
+	std::cerr << RED << "webserv: error: " << msg << ": " << strerror(errno)
+			  << RESET << std::endl;
 }

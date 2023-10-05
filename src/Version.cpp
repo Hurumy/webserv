@@ -14,8 +14,8 @@
 
 #include <algorithm>
 
-#include "Ok.hpp"
 #include "Error.hpp"
+#include "Ok.hpp"
 
 const std::vector<std::string> Version::versions = Version::createVersions();
 
@@ -29,7 +29,8 @@ Result<std::string, bool> Version::getVersion(std::string const &version) {
 	if (versions.empty() == true) {
 		return Error<bool>(false);
 	}
-	std::vector<std::string>::const_iterator iter = std::find(versions.begin(), versions.end(), version);
+	std::vector<std::string>::const_iterator iter =
+		std::find(versions.begin(), versions.end(), version);
 	if (iter == versions.end()) {
 		return Error<bool>(false);
 	}

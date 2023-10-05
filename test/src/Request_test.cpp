@@ -10,19 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Request.hpp"
+
 #include <gtest/gtest.h>
 
-#include "Request.hpp"
 #include "CSocket.hpp"
 
 TEST(RequestTest, setRequestLine01Test) {
 	CSocket csocket(3);
 	Request request;
 
-	csocket.setData("GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: Mozilla/5.0\r\nAccept: text/html, */*\r\n\r\nHellow!");
+	csocket.setData(
+		"GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: "
+		"Mozilla/5.0\r\nAccept: text/html, */*\r\n\r\nHellow!");
 	request.loadPayload(csocket);
 	std::map<std::string, std::string> header = request.getAllHeader();
-	for (std::map<std::string, std::string>::iterator iter = header.begin(); iter != header.end(); ++iter) {
+	for (std::map<std::string, std::string>::iterator iter = header.begin();
+		 iter != header.end(); ++iter) {
 		std::clog << "key: " << iter->first << std::endl;
 		std::clog << "value: " << iter->second << std::endl;
 	}
@@ -62,10 +66,13 @@ TEST(RequestTest, setRequestLineError03Test) {
 	CSocket csocket(3);
 	Request request;
 
-	csocket.setData("GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: Mozilla/5.0\r\nAccept: text/html, */*");
+	csocket.setData(
+		"GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: "
+		"Mozilla/5.0\r\nAccept: text/html, */*");
 	request.loadPayload(csocket);
 	std::map<std::string, std::string> header = request.getAllHeader();
-	for (std::map<std::string, std::string>::iterator iter = header.begin(); iter != header.end(); ++iter) {
+	for (std::map<std::string, std::string>::iterator iter = header.begin();
+		 iter != header.end(); ++iter) {
 		std::clog << "key: " << iter->first << std::endl;
 		std::clog << "value: " << iter->second << std::endl;
 	}

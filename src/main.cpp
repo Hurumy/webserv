@@ -18,10 +18,8 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SocketHandler.hpp"
-#include "Config.hpp"
-#include "ConfParser.hpp"
 
-#define	CONF_FILE_PATH "./conf_files/test.conf"
+#define CONF_FILE_PATH "./conf_files/test.conf"
 
 int main(const int argc, const char **argv) {
 	if (argc != 2) {
