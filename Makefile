@@ -13,7 +13,12 @@
 NAME		:= webserv
 CC			:= c++
 CFLAGS		:= -Wall -Wextra -Werror -std=c++98
-DFLAGS		:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+UNAME_OS	:= $(shell uname -s)
+ifeq ($(UNAME_OS), Linux)
+	DFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+else ifeq ($(UNAME), Darwin)
+	DFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+endif
 ifeq ($(MAKECMDGOALS), debug)
 	CFLAGS += $(DFLAGS)
 endif
