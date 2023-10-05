@@ -12,23 +12,24 @@
 
 #pragma once
 
-#include "webserv.hpp"
-#include "Config.hpp"
-#include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
 #include "Address.hpp"
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
+#include "Result.hpp"
+#include "webserv.hpp"
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
-Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);
-std::vector<std::string>	cutConfToEachPort(std::string raw);
-Result<Config, bool>	parsePortVecs(std::string port);
-std::string	replaceStr(std::string &origin, std::string search, std::string replace);
-Result<std::vector<Config>, bool>	parseConf(std::string filepath);
+Result<std::vector<std::string>, bool> cutConfByDirective(std::string filepath);
+std::vector<std::string> cutConfToEachPort(std::string raw);
+Result<Config, bool> parsePortVecs(std::string port);
+std::string replaceStr(std::string &origin, std::string search,
+					   std::string replace);
+Result<std::vector<Config>, bool> parseConf(std::string filepath);
 
-int	errorInInit(std::string errormessage);
+int errorInInit(std::string errormessage);
 
-int	readListen(Config &conf, std::string oneline);
+int readListen(Config &conf, std::string oneline);
 int readServerName(Config &conf, std::string oneline);
 int readRoot(Config &conf, std::string oneline);
 int readErrorPage(Config &conf, std::string oneline);
@@ -40,9 +41,9 @@ int readIndex(Config &conf, std::string oneline);
 int readUploadPath(Config &conf, std::string oneline);
 int readAllowedMethods(Config &conf, std::string oneline);
 
-bool	isNumber(std::string str);
-bool	isSpace(std::string str);
-bool	isCapitalAlphabet(std::string str);
-bool	isSmallAlphabet(std::string str);
-bool	isAlphabet(std::string str);
-bool	isAlnum(std::string str);
+bool isNumber(std::string str);
+bool isSpace(std::string str);
+bool isCapitalAlphabet(std::string str);
+bool isSmallAlphabet(std::string str);
+bool isAlphabet(std::string str);
+bool isAlnum(std::string str);

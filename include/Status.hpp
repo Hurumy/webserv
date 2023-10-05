@@ -19,13 +19,13 @@
 #include "Result.hpp"
 
 class Status {
-	private:
-		static std::map<unsigned int, std::string> const statusMap;
+   private:
+	static std::map<unsigned int, std::string> const statusMap;
 
-		static std::map<unsigned int, std::string> initStatusMap();
-	protected:
-	public:
-		static Result<std::string, bool> const getStatusMessage(unsigned int const statusCode);
+	static std::map<unsigned int, std::string> initStatusMap();
+
+   protected:
+   public:
+	static Result<std::string, bool> const getStatusMessage(
+		unsigned int const statusCode);
 };
-
- 

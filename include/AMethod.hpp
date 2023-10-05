@@ -12,29 +12,29 @@
 
 #pragma once
 
-#include "webserv.hpp"
+#include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
-#include "Config.hpp"
 #include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
+#include "webserv.hpp"
 
-class	AMethod
-{
-	private:
-	protected:
-		AMethod(Config _conf, Request _req, Response &_res);
-		~AMethod();
-		Config								conf;
-		Request								req;
-		Response							&res;
-		std::string							uri;
-		Result<std::string, bool>	const	_openFile(std::string filename);
-		Result<int, bool>					checkURI();
-		void								setURI();
-		//Result<int, bool>					searchSettingsOfURI();
-		void								setErrorPageBody();
-	public:
-		virtual Result<int, bool>			act() = 0;				
+class AMethod {
+   private:
+   protected:
+	AMethod(Config _conf, Request _req, Response &_res);
+	~AMethod();
+	Config conf;
+	Request req;
+	Response &res;
+	std::string uri;
+	Result<std::string, bool> const _openFile(std::string filename);
+	Result<int, bool> checkURI();
+	void setURI();
+	// Result<int, bool>					searchSettingsOfURI();
+	void setErrorPageBody();
+
+   public:
+	virtual Result<int, bool> act() = 0;
 };

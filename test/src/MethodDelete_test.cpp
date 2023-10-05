@@ -10,23 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "MethodDelete.hpp"
+
 #include <gtest/gtest.h>
 
-#include "MethodDelete.hpp"
-#include "RequestHandler.hpp"
 #include "ConfParser.hpp"
+#include "RequestHandler.hpp"
 
-#define	CONF_FILE_PATH "testconfs/method_delete.conf"
+#define CONF_FILE_PATH "testconfs/method_delete.conf"
 
-TEST (MethodDeleteTest, deletePostedFileTest)
-{
+TEST(MethodDeleteTest, deletePostedFileTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(204);
-	std::string					expected_string("No Content");
-	bool						expected_is_there_content_len(true);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(204);
+	std::string expected_string("No Content");
+	bool expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
@@ -42,18 +42,18 @@ TEST (MethodDeleteTest, deletePostedFileTest)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
 }
 
-TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
-{
+TEST(MethodDeleteTest, deletePostedFileTest_Error_NotFound) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(404);
-	std::string					expected_string("Not Found");
-	bool						expected_is_there_content_len(true);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(404);
+	std::string expected_string("Not Found");
+	bool expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("DELETE");
@@ -69,5 +69,6 @@ TEST (MethodDeleteTest, deletePostedFileTest_Error_NotFound)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
 }

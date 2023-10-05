@@ -18,24 +18,25 @@ enum ipvers {
 };
 
 class SSocket {
-	private:
-		SSocket();
+   private:
+	SSocket();
 
-		int sockfd;
-		int port;
-		ipvers ipver;
-		int backlog;
-		short revents;
-	protected:
-	public:
-		SSocket(int _port, ipvers _ipver, int _backlog);
+	int sockfd;
+	int port;
+	ipvers ipver;
+	int backlog;
+	short revents;
 
-		bool init();
-		bool closeSockfd();
-		int getPort() const;
-		int getSockfd() const;
-		ipvers getIpVer() const;
-		int getBacklog() const;
-		short getRevents() const;
-		void setRevents(short const _revents);
+   protected:
+   public:
+	SSocket(int _port, ipvers _ipver, int _backlog);
+
+	bool init();
+	bool closeSockfd();
+	int getPort() const;
+	int getSockfd() const;
+	ipvers getIpVer() const;
+	int getBacklog() const;
+	short getRevents() const;
+	void setRevents(short const _revents);
 };

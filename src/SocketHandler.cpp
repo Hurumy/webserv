@@ -17,20 +17,21 @@
 #include <poll.h>
 
 #include <algorithm>
+#include <ctime>
 #include <map>
 #include <vector>
-#include <ctime>
 
 #include "CSocket.hpp"
+#include "ConfParser.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
+#include "RequestHandler.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
-#include "ConfParser.hpp"
-#include "RequestHandler.hpp"
 #include "puterror.hpp"
 
-SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets, std::size_t const _timeout, int _pollTimeout)
+SocketHandler::SocketHandler(std::vector<SSocket> &_ssockets,
+							 std::size_t const _timeout, int _pollTimeout)
 	: ssockets(_ssockets), timeout(_timeout), pollTimeout(_pollTimeout) {}
 
 bool SocketHandler::initAllSSockets() {
@@ -56,8 +57,7 @@ bool SocketHandler::closeAllSSockets() {
 bool SocketHandler::removeClosedCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
-		if ((iter->getRevents() & POLLHUP) ==
-				POLLHUP ||
+		if ((iter->getRevents() & POLLHUP) == POLLHUP ||
 			(iter->getPhase() == CSocket::CLOSE)) {
 			iter->closeSockfd();
 			iter = csockets.erase(iter);
@@ -203,8 +203,7 @@ bool SocketHandler::recvCSocketsData() {
 	return true;
 }
 
-bool SocketHandler::sendDataMap(
-	std::map<int, std::string> const &dataMap) {
+bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) {
 	if (dataMap.empty() == true) {
 		// error handling
 		return false;
@@ -231,12 +230,16 @@ bool SocketHandler::sendResponses() {
 	if (responses.empty() == true) {
 		return false;
 	}
-	for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
-		if (csockiter->getPhase() == CSocket::SEND && (csockiter->getRevents() & POLLOUT) == POLLOUT) {
-			#if defined(_DEBUGFLAG)
-				std::clog << responses[csockiter->getSockfd()].getLines() << std::endl;
-			#endif
-			if (csockiter->sendData(responses[csockiter->getSockfd()].getLines()) == false) {
+	for (std::vector<CSocket>::iterator csockiter = csockets.begin();
+		 csockiter != csockets.end(); ++csockiter) {
+		if (csockiter->getPhase() == CSocket::SEND &&
+			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
+#if defined(_DEBUGFLAG)
+			std::clog << responses[csockiter->getSockfd()].getLines()
+					  << std::endl;
+#endif
+			if (csockiter->sendData(
+					responses[csockiter->getSockfd()].getLines()) == false) {
 				// error handling
 			}
 			csockiter->setPhase(CSocket::RECV);
@@ -296,25 +299,24 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
-			RequestHandler requestHandler = RequestHandler(configs, requests[iter->getSockfd()]);
-			// for debugging
-			#if defined(_DEBUGFLAG)
-				std::clog << requests[iter->getSockfd()].getLines() << std::endl;
-			#endif
+			RequestHandler requestHandler =
+				RequestHandler(configs, requests[iter->getSockfd()]);
+// for debugging
+#if defined(_DEBUGFLAG)
+			std::clog << requests[iter->getSockfd()].getLines() << std::endl;
+#endif
 			if (requestHandler.searchMatchHost().isError() == true) {
-				// error handling	
+				// error handling
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				iter->setPhase(CSocket::SEND);
 				removeRequest(iter->getSockfd());
-			}
-			else if (requestHandler.checkRequiedHeader().isError() == true) {
-				// error handling	
+			} else if (requestHandler.checkRequiedHeader().isError() == true) {
+				// error handling
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				iter->setPhase(CSocket::SEND);
 				removeRequest(iter->getSockfd());
-			}
-			else if (requestHandler.routeMethod().isError() == true) {
-				// error handling	
+			} else if (requestHandler.routeMethod().isError() == true) {
+				// error handling
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				iter->setPhase(CSocket::SEND);
 				removeRequest(iter->getSockfd());
@@ -332,7 +334,8 @@ bool SocketHandler::closeTimeoutCSockets() {
 	if (csockets.empty() == true) {
 		return true;
 	}
-	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+	for (std::vector<CSocket>::iterator iter = csockets.begin();
+		 iter != csockets.end(); ++iter) {
 		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
 			iter->setPhase(CSocket::CLOSE);
 		}

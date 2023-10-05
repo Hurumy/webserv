@@ -27,7 +27,10 @@
 #include "Result.hpp"
 
 CSocket::CSocket(int const _sockfd)
-	: sockfd(_sockfd), revents(0), phase(CSocket::RECV), lasttime(std::time(NULL)) {}
+	: sockfd(_sockfd),
+	  revents(0),
+	  phase(CSocket::RECV),
+	  lasttime(std::time(NULL)) {}
 
 int CSocket::getSockfd() const { return sockfd; }
 
@@ -98,9 +101,7 @@ bool CSocket::eraseData(std::size_t until) {
 	return true;
 }
 
-std::time_t const &CSocket::getLasttime() const {
-	return lasttime;
-}
+std::time_t const &CSocket::getLasttime() const { return lasttime; }
 
 void CSocket::setLasttime(std::time_t const &_lasttime) {
 	lasttime = _lasttime;
