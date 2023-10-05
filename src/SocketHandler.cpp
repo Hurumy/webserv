@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 21:23:59 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/05 13:26:19 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,9 @@ bool SocketHandler::sendResponses() {
 	}
 	for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
 		if (csockiter->getPhase() == CSocket::SEND && (csockiter->getRevents() & POLLOUT) == POLLOUT) {
+			#if defined(_DEBUGFLAG)
+				std::clog << responses[csockiter->getSockfd()].getLines() << std::endl;
+			#endif
 			if (csockiter->sendData(responses[csockiter->getSockfd()].getLines()) == false) {
 				// error handling
 			}
@@ -294,6 +297,10 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
 			RequestHandler requestHandler = RequestHandler(configs, requests[iter->getSockfd()]);
+			// for debugging
+			#if defined(_DEBUGFLAG)
+				std::clog << requests[iter->getSockfd()].getLines() << std::endl;
+			#endif
 			if (requestHandler.searchMatchHost().isError() == true) {
 				// error handling	
 				responses[iter->getSockfd()] = requestHandler.getResponse();
