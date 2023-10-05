@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/05 13:44:06 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:04:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ bool CSocket::readData() {
 	if (readLen == -1) {
 		return false;
 	}
-	if (data.size() > std::string::max_size() - readLen) {
+	if (data.size() > data.max_size() - readLen) {
 		phase = CSocket::CLOSE;
 		return false;
 	}
