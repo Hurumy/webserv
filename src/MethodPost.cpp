@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:39:09 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 13:14:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::string MethodPost::makeFilename() {
 	int status = 0;
 	unsigned long long number = 0;
 	std::stringstream ss;
-	std::string filename;
 
 	do {
 		ss.str("");

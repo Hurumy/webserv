@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:09:11 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/02 14:49:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:38:23 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,3 @@
 #define	DEFAULT_PORT 8080
 #define	DEFAULT_LIMIT_CLIENT_BODY_SIZE 500000
 #define	DEFAULT_SERVER_NAME	"webserv"
-
-

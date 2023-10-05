@@ -18,19 +18,11 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
-echo "${0}: install robotframework."
-pip install robotframework
+echo "${0}: install python-dotenv."
+pip install python-dotenv
 status=$?
 if [ $status -ne 0 ]; then
-  echo "Failed to install robotframework: $status"
-  exit $status
-fi
-
-echo "${0}: install robotframework-requests."
-pip install robotframework-requests
-status=$?
-if [ $status -ne 0 ]; then
-  echo "Failed to install robotframework-requests: $status"
+  echo "Failed to install python-dotenv: $status"
   exit $status
 fi
 
@@ -42,10 +34,4 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
-echo "${0}: running webserv."
-./webserv
-status=$?
-if [ $status -ne 0 ]; then
-  echo "Failed to start webserv: $status"
-  exit $status
-fi
+sleep infinity

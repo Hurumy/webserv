@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/11 15:00:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/09/28 00:29:07 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-
 #include <cstring>
+#include <cstdlib>
+
+#include "puterror.hpp"
 
 SSocket::SSocket(int _port, ipvers _ipver, int _backlog)
 	: port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
@@ -41,15 +43,18 @@ bool SSocket::init() {
 	sockfd = socket(s_addr.sin_family, SOCK_STREAM, 0);
 	if (sockfd == -1) {
 		// error output
-		return false;
+		putSytemError("socket");
+		std::exit(EXIT_FAILURE);
 	}
 	if (bind(sockfd, (const struct sockaddr *)&s_addr, addrsize) == -1) {
 		// error output
-		return false;
+		putSytemError("bind");
+		std::exit(EXIT_FAILURE);
 	}
 	if (listen(sockfd, backlog) == -1) {
 		// error output
-		return false;
+		putSytemError("listen");
+		std::exit(EXIT_FAILURE);
 	}
 	return true;
 }

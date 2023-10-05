@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/09/30 11:37:11 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/03 13:55:02 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,7 @@ WS_SRC_FILES	:= \
 					APayload.cpp \
 					Address.cpp \
 					Request.cpp \
+					Version.cpp \
 					Response.cpp \
 					Status.cpp \
 					Config.cpp \
@@ -57,7 +58,7 @@ WS_SRC_FILES	:= \
 					SSocket.cpp \
 					CSocket.cpp \
 					SocketHandler.cpp \
-					error.cpp \
+					puterror.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
 					parseConf.cpp \
