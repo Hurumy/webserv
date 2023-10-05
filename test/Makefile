@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/03 12:28:33 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/05 11:19:14 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -83,6 +83,8 @@ WS_SRC_FILES	:= \
 					MethodDelete.cpp \
 					MakeDirlistHTML.cpp \
 					Location.cpp \
+					parseConf_parseLocation.cpp \
+					pC_location.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

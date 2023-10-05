@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 12:28:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 11:29:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 	html += "</pre><hr></body>\n";
 	html += "</html>\n";
 
-	std::cout << YELLOW << html << RESET << std::endl;
+	//std::cout << YELLOW << html << RESET << std::endl;
 
 	return Ok<std::string>(html);
 }
