@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 20:57:50 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:04:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ bool Request::loadPayload(CSocket &csocket) {
 					break;
 				}
 				if (isTrueLoadHeader == false) {
-					csocket.setPhase(CSocket::RECV);
 					return false;
 				}
 				break;
@@ -149,16 +148,22 @@ bool Request::loadHeader(CSocket &csocket) {
 	std::string key;
 	std::string value;
 
+	if (header.size() > header.max_size() - 1) {
+		csocket.setPhase(CSocket::CLOSE);
+		return false;
+	}
 	iss >> key;
 	if (key.empty() == false) {
 		key.resize(key.size() - 1);
 	} else {
+		csocket.setPhase(CSocket::RECV);
 		return false;
 	}
 	iss >> value;
 	if (value.empty() == false) {
 		header[key] = value;
 	} else {
+		csocket.setPhase(CSocket::RECV);
 		return false;
 	}
 	while (iss >> value) {
