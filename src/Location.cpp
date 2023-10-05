@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:46:18 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 11:50:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 12:16:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ bool Location::setUri(std::string _uri)
 }
 
 
-bool Location::setRootDir(std::string root) {
-	this->rootdir = root;
+bool Location::setRootDir(std::string _root) {
+	rootdir = _root;
 	return (true);
 }
 

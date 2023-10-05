@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 18:13:20 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 11:49:39 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 12:15:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class	Location
 		
 		//for test
 		bool								setUri(std::string _uri);
-		bool								setRootDir(std::string root);
+		bool								setRootDir(std::string _root);
 		bool								setMaxBodySize(unsigned long long siz);
 		bool								addErrorPages(int key, std::string val);
 		bool								addRedirects(std::string key, std::string val);

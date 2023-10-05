@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 11:22:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 12:06:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 Result<std::vector<std::string>, bool>	cutOutLocation(const std::vector<std::string> &origin, Config &conf);
 
 int l_readLocation(Location &loc, std::string oneline);
+int l_readRoot(Location &loc, std::string oneline);
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);

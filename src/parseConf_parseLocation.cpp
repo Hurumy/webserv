@@ -6,32 +6,33 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 11:29:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 12:38:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "webserv.hpp"
 #include "ConfParser.hpp"
 
-static int checkLocationSettings(Location &res, std::string const &str)
+static int checkLocationSettings(Location &res, std::string str)
 {
 	int							status = 0;
 	std::vector<std::string>	lines;
 
+	//std::cout << str << std::endl;
+
 	lines = lineSpliter(str, " ");
 	for (size_t i = 0; i < lines.size(); i++)
 	{
-		//std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		//std::cout << YELLOW ": " << lines.at(i) << "|" << RESET << std::endl;
 
 		if (lines.at(i).empty() == false)
 		{
 			if (lines.at(i) == "location") {
-				l_readLocation(res, str);
+				status = l_readLocation(res, str);
 				break ;
-			}
-			// } else if (lines.at(i) == "root") {
-			// 	status = readRoot(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "root") {
+				status = l_readRoot(res, str);
+				break ;
 			// } else if (lines.at(i) == "error_page") {
 			// 	status = readErrorPage(conf, lines);
 			// 	break;
@@ -56,12 +57,12 @@ static int checkLocationSettings(Location &res, std::string const &str)
 			// } else if (lines.at(i) == "allowedMethods") {
 			// 	status = readAllowedMethods(conf, lines);
 			// 	break;
-			// } else if (lines.at(i) == "{" || lines.at(i) == "}") {
-			// 	break;
+			} else if (lines.at(i) == "{" || lines.at(i) == "}") {
+				break;
 			// } else if (lines.at(i).empty() == false) {
 			// 	std::cout << RED << lines.at(i) << RESET << std::endl;
 			// 	errorInInit("Unknown directive was detected.(｀・ω・´)");
-			// }
+			}
 			if (status == -1) break;
 		}
 	}

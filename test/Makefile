@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/05 11:19:14 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/05 12:10:03 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,6 +35,7 @@ SRC_FILES		:= \
 					MethodDelete_test.cpp \
 					MakeDirListHTML_test.cpp \
 					Location_test.cpp \
+					LocationParser_test.cpp \
 
 SRC_DIR			:= src
 OBJ_DIR			:= obj
