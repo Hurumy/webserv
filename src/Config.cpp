@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 11:14:17 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:06:44 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,20 @@
 
 std::vector<Address> const Config::getAddresses() const {
 	return (this->addresses);
+}
+
+Result<Location, bool>	const Config::getLocations(std::string _path) const
+{
+	if (locations.empty() == true)
+	{
+		return Error<bool>(false);
+	}
+	else if (locations.find(_path) == locations.end())
+	{
+		return Error<bool>(false);
+	}
+	else
+		return Ok<Location>(locations.at(_path));
 }
 
 std::vector<std::string> const Config::getServerName() const {
@@ -75,6 +89,16 @@ bool Config::addAddresses(Address &add) {
 bool Config::addServerName(std::string name) {
 	this->servername.push_back(name);
 	return (true);
+}
+
+bool	Config::addLocations(std::string const key, Location const val)
+{
+	if (locations.find(key) == locations.end()) {
+		this->locations[key] = val;
+		return (true);
+	} else {
+		return (false);
+	}
 }
 
 bool Config::setRootDir(std::string root) {

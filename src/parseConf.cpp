@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:42:09 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 10:21:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,17 @@ Result<std::vector<Config>, bool> parseConf(std::string filepath) {
 
 	//各ポートの設定ごとに、一つずつConfファイルを作り、Push_backしていく
 	for (size_t i = 0; i < list.size(); i++) {
+		//std::cout << RED << list.at(i) << RESET << std::endl;
 		Result<Config, bool> eachconf = parsePortVecs(list.at(i));
-		if (eachconf.isOK() == true) {
+		if (eachconf.isOK() == true)
+		{
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
 		}
 	}
 
 	// return
+	//std::cout << "returned:" << confs.size() << std::endl;
 	return Ok<std::vector<Config> >(confs);
 }
 

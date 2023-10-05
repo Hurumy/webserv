@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 18:03:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 11:19:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,14 @@
 #include "Ok.hpp"
 #include "Error.hpp"
 #include "Address.hpp"
+#include "Location.hpp"
 
 
 class	Config
 {
 	private:
 		std::vector<Address>						addresses;
+		std::map<std::string, Location>				locations;
 		std::vector<std::string>					servername;
 		std::string									rootdir;
 		unsigned long long							maxbodysize;
@@ -40,6 +42,7 @@ class	Config
 	
 	public:
 		std::vector<Address> const			getAddresses() const;
+		Result<Location, bool> const		getLocations(std::string key) const;
 		std::vector<std::string> const		getServerName() const;
 		std::string const					getRootDir() const;
 		unsigned long long					getMaxBodySize() const;
@@ -55,6 +58,7 @@ class	Config
 		
 		//for test
 		bool								addAddresses(Address &add);
+		bool								addLocations(std::string key, Location val);
 		bool								addServerName(std::string name);
 		bool								setRootDir(std::string root);
 		bool								setMaxBodySize(unsigned long long siz);

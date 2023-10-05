@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 14:33:52 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 10:31:42 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void AMethod::setURI() {
 	tmp = "." + uri;
 	uri = tmp;
 
-	// std::cout << YELLOW << uri << RESET << std::endl;
+	//std::cout << YELLOW << uri << RESET << std::endl;
 
 	return;
 }

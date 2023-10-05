@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 10:13:30 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:17:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
-		if (status > 0) {
+		if (status > 0)
+		{
 			buf[status] = '\0';
 			rawdata.append(buf);
-			// std::cout << RED << buf << RESET;
 		}
 	} while (status > 0);
 
@@ -75,7 +75,7 @@ static bool countParentheses(std::string rawdata, std::string start,
 		return (true);
 	else
 	{
-		errorInInit("Inconsistent number of parentheses in the Config file（＞Д＜）");
+		errorInInit("Inconsistent number of parentheses in the Config file（>Д<）");
 		return (false);
 	}
 }

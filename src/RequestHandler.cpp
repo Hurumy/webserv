@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 14:40:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/05 10:24:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,20 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// Configの中からHostが一致するものを探す
 	for (size_t i = 0; i < configs.size(); i++) {
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
-			if (portflag == false &&
-				configs.at(i).getServerName().at(t) == hostname) {
+			if (portflag == false && configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
-			} else if (portflag == true &&
-					   configs.at(i).getServerName().at(t) == without_port) {
+			}
+			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
+			{
 				//そのサーバーネームに対してポートが合っているか確認する
-				for (size_t j = 0; j < configs.at(i).getAddresses().size();
-					 j++) {
-					if (configs.at(i).getAddresses().at(j).getPort() ==
-						portnum) {
+				for (size_t j = 0; j < configs.at(i).getAddresses().size(); j++)
+				{
+					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
+					{
 						this->confnum = i;
-						res.addHeader("Server",
-									  configs.at(i).getServerName().at(t));
+						res.addHeader("Server", configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
