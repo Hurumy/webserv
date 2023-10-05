@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/05 14:09:01 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/05 14:22:53 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,5 +37,5 @@ jobs:
       - name: Run test
         run: |
           ./webserv ./conf_files/test.conf &
-          cd /code/integrationtest
+          cd ./integrationtest
           python runner.py tests
