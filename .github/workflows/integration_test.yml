@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/04 22:48:06 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/05 14:09:01 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: build
-        run: make
+        run: make debug
 
       - name: Install libraries
         run: python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
