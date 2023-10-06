@@ -73,8 +73,8 @@ TEST(LocationParserTest, pReturnTest)
 	bool				getstatus(true);
 	std::string			location_path("/test/conf/");
 	bool				expected_1(true);
-	int					expected_2(405);
-	std::string			expected_3("google.com");
+	int					expected_2(301);
+	std::string			expected_3("https://www.google.com");
 	
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	tmp = res.getOk();

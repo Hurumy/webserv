@@ -94,6 +94,15 @@ TEST(LocationTest, returnurlTest)
 	ASSERT_EQ(loc.getReturnUrl(), expected);
 }
 
+TEST(LocationTest, returnbodyTest)
+{
+	Location	loc;
+	std::string	expected("this is a set text");
+
+	loc.setReturnBody(expected);
+	ASSERT_EQ(loc.getReturnBody(), expected);
+}
+
 TEST(LocationTest, dirlistTest)
 {
 	Location		loc;

@@ -16,7 +16,7 @@ static int threecontents(Config &conf, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//1つ目
+	//1つ目 ステータスしかない
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -27,14 +27,17 @@ static int threecontents(Config &conf, std::vector<std::string> lines) {
 	} else
 		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
-	//2つ目
+	//2つ目 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
 	if ((lines.at(2).compare(0, 7, "http://") == 0 || lines.at(2).compare(0, 8, "https://") == 0) && (300 <= num && num < 400))
 	{
 		conf.setReturnUrl(lines.at(2));
-		conf.setIsReturn(true);
-	} else
-		errorInInit(
-			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	}
+	else if (!(300 <= num && num < 400))
+	{
+		conf.setReturnBody(lines.at(2));
+	}
+	else
+		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
@@ -43,6 +46,7 @@ static int twocontents(Config &conf, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
+	//要素数が1つのときはステータスかURLしか入らない
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;

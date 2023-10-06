@@ -44,6 +44,11 @@ int Location::getReturnStatus() const { return (this->returnstatus); }
 
 std::string Location::getReturnUrl() const { return (this->returnurl); }
 
+std::string	Location::getReturnBody() const
+{
+	return (returnbody);
+}
+
 bool Location::getDirlist() const { return (this->dirlisting); }
 
 std::vector<std::string> const Location::getIndex() const {
@@ -100,6 +105,12 @@ bool Location::setReturnStatus(int status) {
 
 bool Location::setReturnUrl(std::string url) {
 	this->returnurl = url;
+	return (true);
+}
+
+bool Location::setReturnBody(std::string _body)
+{
+	returnbody = _body;
 	return (true);
 }
 

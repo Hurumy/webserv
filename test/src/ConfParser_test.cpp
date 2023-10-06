@@ -117,14 +117,16 @@ TEST(ConfigParserTest, pReturnTest)
 	bool				expected_1(true);
 	bool				expected_2(true);
 	int					expected_3(440);
-	std::string			expected_4("https://www.google.co.jp/");
+	int					expected_4(301);
+	std::string			expected_5("https://www.google.co.jp/");
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
 	ASSERT_EQ(tmp.at(0).isReturn(), expected_1);
 	ASSERT_EQ(tmp.at(1).isReturn(), expected_2);
 	ASSERT_EQ(tmp.at(0).getReturnStatus(), expected_3);
-	ASSERT_EQ(tmp.at(1).getReturnUrl(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReturnStatus(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReturnUrl(), expected_5);
 }
 
 TEST(ConfigParserTest, pAutoIndexTest)
