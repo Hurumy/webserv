@@ -67,4 +67,21 @@ TEST(LocationParserTest, pErrorPagesTest)
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getErrorPages(505).getOk(), expected_3);
 }
 
+TEST(LocationParserTest, pReturnTest)
+{
+	std::vector<Config>	tmp;
+	bool				getstatus(true);
+	std::string			location_path("/test/conf/");
+	bool				expected_1(true);
+	int					expected_2(405);
+	std::string			expected_3("google.com");
+	
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).isOK(), getstatus);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getUri(), location_path);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().isReturn(), expected_1);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReturnStatus(), expected_2);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReturnUrl(), expected_3);
+}
 

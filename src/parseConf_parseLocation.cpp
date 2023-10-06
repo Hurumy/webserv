@@ -36,9 +36,9 @@ static int checkLocationSettings(Location &res, std::string str)
 			} else if (lines.at(i) == "error_page") {
 				status = l_readErrorPage(res, str);
 				break;
-			// } else if (lines.at(i) == "return") {
-			// 	status = readReturn(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "return") {
+				status = l_readReturn(res, str);
+				break;
 			// } else if (lines.at(i) == "rewrite") {
 			// 	status = readRewrite(conf, lines);
 			// 	break;
