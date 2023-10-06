@@ -33,6 +33,7 @@ class	Config
 		bool										isreturn;
 		int											returnstatus;
 		std::string									returnurl;
+		std::string									returnbody;
 		bool										dirlisting;
 		std::vector<std::string>					index;
 		std::string									uploadpath;
@@ -51,6 +52,7 @@ class	Config
 		bool								isReturn() const;
 		int									getReturnStatus() const;
 		std::string							getReturnUrl() const;
+		std::string							getReturnBody() const;
 		bool								getDirlist() const;
 		std::vector<std::string> const		getIndex() const;
 		std::string const					getUploadPath() const;
@@ -67,6 +69,7 @@ class	Config
 		bool								setIsReturn(bool is);
 		bool								setReturnStatus(int status);
 		bool								setReturnUrl(std::string url);
+		bool								setReturnBody(std::string _body);
 		bool								setDirlist(bool conf);
 		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);

@@ -117,6 +117,15 @@ TEST(ConfigTest, returnurlTest)
 	ASSERT_EQ(config.getReturnUrl(), expected);
 }
 
+TEST(ConfigTest, returnbodyTest)
+{
+	Config	config;
+	std::string	expected("that is a set text");
+
+	config.setReturnBody(expected);
+	ASSERT_EQ(config.getReturnBody(), expected);
+}
+
 TEST(ConfigTest, dirlistTest)
 {
 	Config		config;

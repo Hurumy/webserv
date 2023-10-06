@@ -64,6 +64,11 @@ int Config::getReturnStatus() const { return (this->returnstatus); }
 
 std::string Config::getReturnUrl() const { return (this->returnurl); }
 
+std::string Config::getReturnBody() const
+{
+	return (returnbody);
+}
+
 bool Config::getDirlist() const { return (this->dirlisting); }
 
 std::vector<std::string> const Config::getIndex() const {
@@ -133,6 +138,12 @@ bool Config::setReturnStatus(int status) {
 
 bool Config::setReturnUrl(std::string url) {
 	this->returnurl = url;
+	return (true);
+}
+
+bool Config::setReturnBody(std::string _body)
+{
+	returnbody = _body;
 	return (true);
 }
 
