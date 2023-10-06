@@ -46,7 +46,7 @@ static int twocontents(Config &conf, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//要素数が1つのときはステータスかURLしか入らない
+	//要素数が1つのときはステータスかURLしか入らない URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -92,24 +92,28 @@ static int l_threecontents(Location &loc, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
+	//1つ目 ステータスしかない
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
 		if (!(100 <= num && num < 600))
-			errorInInit(
-				"Invalid Status Code detected in return directive (◞‸◟)");
+			errorInInit("Invalid Status Code detected in return directive (◞‸◟)");
 		loc.setReturnStatus(num);
 		loc.setIsReturn(true);
 	} else
-		errorInInit(
-			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
-	if (lines.at(2).compare(0, 7, "http://") == 0 ||
-		lines.at(2).compare(0, 8, "https://") == 0) {
+		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+
+	//2つ目 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
+	if ((lines.at(2).compare(0, 7, "http://") == 0 || lines.at(2).compare(0, 8, "https://") == 0) && (300 <= num && num < 400))
+	{
 		loc.setReturnUrl(lines.at(2));
-		loc.setIsReturn(true);
-	} else
-		errorInInit(
-			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	}
+	else if (!(300 <= num && num < 400))
+	{
+		loc.setReturnBody(lines.at(2));
+	}
+	else
+		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
@@ -118,6 +122,7 @@ static int l_twocontents(Location &loc, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
+	//要素数が1つのときはステータスかURLしか入らない URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -129,6 +134,7 @@ static int l_twocontents(Location &loc, std::vector<std::string> lines) {
 	} else if (lines.at(1).compare(0, 7, "http://") == 0 ||
 			   lines.at(1).compare(0, 8, "https://") == 0) {
 		loc.setReturnUrl(lines.at(1));
+		loc.setReturnStatus(302);
 		loc.setIsReturn(true);
 	} else
 		errorInInit(
