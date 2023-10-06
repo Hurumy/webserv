@@ -49,4 +49,22 @@ TEST(LocationParserTest, pRootTest)
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getRootDir(), expected_1);
 }
 
+TEST(LocationParserTest, pErrorPagesTest)
+{
+	std::vector<Config>	tmp;
+	bool				getstatus(true);
+	std::string			location_path("/test/conf/");
+	std::string			expected_1("/404.html");
+	std::string			expected_2("/500.html");
+	std::string			expected_3("error_pages/505.html");
+	
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).isOK(), getstatus);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getUri(), location_path);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getErrorPages(404).getOk(), expected_1);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getErrorPages(500).getOk(), expected_2);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getErrorPages(505).getOk(), expected_3);
+}
+
 

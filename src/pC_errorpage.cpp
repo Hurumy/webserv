@@ -81,8 +81,8 @@ int l_readErrorPage(Location &loc, std::string oneline)
 	loc.addErrorPages(num, lines.at(2));
 	Result<std::string, bool> res = loc.getErrorPages(num);
 
-	std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() <<
-	RESET << std::endl;
+	// std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() <<
+	// RESET << std::endl;
 
 	return (0);
 }
