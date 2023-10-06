@@ -21,7 +21,6 @@
 static std::string	__openFile(std::string filename)
 {
 	int 				fd;
-	unsigned long long	bodysize = 0;
 	int 				status = 1;
 	std::string 		body;
 	char 				buf[FILE_READ_SIZE + 1];
@@ -38,7 +37,6 @@ static std::string	__openFile(std::string filename)
 		{
 			buf[status] = '\0';
 			body += buf;
-			bodysize += status;
 		}
 	}
 	close(fd);

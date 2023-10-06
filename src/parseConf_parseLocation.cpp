@@ -33,9 +33,9 @@ static int checkLocationSettings(Location &res, std::string str)
 			} else if (lines.at(i) == "root") {
 				status = l_readRoot(res, str);
 				break ;
-			// } else if (lines.at(i) == "error_page") {
-			// 	status = readErrorPage(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "error_page") {
+				status = l_readErrorPage(res, str);
+				break;
 			// } else if (lines.at(i) == "return") {
 			// 	status = readReturn(conf, lines);
 			// 	break;

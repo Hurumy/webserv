@@ -30,5 +30,4 @@ class	Address
 		bool				setPort(int _port);
 		bool				setIpVers(int _protocol);
 		Address();
-		Address(Address const &add);
 };

@@ -18,12 +18,6 @@ Address::Address() {
 	this->ipvers = -1;
 }
 
-Address::Address(Address const &add) {
-	this->ipaddress = add.getIpAddress();
-	this->port = add.getPort();
-	this->ipvers = add.getIpVers();
-}
-
 std::string const Address::getIpAddress() const { return (this->ipaddress); }
 
 int Address::getPort() const { return (this->port); }
