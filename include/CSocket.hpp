@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/22 22:49:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/10 21:56:37 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class CSocket {
 		RECV,
 		LOAD,
 		PASS,
+		CGI,
 		SEND,
 		CLOSE,
 	};
