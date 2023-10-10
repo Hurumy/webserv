@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/10 21:45:31 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/10 21:46:59 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,7 +275,7 @@ bool SocketHandler::loadRequests() {
 	return true;
 }
 
-std::map<int, Request> SocketHandler::getRequests() const {
+std::map<int, Request> const &SocketHandler::getRequests() const {
 	return requests;
 }
 
