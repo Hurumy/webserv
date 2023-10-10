@@ -100,3 +100,13 @@ TEST(LocationParserTest, pRewriteTest)
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getRedirects(key_2).getOk(), expected_2);
 }
 
+TEST(LocationParserTest, pAutoIndexTest)
+{
+	std::vector<Config>	tmp;
+	std::string			location_path("/test/conf/");
+	bool				expected_1(true);
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getDirlist(), expected_1);
+}

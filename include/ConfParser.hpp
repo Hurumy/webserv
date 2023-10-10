@@ -26,6 +26,7 @@ int l_readRoot(Location &loc, std::string oneline);
 int l_readErrorPage(Location &loc, std::string oneline);
 int l_readReturn(Location &loc, std::string oneline);
 int l_readRewrite(Location &loc, std::string oneline);
+int l_readAutoindex(Location &loc, std::string oneline);
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);

@@ -42,9 +42,9 @@ static int checkLocationSettings(Location &res, std::string str)
 			} else if (lines.at(i) == "rewrite") {
 				status = l_readRewrite(res, str);
 				break;
-			// } else if (lines.at(i) == "autoindex") {
-			// 	status = readAutoindex(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "autoindex") {
+				status = l_readAutoindex(res, str);
+				break;
 			// } else if (lines.at(i) == "client_max_body_size") {
 			// 	status = readMaxBodySize(conf, lines);
 			// 	break;
