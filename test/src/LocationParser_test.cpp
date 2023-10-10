@@ -85,3 +85,18 @@ TEST(LocationParserTest, pReturnTest)
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReturnUrl(), expected_3);
 }
 
+TEST(LocationParserTest, pRewriteTest)
+{
+	std::vector<Config>	tmp;
+	std::string			location_path("/test/conf/");
+	std::string			key_1("/content/ok.html");
+	std::string			expected_1("test.co.jp");
+	std::string			key_2("/test/index.html");
+	std::string			expected_2("google.com");
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getRedirects(key_1).getOk(), expected_1);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getRedirects(key_2).getOk(), expected_2);
+}
+
