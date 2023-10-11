@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 17:27:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 18:02:52 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class Request : public virtual APayload {
 	bool loadPayload(CSocket &csocket);
 	bool loadHeader(CSocket &csocket);
 	int const *getOutpfd() const;
+	int getMonitoredfd() const;
 	short getRevents() const;
 	void setRevents(short const _revents);
 
@@ -53,6 +54,7 @@ class Request : public virtual APayload {
 	tag phase;
 	int inpfd[2];
 	int outpfd[2];
+	int monitoredfd;
 	short revents;
 
 	static std::vector<std::string> initMethods();

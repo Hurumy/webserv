@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 17:51:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 18:13:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,12 @@ Request::Request()
 	  lastContentLength(contentLength),
 	  isCompleteHeader(false),
 	  phase(Request::REQLINE),
-	  revents(0) {}
+	  monitoredfd(0),
+	  revents(0) 
+	  {
+		std::memset(inpfd, 0, sizeof(inpfd));
+		std::memset(outpfd, 0, sizeof(outpfd));
+	  }
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -225,6 +230,10 @@ const Request::tag &Request::getPhase() const { return phase; }
 
 int const *Request::getOutpfd() const {
 	return outpfd;
+}
+
+int Request::getMonitoredfd() const {
+	return monitoredfd;
 }
 
 short Request::getRevents() const { return revents; }
