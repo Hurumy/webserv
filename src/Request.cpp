@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 14:04:15 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 13:52:50 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ Request::Request()
 	: contentLength(0),
 	  lastContentLength(contentLength),
 	  isCompleteHeader(false),
-	  phase(Request::REQLINE) {}
+	  phase(Request::REQLINE),
+	  revents(0) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -88,22 +89,27 @@ bool Request::loadPayload(CSocket &csocket) {
 					return false;
 				}
 				break;
-			case Request::BODY:
-				std::string const csockData = csocket.getData();
-				std::size_t beforeSize = body.size();
-				body.append(csockData, 0, lastContentLength);
-				std::size_t afterSize = body.size();
-				csocket.eraseData(afterSize - beforeSize);
-				lastContentLength -= afterSize - beforeSize;
-				if (lastContentLength != 0) {
-					csocket.setPhase(CSocket::RECV);
-					return true;
+			case Request::BODY: {
+					std::string const csockData = csocket.getData();
+					std::size_t beforeSize = body.size();
+					body.append(csockData, 0, lastContentLength);
+					std::size_t afterSize = body.size();
+					csocket.eraseData(afterSize - beforeSize);
+					lastContentLength -= afterSize - beforeSize;
+					if (lastContentLength != 0) {
+						csocket.setPhase(CSocket::RECV);
+						return true;
+					}
+					phase = Request::REQLINE;
+					csocket.setPhase(CSocket::PASS);
+					// for debugging
+					// std::clog << getLines() << std::endl;
 				}
-				phase = Request::REQLINE;
-				csocket.setPhase(CSocket::PASS);
-				// for debugging
-				// std::clog << getLines() << std::endl;
 				return true;
+			case Request::CGIEXEC:
+				return false;
+			case Request::CGIRECV:
+				return false;
 		}
 	}
 	return true;
@@ -214,3 +220,11 @@ bool Request::isVersion(std::string const &word) {
 }
 
 const Request::tag &Request::getPhase() const { return phase; }
+
+int const *Request::getOutpfd() const {
+	return outpfd;
+}
+
+short Request::getRevents() const { return revents; }
+
+void Request::setRevents(short const _revents) { revents = _revents; }

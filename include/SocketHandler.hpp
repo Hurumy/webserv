@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/10 21:46:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/10 22:03:10 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,6 @@ class SocketHandler {
 	bool loadRequests();
 	std::map<int, std::string> createResponse();
 	bool loadResponses(std::vector<Config> const &configs);
+	bool handleCGIRequest();
 	bool closeTimeoutCSockets();
 };

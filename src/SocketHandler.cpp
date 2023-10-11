@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/10 21:46:59 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 16:04:05 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,17 @@ bool SocketHandler::createPollfds() {
 			pollfds.push_back(added_pollfd);
 		}
 	}
+	if (requests.empty() == false) {
+		for (std::map<int, Request>::iterator iter = requests.begin(); iter != requests.end(); ++iter) {
+			if (iter->second.getPhase() == Request::CGIRECV) {
+				std::memset(&added_pollfd, 0, sizeof(added_pollfd));
+				added_pollfd.fd = iter->second.getOutpfd()[0];
+				added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
+				pollfds.push_back(added_pollfd);
+			}
+			
+		}
+	}
 	return true;
 }
 
@@ -140,15 +151,21 @@ bool SocketHandler::setRevents() {
 			 ssockiter != ssockets.end(); ++ssockiter) {
 			if (polliter->fd == ssockiter->getSockfd()) {
 				ssockiter->setRevents(polliter->revents);
+				break ;
 			}
 		}
-	}
-	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin();
-		 polliter != pollfds.end(); ++polliter) {
 		for (std::vector<CSocket>::iterator csockiter = csockets.begin();
 			 csockiter != csockets.end(); ++csockiter) {
 			if (polliter->fd == csockiter->getSockfd()) {
 				csockiter->setRevents(polliter->revents);
+				break ;
+			}
+		}
+		for (std::map<int, Request>::iterator reqiter = requests.begin();
+			 reqiter != requests.end(); ++reqiter) {
+			if (reqiter->second.getPhase() ==Request::CGIRECV && polliter->fd == reqiter->second.getOutpfd()[0]) {
+				reqiter->second.setRevents(polliter->revents);
+				break ;
 			}
 		}
 	}
@@ -325,6 +342,21 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				iter->setPhase(CSocket::SEND);
 				removeRequest(iter->getSockfd());
 			}
+		}
+	}
+	return true;
+}
+
+bool SocketHandler::handleCGIRequest() {
+	if (csockets.empty() == true) {
+		return false;
+	}
+	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
+		if (requests[iter->getSockfd()].getPhase() == Request::CGIEXEC) {
+			//
+		}
+		else if (requests[iter->getSockfd()].getPhase() == Request::CGIRECV && (requests[iter->getSockfd()].getRevents() & POLLIN) == POLLIN) {
+			//
 		}
 	}
 	return true;
