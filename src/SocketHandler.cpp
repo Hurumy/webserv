@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/11 16:04:05 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 17:31:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,7 +352,12 @@ bool SocketHandler::handleCGIRequest() {
 		return false;
 	}
 	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if (requests[iter->getSockfd()].getPhase() == Request::CGIEXEC) {
+		if (requests[iter->getSockfd()].getPhase() == Request::CGISTARTUP) {
+			// Set environment variables
+			// pipe(), fork(), execve()
+			// requests[iter->getSockfd()].setPhase(Request::CGIWRITE)
+		}
+		else if (requests[iter->getSockfd()].getPhase() == Request::CGIWRITE && (requests[iter->getSockfd()].getRevents() & POLLOUT) == POLLOUT) {
 			//
 		}
 		else if (requests[iter->getSockfd()].getPhase() == Request::CGIRECV && (requests[iter->getSockfd()].getRevents() & POLLIN) == POLLIN) {

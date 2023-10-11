@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 01:16:20 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 17:27:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ class Request : public virtual APayload {
 		REQLINE,
 		HEADER,
 		BODY,
-		CGIEXEC,
+		CGISTARTUP,
+		CGIWRITE,
 		CGIRECV,
 	};
 	Request();

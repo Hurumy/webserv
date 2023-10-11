@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 13:52:50 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/11 17:51:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,9 @@ bool Request::loadPayload(CSocket &csocket) {
 					// std::clog << getLines() << std::endl;
 				}
 				return true;
-			case Request::CGIEXEC:
+			case Request::CGISTARTUP:
+				return false;
+			case Request::CGIWRITE:
 				return false;
 			case Request::CGIRECV:
 				return false;
