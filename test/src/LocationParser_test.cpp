@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:28:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:31:31 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,21 @@ TEST(LocationParserTest, pUploadPathTest)
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	tmp = res.getOk();
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getUploadPath(), expected);
+}
+
+TEST(LocationParserTest, pAllowedMethodsTest)
+{
+	std::vector<Config>	tmp;
+	std::string			location_path("/test/conf/");
+	bool			expected_1(true);
+	bool			expected_2(true);
+	bool			expected_3(false);
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReqMethod("GET").isOK(), expected_1);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReqMethod("POST").isOK(), expected_2);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReqMethod("DELETE").isOK(), expected_3);
 }
 
 
