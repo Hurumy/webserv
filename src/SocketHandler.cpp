@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/11 17:31:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/12 19:58:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,9 @@ bool SocketHandler::createPollfds() {
 	}
 	if (requests.empty() == false) {
 		for (std::map<int, Request>::iterator iter = requests.begin(); iter != requests.end(); ++iter) {
-			if (iter->second.getPhase() == Request::CGIRECV) {
+			if (iter->second.getPhase() == Request::CGIWRITE || iter->second.getPhase() == Request::CGIRECV) {
 				std::memset(&added_pollfd, 0, sizeof(added_pollfd));
-				added_pollfd.fd = iter->second.getOutpfd()[0];
+				added_pollfd.fd = iter->second.getMonitoredfd();
 				added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
 				pollfds.push_back(added_pollfd);
 			}
@@ -163,7 +163,8 @@ bool SocketHandler::setRevents() {
 		}
 		for (std::map<int, Request>::iterator reqiter = requests.begin();
 			 reqiter != requests.end(); ++reqiter) {
-			if (reqiter->second.getPhase() ==Request::CGIRECV && polliter->fd == reqiter->second.getOutpfd()[0]) {
+			Request::tag _phase = reqiter->second.getPhase();
+			if ((_phase == Request::CGIWRITE || _phase == Request::CGIRECV) && polliter->fd == reqiter->second.getMonitoredfd()) {
 				reqiter->second.setRevents(polliter->revents);
 				break ;
 			}
@@ -285,6 +286,10 @@ bool SocketHandler::loadRequests() {
 				false) {
 				// error handling
 				// if request payload's format is invalid
+			} else {
+				// For developing CGI
+				csockiter->setPhase(CSocket::CGI);
+				requests[csockiter->getSockfd()].setPhase(Request::CGISTARTUP);
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
@@ -352,16 +357,36 @@ bool SocketHandler::handleCGIRequest() {
 		return false;
 	}
 	for (std::vector<CSocket>::iterator iter = csockets.begin(); iter != csockets.end(); ++iter) {
-		if (requests[iter->getSockfd()].getPhase() == Request::CGISTARTUP) {
-			// Set environment variables
-			// pipe(), fork(), execve()
-			// requests[iter->getSockfd()].setPhase(Request::CGIWRITE)
-		}
-		else if (requests[iter->getSockfd()].getPhase() == Request::CGIWRITE && (requests[iter->getSockfd()].getRevents() & POLLOUT) == POLLOUT) {
-			//
-		}
-		else if (requests[iter->getSockfd()].getPhase() == Request::CGIRECV && (requests[iter->getSockfd()].getRevents() & POLLIN) == POLLIN) {
-			//
+		if (iter->getPhase() == CSocket::CGI) {
+			Request &req = requests[iter->getSockfd()];
+			if (req.getPhase() == Request::CGISTARTUP) {
+				// Set environment variables
+				req.setEnvVars();
+				// pipe(), fork(), execve()
+				req.execCGIScript();
+				// req.setPhase(Request::CGIWRITE)
+				req.setPhase(Request::CGIWRITE);
+				// Set inpfd[1]to monitoredfd
+				req.setMonitoredfd(Request::CGIWRITE);
+			}
+			else if (req.getPhase() == Request::CGIWRITE && (req.getRevents() & POLLOUT) == POLLOUT) {
+				// write message body to pipe
+				if (req.writeMessageBody() == true) {
+					// req.setPhase(Request::CGIRECV)
+					req.setPhase(Request::CGIRECV);
+					// Set outpfd[0]to monitoredfd
+					std::clog << "Set Request::CGIRECV" << std::endl;
+					req.setMonitoredfd(Request::CGIRECV);
+				}
+			}
+			else if (req.getPhase() == Request::CGIRECV && (req.getRevents() & POLLIN) == POLLIN) {
+				// Reade output from outpfd[0]
+				req.recvCGIOutput();
+				// deinit inpfd, outpfd, monitoredfd
+				// iter->setPhase(CSocket::SEND)
+				std::clog << "Set CSocket::PASS" << std::endl;
+				iter->setPhase(CSocket::PASS);
+			}
 		}
 	}
 	return true;

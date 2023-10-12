@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 18:13:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/12 19:59:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unistd.h>
+#include <cstring>
 
 #include "Version.hpp"
 
@@ -226,10 +228,23 @@ bool Request::isVersion(std::string const &word) {
 	return result.isOK() == true;
 }
 
+void Request::setPhase(Request::tag _phase) {
+	phase = _phase;
+}
+
 const Request::tag &Request::getPhase() const { return phase; }
 
-int const *Request::getOutpfd() const {
-	return outpfd;
+void Request::setMonitoredfd(Request::tag _phase) {
+	switch (_phase) {
+		case Request::CGIWRITE:
+			monitoredfd = inpfd[1];
+			break ;
+		case Request::CGIRECV:
+			monitoredfd = outpfd[0];
+			break ;
+		default :
+			break ;
+	}
 }
 
 int Request::getMonitoredfd() const {
@@ -239,3 +254,62 @@ int Request::getMonitoredfd() const {
 short Request::getRevents() const { return revents; }
 
 void Request::setRevents(short const _revents) { revents = _revents; }
+
+bool Request::setEnvVars() const {
+	return true;
+}
+
+bool Request::execCGIScript() {
+	extern char **environ;
+
+	if (pipe(inpfd) == -1) {
+		// error handling
+	}
+	if (pipe(outpfd) == -1) {
+		// error handling
+	}
+	pid_t const pid = fork();
+	if (pid == -1) {
+		// error handling
+	}
+	if (pid == 0) {
+		// for developement
+		char *const argv[] = {strdup("/bin/ls"), NULL};
+		dup2(inpfd[0], 0);
+		dup2(outpfd[1], 1);
+		close(inpfd[0]);
+		close(inpfd[1]);
+		close(outpfd[0]);
+		close(outpfd[1]);
+		execve("/bin/ls", argv, environ);
+		std::exit(EXIT_FAILURE);
+	}
+	return true;
+}
+
+bool Request::writeMessageBody() const {
+	// for develope
+	 if ((revents & POLLOUT) != POLLOUT) {
+		return false;
+	 }
+	 write(inpfd[1], "Makefile", 8);
+	 return true;
+}
+
+bool Request::recvCGIOutput() const {
+	ssize_t readLen;
+	char buf[BUFFER_SIZE + 1] = {0};
+
+	if ((revents & POLLIN) != POLLIN) {
+		return false;
+	}
+	readLen = read(outpfd[0], buf, BUFFER_SIZE);
+	if (readLen == -1) {
+		// errorhandling
+		return false;
+	}
+	// for develope
+	buf[BUFFER_SIZE] = '\0';
+	std::clog << "buf: " << buf << std::endl;
+	return true;
+}

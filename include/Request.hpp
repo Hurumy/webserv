@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/11 18:02:52 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/12 19:58:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,17 @@ class Request : public virtual APayload {
 	bool setMethod(std::string _method);
 	std::string const getMethod(void) const;
 	const tag &getPhase() const;
+	void setPhase(Request::tag _phase);
 	bool loadPayload(CSocket &csocket);
 	bool loadHeader(CSocket &csocket);
-	int const *getOutpfd() const;
 	int getMonitoredfd() const;
+	void setMonitoredfd(Request::tag _phase);
 	short getRevents() const;
 	void setRevents(short const _revents);
+	bool setEnvVars() const;
+	bool execCGIScript();
+	bool writeMessageBody() const;
+	bool recvCGIOutput() const;
 
    protected:
    private:
