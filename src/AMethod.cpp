@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 13:54:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 13:58:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,20 +130,13 @@ Result<int, bool> AMethod::checkURI() {
 void AMethod::setURI() {
 	std::string tmp;
 
-	// ROOTを見る
-	if (conf.getRootDir().empty() == false) {
-		tmp = conf.getRootDir() + uri;
-		uri = tmp;
-	}
-
-	std::cout << uri << std::endl;
+	//std::cout << uri << std::endl;
 
 	//uriを一つずつ長くしていって、最長一致なLocationを探す
 	std::stringstream ss;
 	std::string		  shortpath;
 	ss << uri;
 	isloc = false;
-
 	std::getline(ss, tmp, '/');
 	while (ss.eof() == false)
 	{
@@ -156,6 +149,12 @@ void AMethod::setURI() {
 			loc = conf.getLocations(shortpath).getOk();
 		}
 		std::getline(ss, tmp, '/');
+	}
+
+	// ROOTをURIの頭にくっつける
+	if (conf.getRootDir().empty() == false) {
+		tmp = conf.getRootDir() + uri;
+		uri = tmp;
 	}
 
 	//最初に.をつけて開けるようにする
