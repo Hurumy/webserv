@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:23:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:29:02 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ static int checkLocationSettings(Location &res, std::string str)
 			} else if (lines.at(i) == "index") {
 				status = l_readIndex(res, str);
 				break;
-			// } else if (lines.at(i) == "upload_path") {
-			// 	status = readUploadPath(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "upload_path") {
+				status = l_readUploadPath(res, str);
+				break;
 			// } else if (lines.at(i) == "allowedMethods") {
 			// 	status = readAllowedMethods(conf, lines);
 			// 	break;

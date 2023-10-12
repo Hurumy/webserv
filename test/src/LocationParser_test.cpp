@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:25:27 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:28:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,17 @@ TEST(LocationParserTest, pIndexTest)
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	tmp = res.getOk();
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getIndex().at(0), expected);
+}
+
+TEST(LocationParserTest, pUploadPathTest)
+{
+	std::vector<Config>	tmp;
+	std::string			location_path("/test/conf/");
+	std::string			expected("Users/komatsud/webserv/");
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getUploadPath(), expected);
 }
 
 
