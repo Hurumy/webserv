@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/10 16:11:39 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/12 23:38:17 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SRC_FILES	:= \
 				CSocket.cpp \
 				SSocket.cpp \
 				SocketHandler.cpp \
+				CGIResponseCreator.cpp \
 				Address.cpp \
 				AMethod.cpp \
 				MethodGet.cpp \
