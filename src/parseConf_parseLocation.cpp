@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 12:38:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:16:18 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ static int checkLocationSettings(Location &res, std::string str)
 			} else if (lines.at(i) == "autoindex") {
 				status = l_readAutoindex(res, str);
 				break;
-			// } else if (lines.at(i) == "client_max_body_size") {
-			// 	status = readMaxBodySize(conf, lines);
-			// 	break;
+			} else if (lines.at(i) == "client_max_body_size") {
+				status = l_readMaxBodySize(res, str);
+				break;
 			// } else if (lines.at(i) == "index") {
 			// 	status = readIndex(conf, lines);
 			// 	break;

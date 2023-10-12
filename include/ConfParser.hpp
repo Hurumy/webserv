@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 12:06:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:17:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int l_readErrorPage(Location &loc, std::string oneline);
 int l_readReturn(Location &loc, std::string oneline);
 int l_readRewrite(Location &loc, std::string oneline);
 int l_readAutoindex(Location &loc, std::string oneline);
+int l_readMaxBodySize(Location &loc, std::string oneline);
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool>	cutConfByDirective(std::string filepath);
