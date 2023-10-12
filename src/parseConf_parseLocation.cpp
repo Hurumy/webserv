@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:29:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:32:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ static int checkLocationSettings(Location &res, std::string str)
 				break;
 			} else if (lines.at(i) == "{" || lines.at(i) == "}") {
 				break;
-			// } else if (lines.at(i).empty() == false) {
-			// 	std::cout << RED << lines.at(i) << RESET << std::endl;
-			// 	errorInInit("Unknown directive was detected.(｀・ω・´)");
+			} else if (lines.at(i).empty() == false) {
+				std::cout << RED << lines.at(i) << RESET << std::endl;
+				errorInInit("Unknown directive was detected.(｀・ω・´)");
 			}
 			if (status == -1) break;
 		}

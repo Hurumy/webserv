@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 13:28:41 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:58:13 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ class RequestHandler
 		Request								req;
 		Response							res;
 		size_t								confnum;
-		//RequestHandler();
 		Result<std::string, bool>			_openFile(std::string filename);
 	protected:
 	public:

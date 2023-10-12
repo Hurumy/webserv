@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:31:31 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 13:49:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,5 +158,4 @@ TEST(LocationParserTest, pAllowedMethodsTest)
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReqMethod("POST").isOK(), expected_2);
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getReqMethod("DELETE").isOK(), expected_3);
 }
-
 
