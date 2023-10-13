@@ -6,13 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 13:13:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:32:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGIResponseCreator.hpp"
 
 #include <cstring>
+#include "puterror.hpp"
 
 CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response) : request(_request), response(_response), phase(CGIResponseCreator::CGISTARTUP), monitoredfd(0), revents(0)
 {
@@ -106,6 +107,7 @@ bool CGIResponseCreator::recvCGIOutput() {
 	readLen = read(outpfd[0], buf, BUFFER_SIZE);
 	if (readLen == -1) {
 		// errorhandling
+		putSytemError("read")
 		return false;
 	}
 	if (readLen == 0) {
@@ -115,8 +117,6 @@ bool CGIResponseCreator::recvCGIOutput() {
 	// for develope
 	cgiOutput.append(buf, readLen);
 	phase = CGIResponseCreator::CGIRECVFIN;
-	// buf[BUFFER_SIZE] = '\0';
-	// std::clog << "buf: " << buf << std::endl;
 	return true;
 }
 
@@ -127,16 +127,20 @@ bool CGIResponseCreator::setCGIOutput() {
 
 bool CGIResponseCreator::deinit() {
 	if (close(inpfd[0]) == -1) {
+		putSytemError("read")
 		// error handling
 	}
 	if (close(inpfd[1]) == -1) {
 		// error handling
+		putSytemError("read")
 	}
 	if (close(outpfd[0]) == -1) {
 		// error handling
+		putSytemError("read")
 	}
 	if (close(outpfd[1]) == -1) {
 		// error handling
+		putSytemError("read")
 	}
 	return true;
 }
