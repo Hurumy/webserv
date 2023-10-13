@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:32:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:50:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ bool CGIResponseCreator::recvCGIOutput() {
 	readLen = read(outpfd[0], buf, BUFFER_SIZE);
 	if (readLen == -1) {
 		// errorhandling
-		putSytemError("read")
+		putSytemError("read");
 		return false;
 	}
 	if (readLen == 0) {
@@ -127,20 +127,20 @@ bool CGIResponseCreator::setCGIOutput() {
 
 bool CGIResponseCreator::deinit() {
 	if (close(inpfd[0]) == -1) {
-		putSytemError("read")
+		putSytemError("read");
 		// error handling
 	}
 	if (close(inpfd[1]) == -1) {
 		// error handling
-		putSytemError("read")
+		putSytemError("read");
 	}
 	if (close(outpfd[0]) == -1) {
 		// error handling
-		putSytemError("read")
+		putSytemError("read");
 	}
 	if (close(outpfd[1]) == -1) {
 		// error handling
-		putSytemError("read")
+		putSytemError("read");
 	}
 	return true;
 }
