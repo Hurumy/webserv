@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 00:56:58 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:27:48 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,9 @@ class SocketHandler {
 	int getTimeout() const;
 	void addCSocket(CSocket const &_csocket);
 	bool createPollfds();
-	bool _createPollfds();
 	void clearPollfds();
 	std::vector<struct pollfd> const &getPollfds() const;
 	bool setRevents();
-	bool _setRevents();
 	bool recieveCSockets();
 	std::map<int, Request> const &getRequests() const;
 	bool recvCSocketsData();
@@ -69,6 +67,5 @@ class SocketHandler {
 	std::map<int, std::string> createResponse();
 	bool loadResponses(std::vector<Config> const &configs);
 	bool handleCGIRequest();
-	bool _handleCGIRequest();
 	bool closeTimeoutCSockets();
 };
