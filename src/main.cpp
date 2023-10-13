@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 00:58:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:28:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ int main(const int argc, const char **argv) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
 			// for developing CGI
-			socketHandler._handleCGIRequest();
-			// socketHandler.handleCGIRequest();
+			socketHandler.handleCGIRequest();
 			// responses = socketHandler.createResponse();
 			// socketHandler.loadResponses(configs);
 			// socketHandler.sendDataMap(responses);
@@ -52,10 +51,8 @@ int main(const int argc, const char **argv) {
 		}
 		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
-		// socketHandler.createPollfds();
-		socketHandler._createPollfds();
-		// socketHandler.setRevents();
-		socketHandler._setRevents();
+		socketHandler.createPollfds();
+		socketHandler.setRevents();
 		socketHandler.closeTimeoutCSockets();
 		socketHandler.removeClosedCSockets();
 	}
