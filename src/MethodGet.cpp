@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 10:32:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:16:27 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,8 +139,6 @@ Result<int, bool> MethodGet::act() {
 
 	//拡張子を見てContentTypeを判断しResponseにセット
 	setContentType(uri);
-
-	//リダイレクトなどを確認する
 
 	//ファイルの中身を読み込んでBodyに詰める
 	Result<std::string, bool> const res_read = _openFile(uri);

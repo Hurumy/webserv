@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 13:43:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:30:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ class	AMethod
 	protected:
 		AMethod(Config _conf, Request _req, Response &_res);
 		~AMethod();
+		static std::map<unsigned int, std::string> const statusmap;
+		static std::map<unsigned int, std::string> initStatusMap();
 		Config								conf;
 		Request								req;
 		Response							&res;
@@ -35,8 +37,8 @@ class	AMethod
 		Result<std::string, bool>	const	_openFile(std::string filename);
 		Result<int, bool>					checkURI();
 		void								setURI();
-		//Result<int, bool>					searchSettingsOfURI();
 		void								setErrorPageBody();
 	public:
-		virtual Result<int, bool>			act() = 0;				
+		virtual Result<int, bool>			act() = 0;
+		Result<int, bool>					checkRedirects();
 };

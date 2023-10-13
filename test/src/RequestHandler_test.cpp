@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 13:12:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:29:47 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,3 +289,26 @@ TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion)
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(content_len, expected_content_length);
 }
+
+TEST (RequestHandlerTest, redirectionTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config>			tmp = res.getOk();
+	Request						req;
+	unsigned int				expected_status(440);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	std::cout << handler.getResponse().getLines() << std::endl;
+
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+}
+

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:58:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/13 12:22:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ RequestHandler::RequestHandler(std::vector<Config> const &_conf,
 
 // configs.at(i) の i を返す
 // まだホストが見つかってもいないので、エラーページをセットすることが不可能。ステータスのみ返す
-Result<int, bool> RequestHandler::searchMatchHost() {
+Result<int, bool> RequestHandler::searchMatchHost()
+{
 	Result<std::string, bool> result_1 = req.getHeader("Host");
 	std::string hostname;
 	std::string without_port;
@@ -92,7 +93,8 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	return Error<bool>(false);
 }
 
-Result<int, bool> RequestHandler::checkRequiedHeader() {
+Result<int, bool> RequestHandler::checkRequiedHeader()
+{
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
@@ -110,10 +112,18 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 }
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
-Result<int, bool> RequestHandler::routeMethod() {
+Result<int, bool> RequestHandler::routeMethod()
+{
 	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
+
+		//リダイレクトチェック
+		Result<int, bool>	res_rg = get.checkRedirects();
+		if (res_rg.isOK() == true)
+			return Ok<int>(0);
+
+		//getする
 		Result<int, bool> res_get = get.act();
 		if (res_get.isOK() == false)
 			return Error<bool>(false);
@@ -122,21 +132,40 @@ Result<int, bool> RequestHandler::routeMethod() {
 	} else if (req.getMethod() == "POST") {
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
-		Result<int, bool> res_get = post.act();
-		if (res_get.isOK() == false)
+
+		//リダイレクトチェック
+		Result<int, bool>	res_rp = post.checkRedirects();
+		if (res_rp.isOK() == true)
+			return Ok<int>(0);
+
+		//POSTする
+		Result<int, bool> res_post = post.act();
+		if (res_post.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
 
-	} else if (req.getMethod() == "DELETE") {
+	}
+	else if (req.getMethod() == "DELETE")
+	{
 		//クラス呼ぶ
 		MethodDelete del(configs.at(confnum), req, res);
-		Result<int, bool> res_get = del.act();
-		if (res_get.isOK() == false)
+
+		//リダイレクトチェック
+		Result<int, bool>	res_rd = del.checkRedirects();
+		if (res_rd.isOK() == true)
+			return Ok<int>(0);
+
+		//DELETEする
+		Result<int, bool> res_del = del.act();
+		if (res_del.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	} else {
+	}
+	else 
+	{
+		//Methodがこの3つ以外だった場合、Not Allowedを返す
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		setErrorPageBody();
