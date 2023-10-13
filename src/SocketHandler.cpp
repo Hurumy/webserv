@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:27:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 22:51:36 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,6 +265,7 @@ bool SocketHandler::sendResponses() {
 				// error handling
 			}
 			// for develop
+#if defined(_DEBUGFLAG)
 			{
 				int fd = open("./Makefile", O_RDONLY);
 				std::clog << "open fd: " << fd << std::endl;
@@ -274,6 +275,7 @@ bool SocketHandler::sendResponses() {
 				std::clog << "the number of Request: " << requests.size() << std::endl;
 				std::clog << "the number of CSocket: " << csockets.size() << std::endl;
 			}
+#endif
 			csockiter->setPhase(CSocket::RECV);
 			removeResponse(csockiter->getSockfd());
 		}
