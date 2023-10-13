@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/12 23:54:05 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 13:13:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,10 @@ bool CGIResponseCreator::execCGIScript() {
 	return true;
 }
 
+int CGIResponseCreator::getMonitoredfd() const {
+	return monitoredfd;
+}
+
 void CGIResponseCreator::setMonitoredfd(CGIResponseCreator::tag const &_phase) {
 	switch (_phase) {
 		case CGIResponseCreator::CGIWRITE:
@@ -109,13 +113,30 @@ bool CGIResponseCreator::recvCGIOutput() {
 		return true;
 	}
 	// for develope
-	cgiOutput.append(buf, BUFFER_SIZE);
-	buf[BUFFER_SIZE] = '\0';
-	std::clog << "buf: " << buf << std::endl;
+	cgiOutput.append(buf, readLen);
+	phase = CGIResponseCreator::CGIRECVFIN;
+	// buf[BUFFER_SIZE] = '\0';
+	// std::clog << "buf: " << buf << std::endl;
 	return true;
 }
 
 bool CGIResponseCreator::setCGIOutput() {
 	response.setBody(cgiOutput);
+	return true;
+}
+
+bool CGIResponseCreator::deinit() {
+	if (close(inpfd[0]) == -1) {
+		// error handling
+	}
+	if (close(inpfd[1]) == -1) {
+		// error handling
+	}
+	if (close(outpfd[0]) == -1) {
+		// error handling
+	}
+	if (close(outpfd[1]) == -1) {
+		// error handling
+	}
 	return true;
 }

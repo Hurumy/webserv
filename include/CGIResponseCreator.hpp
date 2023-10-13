@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/12 23:53:07 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 13:06:34 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,12 @@ class CGIResponseCreator {
 		void setRevents(short const _revents);
 		bool setEnvVars();
 		bool execCGIScript();
+		int getMonitoredfd() const;
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
 		bool writeMessageBody() const;
 		bool recvCGIOutput();
 		bool setCGIOutput();
+		bool deinit();
 
 	protected:
 	private:

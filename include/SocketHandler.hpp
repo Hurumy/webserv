@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/10 22:03:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/13 00:56:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
+#include "CGIResponseCreator.hpp"
 
 class SocketHandler {
    private:
@@ -36,6 +37,8 @@ class SocketHandler {
 	std::vector<struct pollfd> pollfds;
 	std::map<int, Request> requests;
 	std::map<int, Response> responses;
+	std::map<int, CGIResponseCreator> cgiResponseCreators;
+	bool isCGI;
 
    protected:
    public:
@@ -52,9 +55,11 @@ class SocketHandler {
 	int getTimeout() const;
 	void addCSocket(CSocket const &_csocket);
 	bool createPollfds();
+	bool _createPollfds();
 	void clearPollfds();
 	std::vector<struct pollfd> const &getPollfds() const;
 	bool setRevents();
+	bool _setRevents();
 	bool recieveCSockets();
 	std::map<int, Request> const &getRequests() const;
 	bool recvCSocketsData();
@@ -64,5 +69,6 @@ class SocketHandler {
 	std::map<int, std::string> createResponse();
 	bool loadResponses(std::vector<Config> const &configs);
 	bool handleCGIRequest();
+	bool _handleCGIRequest();
 	bool closeTimeoutCSockets();
 };
