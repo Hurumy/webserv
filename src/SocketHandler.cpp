@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:51:36 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/14 20:16:10 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,9 @@ bool SocketHandler::loadRequests() {
 				// if request payload's format is invalid
 			} else {
 				// For developing CGI
+#if defined(_DEBUGFLAG)
+			std::clog << requests[csockiter->getSockfd()].getLines() << std::endl;
+#endif
 				csockiter->setPhase(CSocket::CGI);
 				Response res;
 				res.setVersion("HTTP/1.1");
@@ -420,9 +423,9 @@ bool SocketHandler::handleCGIRequest() {
 					}
 				}
 				iter->second.deinit();
-				std::map<int, CGIResponseCreator>::iterator tempIter = iter;
+				std::map<int, CGIResponseCreator>::iterator erasedIter = iter;
 				iter++;
-				cgiResponseCreators.erase(tempIter);
+				cgiResponseCreators.erase(erasedIter);
 			} else {
 				++iter;
 			}
