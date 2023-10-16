@@ -1,4 +1,4 @@
-# webserv
+# webserv of 42 cursus
 
 ## ルール<br>
 
