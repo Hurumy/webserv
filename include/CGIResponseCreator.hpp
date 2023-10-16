@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 13:06:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:47:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include "Request.hpp"
 #include "Response.hpp"
+#include "MetaVariables.hpp"
 
 class CGIResponseCreator {
 	public:
@@ -40,7 +41,11 @@ class CGIResponseCreator {
 
 	protected:
 	private:
-		Request &request;
+		bool _setPathInfo() const;
+		bool _setPathTranslated() const;
+		bool _setQuerySring() const;
+
+		Request &requesta;
 		Response &response;
 		CGIResponseCreator::tag phase;
 		int inpfd[2];
@@ -48,4 +53,7 @@ class CGIResponseCreator {
 		int monitoredfd;
 		short revents;
 		std::string cgiOutput;
+		std::string absPath;
+		std::string filename;
+		MetaVariables metaVariables;
 };

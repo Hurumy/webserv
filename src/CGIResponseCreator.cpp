@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:50:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/14 21:55:39 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,29 @@ void CGIResponseCreator::setRevents(short const _revents) {
 	revents = _revents;
 }
 
+// リソースへの絶対パス
+// CGI script のファイル名
+bool CGIResponseCreator::_setPathInfo() const {
+	// cgi スクリプトを示す path 以下の path (query string は含まない) をセット
+	return true;
+}
+
+bool CGIResponseCreator::_setPathTranslated() const {
+	// cgi スクリプトの実際のロケーション + PATH_INFO
+	return true;
+}
+
+bool CGIResponseCreator::_setQuerySring() const {
+	// Query string
+	return true;
+}
+
 bool CGIResponseCreator::setEnvVars() {
 	// For develope
 	request.getPhase();
+	_setPathInfo();
+	_setPathTranslated();
+	_setQuerySring();
 	return true;
 }
 
