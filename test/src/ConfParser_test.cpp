@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:29:27 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:31:09 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,14 @@
 #include "webserv.hpp"
 
 #define CONF_FILE_PATH "testconfs/simple.conf"
-
-<<<<<<< HEAD
-#define	CONF_FILE_PATH "testconfs/simple.conf"
 #define CONF_FILE_PATH_2 "testconfs/location_dir.conf"
-=======
+
 TEST(ConfigParserTest, pAddressesTest) {
 	std::vector<Config> tmp;
 	int expected_1(8660);
 	int expected_2(80);
 	int expected_3(8080);
 	int expected_4(80);
->>>>>>> main
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();

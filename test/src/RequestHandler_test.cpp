@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:29:48 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:40:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,8 +299,7 @@ TEST (RequestHandlerTest, redirectionTest)
 	handler.checkRequiedHeader();
 	handler.routeMethod();
 
-	std::cout << handler.getResponse().getLines() << std::endl;
-
+	//std::cout << handler.getResponse().getLines() << std::endl;
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 }
 

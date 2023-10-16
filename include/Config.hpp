@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:28:20 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:32:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,6 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
-
-class Config {
-   private:
-	std::vector<Address> addresses;
-	std::vector<std::string> servername;
-	std::string rootdir;
-	unsigned long long maxbodysize;
-	std::map<int, std::string> errorpages;
-	std::map<std::string, std::string> redirects;
-	bool isreturn;
-	int returnstatus;
-	std::string returnurl;
-	bool dirlisting;
-	std::vector<std::string> index;
-	std::string uploadpath;
-	std::map<std::string, bool> reqmethod;
 
 class	Config
 {
@@ -92,7 +76,6 @@ class	Config
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
 		bool								addCgiExtension(std::string _ext);
-};
 
 	// for copy
 	std::map<int, std::string> pullErrorPages() const;

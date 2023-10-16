@@ -6,19 +6,17 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:29:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:34:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
 #include <gtest/gtest.h>
-
 #include <string>
-
 #include "Address.hpp"
 
-TEST(ConfigTest, addressesTest) {
+TEST(ConfigTest, addressesTest)
+{
 	Config config;
 	Address add;
 	std::vector<Address> res;
@@ -110,7 +108,6 @@ TEST(ConfigTest, returnurlTest) {
 	ASSERT_EQ(config.getReturnUrl(), expected);
 }
 
-<<<<<<< HEAD
 TEST(ConfigTest, returnbodyTest)
 {
 	Config	config;
@@ -124,11 +121,6 @@ TEST(ConfigTest, dirlistTest)
 {
 	Config		config;
 	bool	expected(true);
-=======
-TEST(ConfigTest, dirlistTest) {
-	Config config;
-	bool expected(true);
->>>>>>> main
 
 	config.setDirlist(expected);
 	ASSERT_EQ(config.getDirlist(), expected);

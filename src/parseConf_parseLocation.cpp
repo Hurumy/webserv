@@ -6,11 +6,10 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 13:58:43 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:42:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "ConfParser.hpp"
 
 static int checkLocationSettings(Location &res, std::string str)
