@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:32:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:58:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ static int checkLocationSettings(Location &res, std::string str)
 				break;
 			} else if (lines.at(i) == "allowedMethods") {
 				status = l_readAllowedMethods(res, str);
+				break;
+			} else if (lines.at(i) == "cgi_extension") {
+				status = l_readCGIExtension(res, str);
 				break;
 			} else if (lines.at(i) == "{" || lines.at(i) == "}") {
 				break;
