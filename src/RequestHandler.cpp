@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 14:40:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:42:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,26 @@ Result<int, bool> RequestHandler::routeMethod() {
 	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
+
+		// URIチェック
+		Result<int, bool> res_uri = get.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		get.setURI();
+		if (get.isCgi().isOK() == true) {
+			iscgi = true;
+			path_to_cgi = get.isCgi().getOk();
+		} else {
+			iscgi = false;
+		}
+
+		//リダイレクトチェック
+		Result<int, bool> res_rg = get.checkRedirects();
+		if (res_rg.isOK() == true) return Ok<int>(0);
+
+		// getする
 		Result<int, bool> res_get = get.act();
 		if (res_get.isOK() == false)
 			return Error<bool>(false);
@@ -123,8 +143,28 @@ Result<int, bool> RequestHandler::routeMethod() {
 	} else if (req.getMethod() == "POST") {
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
-		Result<int, bool> res_get = post.act();
-		if (res_get.isOK() == false)
+
+		// URIチェック
+		Result<int, bool> res_uri = post.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		post.setURI();
+		if (post.isCgi().isOK() == true) {
+			iscgi = true;
+			path_to_cgi = post.isCgi().getOk();
+		} else {
+			iscgi = false;
+		}
+
+		//リダイレクトチェック
+		Result<int, bool> res_rp = post.checkRedirects();
+		if (res_rp.isOK() == true) return Ok<int>(0);
+
+		// POSTする
+		Result<int, bool> res_post = post.act();
+		if (res_post.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
@@ -132,12 +172,33 @@ Result<int, bool> RequestHandler::routeMethod() {
 	} else if (req.getMethod() == "DELETE") {
 		//クラス呼ぶ
 		MethodDelete del(configs.at(confnum), req, res);
-		Result<int, bool> res_get = del.act();
-		if (res_get.isOK() == false)
+
+		// URIチェック
+		Result<int, bool> res_uri = del.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		del.setURI();
+		if (del.isCgi().isOK() == true) {
+			iscgi = true;
+			path_to_cgi = del.isCgi().getOk();
+		} else {
+			iscgi = false;
+		}
+
+		//リダイレクトチェック
+		Result<int, bool> res_rd = del.checkRedirects();
+		if (res_rd.isOK() == true) return Ok<int>(0);
+
+		// DELETEする
+		Result<int, bool> res_del = del.act();
+		if (res_del.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
 	} else {
+		// Methodがこの3つ以外だった場合、Not Allowedを返す
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		setErrorPageBody();
@@ -228,3 +289,10 @@ void RequestHandler::setErrorPageBody() {
 }
 
 Response RequestHandler::getResponse() { return (this->res); }
+
+Result<std::string, bool> const RequestHandler::isCgi() const {
+	if (iscgi == true) {
+		return Ok<std::string>(path_to_cgi);
+	}
+	return Error<bool>(false);
+}

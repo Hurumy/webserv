@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:11:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/12 09:42:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/03 12:58:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,14 @@ static std::string cutOffStr(std::string &origin, std::string start,
 		endpos = origin.find(end, startpos);
 		if (endpos == std::string::npos) break;
 		prev = origin.substr(0, startpos);
+		// std::cout << "prev: " << prev << std::endl;
 		next = origin.substr(endpos, origin.size());
+		// std::cout << "next: " << next << std::endl;
 		result = prev;
 		result += next;
 		offset = startpos + 1;
+		origin = result;
 	}
-	origin = result;
 	return (result);
 }
 
@@ -60,6 +62,8 @@ std::vector<std::string> cutConfToEachPort(std::string raw) {
 
 	// delete&ignore comments
 	cutOffStr(raw, "#", "\n");
+
+	// std::cout << raw << std::endl;
 
 	// interpret spaces as " "
 	replaceStr(raw, "\n", " ");

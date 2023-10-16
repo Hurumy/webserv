@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:51:35 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 17:54:18 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:27:07 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@ int readUploadPath(Config &conf, std::string oneline) {
 		errorInInit("Too many upload_path declare");
 
 	conf.setUploadPath(lines.at(1));
+
+	return (0);
+}
+
+int l_readUploadPath(Location &loc, std::string oneline) {
+	std::vector<std::string> lines;
+
+	lines = lineSpliter(oneline, " ");
+
+	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+
+	if (lines.at(0) != "upload_path")
+		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+
+	if (lines.size() != 2)
+		errorInInit("Too many elements in upload_path directive");
+
+	if (loc.getUploadPath().empty() == false)
+		errorInInit("Too many upload_path declare");
+
+	loc.setUploadPath(lines.at(1));
 
 	return (0);
 }

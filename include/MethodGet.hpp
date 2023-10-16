@@ -6,13 +6,13 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:04:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/26 13:43:20 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:28:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AMethod.hpp"
 
-class MethodGet : private AMethod {
+class MethodGet : public AMethod {
    private:
 	std::string getsemantics;
 	static const std::map<std::string, std::string> ext;

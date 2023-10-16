@@ -31,3 +31,23 @@ int readRewrite(Config &conf, std::string oneline) {
 
 	return (0);
 }
+
+int l_readRewrite(Location &loc, std::string oneline) {
+	std::vector<std::string> lines;
+
+	lines = lineSpliter(oneline, " ");
+
+	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+
+	if (lines.at(0) != "rewrite")
+		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+
+	if (lines.size() != 3)
+		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+
+	loc.addRedirects(lines.at(1), lines.at(2));
+
+	Result<std::string, bool> res = loc.getRedirects(lines.at(1));
+
+	return (0);
+}

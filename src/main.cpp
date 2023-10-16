@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:28:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/16 20:10:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Config.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
+#include "RequestHandler.hpp"
 #include "Result.hpp"
 #include "SocketHandler.hpp"
 
@@ -29,6 +30,13 @@ int main(const int argc, const char **argv) {
 	std::map<int, std::string> responses;
 	Result<std::vector<Config>, bool> result = parseConf(std::string(argv[1]));
 	std::vector<Config> configs = result.getOk();
+
+	Result<std::vector<Config>, bool> res = parseConf("./conf_files/test.conf");
+	if (res.isError() == true) {
+		std::cout << "parsing Configs failed" << std::endl;
+		return (-1);
+	}
+	std::vector<Config> conf = res.getOk();
 
 	sources.push_back(SSocket(8080, IPV4, 1000));
 	sources.push_back(SSocket(8000, IPV4, 1000));

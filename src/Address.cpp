@@ -6,23 +6,17 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:24:50 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 16:28:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:46:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Address.hpp"
 
-Address::Address() {
-	this->ipaddress = "";
-	this->port = 0;
-	this->ipvers = -1;
-}
-
-Address::Address(Address const &add) {
-	this->ipaddress = add.getIpAddress();
-	this->port = add.getPort();
-	this->ipvers = add.getIpVers();
-}
+// Address::Address() {
+// 	this->ipaddress = "";
+// 	this->port = 0;
+// 	this->ipvers = -1;
+// }
 
 std::string const Address::getIpAddress() const { return (this->ipaddress); }
 

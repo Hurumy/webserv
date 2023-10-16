@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 13:28:41 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:40:18 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ class RequestHandler {
 	Request req;
 	Response res;
 	size_t confnum;
-	// RequestHandler();
+	bool iscgi;
+	std::string path_to_cgi;
 	Result<std::string, bool> _openFile(std::string filename);
 
    protected:
@@ -37,4 +38,5 @@ class RequestHandler {
 	Result<int, bool> routeMethod();
 	void setErrorPageBody();
 	Response getResponse();
+	Result<std::string, bool> const isCgi() const;
 };

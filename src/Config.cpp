@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 17:03:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 10:49:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 
 std::vector<Address> const Config::getAddresses() const {
 	return (this->addresses);
+}
+
+Result<Location, bool> const Config::getLocations(std::string _path) const {
+	if (locations.empty() == true) {
+		return Error<bool>(false);
+	} else if (locations.find(_path) == locations.end()) {
+		return Error<bool>(false);
+	} else
+		return Ok<Location>(locations.at(_path));
 }
 
 std::vector<std::string> const Config::getServerName() const {
@@ -50,6 +59,8 @@ int Config::getReturnStatus() const { return (this->returnstatus); }
 
 std::string Config::getReturnUrl() const { return (this->returnurl); }
 
+std::string Config::getReturnBody() const { return (returnbody); }
+
 bool Config::getDirlist() const { return (this->dirlisting); }
 
 std::vector<std::string> const Config::getIndex() const {
@@ -67,6 +78,15 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
+Result<int, bool> const Config::getCgiExtension(std::string _ext) const {
+	for (size_t i = 0; i < cgiextension.size(); i++) {
+		if (cgiextension.at(i) == _ext) {
+			return Ok<int>(0);
+		}
+	}
+	return Error<bool>(false);
+}
+
 bool Config::addAddresses(Address &add) {
 	this->addresses.push_back(add);
 	return (true);
@@ -75,6 +95,15 @@ bool Config::addAddresses(Address &add) {
 bool Config::addServerName(std::string name) {
 	this->servername.push_back(name);
 	return (true);
+}
+
+bool Config::addLocations(std::string const key, Location const val) {
+	if (locations.find(key) == locations.end()) {
+		this->locations[key] = val;
+		return (true);
+	} else {
+		return (false);
+	}
 }
 
 bool Config::setRootDir(std::string root) {
@@ -112,6 +141,11 @@ bool Config::setReturnUrl(std::string url) {
 	return (true);
 }
 
+bool Config::setReturnBody(std::string _body) {
+	returnbody = _body;
+	return (true);
+}
+
 bool Config::setDirlist(bool conf) {
 	this->dirlisting = conf;
 	return (true);
@@ -128,15 +162,15 @@ bool Config::setUploadPath(std::string path) {
 }
 
 bool Config::addReqMethod(std::string key, bool val) {
-	this->reqmethod[key] = val;
-	return (true);
+	if (reqmethod.find(key) == reqmethod.end()) {
+		this->reqmethod[key] = val;
+		return (true);
+	} else {
+		return (false);
+	}
 }
 
-std::map<int, std::string> Config::pullErrorPages() const {
-	return (this->errorpages);
-}
-
-bool Config::pushErrorPages(std::map<int, std::string> map) {
-	this->errorpages = map;
+bool Config::addCgiExtension(std::string _ext) {
+	cgiextension.push_back(_ext);
 	return (true);
 }

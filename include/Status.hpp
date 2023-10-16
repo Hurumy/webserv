@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Status.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 12:28:43 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/05 15:11:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:28:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 class Status {
    private:
 	static std::map<unsigned int, std::string> const statusMap;
-
 	static std::map<unsigned int, std::string> initStatusMap();
 
    protected:

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:02:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:52:39 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,18 @@ static int isServerSetting(std::string raw) {
 // Confファイルの1行1行をみてなんの設定なのか解釈する
 static int checkSettings(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
+	// std::cout << oneline << std::endl;
 	int status = 0;
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		// std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		//  std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		//  std::cout << i << ", " << lines.size() << std::endl;
 
 		if (lines.at(i).empty() == false) {
-			if (lines.at(i) == "listen") {
+			if (lines.at(i) == "server") {
+				break;
+			} else if (lines.at(i) == "listen") {
 				status = readListen(conf, oneline);
 				break;
 			} else if (lines.at(i) == "server_name") {
@@ -64,7 +68,6 @@ static int checkSettings(Config &conf, std::string oneline) {
 				status = readMaxBodySize(conf, oneline);
 				break;
 			} else if (lines.at(i) == "index") {
-				// std::cout << "reading index!!" << std::endl;
 				status = readIndex(conf, oneline);
 				break;
 			} else if (lines.at(i) == "upload_path") {
@@ -73,6 +76,14 @@ static int checkSettings(Config &conf, std::string oneline) {
 			} else if (lines.at(i) == "allowedMethods") {
 				status = readAllowedMethods(conf, oneline);
 				break;
+			} else if (lines.at(i) == "cgi_extension") {
+				status = readCGIExtension(conf, oneline);
+				break;
+			} else if (lines.at(i) == "{" || lines.at(i) == "}") {
+				break;
+			} else if (lines.at(i).empty() == false) {
+				std::cout << RED << lines.at(i) << RESET << std::endl;
+				errorInInit("Unknown directive was detected.(｀・ω・´)");
 			}
 			if (status == -1) break;
 		}
@@ -89,12 +100,33 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	status = isServerSetting(port);
 	if (status == -1) return Error<bool>(false);
 
+	// std::cout << port << std::endl;
+
 	//セミコロンごとにきりわける
 	line = cutConfToEachPort(port);
+
+	// for (size_t i = 0; i < line.size(); i ++)
+	// 	std::cout << BLUE << line.at(i) << RESET << std::endl;
+
+	//ここでLocationディレクティブを切り出していき、Locationに詰め、Configのベクターにしまう
+	//後に流すstd::vector<std::string>にはLocationのディレクティブは含まれないようにする
+	Result<std::vector<std::string>, bool> res = cutOutLocation(line, conf);
+	if (res.isOK() == false) {
+		errorInInit("parsing Location is failed(´ω`)");
+	} else {
+		line = res.getOk();
+	}
+
+	// for (size_t i = 0; i < line.size() - 1; i ++)
+	// {
+	// 	std::cout << RED << line.at(i) << RESET << std::endl;
+	// 	std::cout << i << ", " << line.size() << std::endl;
+	// }
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {
 		if (line.at(i).empty() == false) {
+			// std::cout << i << ", " << line.size() << std::endl;
 			status = checkSettings(conf, line.at(i));
 			if (status == -1) return Error<bool>(false);
 		}

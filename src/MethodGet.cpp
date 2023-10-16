@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:31:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:53:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,23 +126,13 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 }
 
 Result<int, bool> MethodGet::act() {
-	// URIを確認します
-	Result<int, bool> res_uri = checkURI();
-	if (res_uri.isOK() == false) {
-		setErrorPageBody();
-		return Error<bool>(false);
-	}
-	setURI();
-
 	// Getの条件を確認する
 	checkGetSemantics();
 
-	//拡張子を見てContentTypeを判断しResponseにセット
+	// 拡張子を見てContentTypeを判断しResponseにセット
 	setContentType(uri);
 
-	//リダイレクトなどを確認する
-
-	//ファイルの中身を読み込んでBodyに詰める
+	// ファイルの中身を読み込んでBodyに詰める
 	Result<std::string, bool> const res_read = _openFile(uri);
 	if (res_read.isError() == true) {
 		setErrorPageBody();
