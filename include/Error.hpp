@@ -12,26 +12,29 @@
 
 #pragma once
 
-#include "Result.hpp"
 #include <iostream>
+
+#include "Result.hpp"
 
 template <typename E>
 class Error {
-	public:
-		Error(E const &_e) : e(_e) {}
-		Error(Error const &sourceError) { *this = sourceError; }
-		Error & operator = (Error const &sourceError) {
-			if (this != &sourceError) {
-				e = sourceError.e;
-			}
-			return *this;
+   public:
+	Error(E const &_e) : e(_e) {}
+	Error(Error const &sourceError) { *this = sourceError; }
+	Error &operator=(Error const &sourceError) {
+		if (this != &sourceError) {
+			e = sourceError.e;
 		}
-		~Error() {}
-		template <typename T, typename V>
-		operator Result<T, V>() const { return Result<T, V>(e); }
+		return *this;
+	}
+	~Error() {}
+	template <typename T, typename V>
+	operator Result<T, V>() const {
+		return Result<T, V>(e);
+	}
 
-	private:
-		Error() {}
+   private:
+	Error() {}
 
-		E e;
+	E e;
 };

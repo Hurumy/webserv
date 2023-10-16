@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 12:28:43 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/12 14:18:03 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:28:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,3 @@ class Status {
 	public:
 		static Result<std::string, bool> const getStatusMessage(unsigned int const statusCode);
 };
-
- 

@@ -10,25 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Result.hpp"
+
 #include <gtest/gtest.h>
 
-#include <string>
 #include <iostream>
+#include <string>
 
-#include "Result.hpp"
-#include "Ok.hpp"
 #include "Error.hpp"
+#include "Ok.hpp"
 
 Result<int, std::string> parse_digit(char c) {
-  if (c < '0' || '9' < c) {
-    return Error<std::string>("invalid character");
-  }
-  return Ok<int>(c - '0');
+	if (c < '0' || '9' < c) {
+		return Error<std::string>("invalid character");
+	}
+	return Ok<int>(c - '0');
 }
 
 TEST(ResultTest, OkTest) {
 	Result<int, std::string> result = parse_digit('0');
-	
+
 	ASSERT_EQ(result.isOK(), true);
 	ASSERT_EQ(result.isError(), false);
 	ASSERT_EQ(result.getOk(), 0);
@@ -37,7 +38,7 @@ TEST(ResultTest, OkTest) {
 TEST(ResultTest, ErrorTest) {
 	Result<int, std::string> result = parse_digit('a');
 	std::string expected("invalid character");
-	
+
 	ASSERT_EQ(result.isOK(), false);
 	ASSERT_EQ(result.isError(), true);
 	ASSERT_STREQ(result.getError().c_str(), expected.c_str());

@@ -58,3 +58,6 @@ NoPermToRead.txt
 
 # Files created by file system on MacOS of the cluster
 ._*
+
+# .env
+.env

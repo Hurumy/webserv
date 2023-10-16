@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 19:49:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:28:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,16 @@
 #include "SocketHandler.hpp"
 #include "RequestHandler.hpp"
 
-int main() {
+#define CONF_FILE_PATH "./conf_files/test.conf"
+
+int main(const int argc, const char **argv) {
+	if (argc != 2) {
+		return 1;
+	}
 	std::vector<SSocket> sources;
-	std::map<int, std::string> request;
-	std::map<int, std::string> response;
+	std::map<int, std::string> responses;
+	Result<std::vector<Config>, bool> result = parseConf(std::string(argv[1]));
+	std::vector<Config> configs = result.getOk();
 
 	Result<std::vector<Config>, bool> res = parseConf("./conf_files/test.conf");
 	if (res.isError() == true)
@@ -35,7 +41,7 @@ int main() {
 
 	sources.push_back(SSocket(8080, IPV4, 1000));
 	sources.push_back(SSocket(8000, IPV4, 1000));
-	SocketHandler socketHandler(sources, 10);
+	SocketHandler socketHandler(sources, 10, 30);
 	socketHandler.initAllSSockets();
 	socketHandler.createPollfds();
 	socketHandler.setRevents();
@@ -45,13 +51,16 @@ int main() {
 		if (socketHandler.getCSockets().empty() == false) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
-			response = socketHandler.createResponse();
-			socketHandler.sendDataMap(response);
+			// responses = socketHandler.createResponse();
+			socketHandler.loadResponses(configs);
+			// socketHandler.sendDataMap(responses);
+			socketHandler.sendResponses();
 		}
 		socketHandler.recieveCSockets();
 		socketHandler.clearPollfds();
 		socketHandler.createPollfds();
 		socketHandler.setRevents();
+		socketHandler.closeTimeoutCSockets();
 		socketHandler.removeClosedCSockets();
 	}
 	socketHandler.closeAllSSockets();

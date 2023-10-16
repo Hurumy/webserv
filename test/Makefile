@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/16 13:52:20 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/16 14:29:08 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ WS_SRC_FILES	:= \
 					APayload.cpp \
 					Address.cpp \
 					Request.cpp \
+					Version.cpp \
 					Response.cpp \
 					Status.cpp \
 					Config.cpp \
@@ -59,7 +60,7 @@ WS_SRC_FILES	:= \
 					SSocket.cpp \
 					CSocket.cpp \
 					SocketHandler.cpp \
-					error.cpp \
+					puterror.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
 					parseConf.cpp \

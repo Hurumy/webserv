@@ -10,33 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Address.hpp"
+
 #include <gtest/gtest.h>
 
 #include "webserv.hpp"
-#include "Address.hpp"
 
-TEST(AddressTest, ipAddressTest)
-{
-	Address	add;
+TEST(AddressTest, ipAddressTest) {
+	Address add;
 	std::string expected("111.108.92.125:8660");
 
 	add.setIpAddress(expected);
 	ASSERT_EQ(add.getIpAddress(), expected);
 }
 
-TEST(AddressTest, portTest)
-{
-	Address	add;
-	int		expected(8080);
+TEST(AddressTest, portTest) {
+	Address add;
+	int expected(8080);
 
 	add.setPort(expected);
 	ASSERT_EQ(add.getPort(), expected);
 }
 
-TEST(AddressTest, ipversTest)
-{
-	Address	add;
-	int		expected(1);
+TEST(AddressTest, ipversTest) {
+	Address add;
+	int expected(1);
 
 	add.setIpVers(expected);
 	ASSERT_EQ(add.getIpVers(), expected);

@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.cpp                                          :+:      :+:    :+:   */
+/*   puterror.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/12 08:45:11 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:57:29 by komatsud         ###   ########.fr       */
+/*   Created: 2023/09/27 19:34:36 by shtanemu          #+#    #+#             */
+/*   Updated: 2023/09/27 19:40:07 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
+#pragma once
 
-int errorInInit(std::string errormessage) {
-	perror(errormessage.c_str());
-	std::exit(1);
-}
+#include <errno.h>
+#include <string.h>
+
+#include <string>
+
+int errorInInit(std::string errormessage);
+void putSytemError(char const *msg);

@@ -3,23 +3,36 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2023/10/16 14:00:31 by komatsud         ###   ########.fr        #
+=======
+#    Updated: 2023/10/05 13:11:35 by shtanemu         ###   ########.fr        #
+>>>>>>> main
 #                                                                              #
 # **************************************************************************** #
 
 NAME		:= webserv
 CC			:= c++
-CFLAGS		:= -Wall -Wextra -Werror -std=c++98 -fsanitize=address
+CFLAGS		:= -Wall -Wextra -Werror -std=c++98
+UNAME_OS	:= $(shell uname -s)
+ifeq ($(UNAME_OS), Linux)
+	DFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+else ifeq ($(UNAME), Darwin)
+	DFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+endif
+ifeq ($(MAKECMDGOALS), debug)
+	CFLAGS += $(DFLAGS)
+endif
 
 SRC_FILES	:= \
 				main.cpp \
 				APayload.cpp \
 				Response.cpp \
 				Request.cpp \
-				parseRequest.cpp \
+				Version.cpp \
 				test.cpp \
 				makeStatusMap.cpp \
 				Status.cpp \
@@ -33,10 +46,13 @@ SRC_FILES	:= \
 				MethodGet.cpp \
 				MethodPost.cpp \
 				MethodDelete.cpp \
+				puterror.cpp \
+				parseRequest.cpp \
+				stringCleaner.cpp \
 				parseConf.cpp \
-				parseConf_putEachLine.cpp \
-				parseConf_cutConfToEachPort.cpp \
 				parseConf_cutConfByDirective.cpp \
+				parseConf_cutConfToEachPort.cpp \
+				parseConf_putEachLine.cpp \
 				pC_listen.cpp \
 				pC_return.cpp \
 				pC_root.cpp \
@@ -56,7 +72,7 @@ SRC_FILES	:= \
 				parseConf_parseLocation.cpp \
 				pC_location.cpp \
 				pC_cgi_path.cpp \
-				
+				MakeDirlistHTML.cpp \
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
@@ -79,6 +95,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 
 $(DEPS):
 
+
+debug: all
 
 all: $(NAME)
 

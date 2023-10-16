@@ -10,21 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "webserv.hpp"
 #include "AMethod.hpp"
+#include "webserv.hpp"
 
-class MethodPost: public AMethod
-{
-	private:
-		std::string			filename;
-		int 				openPostResource();
-		std::string 		makeFilename();
-		int 				writeToFile(int fd);
-		Result<int, bool>	checkMaxBodySize();
-	protected:
-	public:
-		MethodPost(Config _conf, Request _req, Response &_res);
-		~MethodPost();
-		Result<int, bool>	act();
+class MethodPost : public AMethod {
+   private:
+	std::string filename;
+	int openPostResource();
+	std::string makeFilename();
+	int writeToFile(int fd);
+	Result<int, bool> checkMaxBodySize();
+
+   protected:
+   public:
+	MethodPost(Config _conf, Request _req, Response &_res);
+	~MethodPost();
+	Result<int, bool> act();
 };
-

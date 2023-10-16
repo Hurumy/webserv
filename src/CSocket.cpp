@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/19 13:39:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/05 14:04:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@
 #include "Result.hpp"
 
 CSocket::CSocket(int const _sockfd)
-	: sockfd(_sockfd), revents(0), phase(CSocket::RECV) {}
+	: sockfd(_sockfd),
+	  revents(0),
+	  phase(CSocket::RECV),
+	  lasttime(std::time(NULL)) {}
 
 int CSocket::getSockfd() const { return sockfd; }
 
@@ -58,6 +61,10 @@ bool CSocket::readData() {
 	}
 	readLen = recv(sockfd, buff, BUFFER_SIZE, 0);
 	if (readLen == -1) {
+		return false;
+	}
+	if (data.size() > data.max_size() - readLen) {
+		phase = CSocket::CLOSE;
 		return false;
 	}
 	data.append(buff, readLen);
@@ -92,4 +99,10 @@ CSocket::tag CSocket::getPhase() const { return phase; }
 bool CSocket::eraseData(std::size_t until) {
 	data.erase(0, until);
 	return true;
+}
+
+std::time_t const &CSocket::getLasttime() const { return lasttime; }
+
+void CSocket::setLasttime(std::time_t const &_lasttime) {
+	lasttime = _lasttime;
 }

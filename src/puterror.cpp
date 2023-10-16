@@ -1,30 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Response.hpp                                       :+:      :+:    :+:   */
+/*   puterror.cpp                                          :+:      :+:    :+:
+ */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/03 15:28:25 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/03 19:02:19 by shtanemu         ###   ########.fr       */
+/*   Created: 2023/09/12 08:45:11 by komatsud          #+#    #+#             */
+/*   Updated: 2023/09/27 19:26:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#pragma once
+#include <errno.h>
+#include <string.h>
 
-#include "APayload.hpp"
 #include "webserv.hpp"
 
-class Response : public virtual APayload {
-   private:
-	unsigned int status;
-	std::string statusMessage;
+int errorInInit(std::string errormessage) {
+	perror(errormessage.c_str());
+	std::exit(1);
+}
 
-   protected:
-   public:
-	std::string const getLines() const;
-	bool setStatus(unsigned int status);
-	unsigned int getStatus() const;
-	bool setStatusMessage(std::string const &message);
-	std::string const &getStatusMessage() const;
-};
+void putSytemError(char const *msg) {
+	std::cerr << RED << "webserv: error: " << msg << ": " << strerror(errno)
+			  << RESET << std::endl;
+}

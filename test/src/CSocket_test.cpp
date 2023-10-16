@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <gtest/gtest.h>
-
 #include "CSocket.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(CSocketTest, constructorTest) {
 	CSocket csocket(3);

@@ -19,12 +19,12 @@ services:
   webserv:
     container_name: webserv
     build: .
+    tty: true    
     volumes:
       - .:/code
     ports:
       - '8000:8000'
       - '8080:8080'
-    command: /bin/sh -c "/code/entrypoint.sh"
     networks:
       - webserv_net
 

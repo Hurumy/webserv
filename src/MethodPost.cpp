@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:54:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:29:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ std::string MethodPost::makeFilename() {
 	int status = 0;
 	unsigned long long number = 0;
 	std::stringstream ss;
-	std::string filename;
 
 	do {
 		ss.str("");

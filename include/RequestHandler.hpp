@@ -6,19 +6,19 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:58:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:28:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "webserv.hpp"
 #include "Config.hpp"
+#include "Error.hpp"
+#include "Ok.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 #include "Result.hpp"
-#include "Ok.hpp"
-#include "Error.hpp"
+#include "webserv.hpp"
 
 class RequestHandler
 {
@@ -37,9 +37,3 @@ class RequestHandler
 		void				setErrorPageBody();
 		Response			getResponse();
 };
-
-
-
-
-
-

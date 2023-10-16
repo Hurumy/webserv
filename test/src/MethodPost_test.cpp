@@ -6,17 +6,18 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:37:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:29:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "MethodPost.hpp"
+
 #include <gtest/gtest.h>
 
-#include "MethodPost.hpp"
-#include "RequestHandler.hpp"
 #include "ConfParser.hpp"
+#include "RequestHandler.hpp"
 
-#define	CONF_FILE_PATH "testconfs/method_post.conf"
+#define CONF_FILE_PATH "testconfs/method_post.conf"
 
 static std::string	__openFile(std::string filename)
 {
@@ -27,38 +28,34 @@ static std::string	__openFile(std::string filename)
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
-	if (fd < 0)
-		return ("Open Failed");
+	if (fd < 0) return ("Open Failed");
 
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
-		if (status != -1)
-		{
+		if (status != -1) {
 			buf[status] = '\0';
 			body += buf;
 		}
 	}
 	close(fd);
 
-	if (status == -1)
-		return ("close or read failed");
+	if (status == -1) return ("close or read failed");
 
-	//Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
+	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
 	return (body);
 }
 
-TEST (MethodPostTest, postTextFileTest)
-{
+TEST(MethodPostTest, postTextFileTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(true);
-	unsigned int				expected_status(201);
-	std::string					expected_string("Created");
-	bool						expected_status_location(true);
-	std::string					expected_content("post file!!");
-	bool						expected_is_there_content_len(true);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(201);
+	std::string expected_string("Created");
+	bool expected_status_location(true);
+	std::string expected_content("post file!!");
+	bool expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
@@ -76,28 +73,30 @@ TEST (MethodPostTest, postTextFileTest)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(), expected_status_location);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
-	
-	Result<std::string, bool> res_loc = handler.getResponse().getHeader("Location");
-	std::string	filename = res_loc.getOk();
+	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(),
+			  expected_status_location);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
+
+	Result<std::string, bool> res_loc =
+		handler.getResponse().getHeader("Location");
+	std::string filename = res_loc.getOk();
 	filename = "." + filename;
-	//std::cout << filename << std::endl;
+	// std::cout << filename << std::endl;
 	std::string body = __openFile(filename);
 
 	ASSERT_EQ(body, expected_content);
 }
 
-TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
-{
+TEST(MethodPostTest, postTextFileTest_Error_methodNotAllowed) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-	std::vector<Config>			tmp = res.getOk();
-	Request						req;
-	bool						expected(false);
-	unsigned int				expected_status(405);
-	std::string					expected_string("Method Not Allowed");
-	std::string					expected_content("huowadwasdhjwahjdkwhujwaduhjadwuhjdwauij");
-	bool						expected_is_there_content_len(true);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(false);
+	unsigned int expected_status(405);
+	std::string expected_string("Method Not Allowed");
+	std::string expected_content("huowadwasdhjwahjdkwhujwaduhjadwuhjdwauij");
+	bool expected_is_there_content_len(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("POST");
@@ -113,5 +112,6 @@ TEST (MethodPostTest, postTextFileTest_Error_methodNotAllowed)
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
 }

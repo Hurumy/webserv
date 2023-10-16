@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <gtest/gtest.h>
-
 #include "SSocket.hpp"
+
+#include <gtest/gtest.h>
 
 TEST(SSocketTest, constructorTest) {
 	SSocket ssocket(8080, IPV4, 100);
