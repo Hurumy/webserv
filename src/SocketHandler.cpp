@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/14 20:16:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:40:58 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -328,7 +328,8 @@ bool SocketHandler::loadRequests() {
 				cgiResponseCreators.insert(std::make_pair(
 					csockiter->getSockfd(),
 					CGIResponseCreator(requests[csockiter->getSockfd()],
-									   responses[csockiter->getSockfd()])));
+									   responses[csockiter->getSockfd()],
+									   "test")));
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
@@ -356,7 +357,6 @@ std::map<int, std::string> SocketHandler::createResponse() {
 }
 
 bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
-	// temporarily
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
@@ -383,12 +383,13 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				removeRequest(iter->getSockfd());
 			} else {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
-				if (isCGI == true) {
+				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
 					cgiResponseCreators.insert(std::make_pair(
 						iter->getSockfd(),
 						CGIResponseCreator(requests[iter->getSockfd()],
-										   responses[iter->getSockfd()])));
+										   responses[iter->getSockfd()],
+										   requestHandler.isCgi().getOk())));
 				} else {
 					iter->setPhase(CSocket::SEND);
 					removeRequest(iter->getSockfd());

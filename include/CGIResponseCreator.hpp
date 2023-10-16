@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/16 13:47:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:42:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 class CGIResponseCreator {
 	public:
 		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
-		CGIResponseCreator(Request &_request, Response &_response);
+		CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath);
 
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);
@@ -40,7 +40,7 @@ class CGIResponseCreator {
 		bool _setPathTranslated() const;
 		bool _setQuerySring() const;
 
-		Request &requesta;
+		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;
 		int inpfd[2];
@@ -48,7 +48,6 @@ class CGIResponseCreator {
 		int monitoredfd;
 		short revents;
 		std::string cgiOutput;
-		std::string absPath;
-		std::string filename;
+		std::string cgiPath;
 		MetaVariables metaVariables;
 };

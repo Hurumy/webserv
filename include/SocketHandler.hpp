@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/13 22:27:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:15:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ class SocketHandler {
 		std::map<int, Request> requests;
 		std::map<int, Response> responses;
 		std::map<int, CGIResponseCreator> cgiResponseCreators;
-		bool isCGI;
 
 	protected:
 	public:
