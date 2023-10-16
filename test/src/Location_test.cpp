@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:51:04 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 12:30:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 11:00:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,22 @@ TEST(LocationTest, reqMethodTest)
 	ASSERT_EQ(res.getOk(), "");
 }
 
+TEST(LocationTest, cgiExtensionTest)
+{
+	Location	location;
+	std::string	ext_1("py");
+	std::string ext_2("cgi");
+	std::string	ext_3("pl");
+	bool		expected(true);
+	bool		expected_2(true);
+	bool		expected_3(false);
 
+	location.addCgiExtension(ext_1);
+	location.addCgiExtension(ext_2);
+	ASSERT_EQ(location.getCgiExtension(ext_1).isOK(), expected);
+	ASSERT_EQ(location.getCgiExtension(ext_2).isOK(), expected_2);
+	ASSERT_EQ(location.getCgiExtension(ext_3).isOK(), expected_3);
+}
 
 
 

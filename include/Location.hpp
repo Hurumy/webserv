@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 18:13:20 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 12:15:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 10:58:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ class	Location
 		std::vector<std::string>						index;
 		std::string										uploadpath;
 		std::map<std::string, bool>						reqmethod;
+		std::vector<std::string>						cgiextension;
+
 	protected:
 	public:
 		std::string const					getUri() const;
@@ -48,6 +50,7 @@ class	Location
 		std::vector<std::string> const		getIndex() const;
 		std::string const					getUploadPath() const;
 		Result<std::string, bool> const		getReqMethod(std::string key) const;
+		Result<int, bool> const				getCgiExtension(std::string _ext) const;
 		
 		//for test
 		bool								setUri(std::string _uri);
@@ -63,4 +66,5 @@ class	Location
 		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
+		bool								addCgiExtension(std::string _ext);
 };

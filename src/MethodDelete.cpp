@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:38:46 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:54:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,9 @@ int MethodDelete::openResourceDelete() {
 	}
 }
 
-Result<int, bool> MethodDelete::act() {
+Result<int, bool> MethodDelete::act()
+{
 	int status;
-
-	// URIを確認します
-	Result<int, bool> res_uri = checkURI();
-	if (res_uri.isOK() == false) {
-		setErrorPageBody();
-		return Error<bool>(false);
-	}
-	setURI();
 
 	status = openResourceDelete();
 	if (200 <= status && status <= 299) {

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:39:09 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:54:04 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,16 +143,9 @@ int MethodPost::openPostResource() {
 		return (status);
 }
 
-Result<int, bool> MethodPost::act() {
+Result<int, bool> MethodPost::act()
+{
 	int status;
-
-	// URIを確認します
-	Result<int, bool> res_uri = checkURI();
-	if (res_uri.isOK() == false) {
-		setErrorPageBody();
-		return Error<bool>(false);
-	}
-	setURI();
 
 	status = openPostResource();
 	if (status >= 200 && status <= 299) {

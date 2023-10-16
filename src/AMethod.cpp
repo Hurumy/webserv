@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/13 12:40:39 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:52:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	}
 
 	// read
-	while (status > 0) {
+	while (status > 0)
+	{
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status != -1) {
 			buf[status] = '\0';
@@ -230,6 +231,7 @@ Result<int, bool>	AMethod::checkRedirects()
 		//location指定のリダイレクト
 	std::stringstream ss;
 	std::string		  size;
+	
 	if (isloc == true && loc.isReturn() == true)
 	{
 		res.setStatus(loc.getReturnStatus());

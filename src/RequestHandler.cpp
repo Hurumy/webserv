@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/13 12:22:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:51:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,14 @@ Result<int, bool> RequestHandler::routeMethod()
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 
+		//URIチェック
+		Result<int, bool> res_uri = get.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		get.setURI();
+
 		//リダイレクトチェック
 		Result<int, bool>	res_rg = get.checkRedirects();
 		if (res_rg.isOK() == true)
@@ -129,9 +137,19 @@ Result<int, bool> RequestHandler::routeMethod()
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	} else if (req.getMethod() == "POST") {
+	}
+	else if (req.getMethod() == "POST")
+	{
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
+
+		//URIチェック
+		Result<int, bool> res_uri = post.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		post.setURI();
 
 		//リダイレクトチェック
 		Result<int, bool>	res_rp = post.checkRedirects();
@@ -150,6 +168,14 @@ Result<int, bool> RequestHandler::routeMethod()
 	{
 		//クラス呼ぶ
 		MethodDelete del(configs.at(confnum), req, res);
+
+		//URIチェック
+		Result<int, bool> res_uri = del.checkURI();
+		if (res_uri.isOK() == false) {
+			setErrorPageBody();
+			return Error<bool>(false);
+		}
+		del.setURI();
 
 		//リダイレクトチェック
 		Result<int, bool>	res_rd = del.checkRedirects();

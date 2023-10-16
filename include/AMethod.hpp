@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/13 12:30:17 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 12:49:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ class	AMethod
 		bool								isloc;
 		Location							loc;
 		Result<std::string, bool>	const	_openFile(std::string filename);
-		Result<int, bool>					checkURI();
-		void								setURI();
-		void								setErrorPageBody();
 	public:
 		virtual Result<int, bool>			act() = 0;
 		Result<int, bool>					checkRedirects();
+		Result<int, bool>					checkURI();
+		void								setURI();
+		void								setErrorPageBody();
 };

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:46:18 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 12:16:48 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 10:59:50 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,18 @@ Result<std::string, bool> const Location::getReqMethod(std::string key) const {
 		return Error<bool>(false);
 	} else
 		return Ok<std::string>("");
+}
+
+Result<int, bool> const	Location::getCgiExtension(std::string _ext) const
+{
+	for (size_t i = 0; i < cgiextension.size(); i ++)
+	{
+		if (cgiextension.at(i) == _ext)
+		{
+			return Ok<int>(0);
+		}
+	}
+	return Error<bool>(false);
 }
 
 bool Location::setUri(std::string _uri)
@@ -133,5 +145,12 @@ bool Location::addReqMethod(std::string key, bool val) {
 	this->reqmethod[key] = val;
 	return (true);
 }
+
+bool Location::addCgiExtension(std::string _ext)
+{
+	cgiextension.push_back(_ext);
+	return (true);
+}
+
 
 
