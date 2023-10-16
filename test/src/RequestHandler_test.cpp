@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:40:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:53:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,5 +301,30 @@ TEST (RequestHandlerTest, redirectionTest)
 
 	//std::cout << handler.getResponse().getLines() << std::endl;
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+}
+
+TEST (RequestHandlerTest, getCgiInfoTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config>			tmp = res.getOk();
+	Request						req;
+	bool						expected_status(true);
+	std::string					expected_path("/dummy/test.cgi");
+	std::string					expected_root("/usr/share/nginx/html");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/dummy/test.cgi");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+	handler.isCgi();
+
+	//std::cout << handler.getResponse().getLines() << std::endl;
+	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
+	ASSERT_EQ(handler.isCgi().getOk(), expected_root + expected_path);
 }
 

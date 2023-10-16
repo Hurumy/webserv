@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:39:16 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:34:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
+#include "ConfParser.hpp"
 
 class AMethod {
    private:
@@ -31,6 +32,8 @@ class AMethod {
 		std::string 	uri;
 		bool			isloc;
 		Location		loc;
+		bool								iscgi;
+		std::string							path_to_cgi;
 		Result<std::string, bool> const _openFile(std::string filename);
 		static std::map<unsigned int, std::string> const statusmap;
 		static std::map<unsigned int, std::string> initStatusMap();
@@ -41,4 +44,5 @@ class AMethod {
 		Result<int, bool>					checkURI();
 		void								setURI();
 		void								setErrorPageBody();
+		Result<std::string, bool> const		isCgi() const;
 };

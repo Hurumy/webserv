@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:52:53 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:54:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,8 @@ Result<int, bool> AMethod::checkURI() {
 	return Ok<int>(0);
 }
 
-void AMethod::setURI() {
+void AMethod::setURI()
+{
 	std::string tmp;
 
 	//std::cout << uri << std::endl;
@@ -214,6 +215,50 @@ void AMethod::setURI() {
 	if (conf.getRootDir().empty() == false) {
 		tmp = conf.getRootDir() + uri;
 		uri = tmp;
+	}
+
+	//cgiかどうかチェック！！
+	iscgi = false;
+	std::stringstream sb;
+	std::string		  cgipath;
+	sb << uri;
+	while (sb.eof() == false)
+	{
+		std::getline(sb, tmp, '/');
+		cgipath += tmp;
+		if (tmp.find('.') != std::string::npos)
+		{
+			std::vector<std::string> lines;
+			lines = lineSpliter(tmp, ".");
+			if (lines.size() == 2)
+			{
+				//locationの指定を見る
+				if (isloc == true)
+				{
+					Result<int, bool> _res = loc.getCgiExtension(lines.at(1));
+					if (_res.isOK() == true)
+					{
+						//これはcgiだ！
+						iscgi = true;
+						path_to_cgi = cgipath;
+						break ;
+					}
+				}
+				//Configの指定を見る
+				else
+				{
+					Result<int, bool> _res = conf.getCgiExtension(lines.at(1));
+					if (_res.isOK() == true)
+					{
+						//これはcgiだ！
+						iscgi = true;
+						path_to_cgi = cgipath;
+						break ;
+					}
+				}
+			}
+		}
+		cgipath += "/";
 	}
 
 	//最初に.をつけて開けるようにする
@@ -280,4 +325,13 @@ Result<int, bool>	AMethod::checkRedirects()
 		return Ok<int>(0);
 	}
 	return Error<bool>(true);
+}
+
+Result<std::string, bool> const		AMethod::isCgi() const
+{
+	if (iscgi == true)
+	{
+		return Ok<std::string>(path_to_cgi);
+	}
+	return Error<bool>(false);
 }

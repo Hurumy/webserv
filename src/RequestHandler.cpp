@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:51:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:42:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,15 @@ Result<int, bool> RequestHandler::routeMethod()
 			return Error<bool>(false);
 		}
 		get.setURI();
+		if (get.isCgi().isOK() == true)
+		{
+			iscgi = true;
+			path_to_cgi = get.isCgi().getOk();
+		}
+		else
+		{
+			iscgi = false;
+		}
 
 		//リダイレクトチェック
 		Result<int, bool>	res_rg = get.checkRedirects();
@@ -150,6 +159,15 @@ Result<int, bool> RequestHandler::routeMethod()
 			return Error<bool>(false);
 		}
 		post.setURI();
+		if (post.isCgi().isOK() == true)
+		{
+			iscgi = true;
+			path_to_cgi = post.isCgi().getOk();
+		}
+		else
+		{
+			iscgi = false;
+		}
 
 		//リダイレクトチェック
 		Result<int, bool>	res_rp = post.checkRedirects();
@@ -176,6 +194,15 @@ Result<int, bool> RequestHandler::routeMethod()
 			return Error<bool>(false);
 		}
 		del.setURI();
+		if (del.isCgi().isOK() == true)
+		{
+			iscgi = true;
+			path_to_cgi = del.isCgi().getOk();
+		}
+		else
+		{
+			iscgi = false;
+		}
 
 		//リダイレクトチェック
 		Result<int, bool>	res_rd = del.checkRedirects();
@@ -282,3 +309,13 @@ void RequestHandler::setErrorPageBody() {
 }
 
 Response RequestHandler::getResponse() { return (this->res); }
+
+Result<std::string, bool> const	RequestHandler::isCgi() const
+{
+	if (iscgi == true)
+	{
+		return Ok<std::string>(path_to_cgi);
+	}
+	return Error<bool>(false);
+}
+
