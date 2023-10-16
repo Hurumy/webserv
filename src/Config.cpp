@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 13:06:44 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 10:49:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,18 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Error<bool>(false);
 	} else
 		return Ok<std::string>("");
+}
+
+Result<int, bool> const	Config::getCgiExtension(std::string _ext) const
+{
+	for (size_t i = 0; i < cgiextension.size(); i ++)
+	{
+		if (cgiextension.at(i) == _ext)
+		{
+			return Ok<int>(0);
+		}
+	}
+	return Error<bool>(false);
 }
 
 bool Config::addAddresses(Address &add) {
@@ -169,4 +181,10 @@ bool Config::addReqMethod(std::string key, bool val) {
 	} else {
 		return (false);
 	}
+}
+
+bool Config::addCgiExtension(std::string _ext)
+{
+	cgiextension.push_back(_ext);
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/13 12:29:47 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/13 13:43:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include "ConfParser.hpp"
 
 #define	CONF_FILE_PATH "testconfs/simple.conf"
+#define CONF_FILE_WITH_ONE_LOC "testconfs/location_dif.conf"
 
 TEST(RequestHandlerTest, searchMatchHostTest)
 {

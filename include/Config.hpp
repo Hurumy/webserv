@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 11:19:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 10:37:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ class	Config
 		std::vector<std::string>					index;
 		std::string									uploadpath;
 		std::map<std::string, bool>					reqmethod;
+		std::vector<std::string>					cgiextension;
 	
 	protected:
 	
@@ -57,6 +58,7 @@ class	Config
 		std::vector<std::string> const		getIndex() const;
 		std::string const					getUploadPath() const;
 		Result<std::string, bool> const		getReqMethod(std::string key) const;
+		Result<int, bool> const				getCgiExtension(std::string _ext) const;
 		
 		//for test
 		bool								addAddresses(Address &add);
@@ -74,5 +76,6 @@ class	Config
 		bool								addIndex(std::string _index);
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
+		bool								addCgiExtension(std::string _ext);
 };
 
