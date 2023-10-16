@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:04:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:31:09 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include "webserv.hpp"
 
 #define CONF_FILE_PATH "testconfs/simple.conf"
+#define CONF_FILE_PATH_2 "testconfs/location_dir.conf"
 
 TEST(ConfigParserTest, pAddressesTest) {
 	std::vector<Config> tmp;
@@ -105,19 +106,22 @@ TEST(ConfigParserTest, pRewriteTest) {
 	ASSERT_EQ(tmp.at(1).getRedirects(key_2).getOk(), expected_2);
 }
 
-TEST(ConfigParserTest, pReturnTest) {
-	std::vector<Config> tmp;
-	bool expected_1(true);
-	bool expected_2(true);
-	int expected_3(440);
-	std::string expected_4("https://www.google.co.jp/");
+TEST(ConfigParserTest, pReturnTest)
+{
+	std::vector<Config>	tmp;
+	bool				expected_1(true);
+	bool				expected_2(true);
+	int					expected_3(440);
+	int					expected_4(301);
+	std::string			expected_5("https://www.google.co.jp/");
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
 	ASSERT_EQ(tmp.at(0).isReturn(), expected_1);
 	ASSERT_EQ(tmp.at(1).isReturn(), expected_2);
 	ASSERT_EQ(tmp.at(0).getReturnStatus(), expected_3);
-	ASSERT_EQ(tmp.at(1).getReturnUrl(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReturnStatus(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReturnUrl(), expected_5);
 }
 
 TEST(ConfigParserTest, pAutoIndexTest) {
@@ -180,4 +184,45 @@ TEST(ConfigParserTest, pAllowedMethodsTest) {
 	ASSERT_EQ(tmp.at(1).getReqMethod("POST").isOK(), expected_6);
 	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
 	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
+}
+
+TEST(ConfigParserTest, parsingSomeLocationDirectivesTest)
+{
+	std::vector<Config>	tmp;
+	bool			expected_1(true);
+	bool			expected_2(true);
+	bool			expected_3(true);
+	bool			expected_4(false);
+	bool			expected_5(true);
+	bool			expected_6(true);
+	bool			expected_7(false);
+	bool			expected_8(false);	
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH_2);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getReqMethod("GET").isOK(), expected_1);
+	ASSERT_EQ(tmp.at(0).getReqMethod("POST").isOK(), expected_2);
+	ASSERT_EQ(tmp.at(0).getReqMethod("DELETE").isOK(), expected_3);
+	ASSERT_EQ(tmp.at(0).getReqMethod("PUT").isOK(), expected_4);
+	ASSERT_EQ(tmp.at(1).getReqMethod("GET").isOK(), expected_5);
+	ASSERT_EQ(tmp.at(1).getReqMethod("POST").isOK(), expected_6);
+	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
+	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
+}
+
+TEST(ConfigParserTest, pCgiExtensionTest)
+{
+	std::vector<Config>	tmp;
+	std::string			expected_1("py");
+	std::string			expected_2("cgi");
+	std::string			expected_3("pl");
+	bool				ex_1(true);
+	bool				ex_2(true);
+	bool				ex_3(false);
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_1).isOK(), ex_1);
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_2).isOK(), ex_2);
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_3).isOK(), ex_3);
 }

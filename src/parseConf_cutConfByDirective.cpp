@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/27 19:01:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/04 13:17:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,28 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 	std::string rawdata;
 
 	fd = open(filepath.c_str(), O_RDONLY);
-	if (fd < 0) return Error<bool>(false);
-
-	do {
-		status = read(fd, buf, FILE_READ_SIZE);
-		if (status > 0) {
-			buf[status] = '\0';
-			rawdata.append(buf);
-			// std::cout << RED << buf << RESET;
-		}
-	} while (status > 0);
-
-	if (status == -1) {
+	if (fd < 0) 
+	{
+		errorInInit("Failed to open the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
-	// std::cout << rawdata << std::endl;
+	do {
+		status = read(fd, buf, FILE_READ_SIZE);
+		if (status > 0)
+		{
+			buf[status] = '\0';
+			rawdata.append(buf);
+		}
+	} while (status > 0);
+
+	if (status == -1)
+	{
+		errorInInit("Failed to read the config file｡°(´ฅωฅ`)°｡");
+		return Error<bool>(false);
+	}
+
+	//std::cout << rawdata << std::endl;
 
 	return Ok<std::string>(rawdata);
 }
@@ -68,7 +74,10 @@ static bool countParentheses(std::string rawdata, std::string start,
 	if (num_of_start == num_of_end)
 		return (true);
 	else
+	{
+		errorInInit("Inconsistent number of parentheses in the Config file（>Д<）");
 		return (false);
+	}
 }
 
 //第1層をパース
@@ -129,20 +138,24 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 
 	Result<std::string, bool> res = openAndReadConf(filepath);
 
-	if (res.isOK() == false) return Error<bool>(false);
+	if (res.isOK() == false)
+		return Error<bool>(false);
 
 	rawdata = res.getOk();
 
 	//カッコの数を数えて{==}でなければ弾く
 	status = countParentheses(rawdata, "{", "}");
-	if (status == false) return Error<bool>(false);
+	if (status == false)
+		return Error<bool>(false);
 
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
 
 	// for(size_t i = 0; i < firstlayer.size(); i ++)
-	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET
-	// << std::endl;
+	// {
+	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
+	// 	std::cout << RED "===ONE DIRECTIVE END===" << RESET << std::endl;
+	// }
 
 	return Ok<std::vector<std::string> >(firstlayer);
 }

@@ -6,19 +6,17 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 14:53:42 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:34:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
-
 #include <gtest/gtest.h>
-
 #include <string>
-
 #include "Address.hpp"
 
-TEST(ConfigTest, addressesTest) {
+TEST(ConfigTest, addressesTest)
+{
 	Config config;
 	Address add;
 	std::vector<Address> res;
@@ -110,9 +108,19 @@ TEST(ConfigTest, returnurlTest) {
 	ASSERT_EQ(config.getReturnUrl(), expected);
 }
 
-TEST(ConfigTest, dirlistTest) {
-	Config config;
-	bool expected(true);
+TEST(ConfigTest, returnbodyTest)
+{
+	Config	config;
+	std::string	expected("that is a set text");
+
+	config.setReturnBody(expected);
+	ASSERT_EQ(config.getReturnBody(), expected);
+}
+
+TEST(ConfigTest, dirlistTest)
+{
+	Config		config;
+	bool	expected(true);
 
 	config.setDirlist(expected);
 	ASSERT_EQ(config.getDirlist(), expected);
@@ -144,3 +152,21 @@ TEST(ConfigTest, reqMethodTest) {
 	ASSERT_EQ(res.isOK(), true);
 	ASSERT_EQ(res.getOk(), "");
 }
+
+TEST(ConfigTest, cgiExtensionTest)
+{
+	Config		config;
+	std::string	ext_1("py");
+	std::string ext_2("cgi");
+	std::string	ext_3("pl");
+	bool		expected(true);
+	bool		expected_2(true);
+	bool		expected_3(false);
+
+	config.addCgiExtension(ext_1);
+	config.addCgiExtension(ext_2);
+	ASSERT_EQ(config.getCgiExtension(ext_1).isOK(), expected);
+	ASSERT_EQ(config.getCgiExtension(ext_2).isOK(), expected_2);
+	ASSERT_EQ(config.getCgiExtension(ext_3).isOK(), expected_3);
+}
+

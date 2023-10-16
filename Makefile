@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
+#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/05 13:11:35 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/16 14:54:16 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,9 +42,7 @@ SRC_FILES	:= \
 				MethodGet.cpp \
 				MethodPost.cpp \
 				MethodDelete.cpp \
-				puterror.cpp \
 				parseRequest.cpp \
-				stringCleaner.cpp \
 				parseConf.cpp \
 				parseConf_cutConfByDirective.cpp \
 				parseConf_cutConfToEachPort.cpp \
@@ -61,7 +59,13 @@ SRC_FILES	:= \
 				pC_uploadpath.cpp \
 				pC_allowedmethods.cpp \
 				RequestHandler.cpp \
-				MakeDirlistHTML.cpp
+				puterror.cpp \
+				stringCleaner.cpp \
+				MakeDirlistHTML.cpp \
+				Location.cpp \
+				parseConf_parseLocation.cpp \
+				pC_location.cpp \
+				pC_cgi_path.cpp \
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj

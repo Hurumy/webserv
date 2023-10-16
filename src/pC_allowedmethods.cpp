@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 18:01:52 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 18:19:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/12 11:30:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int readAllowedMethods(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
+	bool						status;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -23,15 +24,52 @@ int readAllowedMethods(Config &conf, std::string oneline) {
 		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() > 5)
-		errorInInit("Too many allowedMethods directives _(´ω`_)⌒)_ ))");
+		errorInInit("Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
 
 	for (size_t i = 1; i < lines.size(); i++) {
-		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
-			lines.at(i) == "DELETE" || lines.at(i) == "PUT")
-			conf.addReqMethod(lines.at(i), true);
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
+		{
+			status = conf.addReqMethod(lines.at(i), true);
+			if (status == false)
+			{
+				errorInInit("Too many allowedMethod is declare(´-ω-`)");
+			}
+		}
 		else
 			errorInInit("Unsupported method is detected (*´ω｀*)");
 	}
 
 	return (0);
 }
+
+int l_readAllowedMethods(Location &loc, std::string oneline)
+{
+	std::vector<std::string> lines;
+	bool						status;
+
+	lines = lineSpliter(oneline, " ");
+
+	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+
+	if (lines.at(0) != "allowedMethods")
+		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
+
+	if (lines.size() > 5)
+		errorInInit("Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
+
+	for (size_t i = 1; i < lines.size(); i++) {
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
+		{
+			status = loc.addReqMethod(lines.at(i), true);
+			if (status == false)
+			{
+				errorInInit("Too many allowedMethod is declare(´-ω-`)");
+			}
+		}
+		else
+			errorInInit("Unsupported method is detected (*´ω｀*)");
+	}
+
+	return (0);
+}
+

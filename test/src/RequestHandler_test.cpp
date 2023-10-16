@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 13:12:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:53:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-#define CONF_FILE_PATH "testconfs/simple.conf"
+#define	CONF_FILE_PATH "testconfs/simple.conf"
+#define CONF_FILE_WITH_ONE_LOC "testconfs/location_dif.conf"
 
 TEST(RequestHandlerTest, searchMatchHostTest) {
 	std::vector<Config> tmp;
@@ -280,3 +281,50 @@ TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion) {
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(content_len, expected_content_length);
 }
+
+TEST (RequestHandlerTest, redirectionTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config>			tmp = res.getOk();
+	Request						req;
+	unsigned int				expected_status(440);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	//std::cout << handler.getResponse().getLines() << std::endl;
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+}
+
+TEST (RequestHandlerTest, getCgiInfoTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config>			tmp = res.getOk();
+	Request						req;
+	bool						expected_status(true);
+	std::string					expected_path("/dummy/test.cgi");
+	std::string					expected_root("/usr/share/nginx/html");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/dummy/test.cgi");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+	handler.isCgi();
+
+	//std::cout << handler.getResponse().getLines() << std::endl;
+	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
+	ASSERT_EQ(handler.isCgi().getOk(), expected_root + expected_path);
+}
+

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:36:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:42:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ TEST(MethodGetTest, getHtmlTest) {
 	ASSERT_EQ(result_1.isOK(), expected);
 
 	handler.routeMethod();
+
+	std::cout << handler.getResponse().getStatus() << std::endl;
+	std::cout << handler.getResponse().getStatusMessage() << std::endl;
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);

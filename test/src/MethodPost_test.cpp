@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/28 11:37:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:29:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@
 
 #define CONF_FILE_PATH "testconfs/method_post.conf"
 
-static std::string __openFile(std::string filename) {
-	int fd;
-	unsigned long long bodysize = 0;
-	int status = 1;
-	std::string body;
-	char buf[FILE_READ_SIZE + 1];
+static std::string	__openFile(std::string filename)
+{
+	int 				fd;
+	int 				status = 1;
+	std::string 		body;
+	char 				buf[FILE_READ_SIZE + 1];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
@@ -36,7 +36,6 @@ static std::string __openFile(std::string filename) {
 		if (status != -1) {
 			buf[status] = '\0';
 			body += buf;
-			bodysize += status;
 		}
 	}
 	close(fd);

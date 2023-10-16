@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MakeDirlistHTML.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/03 13:52:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/16 14:29:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		tmpfilepath = path + st->d_name;
 		status = stat(tmpfilepath.c_str(), &sstat);
 		if (status == -1) return Error<bool>(false);
-		stime = sstat.st_mtim;
+
+		// stime = sstat.st_mtim;
+		// stime = sstat.st_mtimespec;
+
 		strftime(buf, sizeof(buf), "%d-%b-%Y %R", gmtime(&stime.tv_sec));
 		html += buf;
 		bzero(buf, bufsize);
@@ -89,7 +92,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 	html += "</pre><hr></body>\n";
 	html += "</html>\n";
 
-	std::cout << YELLOW << html << RESET << std::endl;
+	//std::cout << YELLOW << html << RESET << std::endl;
 
 	return Ok<std::string>(html);
 }

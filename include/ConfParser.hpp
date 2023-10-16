@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:13:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:59:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,20 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
+
+Result<std::vector<std::string>, bool>	cutOutLocation(const std::vector<std::string> &origin, Config &conf);
+
+int l_readLocation(Location &loc, std::string oneline);
+int l_readRoot(Location &loc, std::string oneline);
+int l_readErrorPage(Location &loc, std::string oneline);
+int l_readReturn(Location &loc, std::string oneline);
+int l_readRewrite(Location &loc, std::string oneline);
+int l_readAutoindex(Location &loc, std::string oneline);
+int l_readMaxBodySize(Location &loc, std::string oneline);
+int l_readIndex(Location &loc, std::string oneline);
+int l_readUploadPath(Location &loc, std::string oneline);
+int l_readAllowedMethods(Location &loc, std::string oneline);
+int l_readCGIExtension(Location &loc, std::string oneline);
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool> cutConfByDirective(std::string filepath);
@@ -40,6 +54,7 @@ int readMaxBodySize(Config &conf, std::string oneline);
 int readIndex(Config &conf, std::string oneline);
 int readUploadPath(Config &conf, std::string oneline);
 int readAllowedMethods(Config &conf, std::string oneline);
+int readCGIExtension(Config &conf, std::string oneline);
 
 bool isNumber(std::string str);
 bool isSpace(std::string str);

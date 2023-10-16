@@ -1,50 +1,43 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Config.hpp                                         :+:      :+:    :+:   */
+/*   Location.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:32:24 by komatsud         ###   ########.fr       */
+/*   Created: 2023/10/02 18:13:20 by komatsud          #+#    #+#             */
+/*   Updated: 2023/10/16 10:58:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include "Address.hpp"
-#include "Location.hpp"
+#include "webserv.hpp"
+#include "Result.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
-#include "Result.hpp"
-#include "webserv.hpp"
 
-class	Config
+class	Location
 {
 	private:
-		std::vector<Address>						addresses;
-		std::map<std::string, Location>				locations;
-		std::vector<std::string>					servername;
-		std::string									rootdir;
-		unsigned long long							maxbodysize;
-		std::map<int, std::string>					errorpages;
-		std::map<std::string, std::string>			redirects;
-		bool										isreturn;
-		int											returnstatus;
-		std::string									returnurl;
-		std::string									returnbody;
-		bool										dirlisting;
-		std::vector<std::string>					index;
-		std::string									uploadpath;
-		std::map<std::string, bool>					reqmethod;
-		std::vector<std::string>					cgiextension;
-	
+		std::string										uri;
+		std::string		 								rootdir;
+		unsigned long long								maxbodysize;
+		std::map<int, std::string>						errorpages;
+		std::map<std::string, std::string>				redirects;
+		bool											isreturn;
+		int												returnstatus;
+		std::string										returnurl;
+		std::string										returnbody;
+		bool											dirlisting;
+		std::vector<std::string>						index;
+		std::string										uploadpath;
+		std::map<std::string, bool>						reqmethod;
+		std::vector<std::string>						cgiextension;
+
 	protected:
-	
 	public:
-		std::vector<Address> const			getAddresses() const;
-		Result<Location, bool> const		getLocations(std::string key) const;
-		std::vector<std::string> const		getServerName() const;
+		std::string const					getUri() const;
 		std::string const					getRootDir() const;
 		unsigned long long					getMaxBodySize() const;
 		Result<std::string, bool> const		getErrorPages(int status) const;
@@ -60,10 +53,8 @@ class	Config
 		Result<int, bool> const				getCgiExtension(std::string _ext) const;
 		
 		//for test
-		bool								addAddresses(Address &add);
-		bool								addLocations(std::string key, Location val);
-		bool								addServerName(std::string name);
-		bool								setRootDir(std::string root);
+		bool								setUri(std::string _uri);
+		bool								setRootDir(std::string _root);
 		bool								setMaxBodySize(unsigned long long siz);
 		bool								addErrorPages(int key, std::string val);
 		bool								addRedirects(std::string key, std::string val);
@@ -76,8 +67,4 @@ class	Config
 		bool								setUploadPath(std::string path);
 		bool								addReqMethod(std::string key, bool val);
 		bool								addCgiExtension(std::string _ext);
-
-	// for copy
-	std::map<int, std::string> pullErrorPages() const;
-	bool pushErrorPages(std::map<int, std::string> map);
 };

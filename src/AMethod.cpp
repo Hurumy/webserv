@@ -6,11 +6,69 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/02 14:33:52 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 15:54:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AMethod.hpp"
+
+const std::map<unsigned int, std::string> AMethod::statusmap = AMethod::initStatusMap();
+
+std::map<unsigned int, std::string> AMethod::initStatusMap()
+{
+	std::map<unsigned int, std::string> m;
+	m[100] = "Continue";
+	m[101] = "Switching Protocol";
+	m[102] = "Processing";
+	m[103] = "Early Hints";
+	m[200] = "OK";
+	m[201] = "Created";
+	m[202] = "Accepted";
+	m[203] = "Non-Authoritative Information";
+	m[204] = "No Content";
+	m[205] = "Reset Content";
+	m[206] = "Partial Content";
+	m[300] = "Multiple Choice";
+	m[301] = "Moved Permanently";
+	m[302] = "Found";
+	m[304] = "Not Modified";
+	m[400] = "Bad Request";
+	m[401] = "Unauthorized";
+	m[402] = "Payment Required";
+	m[403] = "Forbidden";
+	m[404] = "Not Found";
+	m[405] = "Method Not Allowed";
+	m[406] = "Not Acceptable";
+	m[407] = "Proxy Authentication Required";
+	m[408] = "Request Timeout";
+	m[409] = "Conflict";
+	m[410] = "Gone";
+	m[411] = "Length Required";
+	m[412] = "Precondition Failed";
+	m[413] = "Payload Too Large";
+	m[414] = "URI Too Long";
+	m[415] = "Unsupported Media Type";
+	m[416] = "Range Not Satisfiable";
+	m[417] = "Expectation Failed";
+	m[422] = "Unprocessable Entity";
+	m[423] = "Locked";
+	m[425] = "Too Early";
+	m[426] = "Upgrade Required";
+	m[429] = "Too Many Requests";
+	m[431] = "Request Header Fields Too Large";
+	m[500] = "Internal Server Error";
+	m[501] = "Not Implemented";
+	m[502] = "Bad Gateway";
+	m[503] = "Service Unavailable";
+	m[504] = "Gateway Timeout";
+	m[505] = "HTTP Version Not Supported";
+	m[506] = "Variant Also Negotiates";
+	m[507] = "Insufficient Storage";
+	m[508] = "Loop Detected";
+	m[510] = "Not Extended";
+	m[511] = "Network Authentication Required";
+	return m;
+}
 
 AMethod::AMethod(Config _conf, Request _req, Response &_res)
 	: conf(_conf), req(_req), res(_res) {}
@@ -37,7 +95,8 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	}
 
 	// read
-	while (status > 0) {
+	while (status > 0)
+	{
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status != -1) {
 			buf[status] = '\0';
@@ -127,40 +186,152 @@ Result<int, bool> AMethod::checkURI() {
 	return Ok<int>(0);
 }
 
-void AMethod::setURI() {
+void AMethod::setURI()
+{
 	std::string tmp;
 
-	// ROOTを見る
+	//std::cout << uri << std::endl;
+
+	//uriを一つずつ長くしていって、最長一致なLocationを探す
+	std::stringstream ss;
+	std::string		  shortpath;
+	ss << uri;
+	isloc = false;
+	std::getline(ss, tmp, '/');
+	while (ss.eof() == false)
+	{
+		shortpath += tmp;
+		shortpath += '/';
+		// std::cout << RED << shortpath << RESET << std::endl;
+		if (conf.getLocations(shortpath).isOK() == true)
+		{
+			isloc = true;
+			loc = conf.getLocations(shortpath).getOk();
+		}
+		std::getline(ss, tmp, '/');
+	}
+
+	// ROOTをURIの頭にくっつける
 	if (conf.getRootDir().empty() == false) {
 		tmp = conf.getRootDir() + uri;
 		uri = tmp;
+	}
+
+	//cgiかどうかチェック！！
+	iscgi = false;
+	std::stringstream sb;
+	std::string		  cgipath;
+	sb << uri;
+	while (sb.eof() == false)
+	{
+		std::getline(sb, tmp, '/');
+		cgipath += tmp;
+		if (tmp.find('.') != std::string::npos)
+		{
+			std::vector<std::string> lines;
+			lines = lineSpliter(tmp, ".");
+			if (lines.size() == 2)
+			{
+				//locationの指定を見る
+				if (isloc == true)
+				{
+					Result<int, bool> _res = loc.getCgiExtension(lines.at(1));
+					if (_res.isOK() == true)
+					{
+						//これはcgiだ！
+						iscgi = true;
+						path_to_cgi = cgipath;
+						break ;
+					}
+				}
+				//Configの指定を見る
+				else
+				{
+					Result<int, bool> _res = conf.getCgiExtension(lines.at(1));
+					if (_res.isOK() == true)
+					{
+						//これはcgiだ！
+						iscgi = true;
+						path_to_cgi = cgipath;
+						break ;
+					}
+				}
+			}
+		}
+		cgipath += "/";
 	}
 
 	//最初に.をつけて開けるようにする
 	tmp = "." + uri;
 	uri = tmp;
 
-	// std::cout << YELLOW << uri << RESET << std::endl;
+	//std::cout << YELLOW << uri << RESET << std::endl;
 
 	return;
 }
 
-// Result<int, bool>	AMethod::searchSettingsOfURI()
-// {
-// 	//return
-// 	if (conf.isReturn() == true)
-// 	{
-// 		if (conf.getReturnUrl().empty() == false)
-// 		{
+Result<int, bool>	AMethod::checkRedirects()
+{
+	//リダイレクトなどを確認する
+		//location指定のリダイレクト
+	std::stringstream ss;
+	std::string		  size;
+	
+	if (isloc == true && loc.isReturn() == true)
+	{
+		res.setStatus(loc.getReturnStatus());
+		if (statusmap.find(loc.getReturnStatus()) != statusmap.end())
+			res.setStatusMessage(statusmap.at(loc.getReturnStatus()));
+		else
+			res.setStatusMessage("Unknown status");
+		if (loc.getReturnBody().empty() == false)
+		{
+			ss << loc.getReturnBody().size();
+			ss >> size;
+			res.addHeader("Content-Length", size);
+			res.addHeader("Content-Type", "text/html");
+			res.setBody(loc.getReturnBody());
+		}
+		if (loc.getReturnUrl().empty() == false)
+		{
+			res.addHeader("Location", loc.getReturnUrl());
+		}
+		return Ok<int>(0);
+	}
+		//config指定のリダイレクト
+	else if (conf.isReturn() == true)
+	{
+		res.setStatus(conf.getReturnStatus());
+		if (statusmap.find(conf.getReturnStatus()) != statusmap.end())
+			res.setStatusMessage(statusmap.at(conf.getReturnStatus()));
+		else
+			res.setStatusMessage("Unknown status");
+		if (conf.getReturnBody().empty() == false)
+		{
+			ss << conf.getReturnBody().size();
+			ss >> size;
+			res.addHeader("Content-Length", size);
+			res.addHeader("Content-Type", "text/html");
+			res.setBody(conf.getReturnBody());
+		}
+		else
+		{
+			res.addHeader("Content-Length", "0");
+		}
+		if (conf.getReturnUrl().empty() == false)
+		{
+			res.addHeader("Location", conf.getReturnUrl());
+		}
+		return Ok<int>(0);
+	}
+	return Error<bool>(true);
+}
 
-// 		}
-// 		else
-// 		{
-// 			res.setStatus(conf.getReturnStatus());
-
-// 		}
-// 	}
-
-// 	//rewrite
-
-// }
+Result<std::string, bool> const		AMethod::isCgi() const
+{
+	if (iscgi == true)
+	{
+		return Ok<std::string>(path_to_cgi);
+	}
+	return Error<bool>(false);
+}
