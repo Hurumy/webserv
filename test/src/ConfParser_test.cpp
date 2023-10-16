@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 11:28:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:55:02 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,4 +217,21 @@ TEST(ConfigParserTest, parsingSomeLocationDirectivesTest)
 	ASSERT_EQ(tmp.at(1).getReqMethod("POST").isOK(), expected_6);
 	ASSERT_EQ(tmp.at(1).getReqMethod("DELETE").isOK(), expected_7);
 	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
+}
+
+TEST(ConfigParserTest, pCgiExtensionTest)
+{
+	std::vector<Config>	tmp;
+	std::string			expected_1("py");
+	std::string			expected_2("cgi");
+	std::string			expected_3("pl");
+	bool				ex_1(true);
+	bool				ex_2(true);
+	bool				ex_3(false);
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_1).isOK(), ex_1);
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_2).isOK(), ex_2);
+	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_3).isOK(), ex_3);
 }

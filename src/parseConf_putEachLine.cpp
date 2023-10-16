@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:55:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:52:39 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ static int checkSettings(Config &conf, std::string oneline) {
 			} else if (lines.at(i) == "allowedMethods") {
 				status = readAllowedMethods(conf, oneline);
 				break;
-			// } else if (lines.at(i) == "cgi_extension") {
-			// 	status = readAllowedMethods(conf, oneline);
-			// 	break;
+			} else if (lines.at(i) == "cgi_extension") {
+				status = readCGIExtension(conf, oneline);
+				break;
 			} else if (lines.at(i) == "{" || lines.at(i) == "}") {
 				break;
 			} else if (lines.at(i).empty() == false) {

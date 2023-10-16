@@ -6,47 +6,33 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 13:48:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:54:53 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/16 13:55:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-// //.cgi, .pyとか
-// int readCGIExtension(Config &conf, std::string oneline)
-// {
-// 	std::vector<std::string> lines;
-// 	std::stringstream ss;
-// 	int num;
+//.cgi, .pyとか
+int readCGIExtension(Config &conf, std::string oneline)
+{
+	std::vector<std::string> lines;
 
-// 	lines = lineSpliter(oneline, " ");
+	lines = lineSpliter(oneline, " ");
 
-// 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
-// 	if (lines.at(0) != "cgi_extension")
-// 		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
+	if (lines.at(0) != "cgi_extension")
+		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
-// 	if (lines.size() < 2)
-// 		errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
+	if (lines.size() < 2)
+		errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
 
-// 	if (isNumber(lines.at(1)) == false)
-// 		errorInInit(
-// 			"Invalid HTTP statuscode in error_page directives "
-// 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
-// 	ss << lines.at(1);
-// 	ss >> num;
+	for (size_t i = 1; i < lines.size(); i ++)
+	{
+		conf.addCgiExtension(lines.at(i));
+		//std::cout << lines.at(i) << std::endl;
+	}
 
-// 	if (!(100 <= num && num < 600))
-// 		errorInInit(
-// 			"Invalid HTTP statuscode in error_page directives "
-// 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
-
-// 	conf.addErrorPages(num, lines.at(2));
-// 	Result<std::string, bool> res = conf.getErrorPages(num);
-
-// 	// std::cout << MAGENTA "error_pages: " << num << ": " << res.getOk() <<
-// 	// RESET << std::endl;
-
-// 	return (0);
-// }
+	return (0);
+}
