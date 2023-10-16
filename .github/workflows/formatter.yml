@@ -33,19 +33,19 @@ jobs:
         cpp_files=$(find . -type f -name '*.cpp' -path "./src/*")
         for file in $cpp_files; do
           echo "Running clang-format for $file..."
-          clang-format -i "$file"
+          clang-format --style=file ./src/.clang-format "$file"
         done
         hpp_files=$(find . -type f -name '*.hpp' -path "./include/*")
         for file in $hpp_files; do
           echo "Running clang-format for $file..."
-          clang-format -i "$file"
+          clang-format --style=file ./include/.clang-format "$file"
         done
     - name: Refactor unit test codes
       run: |
         cpp_files=$(find . -type f -name '*.cpp' -path "./test/src/*")
         for file in $cpp_files; do
           echo "Running clang-format for $file..."
-          clang-format -i "$file"
+          clang-format --style=file ./test/.clang-format "$file"
         done
     - name: Remove unnecessary file
       run: rm -f ".clang-fomat file"
