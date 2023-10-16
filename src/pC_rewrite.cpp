@@ -32,8 +32,7 @@ int readRewrite(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readRewrite(Location &loc, std::string oneline)
-{
+int l_readRewrite(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");

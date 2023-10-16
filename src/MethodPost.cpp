@@ -142,8 +142,7 @@ int MethodPost::openPostResource() {
 		return (status);
 }
 
-Result<int, bool> MethodPost::act()
-{
+Result<int, bool> MethodPost::act() {
 	int status;
 
 	status = openPostResource();

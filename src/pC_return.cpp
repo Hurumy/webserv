@@ -16,28 +16,30 @@ static int threecontents(Config &conf, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//1つ目 ステータスしかない
+	// 1つ目 ステータスしかない
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
 		if (!(100 <= num && num < 600))
-			errorInInit("Invalid Status Code detected in return directive (◞‸◟)");
+			errorInInit(
+				"Invalid Status Code detected in return directive (◞‸◟)");
 		conf.setReturnStatus(num);
 		conf.setIsReturn(true);
 	} else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
-	//2つ目 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
-	if ((lines.at(2).compare(0, 7, "http://") == 0 || lines.at(2).compare(0, 8, "https://") == 0) && (300 <= num && num < 400))
-	{
+	// 2つ目
+	// 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
+	if ((lines.at(2).compare(0, 7, "http://") == 0 ||
+		 lines.at(2).compare(0, 8, "https://") == 0) &&
+		(300 <= num && num < 400)) {
 		conf.setReturnUrl(lines.at(2));
-	}
-	else if (!(300 <= num && num < 400))
-	{
+	} else if (!(300 <= num && num < 400)) {
 		conf.setReturnBody(lines.at(2));
-	}
-	else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	} else
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
@@ -46,7 +48,8 @@ static int twocontents(Config &conf, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//要素数が1つのときはステータスかURLしか入らない URLの時はステータスを302にしてよい
+	//要素数が1つのときはステータスかURLしか入らない
+	//URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -87,33 +90,34 @@ int readReturn(Config &conf, std::string oneline) {
 	return (0);
 }
 
-
 static int l_threecontents(Location &loc, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//1つ目 ステータスしかない
+	// 1つ目 ステータスしかない
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
 		if (!(100 <= num && num < 600))
-			errorInInit("Invalid Status Code detected in return directive (◞‸◟)");
+			errorInInit(
+				"Invalid Status Code detected in return directive (◞‸◟)");
 		loc.setReturnStatus(num);
 		loc.setIsReturn(true);
 	} else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
-	//2つ目 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
-	if ((lines.at(2).compare(0, 7, "http://") == 0 || lines.at(2).compare(0, 8, "https://") == 0) && (300 <= num && num < 400))
-	{
+	// 2つ目
+	// 300番代の時はリダイレクト先のURL、それ以外のステータスの場合はBodyに設定する文章を任意に設定できる
+	if ((lines.at(2).compare(0, 7, "http://") == 0 ||
+		 lines.at(2).compare(0, 8, "https://") == 0) &&
+		(300 <= num && num < 400)) {
 		loc.setReturnUrl(lines.at(2));
-	}
-	else if (!(300 <= num && num < 400))
-	{
+	} else if (!(300 <= num && num < 400)) {
 		loc.setReturnBody(lines.at(2));
-	}
-	else
-		errorInInit("Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
+	} else
+		errorInInit(
+			"Unknown element detected in return directive ヾ(ﾟω｡ヽ≡ﾉﾟω｡)ﾉﾞ");
 
 	return (0);
 }
@@ -122,7 +126,8 @@ static int l_twocontents(Location &loc, std::vector<std::string> lines) {
 	std::stringstream ss;
 	int num;
 
-	//要素数が1つのときはステータスかURLしか入らない URLの時はステータスを302にしてよい
+	//要素数が1つのときはステータスかURLしか入らない
+	//URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -143,8 +148,7 @@ static int l_twocontents(Location &loc, std::vector<std::string> lines) {
 	return (0);
 }
 
-int l_readReturn(Location &loc, std::string oneline)
-{
+int l_readReturn(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");

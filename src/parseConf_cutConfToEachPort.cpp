@@ -24,15 +24,13 @@ static std::string cutOffStr(std::string &origin, std::string start,
 
 	while (1) {
 		startpos = origin.find(start, offset);
-		if (startpos == std::string::npos)
-			break;
+		if (startpos == std::string::npos) break;
 		endpos = origin.find(end, startpos);
-		if (endpos == std::string::npos)
-			break;
+		if (endpos == std::string::npos) break;
 		prev = origin.substr(0, startpos);
-		//std::cout << "prev: " << prev << std::endl;
+		// std::cout << "prev: " << prev << std::endl;
 		next = origin.substr(endpos, origin.size());
-		//std::cout << "next: " << next << std::endl;
+		// std::cout << "next: " << next << std::endl;
 		result = prev;
 		result += next;
 		offset = startpos + 1;
@@ -65,7 +63,7 @@ std::vector<std::string> cutConfToEachPort(std::string raw) {
 	// delete&ignore comments
 	cutOffStr(raw, "#", "\n");
 
-	//std::cout << raw << std::endl;
+	// std::cout << raw << std::endl;
 
 	// interpret spaces as " "
 	replaceStr(raw, "\n", " ");

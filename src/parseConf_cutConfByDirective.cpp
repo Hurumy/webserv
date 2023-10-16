@@ -20,28 +20,25 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 	std::string rawdata;
 
 	fd = open(filepath.c_str(), O_RDONLY);
-	if (fd < 0) 
-	{
+	if (fd < 0) {
 		errorInInit("Failed to open the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
 	do {
 		status = read(fd, buf, FILE_READ_SIZE);
-		if (status > 0)
-		{
+		if (status > 0) {
 			buf[status] = '\0';
 			rawdata.append(buf);
 		}
 	} while (status > 0);
 
-	if (status == -1)
-	{
+	if (status == -1) {
 		errorInInit("Failed to read the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
-	//std::cout << rawdata << std::endl;
+	// std::cout << rawdata << std::endl;
 
 	return Ok<std::string>(rawdata);
 }
@@ -73,9 +70,9 @@ static bool countParentheses(std::string rawdata, std::string start,
 
 	if (num_of_start == num_of_end)
 		return (true);
-	else
-	{
-		errorInInit("Inconsistent number of parentheses in the Config file（>Д<）");
+	else {
+		errorInInit(
+			"Inconsistent number of parentheses in the Config file（>Д<）");
 		return (false);
 	}
 }
@@ -138,23 +135,22 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 
 	Result<std::string, bool> res = openAndReadConf(filepath);
 
-	if (res.isOK() == false)
-		return Error<bool>(false);
+	if (res.isOK() == false) return Error<bool>(false);
 
 	rawdata = res.getOk();
 
 	//カッコの数を数えて{==}でなければ弾く
 	status = countParentheses(rawdata, "{", "}");
-	if (status == false)
-		return Error<bool>(false);
+	if (status == false) return Error<bool>(false);
 
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
 
 	// for(size_t i = 0; i < firstlayer.size(); i ++)
 	// {
-	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET << std::endl;
-	// 	std::cout << RED "===ONE DIRECTIVE END===" << RESET << std::endl;
+	// 	std::cout << YELLOW "vector " << i << ": " << firstlayer.at(i) << RESET
+	// << std::endl; 	std::cout << RED "===ONE DIRECTIVE END===" << RESET <<
+	// std::endl;
 	// }
 
 	return Ok<std::vector<std::string> >(firstlayer);

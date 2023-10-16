@@ -12,8 +12,7 @@
 
 #include "ConfParser.hpp"
 
-int l_readLocation(Location &loc, std::string oneline)
-{
+int l_readLocation(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -24,10 +23,10 @@ int l_readLocation(Location &loc, std::string oneline)
 		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("There are no settings in some Location directive(ﾉｼ｀･ω･)ﾉｼ");
+		errorInInit(
+			"There are no settings in some Location directive(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (lines.at(1).empty() == false)
-	{
+	if (lines.at(1).empty() == false) {
 		loc.setUri(lines.at(1));
 	}
 

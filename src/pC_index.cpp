@@ -24,7 +24,8 @@ int readIndex(Config &conf, std::string oneline) {
 
 	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (conf.getIndex().empty() == false) errorInInit("Too many index is declare(´-ω-`)");
+	if (conf.getIndex().empty() == false)
+		errorInInit("Too many index is declare(´-ω-`)");
 
 	// std::cout << lines.size() << std::endl;
 	for (size_t i = 1; i < lines.size(); i++) {
@@ -35,8 +36,7 @@ int readIndex(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readIndex(Location &loc, std::string oneline)
-{
+int l_readIndex(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -48,7 +48,8 @@ int l_readIndex(Location &loc, std::string oneline)
 
 	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (loc.getIndex().empty() == false) errorInInit("Too many index is declare(´-ω-`)");
+	if (loc.getIndex().empty() == false)
+		errorInInit("Too many index is declare(´-ω-`)");
 
 	// std::cout << lines.size() << std::endl;
 	for (size_t i = 1; i < lines.size(); i++) {
@@ -58,4 +59,3 @@ int l_readIndex(Location &loc, std::string oneline)
 
 	return (0);
 }
-

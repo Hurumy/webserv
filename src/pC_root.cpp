@@ -15,7 +15,7 @@
 int readRoot(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
 
-	//std::cout << oneline << std::endl;
+	// std::cout << oneline << std::endl;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -35,11 +35,10 @@ int readRoot(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readRoot(Location &loc, std::string oneline)
-{
+int l_readRoot(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
-	//std::cout << oneline << std::endl;
+	// std::cout << oneline << std::endl;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -51,8 +50,7 @@ int l_readRoot(Location &loc, std::string oneline)
 	if (lines.size() != 2)
 		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
-	if (loc.getRootDir().empty() == false)
-		errorInInit("Too many root declare");
+	if (loc.getRootDir().empty() == false) errorInInit("Too many root declare");
 
 	loc.setRootDir(lines.at(1));
 

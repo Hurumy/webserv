@@ -13,8 +13,7 @@
 #include "ConfParser.hpp"
 
 //.cgi, .pyとか
-int readCGIExtension(Config &conf, std::string oneline)
-{
+int readCGIExtension(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -27,18 +26,15 @@ int readCGIExtension(Config &conf, std::string oneline)
 	if (lines.size() < 2)
 		errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
 
-
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
+	for (size_t i = 1; i < lines.size(); i++) {
 		conf.addCgiExtension(lines.at(i));
-		//std::cout << lines.at(i) << std::endl;
+		// std::cout << lines.at(i) << std::endl;
 	}
 
 	return (0);
 }
 
-int l_readCGIExtension(Location &loc, std::string oneline)
-{
+int l_readCGIExtension(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -51,13 +47,10 @@ int l_readCGIExtension(Location &loc, std::string oneline)
 	if (lines.size() < 2)
 		errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
 
-
-	for (size_t i = 1; i < lines.size(); i ++)
-	{
+	for (size_t i = 1; i < lines.size(); i++) {
 		loc.addCgiExtension(lines.at(i));
-		//std::cout << lines.at(i) << std::endl;
+		// std::cout << lines.at(i) << std::endl;
 	}
 
 	return (0);
 }
-

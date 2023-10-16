@@ -32,18 +32,17 @@ static int isServerSetting(std::string raw) {
 // Confファイルの1行1行をみてなんの設定なのか解釈する
 static int checkSettings(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
-	//std::cout << oneline << std::endl;
+	// std::cout << oneline << std::endl;
 	int status = 0;
 
 	lines = lineSpliter(oneline, " ");
-	for (size_t i = 0; i < lines.size(); i++)
-	{
+	for (size_t i = 0; i < lines.size(); i++) {
 		//  std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 		//  std::cout << i << ", " << lines.size() << std::endl;
 
 		if (lines.at(i).empty() == false) {
 			if (lines.at(i) == "server") {
-				break ;
+				break;
 			} else if (lines.at(i) == "listen") {
 				status = readListen(conf, oneline);
 				break;
@@ -101,24 +100,20 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	status = isServerSetting(port);
 	if (status == -1) return Error<bool>(false);
 
-	//std::cout << port << std::endl;
+	// std::cout << port << std::endl;
 
 	//セミコロンごとにきりわける
 	line = cutConfToEachPort(port);
 
 	// for (size_t i = 0; i < line.size(); i ++)
 	// 	std::cout << BLUE << line.at(i) << RESET << std::endl;
-	
 
 	//ここでLocationディレクティブを切り出していき、Locationに詰め、Configのベクターにしまう
 	//後に流すstd::vector<std::string>にはLocationのディレクティブは含まれないようにする
-	Result<std::vector<std::string>, bool>	res = cutOutLocation(line, conf);
-	if (res.isOK() == false)
-	{
+	Result<std::vector<std::string>, bool> res = cutOutLocation(line, conf);
+	if (res.isOK() == false) {
 		errorInInit("parsing Location is failed(´ω`)");
-	}
-	else
-	{
+	} else {
 		line = res.getOk();
 	}
 
@@ -129,13 +124,11 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// }
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
-	for (size_t i = 0; i < line.size(); i ++) {
-		if (line.at(i).empty() == false)
-		{
-			//std::cout << i << ", " << line.size() << std::endl;
+	for (size_t i = 0; i < line.size(); i++) {
+		if (line.at(i).empty() == false) {
+			// std::cout << i << ", " << line.size() << std::endl;
 			status = checkSettings(conf, line.at(i));
-			if (status == -1)
-				return Error<bool>(false);
+			if (status == -1) return Error<bool>(false);
 		}
 	}
 

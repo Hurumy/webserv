@@ -125,8 +125,7 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 	return Ok<int>(0);
 }
 
-Result<int, bool> MethodGet::act()
-{
+Result<int, bool> MethodGet::act() {
 	// Getの条件を確認する
 	checkGetSemantics();
 
@@ -135,13 +134,10 @@ Result<int, bool> MethodGet::act()
 
 	// ファイルの中身を読み込んでBodyに詰める
 	Result<std::string, bool> const res_read = _openFile(uri);
-	if (res_read.isError() == true)
-	{
+	if (res_read.isError() == true) {
 		setErrorPageBody();
 		return Error<bool>(false);
-	}
-	else
-	{
+	} else {
 		res.setStatus(200);
 		res.setStatusMessage("OK");
 		return Ok<int>(0);

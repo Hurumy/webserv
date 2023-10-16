@@ -26,17 +26,16 @@ Result<std::vector<Config>, bool> parseConf(std::string filepath) {
 
 	//各ポートの設定ごとに、一つずつConfファイルを作り、Push_backしていく
 	for (size_t i = 0; i < list.size(); i++) {
-		//std::cout << RED << list.at(i) << RESET << std::endl;
+		// std::cout << RED << list.at(i) << RESET << std::endl;
 		Result<Config, bool> eachconf = parsePortVecs(list.at(i));
-		if (eachconf.isOK() == true)
-		{
+		if (eachconf.isOK() == true) {
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
 		}
 	}
 
 	// return
-	//std::cout << "returned:" << confs.size() << std::endl;
+	// std::cout << "returned:" << confs.size() << std::endl;
 	return Ok<std::vector<Config> >(confs);
 }
 

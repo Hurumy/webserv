@@ -12,10 +12,10 @@
 
 #include "AMethod.hpp"
 
-const std::map<unsigned int, std::string> AMethod::statusmap = AMethod::initStatusMap();
+const std::map<unsigned int, std::string> AMethod::statusmap =
+	AMethod::initStatusMap();
 
-std::map<unsigned int, std::string> AMethod::initStatusMap()
-{
+std::map<unsigned int, std::string> AMethod::initStatusMap() {
 	std::map<unsigned int, std::string> m;
 	m[100] = "Continue";
 	m[101] = "Switching Protocol";
@@ -95,8 +95,7 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	}
 
 	// read
-	while (status > 0)
-	{
+	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
 		if (status != -1) {
 			buf[status] = '\0';
@@ -186,25 +185,22 @@ Result<int, bool> AMethod::checkURI() {
 	return Ok<int>(0);
 }
 
-void AMethod::setURI()
-{
+void AMethod::setURI() {
 	std::string tmp;
 
-	//std::cout << uri << std::endl;
+	// std::cout << uri << std::endl;
 
-	//uriを一つずつ長くしていって、最長一致なLocationを探す
+	// uriを一つずつ長くしていって、最長一致なLocationを探す
 	std::stringstream ss;
-	std::string		  shortpath;
+	std::string shortpath;
 	ss << uri;
 	isloc = false;
 	std::getline(ss, tmp, '/');
-	while (ss.eof() == false)
-	{
+	while (ss.eof() == false) {
 		shortpath += tmp;
 		shortpath += '/';
 		// std::cout << RED << shortpath << RESET << std::endl;
-		if (conf.getLocations(shortpath).isOK() == true)
-		{
+		if (conf.getLocations(shortpath).isOK() == true) {
 			isloc = true;
 			loc = conf.getLocations(shortpath).getOk();
 		}
@@ -217,43 +213,36 @@ void AMethod::setURI()
 		uri = tmp;
 	}
 
-	//cgiかどうかチェック！！
+	// cgiかどうかチェック！！
 	iscgi = false;
 	std::stringstream sb;
-	std::string		  cgipath;
+	std::string cgipath;
 	sb << uri;
-	while (sb.eof() == false)
-	{
+	while (sb.eof() == false) {
 		std::getline(sb, tmp, '/');
 		cgipath += tmp;
-		if (tmp.find('.') != std::string::npos)
-		{
+		if (tmp.find('.') != std::string::npos) {
 			std::vector<std::string> lines;
 			lines = lineSpliter(tmp, ".");
-			if (lines.size() == 2)
-			{
-				//locationの指定を見る
-				if (isloc == true)
-				{
+			if (lines.size() == 2) {
+				// locationの指定を見る
+				if (isloc == true) {
 					Result<int, bool> _res = loc.getCgiExtension(lines.at(1));
-					if (_res.isOK() == true)
-					{
+					if (_res.isOK() == true) {
 						//これはcgiだ！
 						iscgi = true;
 						path_to_cgi = cgipath;
-						break ;
+						break;
 					}
 				}
-				//Configの指定を見る
-				else
-				{
+				// Configの指定を見る
+				else {
 					Result<int, bool> _res = conf.getCgiExtension(lines.at(1));
-					if (_res.isOK() == true)
-					{
+					if (_res.isOK() == true) {
 						//これはcgiだ！
 						iscgi = true;
 						path_to_cgi = cgipath;
-						break ;
+						break;
 					}
 				}
 			}
@@ -265,61 +254,52 @@ void AMethod::setURI()
 	tmp = "." + uri;
 	uri = tmp;
 
-	//std::cout << YELLOW << uri << RESET << std::endl;
+	// std::cout << YELLOW << uri << RESET << std::endl;
 
 	return;
 }
 
-Result<int, bool>	AMethod::checkRedirects()
-{
+Result<int, bool> AMethod::checkRedirects() {
 	//リダイレクトなどを確認する
-		//location指定のリダイレクト
+	// location指定のリダイレクト
 	std::stringstream ss;
-	std::string		  size;
-	
-	if (isloc == true && loc.isReturn() == true)
-	{
+	std::string size;
+
+	if (isloc == true && loc.isReturn() == true) {
 		res.setStatus(loc.getReturnStatus());
 		if (statusmap.find(loc.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(loc.getReturnStatus()));
 		else
 			res.setStatusMessage("Unknown status");
-		if (loc.getReturnBody().empty() == false)
-		{
+		if (loc.getReturnBody().empty() == false) {
 			ss << loc.getReturnBody().size();
 			ss >> size;
 			res.addHeader("Content-Length", size);
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(loc.getReturnBody());
 		}
-		if (loc.getReturnUrl().empty() == false)
-		{
+		if (loc.getReturnUrl().empty() == false) {
 			res.addHeader("Location", loc.getReturnUrl());
 		}
 		return Ok<int>(0);
 	}
-		//config指定のリダイレクト
-	else if (conf.isReturn() == true)
-	{
+	// config指定のリダイレクト
+	else if (conf.isReturn() == true) {
 		res.setStatus(conf.getReturnStatus());
 		if (statusmap.find(conf.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(conf.getReturnStatus()));
 		else
 			res.setStatusMessage("Unknown status");
-		if (conf.getReturnBody().empty() == false)
-		{
+		if (conf.getReturnBody().empty() == false) {
 			ss << conf.getReturnBody().size();
 			ss >> size;
 			res.addHeader("Content-Length", size);
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(conf.getReturnBody());
-		}
-		else
-		{
+		} else {
 			res.addHeader("Content-Length", "0");
 		}
-		if (conf.getReturnUrl().empty() == false)
-		{
+		if (conf.getReturnUrl().empty() == false) {
 			res.addHeader("Location", conf.getReturnUrl());
 		}
 		return Ok<int>(0);
@@ -327,10 +307,8 @@ Result<int, bool>	AMethod::checkRedirects()
 	return Error<bool>(true);
 }
 
-Result<std::string, bool> const		AMethod::isCgi() const
-{
-	if (iscgi == true)
-	{
+Result<std::string, bool> const AMethod::isCgi() const {
+	if (iscgi == true) {
 		return Ok<std::string>(path_to_cgi);
 	}
 	return Error<bool>(false);

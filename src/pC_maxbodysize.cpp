@@ -51,8 +51,7 @@ int readMaxBodySize(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readMaxBodySize(Location &loc, std::string oneline)
-{
+int l_readMaxBodySize(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 	std::stringstream ss;
 	unsigned long long size;

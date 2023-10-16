@@ -19,12 +19,11 @@
 
 #define CONF_FILE_PATH "testconfs/method_post.conf"
 
-static std::string	__openFile(std::string filename)
-{
-	int 				fd;
-	int 				status = 1;
-	std::string 		body;
-	char 				buf[FILE_READ_SIZE + 1];
+static std::string __openFile(std::string filename) {
+	int fd;
+	int status = 1;
+	std::string body;
+	char buf[FILE_READ_SIZE + 1];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);

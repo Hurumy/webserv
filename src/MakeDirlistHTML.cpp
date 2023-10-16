@@ -92,7 +92,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 	html += "</pre><hr></body>\n";
 	html += "</html>\n";
 
-	//std::cout << YELLOW << html << RESET << std::endl;
+	// std::cout << YELLOW << html << RESET << std::endl;
 
 	return Ok<std::string>(html);
 }

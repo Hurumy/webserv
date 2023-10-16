@@ -14,7 +14,7 @@
 
 int readAllowedMethods(Config &conf, std::string oneline) {
 	std::vector<std::string> lines;
-	bool						status;
+	bool status;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -24,28 +24,26 @@ int readAllowedMethods(Config &conf, std::string oneline) {
 		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() > 5)
-		errorInInit("Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
+		errorInInit(
+			"Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
 
 	for (size_t i = 1; i < lines.size(); i++) {
-		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
-		{
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
+			lines.at(i) == "DELETE" || lines.at(i) == "PUT") {
 			status = conf.addReqMethod(lines.at(i), true);
-			if (status == false)
-			{
+			if (status == false) {
 				errorInInit("Too many allowedMethod is declare(´-ω-`)");
 			}
-		}
-		else
+		} else
 			errorInInit("Unsupported method is detected (*´ω｀*)");
 	}
 
 	return (0);
 }
 
-int l_readAllowedMethods(Location &loc, std::string oneline)
-{
+int l_readAllowedMethods(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
-	bool						status;
+	bool status;
 
 	lines = lineSpliter(oneline, " ");
 
@@ -55,21 +53,19 @@ int l_readAllowedMethods(Location &loc, std::string oneline)
 		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() > 5)
-		errorInInit("Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
+		errorInInit(
+			"Too many elements in allowedMethods directives _(´ω`_)⌒)_ ))");
 
 	for (size_t i = 1; i < lines.size(); i++) {
-		if (lines.at(i) == "GET" || lines.at(i) == "POST" || lines.at(i) == "DELETE" || lines.at(i) == "PUT")
-		{
+		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
+			lines.at(i) == "DELETE" || lines.at(i) == "PUT") {
 			status = loc.addReqMethod(lines.at(i), true);
-			if (status == false)
-			{
+			if (status == false) {
 				errorInInit("Too many allowedMethod is declare(´-ω-`)");
 			}
-		}
-		else
+		} else
 			errorInInit("Unsupported method is detected (*´ω｀*)");
 	}
 
 	return (0);
 }
-
