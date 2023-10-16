@@ -12,62 +12,64 @@
 
 #include "MetaVariables.hpp"
 
-void MetaVariables::setMetaVar(MetaVariables::tag const varName, std::string const &value) {
+void MetaVariables::setMetaVar(MetaVariables::tag const varName,
+							   std::string const &value) {
 	switch (varName) {
 		case MetaVariables::AUTH_TYPE:
 			authtype = value;
-			break ;
+			break;
 		case MetaVariables::CONTENT_LENGTH:
 			contentLength = value;
-			break ;
+			break;
 		case MetaVariables::CONTENT_TYPE:
 			contentType = value;
-			break ;
+			break;
 		case MetaVariables::GATEWAY_INTERFACE:
 			gateWayInterface = value;
-			break ;
+			break;
 		case MetaVariables::PATH_INFO:
 			pathInfo = value;
-			break ;
+			break;
 		case MetaVariables::PATH_TRANSLATED:
 			pathTranslated = value;
-			break ;
+			break;
 		case MetaVariables::QUERY_STRING:
 			queryString = value;
-			break ;
+			break;
 		case MetaVariables::REMOTE_ADDR:
 			remoteAddr = value;
-			break ;
+			break;
 		case MetaVariables::REMOTE_HOST:
 			remoteHost = value;
-			break ;
+			break;
 		case MetaVariables::REMOTE_IDENT:
 			remoteIdent = value;
-			break ;
+			break;
 		case MetaVariables::REMOTE_USER:
 			remoteUser = value;
-			break ;
+			break;
 		case MetaVariables::REQUEST_METHOD:
 			requestMethod = value;
-			break ;
+			break;
 		case MetaVariables::SCRIPT_NAME:
 			scriptName = value;
-			break ;
+			break;
 		case MetaVariables::SERVER_NAME:
 			serverName = value;
-			break ;
+			break;
 		case MetaVariables::SERVER_PORT:
 			serverPort = value;
-			break ;
+			break;
 		case MetaVariables::SERVER_PROTOCOL:
 			serverProtocol = value;
-			break ;
+			break;
 		case MetaVariables::SERVER_SOFTWARE:
 			serverSoftware = value;
-			break ;
+			break;
 	}
 }
 
-void MetaVariables::setOptionalMetaVars(std::string const &varName, std::string const &varValue) {
+void MetaVariables::setOptionalMetaVars(std::string const &varName,
+										std::string const &varValue) {
 	optinalMetaVars.insert(std::make_pair(varName, varValue));
 }

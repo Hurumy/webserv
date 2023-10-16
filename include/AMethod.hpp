@@ -22,27 +22,27 @@
 #include "webserv.hpp"
 
 class AMethod {
-   private:
-   protected:
-	AMethod(Config _conf, Request _req, Response &_res);
-	~AMethod();
-	Config conf;
-	Request req;
-	Response &res;
-	std::string uri;
-	bool isloc;
-	Location loc;
-	bool iscgi;
-	std::string path_to_cgi;
-	Result<std::string, bool> const _openFile(std::string filename);
-	static std::map<unsigned int, std::string> const statusmap;
-	static std::map<unsigned int, std::string> initStatusMap();
-	// Result<int, bool>					searchSettingsOfURI();
-   public:
-	virtual Result<int, bool> act() = 0;
-	Result<int, bool> checkRedirects();
-	Result<int, bool> checkURI();
-	void setURI();
-	void setErrorPageBody();
-	Result<std::string, bool> const isCgi() const;
+	private:
+	protected:
+		AMethod(Config _conf, Request _req, Response &_res);
+		~AMethod();
+		Config conf;
+		Request req;
+		Response &res;
+		std::string uri;
+		bool isloc;
+		Location loc;
+		bool iscgi;
+		std::string path_to_cgi;
+		Result<std::string, bool> const _openFile(std::string filename);
+		static std::map<unsigned int, std::string> const statusmap;
+		static std::map<unsigned int, std::string> initStatusMap();
+		// Result<int, bool>					searchSettingsOfURI();
+	public:
+		virtual Result<int, bool> act() = 0;
+		Result<int, bool> checkRedirects();
+		Result<int, bool> checkURI();
+		void setURI();
+		void setErrorPageBody();
+		Result<std::string, bool> const isCgi() const;
 };

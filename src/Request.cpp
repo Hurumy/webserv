@@ -12,12 +12,13 @@
 
 #include "Request.hpp"
 
+#include <unistd.h>
+
 #include <algorithm>
+#include <cstring>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <unistd.h>
-#include <cstring>
 
 #include "Version.hpp"
 
@@ -27,11 +28,10 @@ Request::Request()
 	  isCompleteHeader(false),
 	  phase(Request::REQLINE),
 	  monitoredfd(0),
-	  revents(0) 
-	  {
-		std::memset(inpfd, 0, sizeof(inpfd));
-		std::memset(outpfd, 0, sizeof(outpfd));
-	  }
+	  revents(0) {
+	std::memset(inpfd, 0, sizeof(inpfd));
+	std::memset(outpfd, 0, sizeof(outpfd));
+}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -97,21 +97,21 @@ bool Request::loadPayload(CSocket &csocket) {
 				}
 				break;
 			case Request::BODY: {
-					std::string const csockData = csocket.getData();
-					std::size_t beforeSize = body.size();
-					body.append(csockData, 0, lastContentLength);
-					std::size_t afterSize = body.size();
-					csocket.eraseData(afterSize - beforeSize);
-					lastContentLength -= afterSize - beforeSize;
-					if (lastContentLength != 0) {
-						csocket.setPhase(CSocket::RECV);
-						return true;
-					}
-					phase = Request::REQLINE;
-					csocket.setPhase(CSocket::PASS);
-					// for debugging
-					// std::clog << getLines() << std::endl;
+				std::string const csockData = csocket.getData();
+				std::size_t beforeSize = body.size();
+				body.append(csockData, 0, lastContentLength);
+				std::size_t afterSize = body.size();
+				csocket.eraseData(afterSize - beforeSize);
+				lastContentLength -= afterSize - beforeSize;
+				if (lastContentLength != 0) {
+					csocket.setPhase(CSocket::RECV);
+					return true;
 				}
+				phase = Request::REQLINE;
+				csocket.setPhase(CSocket::PASS);
+				// for debugging
+				// std::clog << getLines() << std::endl;
+			}
 				return true;
 			case Request::CGISTARTUP:
 				return false;
@@ -228,9 +228,7 @@ bool Request::isVersion(std::string const &word) {
 	return result.isOK() == true;
 }
 
-void Request::setPhase(Request::tag _phase) {
-	phase = _phase;
-}
+void Request::setPhase(Request::tag _phase) { phase = _phase; }
 
 const Request::tag &Request::getPhase() const { return phase; }
 
@@ -238,26 +236,22 @@ void Request::setMonitoredfd(Request::tag _phase) {
 	switch (_phase) {
 		case Request::CGIWRITE:
 			monitoredfd = inpfd[1];
-			break ;
+			break;
 		case Request::CGIRECV:
 			monitoredfd = outpfd[0];
-			break ;
-		default :
-			break ;
+			break;
+		default:
+			break;
 	}
 }
 
-int Request::getMonitoredfd() const {
-	return monitoredfd;
-}
+int Request::getMonitoredfd() const { return monitoredfd; }
 
 short Request::getRevents() const { return revents; }
 
 void Request::setRevents(short const _revents) { revents = _revents; }
 
-bool Request::setEnvVars() const {
-	return true;
-}
+bool Request::setEnvVars() const { return true; }
 
 bool Request::execCGIScript() {
 	extern char **environ;
@@ -289,11 +283,11 @@ bool Request::execCGIScript() {
 
 bool Request::writeMessageBody() const {
 	// for develope
-	 if ((revents & POLLOUT) != POLLOUT) {
+	if ((revents & POLLOUT) != POLLOUT) {
 		return false;
-	 }
-	 write(inpfd[1], "Makefile", 8);
-	 return true;
+	}
+	write(inpfd[1], "Makefile", 8);
+	return true;
 }
 
 bool Request::recvCGIOutput() const {

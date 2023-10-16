@@ -15,19 +15,19 @@
 #include "webserv.hpp"
 
 class Address {
-   private:
-	std::string ipaddress;
-	int port;
-	int ipvers;
+	private:
+		std::string ipaddress;
+		int port;
+		int ipvers;
 
-   protected:
-   public:
-	std::string const getIpAddress() const;
-	int getPort() const;
-	int getIpVers() const;
-	bool setIpAddress(std::string address);
-	bool setPort(int _port);
-	bool setIpVers(int _protocol);
-	// Address();
-	// Address(Address const &add);
+	protected:
+	public:
+		std::string const getIpAddress() const;
+		int getPort() const;
+		int getIpVers() const;
+		bool setIpAddress(std::string address);
+		bool setPort(int _port);
+		bool setIpVers(int _protocol);
+		// Address();
+		// Address(Address const &add);
 };

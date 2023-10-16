@@ -18,11 +18,11 @@
 #include "Result.hpp"
 
 class Version {
-   private:
-	static const std::vector<std::string> versions;
+	private:
+		static const std::vector<std::string> versions;
 
-   protected:
-   public:
-	static Result<std::string, bool> getVersion(std::string const &version);
-	static std::vector<std::string> createVersions();
+	protected:
+	public:
+		static Result<std::string, bool> getVersion(std::string const &version);
+		static std::vector<std::string> createVersions();
 };

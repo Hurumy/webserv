@@ -19,17 +19,17 @@
 #include "webserv.hpp"
 
 class Port {
-   private:
-	std::map<int, Config> conf;
-	int hostport;
+	private:
+		std::map<int, Config> conf;
+		int hostport;
 
-   protected:
-   public:
-	Result<Config, bool> getConf(int port) const;
-	int getHostPort() const;
-	size_t getNumofPorts() const;
+	protected:
+	public:
+		Result<Config, bool> getConf(int port) const;
+		int getHostPort() const;
+		size_t getNumofPorts() const;
 
-	// for test
-	bool addConf(int port, Config &_conf);
-	bool setHostPort(int port);
+		// for test
+		bool addConf(int port, Config &_conf);
+		bool setHostPort(int port);
 };

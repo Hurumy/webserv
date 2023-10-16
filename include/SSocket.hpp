@@ -13,30 +13,30 @@
 #pragma once
 
 enum ipvers {
-	IPV4,
-	IPV6,
+		IPV4,
+		IPV6,
 };
 
 class SSocket {
-   private:
-	SSocket();
+	private:
+		SSocket();
 
-	int sockfd;
-	int port;
-	ipvers ipver;
-	int backlog;
-	short revents;
+		int sockfd;
+		int port;
+		ipvers ipver;
+		int backlog;
+		short revents;
 
-   protected:
-   public:
-	SSocket(int _port, ipvers _ipver, int _backlog);
+	protected:
+	public:
+		SSocket(int _port, ipvers _ipver, int _backlog);
 
-	bool init();
-	bool closeSockfd();
-	int getPort() const;
-	int getSockfd() const;
-	ipvers getIpVer() const;
-	int getBacklog() const;
-	short getRevents() const;
-	void setRevents(short const _revents);
+		bool init();
+		bool closeSockfd();
+		int getPort() const;
+		int getSockfd() const;
+		ipvers getIpVer() const;
+		int getBacklog() const;
+		short getRevents() const;
+		void setRevents(short const _revents);
 };

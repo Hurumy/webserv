@@ -13,10 +13,15 @@
 #include "CGIResponseCreator.hpp"
 
 #include <cstring>
+
 #include "puterror.hpp"
 
-CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response) : request(_request), response(_response), phase(CGIResponseCreator::CGISTARTUP), monitoredfd(0), revents(0)
-{
+CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response)
+	: request(_request),
+	  response(_response),
+	  phase(CGIResponseCreator::CGISTARTUP),
+	  monitoredfd(0),
+	  revents(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
 }
@@ -29,9 +34,7 @@ void CGIResponseCreator::setPhase(CGIResponseCreator::tag const &_phase) {
 	phase = _phase;
 }
 
-short CGIResponseCreator::getRevents() const {
-	return revents;
-}
+short CGIResponseCreator::getRevents() const { return revents; }
 
 void CGIResponseCreator::setRevents(short const _revents) {
 	revents = _revents;
@@ -91,30 +94,28 @@ bool CGIResponseCreator::execCGIScript() {
 	return true;
 }
 
-int CGIResponseCreator::getMonitoredfd() const {
-	return monitoredfd;
-}
+int CGIResponseCreator::getMonitoredfd() const { return monitoredfd; }
 
 void CGIResponseCreator::setMonitoredfd(CGIResponseCreator::tag const &_phase) {
 	switch (_phase) {
 		case CGIResponseCreator::CGIWRITE:
 			monitoredfd = inpfd[1];
-			break ;
+			break;
 		case CGIResponseCreator::CGIRECV:
 			monitoredfd = outpfd[0];
-			break ;
-		default :
-			break ;
+			break;
+		default:
+			break;
 	}
 }
 
 bool CGIResponseCreator::writeMessageBody() const {
 	// for develope
-	 if ((revents & POLLOUT) != POLLOUT) {
+	if ((revents & POLLOUT) != POLLOUT) {
 		return false;
-	 }
-	 write(inpfd[1], "Makefile", 8);
-	 return true;
+	}
+	write(inpfd[1], "Makefile", 8);
+	return true;
 }
 
 bool CGIResponseCreator::recvCGIOutput() {

@@ -12,18 +12,13 @@
 
 #pragma once
 
+#include "MetaVariables.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
-#include "MetaVariables.hpp"
 
 class CGIResponseCreator {
 	public:
-		enum tag {
-			CGISTARTUP,
-			CGIWRITE,
-			CGIRECV,
-			CGIRECVFIN
-		};
+		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
 		CGIResponseCreator(Request &_request, Response &_response);
 
 		CGIResponseCreator::tag const &getPhase() const;

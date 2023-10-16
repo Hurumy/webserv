@@ -16,21 +16,21 @@
 #include "webserv.hpp"
 
 class APayload {
-   private:
-   protected:
-	std::string version;
-	std::string body;
-	std::map<std::string, std::string> header;
+	private:
+	protected:
+		std::string version;
+		std::string body;
+		std::map<std::string, std::string> header;
 
-   public:
-	virtual ~APayload();
+	public:
+		virtual ~APayload();
 
-	virtual const std::string getLines() const = 0;
-	bool setVersion(std::string const &_version);
-	std::string const &getVersion() const;
-	bool setBody(std::string const &_body);
-	std::string const &getBody() const;
-	bool addHeader(std::string const &key, std::string const &value);
-	Result<std::string, bool> const getHeader(std::string const &key) const;
-	std::map<std::string, std::string> const &getAllHeader() const;
+		virtual const std::string getLines() const = 0;
+		bool setVersion(std::string const &_version);
+		std::string const &getVersion() const;
+		bool setBody(std::string const &_body);
+		std::string const &getBody() const;
+		bool addHeader(std::string const &key, std::string const &value);
+		Result<std::string, bool> const getHeader(std::string const &key) const;
+		std::map<std::string, std::string> const &getAllHeader() const;
 };
