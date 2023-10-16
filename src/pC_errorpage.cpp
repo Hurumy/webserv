@@ -49,8 +49,7 @@ int readErrorPage(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readErrorPage(Location &loc, std::string oneline)
-{
+int l_readErrorPage(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 	std::stringstream ss;
 	int num;
@@ -86,4 +85,3 @@ int l_readErrorPage(Location &loc, std::string oneline)
 
 	return (0);
 }
-

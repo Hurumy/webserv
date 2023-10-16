@@ -39,8 +39,7 @@ int readAutoindex(Config &conf, std::string oneline) {
 	return (0);
 }
 
-int l_readAutoindex(Location &loc, std::string oneline)
-{
+int l_readAutoindex(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");

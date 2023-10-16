@@ -33,9 +33,7 @@ int readUploadPath(Config &conf, std::string oneline) {
 	return (0);
 }
 
-
-int l_readUploadPath(Location &loc, std::string oneline)
-{
+int l_readUploadPath(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -55,4 +53,3 @@ int l_readUploadPath(Location &loc, std::string oneline)
 
 	return (0);
 }
-

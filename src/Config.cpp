@@ -16,17 +16,12 @@ std::vector<Address> const Config::getAddresses() const {
 	return (this->addresses);
 }
 
-Result<Location, bool>	const Config::getLocations(std::string _path) const
-{
-	if (locations.empty() == true)
-	{
+Result<Location, bool> const Config::getLocations(std::string _path) const {
+	if (locations.empty() == true) {
 		return Error<bool>(false);
-	}
-	else if (locations.find(_path) == locations.end())
-	{
+	} else if (locations.find(_path) == locations.end()) {
 		return Error<bool>(false);
-	}
-	else
+	} else
 		return Ok<Location>(locations.at(_path));
 }
 
@@ -64,10 +59,7 @@ int Config::getReturnStatus() const { return (this->returnstatus); }
 
 std::string Config::getReturnUrl() const { return (this->returnurl); }
 
-std::string Config::getReturnBody() const
-{
-	return (returnbody);
-}
+std::string Config::getReturnBody() const { return (returnbody); }
 
 bool Config::getDirlist() const { return (this->dirlisting); }
 
@@ -86,12 +78,9 @@ Result<std::string, bool> const Config::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-Result<int, bool> const	Config::getCgiExtension(std::string _ext) const
-{
-	for (size_t i = 0; i < cgiextension.size(); i ++)
-	{
-		if (cgiextension.at(i) == _ext)
-		{
+Result<int, bool> const Config::getCgiExtension(std::string _ext) const {
+	for (size_t i = 0; i < cgiextension.size(); i++) {
+		if (cgiextension.at(i) == _ext) {
 			return Ok<int>(0);
 		}
 	}
@@ -108,8 +97,7 @@ bool Config::addServerName(std::string name) {
 	return (true);
 }
 
-bool	Config::addLocations(std::string const key, Location const val)
-{
+bool Config::addLocations(std::string const key, Location const val) {
 	if (locations.find(key) == locations.end()) {
 		this->locations[key] = val;
 		return (true);
@@ -153,8 +141,7 @@ bool Config::setReturnUrl(std::string url) {
 	return (true);
 }
 
-bool Config::setReturnBody(std::string _body)
-{
+bool Config::setReturnBody(std::string _body) {
 	returnbody = _body;
 	return (true);
 }
@@ -183,8 +170,7 @@ bool Config::addReqMethod(std::string key, bool val) {
 	}
 }
 
-bool Config::addCgiExtension(std::string _ext)
-{
+bool Config::addCgiExtension(std::string _ext) {
 	cgiextension.push_back(_ext);
 	return (true);
 }

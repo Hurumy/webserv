@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include "Config.hpp"
+
 #include <gtest/gtest.h>
+
 #include <string>
+
 #include "Address.hpp"
 
-TEST(ConfigTest, addressesTest)
-{
+TEST(ConfigTest, addressesTest) {
 	Config config;
 	Address add;
 	std::vector<Address> res;
@@ -108,19 +110,17 @@ TEST(ConfigTest, returnurlTest) {
 	ASSERT_EQ(config.getReturnUrl(), expected);
 }
 
-TEST(ConfigTest, returnbodyTest)
-{
-	Config	config;
-	std::string	expected("that is a set text");
+TEST(ConfigTest, returnbodyTest) {
+	Config config;
+	std::string expected("that is a set text");
 
 	config.setReturnBody(expected);
 	ASSERT_EQ(config.getReturnBody(), expected);
 }
 
-TEST(ConfigTest, dirlistTest)
-{
-	Config		config;
-	bool	expected(true);
+TEST(ConfigTest, dirlistTest) {
+	Config config;
+	bool expected(true);
 
 	config.setDirlist(expected);
 	ASSERT_EQ(config.getDirlist(), expected);
@@ -153,15 +153,14 @@ TEST(ConfigTest, reqMethodTest) {
 	ASSERT_EQ(res.getOk(), "");
 }
 
-TEST(ConfigTest, cgiExtensionTest)
-{
-	Config		config;
-	std::string	ext_1("py");
+TEST(ConfigTest, cgiExtensionTest) {
+	Config config;
+	std::string ext_1("py");
 	std::string ext_2("cgi");
-	std::string	ext_3("pl");
-	bool		expected(true);
-	bool		expected_2(true);
-	bool		expected_3(false);
+	std::string ext_3("pl");
+	bool expected(true);
+	bool expected_2(true);
+	bool expected_3(false);
 
 	config.addCgiExtension(ext_1);
 	config.addCgiExtension(ext_2);
@@ -169,4 +168,3 @@ TEST(ConfigTest, cgiExtensionTest)
 	ASSERT_EQ(config.getCgiExtension(ext_2).isOK(), expected_2);
 	ASSERT_EQ(config.getCgiExtension(ext_3).isOK(), expected_3);
 }
-

@@ -12,7 +12,7 @@
 
 #include "Location.hpp"
 
-std::string const Location::getUri() const {return (this->uri);}
+std::string const Location::getUri() const { return (this->uri); }
 
 std::string const Location::getRootDir() const { return (this->rootdir); }
 
@@ -44,10 +44,7 @@ int Location::getReturnStatus() const { return (this->returnstatus); }
 
 std::string Location::getReturnUrl() const { return (this->returnurl); }
 
-std::string	Location::getReturnBody() const
-{
-	return (returnbody);
-}
+std::string Location::getReturnBody() const { return (returnbody); }
 
 bool Location::getDirlist() const { return (this->dirlisting); }
 
@@ -66,24 +63,19 @@ Result<std::string, bool> const Location::getReqMethod(std::string key) const {
 		return Ok<std::string>("");
 }
 
-Result<int, bool> const	Location::getCgiExtension(std::string _ext) const
-{
-	for (size_t i = 0; i < cgiextension.size(); i ++)
-	{
-		if (cgiextension.at(i) == _ext)
-		{
+Result<int, bool> const Location::getCgiExtension(std::string _ext) const {
+	for (size_t i = 0; i < cgiextension.size(); i++) {
+		if (cgiextension.at(i) == _ext) {
 			return Ok<int>(0);
 		}
 	}
 	return Error<bool>(false);
 }
 
-bool Location::setUri(std::string _uri)
-{
+bool Location::setUri(std::string _uri) {
 	this->uri = _uri;
 	return (true);
 }
-
 
 bool Location::setRootDir(std::string _root) {
 	rootdir = _root;
@@ -120,8 +112,7 @@ bool Location::setReturnUrl(std::string url) {
 	return (true);
 }
 
-bool Location::setReturnBody(std::string _body)
-{
+bool Location::setReturnBody(std::string _body) {
 	returnbody = _body;
 	return (true);
 }
@@ -146,11 +137,7 @@ bool Location::addReqMethod(std::string key, bool val) {
 	return (true);
 }
 
-bool Location::addCgiExtension(std::string _ext)
-{
+bool Location::addCgiExtension(std::string _ext) {
 	cgiextension.push_back(_ext);
 	return (true);
 }
-
-
-

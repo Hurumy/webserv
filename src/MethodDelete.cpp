@@ -55,8 +55,7 @@ int MethodDelete::openResourceDelete() {
 	}
 }
 
-Result<int, bool> MethodDelete::act()
-{
+Result<int, bool> MethodDelete::act() {
 	int status;
 
 	status = openResourceDelete();

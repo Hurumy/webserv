@@ -20,23 +20,23 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-class RequestHandler
-{
-	private:
-		std::vector<Config> const			&configs;
-		Request								req;
-		Response							res;
-		size_t								confnum;
-		bool								iscgi;
-		std::string							path_to_cgi;
-		Result<std::string, bool>			_openFile(std::string filename);
-	protected:
-	public:
-		RequestHandler(std::vector<Config> const &_conf, Request const _req);
-		Result<int, bool>				searchMatchHost();
-		Result<int, bool>				checkRequiedHeader();
-		Result<int, bool>				routeMethod();
-		void							setErrorPageBody();
-		Response						getResponse();
-		Result<std::string, bool> const	isCgi() const;
+class RequestHandler {
+   private:
+	std::vector<Config> const &configs;
+	Request req;
+	Response res;
+	size_t confnum;
+	bool iscgi;
+	std::string path_to_cgi;
+	Result<std::string, bool> _openFile(std::string filename);
+
+   protected:
+   public:
+	RequestHandler(std::vector<Config> const &_conf, Request const _req);
+	Result<int, bool> searchMatchHost();
+	Result<int, bool> checkRequiedHeader();
+	Result<int, bool> routeMethod();
+	void setErrorPageBody();
+	Response getResponse();
+	Result<std::string, bool> const isCgi() const;
 };

@@ -106,14 +106,13 @@ TEST(ConfigParserTest, pRewriteTest) {
 	ASSERT_EQ(tmp.at(1).getRedirects(key_2).getOk(), expected_2);
 }
 
-TEST(ConfigParserTest, pReturnTest)
-{
-	std::vector<Config>	tmp;
-	bool				expected_1(true);
-	bool				expected_2(true);
-	int					expected_3(440);
-	int					expected_4(301);
-	std::string			expected_5("https://www.google.co.jp/");
+TEST(ConfigParserTest, pReturnTest) {
+	std::vector<Config> tmp;
+	bool expected_1(true);
+	bool expected_2(true);
+	int expected_3(440);
+	int expected_4(301);
+	std::string expected_5("https://www.google.co.jp/");
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
@@ -186,17 +185,16 @@ TEST(ConfigParserTest, pAllowedMethodsTest) {
 	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
 }
 
-TEST(ConfigParserTest, parsingSomeLocationDirectivesTest)
-{
-	std::vector<Config>	tmp;
-	bool			expected_1(true);
-	bool			expected_2(true);
-	bool			expected_3(true);
-	bool			expected_4(false);
-	bool			expected_5(true);
-	bool			expected_6(true);
-	bool			expected_7(false);
-	bool			expected_8(false);	
+TEST(ConfigParserTest, parsingSomeLocationDirectivesTest) {
+	std::vector<Config> tmp;
+	bool expected_1(true);
+	bool expected_2(true);
+	bool expected_3(true);
+	bool expected_4(false);
+	bool expected_5(true);
+	bool expected_6(true);
+	bool expected_7(false);
+	bool expected_8(false);
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH_2);
 	tmp = res.getOk();
@@ -210,15 +208,14 @@ TEST(ConfigParserTest, parsingSomeLocationDirectivesTest)
 	ASSERT_EQ(tmp.at(1).getReqMethod("PUT").isOK(), expected_8);
 }
 
-TEST(ConfigParserTest, pCgiExtensionTest)
-{
-	std::vector<Config>	tmp;
-	std::string			expected_1("py");
-	std::string			expected_2("cgi");
-	std::string			expected_3("pl");
-	bool				ex_1(true);
-	bool				ex_2(true);
-	bool				ex_3(false);
+TEST(ConfigParserTest, pCgiExtensionTest) {
+	std::vector<Config> tmp;
+	std::string expected_1("py");
+	std::string expected_2("cgi");
+	std::string expected_3("pl");
+	bool ex_1(true);
+	bool ex_2(true);
+	bool ex_3(false);
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();

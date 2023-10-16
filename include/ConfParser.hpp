@@ -19,7 +19,8 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-Result<std::vector<std::string>, bool>	cutOutLocation(const std::vector<std::string> &origin, Config &conf);
+Result<std::vector<std::string>, bool> cutOutLocation(
+	const std::vector<std::string> &origin, Config &conf);
 
 int l_readLocation(Location &loc, std::string oneline);
 int l_readRoot(Location &loc, std::string oneline);

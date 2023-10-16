@@ -16,9 +16,9 @@
 #include "Config.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
+#include "RequestHandler.hpp"
 #include "Result.hpp"
 #include "SocketHandler.hpp"
-#include "RequestHandler.hpp"
 
 #define CONF_FILE_PATH "./conf_files/test.conf"
 
@@ -32,8 +32,7 @@ int main(const int argc, const char **argv) {
 	std::vector<Config> configs = result.getOk();
 
 	Result<std::vector<Config>, bool> res = parseConf("./conf_files/test.conf");
-	if (res.isError() == true)
-	{
+	if (res.isError() == true) {
 		std::cout << "parsing Configs failed" << std::endl;
 		return (-1);
 	}

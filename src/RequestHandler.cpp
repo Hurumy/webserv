@@ -26,8 +26,7 @@ RequestHandler::RequestHandler(std::vector<Config> const &_conf,
 
 // configs.at(i) の i を返す
 // まだホストが見つかってもいないので、エラーページをセットすることが不可能。ステータスのみ返す
-Result<int, bool> RequestHandler::searchMatchHost()
-{
+Result<int, bool> RequestHandler::searchMatchHost() {
 	Result<std::string, bool> result_1 = req.getHeader("Host");
 	std::string hostname;
 	std::string without_port;
@@ -67,20 +66,21 @@ Result<int, bool> RequestHandler::searchMatchHost()
 	// Configの中からHostが一致するものを探す
 	for (size_t i = 0; i < configs.size(); i++) {
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
-			if (portflag == false && configs.at(i).getServerName().at(t) == hostname) {
+			if (portflag == false &&
+				configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
-			}
-			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
-			{
+			} else if (portflag == true &&
+					   configs.at(i).getServerName().at(t) == without_port) {
 				//そのサーバーネームに対してポートが合っているか確認する
-				for (size_t j = 0; j < configs.at(i).getAddresses().size(); j++)
-				{
-					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
-					{
+				for (size_t j = 0; j < configs.at(i).getAddresses().size();
+					 j++) {
+					if (configs.at(i).getAddresses().at(j).getPort() ==
+						portnum) {
 						this->confnum = i;
-						res.addHeader("Server", configs.at(i).getServerName().at(t));
+						res.addHeader("Server",
+									  configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
@@ -93,8 +93,7 @@ Result<int, bool> RequestHandler::searchMatchHost()
 	return Error<bool>(false);
 }
 
-Result<int, bool> RequestHandler::checkRequiedHeader()
-{
+Result<int, bool> RequestHandler::checkRequiedHeader() {
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
@@ -112,113 +111,94 @@ Result<int, bool> RequestHandler::checkRequiedHeader()
 }
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
-Result<int, bool> RequestHandler::routeMethod()
-{
+Result<int, bool> RequestHandler::routeMethod() {
 	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 
-		//URIチェック
+		// URIチェック
 		Result<int, bool> res_uri = get.checkURI();
 		if (res_uri.isOK() == false) {
 			setErrorPageBody();
 			return Error<bool>(false);
 		}
 		get.setURI();
-		if (get.isCgi().isOK() == true)
-		{
+		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
-		}
-		else
-		{
+		} else {
 			iscgi = false;
 		}
 
 		//リダイレクトチェック
-		Result<int, bool>	res_rg = get.checkRedirects();
-		if (res_rg.isOK() == true)
-			return Ok<int>(0);
+		Result<int, bool> res_rg = get.checkRedirects();
+		if (res_rg.isOK() == true) return Ok<int>(0);
 
-		//getする
+		// getする
 		Result<int, bool> res_get = get.act();
 		if (res_get.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else if (req.getMethod() == "POST")
-	{
+	} else if (req.getMethod() == "POST") {
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
-		//URIチェック
+		// URIチェック
 		Result<int, bool> res_uri = post.checkURI();
 		if (res_uri.isOK() == false) {
 			setErrorPageBody();
 			return Error<bool>(false);
 		}
 		post.setURI();
-		if (post.isCgi().isOK() == true)
-		{
+		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
-		}
-		else
-		{
+		} else {
 			iscgi = false;
 		}
 
 		//リダイレクトチェック
-		Result<int, bool>	res_rp = post.checkRedirects();
-		if (res_rp.isOK() == true)
-			return Ok<int>(0);
+		Result<int, bool> res_rp = post.checkRedirects();
+		if (res_rp.isOK() == true) return Ok<int>(0);
 
-		//POSTする
+		// POSTする
 		Result<int, bool> res_post = post.act();
 		if (res_post.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
 
-	}
-	else if (req.getMethod() == "DELETE")
-	{
+	} else if (req.getMethod() == "DELETE") {
 		//クラス呼ぶ
 		MethodDelete del(configs.at(confnum), req, res);
 
-		//URIチェック
+		// URIチェック
 		Result<int, bool> res_uri = del.checkURI();
 		if (res_uri.isOK() == false) {
 			setErrorPageBody();
 			return Error<bool>(false);
 		}
 		del.setURI();
-		if (del.isCgi().isOK() == true)
-		{
+		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
-		}
-		else
-		{
+		} else {
 			iscgi = false;
 		}
 
 		//リダイレクトチェック
-		Result<int, bool>	res_rd = del.checkRedirects();
-		if (res_rd.isOK() == true)
-			return Ok<int>(0);
+		Result<int, bool> res_rd = del.checkRedirects();
+		if (res_rd.isOK() == true) return Ok<int>(0);
 
-		//DELETEする
+		// DELETEする
 		Result<int, bool> res_del = del.act();
 		if (res_del.isOK() == false)
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else 
-	{
-		//Methodがこの3つ以外だった場合、Not Allowedを返す
+	} else {
+		// Methodがこの3つ以外だった場合、Not Allowedを返す
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
 		setErrorPageBody();
@@ -310,12 +290,9 @@ void RequestHandler::setErrorPageBody() {
 
 Response RequestHandler::getResponse() { return (this->res); }
 
-Result<std::string, bool> const	RequestHandler::isCgi() const
-{
-	if (iscgi == true)
-	{
+Result<std::string, bool> const RequestHandler::isCgi() const {
+	if (iscgi == true) {
 		return Ok<std::string>(path_to_cgi);
 	}
 	return Error<bool>(false);
 }
-
