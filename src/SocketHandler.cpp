@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:24:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:30:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,9 +303,7 @@ bool SocketHandler::loadRequests() {
 		 csockiter != csockets.end(); ++csockiter) {
 		if ((csockiter->getRevents() & POLLIN) == POLLIN &&
 			csockiter->getPhase() == CSocket::LOAD) {
-			std::map<int, Request>::iterator reqiter =
-				requests.find(csockiter->getSockfd());
-			if (reqiter == requests.end()) {
+			if (requests.find(csockiter->getSockfd()) == requests.end()) {
 				requests[csockiter->getSockfd()] = request;
 				requests[csockiter->getSockfd()].setRemoteAddr(csockiter->getRemoteAddr());
 			}
