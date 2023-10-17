@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 21:18:00 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/14 21:33:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:48:32 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,45 @@ void MetaVariables::setMetaVar(MetaVariables::tag const varName,
 		case MetaVariables::SERVER_SOFTWARE:
 			serverSoftware = value;
 			break;
+	}
+}
+
+std::string const &MetaVariables::getMetaVar(MetaVariables::tag const varName) const {
+	switch (varName) {
+		case MetaVariables::AUTH_TYPE:
+			return authtype;
+		case MetaVariables::CONTENT_LENGTH:
+			return contentLength;
+		case MetaVariables::CONTENT_TYPE:
+			return contentType;
+		case MetaVariables::GATEWAY_INTERFACE:
+			return gateWayInterface;
+		case MetaVariables::PATH_INFO:
+			return pathInfo;
+		case MetaVariables::PATH_TRANSLATED:
+			return pathTranslated;
+		case MetaVariables::QUERY_STRING:
+			return queryString;
+		case MetaVariables::REMOTE_ADDR:
+			return remoteAddr;
+		case MetaVariables::REMOTE_HOST:
+			return remoteHost;
+		case MetaVariables::REMOTE_IDENT:
+			return remoteIdent;
+		case MetaVariables::REMOTE_USER:
+			return remoteUser;
+		case MetaVariables::REQUEST_METHOD:
+			return requestMethod;
+		case MetaVariables::SCRIPT_NAME:
+			return scriptName;
+		case MetaVariables::SERVER_NAME:
+			return serverName;
+		case MetaVariables::SERVER_PORT:
+			return serverPort;
+		case MetaVariables::SERVER_PROTOCOL:
+			return serverProtocol;
+		case MetaVariables::SERVER_SOFTWARE:
+			return serverSoftware;
 	}
 }
 

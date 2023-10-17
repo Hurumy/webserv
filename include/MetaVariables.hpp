@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 20:29:31 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/16 13:47:31 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:46:26 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class MetaVariables {
 
 		void setMetaVar(MetaVariables::tag const varName,
 						std::string const &value);
+		std::string const &getMetaVar(MetaVariables::tag const varName) const;
 		void setOptionalMetaVars(std::string const &varName,
 								 std::string const &varValue);
 
