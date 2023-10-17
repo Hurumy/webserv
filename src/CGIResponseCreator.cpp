@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 15:59:50 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 16:23:23 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,23 @@ bool CGIResponseCreator::_setPathTranslated() {
 	return true;
 }
 
-bool CGIResponseCreator::_setQuerySring() const {
+bool CGIResponseCreator::_setQuerySring() {
 	// Query string
+	std::string filename;
+	std::string postFilename;
+	std::size_t posQueryString;
+	std::size_t posHash;
+
+	filename = cgiPath.substr(cgiPath.rfind("/"));
+	postFilename = request.getUrl().substr(request.getUrl().find(filename) + filename.size());
+	posQueryString = postFilename.find("?");
+	if (posQueryString == std::string::npos) return false;
+	posHash = postFilename.find("#");
+	if (posHash == std::string::npos || posQueryString > posHash) {
+		metaVariables.setMetaVar(MetaVariables::QUERY_STRING, postFilename.substr(posQueryString + 1));
+	} else {
+		metaVariables.setMetaVar(MetaVariables::QUERY_STRING, postFilename.substr(posQueryString + 1, posHash));
+	}
 	return true;
 }
 
