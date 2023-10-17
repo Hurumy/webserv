@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 16:23:23 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:32:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ bool CGIResponseCreator::_setPathTranslated() {
 }
 
 bool CGIResponseCreator::_setQuerySring() {
-	// Query string
 	std::string filename;
 	std::string postFilename;
 	std::size_t posQueryString;
@@ -79,6 +78,11 @@ bool CGIResponseCreator::_setQuerySring() {
 	} else {
 		metaVariables.setMetaVar(MetaVariables::QUERY_STRING, postFilename.substr(posQueryString + 1, posHash));
 	}
+	return true;
+}
+
+bool CGIResponseCreator::_setRemoteAddr() {
+	metaVariables.setMetaVar(MetaVariables::REMOTE_ADDR, request.getRemoteAddr());
 	return true;
 }
 
