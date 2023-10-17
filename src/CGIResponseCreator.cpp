@@ -6,13 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 00:38:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:44:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGIResponseCreator.hpp"
 
 #include <cstring>
+#include <algorithm>
 
 #include "puterror.hpp"
 
@@ -41,10 +42,15 @@ void CGIResponseCreator::setRevents(short const _revents) {
 	revents = _revents;
 }
 
-// リソースへの絶対パス
-// CGI script のファイル名
-bool CGIResponseCreator::_setPathInfo() const {
-	// cgi スクリプトを示す path 以下の path (query string は含まない) をセット
+bool CGIResponseCreator::_setPathInfo() {
+	std::string filename;
+	std::string postFilename;
+	std::size_t posCut;
+
+	filename = cgiPath.substr(cgiPath.rfind("/"));
+	postFilename = request.getUrl().substr(request.getUrl().find(filename) + filename.size());
+	posCut = std::min(postFilename.find("?"), postFilename.find("#"));
+	metaVariables.setMetaVar(MetaVariables::PATH_INFO, postFilename.substr(0, posCut));
 	return true;
 }
 
