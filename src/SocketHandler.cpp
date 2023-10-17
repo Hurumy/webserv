@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:06:23 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:24:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,6 +307,7 @@ bool SocketHandler::loadRequests() {
 				requests.find(csockiter->getSockfd());
 			if (reqiter == requests.end()) {
 				requests[csockiter->getSockfd()] = request;
+				requests[csockiter->getSockfd()].setRemoteAddr(csockiter->getRemoteAddr());
 			}
 			if (requests[csockiter->getSockfd()].loadPayload(*csockiter) ==
 				false) {
