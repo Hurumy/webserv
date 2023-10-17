@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:32:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 22:42:16 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,10 @@ bool CGIResponseCreator::_setQuerySring() {
 
 bool CGIResponseCreator::_setRemoteAddr() {
 	metaVariables.setMetaVar(MetaVariables::REMOTE_ADDR, request.getRemoteAddr());
+	return true;
+}
+
+bool CGIResponseCreator::_setRemoteHost() {
 	return true;
 }
 
