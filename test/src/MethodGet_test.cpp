@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 13:42:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:18:04 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "webserv.hpp"
 
 #define CONF_FILE_PATH "testconfs/method_get.conf"
+#define CONF_FILE_DIRLIST_TEST "testconfs/dirlisting_test.conf"
 
 TEST(MethodGetTest, getHtmlTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
@@ -154,6 +155,44 @@ TEST(MethodGetTest, getActTest_Error_NotFound) {
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
+}
+
+TEST(MethodGetTest, getActTest_getDirlistTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_DIRLIST_TEST);
+	std::vector<Config> tmp = res.getOk();
+	Request 			req;
+	bool 				expected(true);
+	bool 				expected_stat(false);
+	unsigned int 		expected_status(200);
+	std::string 		expected_string("OK");
+	bool 				expected_is_there_content_len(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "kawaii.test");
+	req.setUrl("/www/content/");
+
+	//routing
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+
+	//request style check
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	ASSERT_EQ(result_1.isOK(), expected);
+
+	//acting
+	handler.routeMethod();
+
+	//cgi test
+	Result<std::string, bool> cgi_res = handler.isCgi();
+	ASSERT_EQ(cgi_res.isOK(), expected_stat);
+
+	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
 // TEST (MethodGetTest, getActTest_Error_PermDenied)

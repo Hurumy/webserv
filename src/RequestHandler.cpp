@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:42:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 14:33:32 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,10 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 }
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
-Result<int, bool> RequestHandler::routeMethod() {
-	if (req.getMethod() == "GET") {
+Result<int, bool> RequestHandler::routeMethod()
+{
+	if (req.getMethod() == "GET")
+	{
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 
@@ -123,12 +125,14 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		get.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
 		} else {
 			iscgi = false;
-		}
+		} 
 
 		//リダイレクトチェック
 		Result<int, bool> res_rg = get.checkRedirects();
@@ -140,7 +144,9 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	} else if (req.getMethod() == "POST") {
+	}
+	else if (req.getMethod() == "POST")
+	{
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
@@ -151,6 +157,8 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		post.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
@@ -180,6 +188,8 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		del.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
@@ -252,7 +262,8 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	return Ok<std::string>(body);
 }
 
-void RequestHandler::setErrorPageBody() {
+void RequestHandler::setErrorPageBody()
+{
 	unsigned int prevstatus = res.getStatus();
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
@@ -285,7 +296,7 @@ void RequestHandler::setErrorPageBody() {
 			break;
 		}
 	}
-	return;
+	return ;
 }
 
 Response RequestHandler::getResponse() { return (this->res); }
