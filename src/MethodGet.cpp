@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:53:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 12:36:22 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,28 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 	return Ok<int>(0);
 }
 
-Result<int, bool> MethodGet::act() {
+Result<int, bool> MethodGet::checkIsDirlisting()
+{
+	//URIがディレクトリを指しているか確認する
+	
+
+	//Location,Configでディレクトリリスティングが有効になっているか確認する
+	
+	
+	//有効になっていたらメソッドを呼んでそのまま帰る
+
+
+}
+
+Result<int, bool> MethodGet::act()
+{
+	//ディレクトリリスティングが有効ならこの時点で帰る
+	Result<int, bool> res_dir = checkIsDirlisting();
+	if (res_dir.isOK() == true)
+	{
+		return Ok<int>(0);
+	}
+
 	// Getの条件を確認する
 	checkGetSemantics();
 

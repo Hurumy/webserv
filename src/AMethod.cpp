@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:54:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 12:40:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,13 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		res.setStatus(403);
 		res.setStatusMessage("Forbidden");
 		return Error<bool>(false);
+	} else if (fd == -1)
+	{
+		res.setStatus(500);
+		res.setStatueMessage("Internal Server Error");
+		return Error<bool>(false);
 	}
-
+	
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
