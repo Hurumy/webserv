@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 00:40:58 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 16:35:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ bool SocketHandler::recieveCSockets() {
 				// error handling?
 				return false;
 			}
-			fcntl(sockfd, O_NONBLOCK);
+			fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
 			csockets.push_back(CSocket(sockfd));
 		}
 	}
