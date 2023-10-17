@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 22:42:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 23:47:55 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,26 @@ bool CGIResponseCreator::_setRemoteAddr() {
 	return true;
 }
 
-bool CGIResponseCreator::_setRemoteHost() {
+bool CGIResponseCreator::_setRemoteMethod() {
+	metaVariables.setMetaVar(MetaVariables::REMOTE_METHOD, request.getMethod());
 	return true;
 }
 
+bool CGIResponseCreator::_setServerProtocol() {
+	metaVariables.setMetaVar(MetaVariables::SERVER_PROTOCOL, WS_HTTP_VERSION);
+	return true;
+}
+
+// server hostname 取れるように
+// server port 取れるように
 bool CGIResponseCreator::setEnvVars() {
 	// For develope
 	request.getPhase();
 	_setPathInfo();
 	_setPathTranslated();
 	_setQuerySring();
+	_setRemoteAddr();
+	_setRemoteMethod();
 	return true;
 }
 

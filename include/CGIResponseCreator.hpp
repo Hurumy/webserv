@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 22:42:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 23:47:50 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "MetaVariables.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+
+#define WS_HTTP_VERSION "HTTP/1.1"
 
 class CGIResponseCreator {
 	public:
@@ -40,7 +42,8 @@ class CGIResponseCreator {
 		bool _setPathTranslated();
 		bool _setQuerySring();
 		bool _setRemoteAddr();
-		bool _setRemoteHost();
+		bool _setRemoteMethod();
+		bool _setServerProtocol();
 
 		Request &request;
 		Response &response;
