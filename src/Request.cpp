@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 19:59:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:40:40 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ bool Request::setUrl(std::string _url) {
 	return (true);
 }
 
-std::string const Request::getUrl(void) const { return (this->url); }
+std::string const &Request::getUrl() const { return (this->url); }
 
 bool Request::setMethod(std::string _method) {
 	this->method = _method;
 	return (true);
 }
 
-std::string const Request::getMethod(void) const { return (this->method); }
+std::string const &Request::getMethod() const { return (this->method); }
 
 bool Request::loadPayload(CSocket &csocket) {
 	bool isTrueLoadHeader;
