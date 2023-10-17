@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:18:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:26:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,4 @@ void CSocket::setRemoteAddr(unsigned long s_addr) {
 	}
 }
 
-std::string const &getRemoteAddr() const { return remoteAddr; }
+std::string const &CSocket::getRemoteAddr() const { return remoteAddr; }
