@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:40:02 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:23:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ class Request : public virtual APayload {
 		bool execCGIScript();
 		bool writeMessageBody() const;
 		bool recvCGIOutput() const;
+		void setRemoteAddr(std::string const &_remoteAddr);
+		std::string const &getRemoteAddr() const;
 
 	protected:
 	private:
@@ -61,6 +63,7 @@ class Request : public virtual APayload {
 		int outpfd[2];
 		int monitoredfd;
 		short revents;
+		std::string remoteAddr;
 
 		static std::vector<std::string> initMethods();
 		bool loadRequestLine(CSocket &csocket);

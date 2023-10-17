@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:40:40 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:24:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,4 +306,12 @@ bool Request::recvCGIOutput() const {
 	buf[BUFFER_SIZE] = '\0';
 	std::clog << "buf: " << buf << std::endl;
 	return true;
+}
+
+void Request::setRemoteAddr(std::string const &_remoteAddr) {
+	remoteAddr = _remoteAddr;
+}
+
+std::string const &Request::getRemoteAddr() const {
+	return remoteAddr;
 }
