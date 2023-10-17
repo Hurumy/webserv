@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:19:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:30:30 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,13 +130,13 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	int 		status;
 	struct stat t_stat;
 
-	std::cout << "uri: " << uri << std::endl;
+	//std::cout << "uri: " << uri << std::endl;
 
 	//URIがディレクトリを指しているか確認する
 	status = stat(uri.c_str(), &t_stat);
 	if (status == -1)
 	{
-		std::cout << "stat failed" << errno << std::endl;
+		//std::cout << "stat failed" << errno << std::endl;
 		if (errno == ENAMETOOLONG)
 		{
 			res.setStatus(414);
@@ -225,8 +225,6 @@ Result<int, bool> MethodGet::act()
 	{
 		return Ok<int>(0);
 	}
-
-	std::cout << "its not directory" << std::endl;
 
 	// Getの条件を確認する
 	checkGetSemantics();

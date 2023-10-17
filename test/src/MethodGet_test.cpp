@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:18:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:32:04 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ TEST(MethodGetTest, getActTest_getDirlistTest)
 	Result<std::string, bool> cgi_res = handler.isCgi();
 	ASSERT_EQ(cgi_res.isOK(), expected_stat);
 
-	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+	//std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
