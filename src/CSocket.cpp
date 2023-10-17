@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/05 14:04:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:18:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ CSocket::CSocket(int const _sockfd)
 	  revents(0),
 	  phase(CSocket::RECV),
 	  lasttime(std::time(NULL)) {}
+
+CSocket::CSocket(int const _sockfd, unsigned long s_addr)
+	: sockfd(_sockfd),
+	  revents(0),
+	  phase(CSocket::RECV),
+	  lasttime(std::time(NULL))
+	  { setRemoteAddr(s_addr); }
 
 int CSocket::getSockfd() const { return sockfd; }
 
@@ -106,3 +113,24 @@ std::time_t const &CSocket::getLasttime() const { return lasttime; }
 void CSocket::setLasttime(std::time_t const &_lasttime) {
 	lasttime = _lasttime;
 }
+
+void CSocket::setRemoteAddr(unsigned long s_addr) {
+	int byte;
+	int bitshift(32);
+	std::stringstream ss;
+
+	while (bitshift != 0) {
+		bitshift = bitshift - 8;
+		byte = (s_addr >> bitshift) & 0xFF;
+		ss << byte;
+		if (bitshift == 0) {
+			remoteAddr.append(ss.str());
+		} else {
+			remoteAddr.append(ss.str() + ".");
+		}
+		ss.str("");
+		ss.clear(std::stringstream::goodbit);
+	}
+}
+
+std::string const &getRemoteAddr() const { return remoteAddr; }

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/10 21:56:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 20:17:32 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class CSocket {
 	protected:
 	public:
 		CSocket(int const _sockfd);
+		CSocket(int const _sockfd, unsigned long s_addr);
 		enum tag {
 				RECV,
 				LOAD,
@@ -47,6 +48,8 @@ class CSocket {
 		bool eraseData(std::size_t until);
 		std::time_t const &getLasttime() const;
 		void setLasttime(std::time_t const &_lasttime);
+		void setRemoteAddr(unsigned long s_addr);
+		std::string const &getRemoteAddr() const;
 
 	private:
 		CSocket();
@@ -56,4 +59,5 @@ class CSocket {
 		std::string data;
 		tag phase;
 		std::time_t lasttime;
+		std::string remoteAddr;
 };
