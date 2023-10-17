@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 01:15:32 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:59:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class CGIResponseCreator {
 	protected:
 	private:
 		bool _setPathInfo();
-		bool _setPathTranslated() const;
+		bool _setPathTranslated();
 		bool _setQuerySring() const;
 
 		Request &request;
