@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 20:29:31 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 15:46:26 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:07:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,11 @@
 #include <map>
 #include <string>
 
+#define DEFAULT_METAVARS_SIZE 17L
+
 class MetaVariables {
 	public:
+		MetaVariables();
 		enum tag {
 				AUTH_TYPE,
 				CONTENT_LENGTH,
@@ -39,28 +42,16 @@ class MetaVariables {
 
 		void setMetaVar(MetaVariables::tag const varName,
 						std::string const &value);
-		std::string const &getMetaVar(MetaVariables::tag const varName) const;
+		std::string const &getMetaVar(MetaVariables::tag const varName);
 		void setOptionalMetaVars(std::string const &varName,
 								 std::string const &varValue);
+		std::size_t getSizeMetaVars() const;
+		std::map<MetaVariables::tag, std::string> const &getMetaVariables() const;
+		std::map<std::string, std::string> const &getOptionalMetaVariables() const;
 
 	protected:
 	private:
-		std::string authtype;
-		std::string contentLength;
-		std::string contentType;
-		std::string gateWayInterface;
-		std::string pathInfo;
-		std::string pathTranslated;
-		std::string queryString;
-		std::string remoteAddr;
-		std::string remoteHost;
-		std::string remoteIdent;
-		std::string remoteUser;
-		std::string requestMethod;
-		std::string scriptName;
-		std::string serverName;
-		std::string serverPort;
-		std::string serverProtocol;
-		std::string serverSoftware;
-		std::map<std::string, std::string> optinalMetaVars;
+		static std::map<MetaVariables::tag, std::string> initMetaVariables();
+		std::map<MetaVariables::tag, std::string> metaVariablesMap;
+		std::map<std::string, std::string> optinalMetaVarsMap;
 };
