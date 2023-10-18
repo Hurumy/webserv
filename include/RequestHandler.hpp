@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 10:46:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 14:22:45 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-class RequestHandler {
+class RequestHandler
+{
    private:
 	std::vector<Config> const &configs;
 	Request req;
@@ -42,5 +43,5 @@ class RequestHandler {
 	Response getResponse();
 	Result<std::string, bool> const isCgi() const;
 	std::string const	getHostname() const;
-	int const			getPortNumber() const;
+	int					getPortNumber() const;
 };

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 10:47:41 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 11:33:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,7 +317,7 @@ std::string const	RequestHandler::getHostname() const
 	return (this->servername);
 }
 
-int const			RequestHandler::getPortNumber() const
+int					RequestHandler::getPortNumber() const
 {
 	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
 }

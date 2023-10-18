@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 13:52:39 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 17:45:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,8 @@ Result<Config, bool> parsePortVecs(std::string port) {
 			if (status == -1) return Error<bool>(false);
 		}
 	}
+
+	//重複チェック、設定がない場合のチェック
 
 	//返す
 	return Ok<Config>(conf);

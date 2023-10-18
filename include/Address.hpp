@@ -6,28 +6,33 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:10:30 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:46:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 14:46:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "webserv.hpp"
+#include "SSocket.hpp"
 
-class Address {
+class Address
+{
    private:
 	std::string ipaddress;
-	int port;
-	int ipvers;
+	int 		port;
+ 	ipvers 		ipver;
+	bool		isaddress;
 
    protected:
    public:
 	std::string const getIpAddress() const;
 	int getPort() const;
 	int getIpVers() const;
+	bool getIsAddress() const;
 	bool setIpAddress(std::string address);
 	bool setPort(int _port);
 	bool setIpVers(int _protocol);
-	// Address();
+	Address();
+	// ~Address();
 	// Address(Address const &add);
 };

@@ -6,11 +6,12 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 10:12:05 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:34:01 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 14:44:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
+#include "SSocket.hpp"
 
 #include <gtest/gtest.h>
 
@@ -18,13 +19,14 @@
 
 #include "Address.hpp"
 
-TEST(ConfigTest, addressesTest) {
-	Config config;
-	Address add;
-	std::vector<Address> res;
-	std::string expected("111.108.92.125");
-	int expected_port(8080);
-	int expected_ver(0);
+TEST(ConfigTest, addressesTest)
+{
+	Config 					config;
+	Address 				add;
+	std::vector<Address> 	res;
+	std::string		 		expected("111.108.92.125");
+	int 					expected_port(8080);
+	int 					expected_ver(IPV4);
 
 	add.setIpAddress(expected);
 	add.setPort(expected_port);
