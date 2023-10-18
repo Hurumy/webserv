@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:57:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:58:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,9 @@ bool CGIResponseCreator::_setServerProtocol() {
 
 // server hostname 取れるように
 // server port 取れるように
-// CONTENT_TYPE, SERVER_NAME, SERVER_PORT
-bool CGIResponseCreator::setEnvVars() {
+// SERVER_NAME, SERVER_PORT
+bool CGIResponseCreator::_setEnvVars() {
 	// For develope
-	request.getPhase();
 	_setAuthType();
 	_setContentLength();
 	_setContentType();

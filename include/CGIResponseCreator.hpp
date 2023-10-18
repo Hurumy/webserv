@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:53:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 16:00:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ class CGIResponseCreator {
 		void setPhase(CGIResponseCreator::tag const &_phase);
 		short getRevents() const;
 		void setRevents(short const _revents);
-		bool setEnvVars();
 		bool execCGIScript();
 		int getMonitoredfd() const;
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
@@ -39,6 +38,7 @@ class CGIResponseCreator {
 
 	protected:
 	private:
+		bool _setEnvVars();
 		bool _setAuthType();
 		bool _setContentLength();
 		bool _setContentType();
