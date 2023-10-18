@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:51:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:56:39 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,16 @@ bool CGIResponseCreator::_setContentLength() {
 
 	ss << request.getBody().size();
 	metaVariables.setMetaVar(MetaVariables::CONTENT_LENGTH, ss.str());
+	return true;
+}
+
+bool CGIResponseCreator::_setContentType() {
+	Result<std::string, bool> result(request.getHeader("Content-Type"));
+
+	if (result.isError() == true) {
+		return false;
+	}
+	metaVariables.setMetaVar(MetaVariables::CONTENT_TYPE, result.getOk());
 	return true;
 }
 
@@ -125,7 +135,7 @@ bool CGIResponseCreator::_setServerProtocol() {
 
 // server hostname 取れるように
 // server port 取れるように
-// AUTH_TYPE, CONTENT_LENGTH, CONTENT_TYPE, SERVER_NAME, SERVER_PORT
+// CONTENT_TYPE, SERVER_NAME, SERVER_PORT
 bool CGIResponseCreator::setEnvVars() {
 	// For develope
 	request.getPhase();
