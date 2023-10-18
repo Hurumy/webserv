@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 14:29:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 17:58:27 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int readIndex(Config &conf, std::string oneline);
 int readUploadPath(Config &conf, std::string oneline);
 int readAllowedMethods(Config &conf, std::string oneline);
 int readCGIExtension(Config &conf, std::string oneline);
+
+int	thereisnoListen(Config &conf);
 
 bool isNumber(std::string str);
 bool isSpace(std::string str);

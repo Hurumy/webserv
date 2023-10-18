@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 17:45:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:08:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static int isServerSetting(std::string raw) {
 }
 
 // Confファイルの1行1行をみてなんの設定なのか解釈する
-static int checkSettings(Config &conf, std::string oneline) {
+static int checkSettings(Config &conf, std::string oneline)
+{
 	std::vector<std::string> lines;
 	// std::cout << oneline << std::endl;
 	int status = 0;
@@ -88,6 +89,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 			if (status == -1) break;
 		}
 	}
+
 	return 0;
 }
 
@@ -123,16 +125,25 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// 	std::cout << i << ", " << line.size() << std::endl;
 	// }
 
+
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {
-		if (line.at(i).empty() == false) {
+		if (line.at(i).empty() == false)
+		{
 			// std::cout << i << ", " << line.size() << std::endl;
 			status = checkSettings(conf, line.at(i));
-			if (status == -1) return Error<bool>(false);
+			if (status == -1)
+				return Error<bool>(false);
 		}
 	}
 
-	//重複チェック、設定がない場合のチェック
+	//重複・初期化処理ない時の処理
+	if (conf.getAddresses().size() == 0)
+	{
+		thereisnoListen(conf);
+	}
+
+
 
 	//返す
 	return Ok<Config>(conf);

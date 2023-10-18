@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 17:52:46 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:03:20 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,16 +176,16 @@ int readListen(Config &conf, std::string oneline)
 	if (status != 1)
 		status = rL_searchipv4(add, content);
 
-	//default_serverの設定があった場合
-	if (lines.size() == 3)
-	{
-		if (lines.at(3) == "default_server")
-		{
+	// //default_serverの設定があった場合
+	// if (lines.size() == 3)
+	// {
+	// 	if (lines.at(3) == "default_server")
+	// 	{
 
-		}
-		else
-			errorInInit("Unknown directive found....°(ಗдಗ。)°.");
-	}
+	// 	}
+	// 	else
+	// 		errorInInit("Unknown directive found....°(ಗдಗ。)°.");
+	// }
 
 
 	//**listenがない場合**
@@ -197,11 +197,14 @@ int readListen(Config &conf, std::string oneline)
 	return (0);
 }
 
-// int	thereisnoListen(Config &conf)
-// {
-// 	Address add;
+int	thereisnoListen(Config &conf)
+{
+	Address add;
 
-// 	add.set
-// }
+	add.setPort(80);
+	add.setIpVers(IPV4);
+	conf.addAddresses(add);
+	return (0);
+}
 
 
