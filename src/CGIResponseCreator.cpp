@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:46:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:51:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,14 @@ bool CGIResponseCreator::_setAuthType() {
 	std::istringstream iss(result.getOk());
 	iss >> authScheme;
 	metaVariables.setMetaVar(MetaVariables::AUTH_TYPE, authScheme);
+	return true;
+}
+
+bool CGIResponseCreator::_setContentLength() {
+	std::stringstream ss;
+
+	ss << request.getBody().size();
+	metaVariables.setMetaVar(MetaVariables::CONTENT_LENGTH, ss.str());
 	return true;
 }
 

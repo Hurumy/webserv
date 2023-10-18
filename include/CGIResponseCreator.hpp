@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:27:07 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:47:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ class CGIResponseCreator {
 	protected:
 	private:
 		bool _setAuthType();
+		bool _setContentLength();
 		bool _setGateWayInterface();
 		bool _setPathInfo();
 		bool _setPathTranslated();
