@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 23:50:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:46:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <cstring>
 #include <algorithm>
 
+#include "Result.hpp"
 #include "puterror.hpp"
 
 CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath)
@@ -40,6 +41,24 @@ short CGIResponseCreator::getRevents() const { return revents; }
 
 void CGIResponseCreator::setRevents(short const _revents) {
 	revents = _revents;
+}
+
+bool CGIResponseCreator::_setAuthType() {
+	Result<std::string, bool> result(request.getHeader("Authorization"));
+	std::string authScheme;
+
+	if (result.isError() == true) {
+		return false;
+	}
+	std::istringstream iss(result.getOk());
+	iss >> authScheme;
+	metaVariables.setMetaVar(MetaVariables::AUTH_TYPE, authScheme);
+	return true;
+}
+
+bool CGIResponseCreator::_setGateWayInterface() {
+	metaVariables.setMetaVar(MetaVariables::GATEWAY_INTERFACE, WS_CGI_VERSION);
+	return true;
 }
 
 bool CGIResponseCreator::_setPathInfo() {
@@ -98,9 +117,12 @@ bool CGIResponseCreator::_setServerProtocol() {
 
 // server hostname 取れるように
 // server port 取れるように
+// AUTH_TYPE, CONTENT_LENGTH, CONTENT_TYPE, SERVER_NAME, SERVER_PORT
 bool CGIResponseCreator::setEnvVars() {
 	// For develope
 	request.getPhase();
+	_setAuthType();
+	_setGateWayInterface();
 	_setPathInfo();
 	_setPathTranslated();
 	_setQuerySring();

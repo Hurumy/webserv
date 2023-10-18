@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 23:49:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 15:27:07 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Request.hpp"
 #include "Response.hpp"
 
+#define WS_CGI_VERSION "CGI/1.1"
 #define WS_HTTP_VERSION "HTTP/1.1"
 
 class CGIResponseCreator {
@@ -38,6 +39,8 @@ class CGIResponseCreator {
 
 	protected:
 	private:
+		bool _setAuthType();
+		bool _setGateWayInterface();
 		bool _setPathInfo();
 		bool _setPathTranslated();
 		bool _setQuerySring();
