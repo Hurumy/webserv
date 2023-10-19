@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 18:59:47 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 21:03:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,7 +324,7 @@ bool SocketHandler::loadRequests() {
 				res.setStatusMessage("OK");
 				res.addHeader("Content-Type", "text/plain");
 				responses[csockiter->getSockfd()] = res;
-				CGIResponseCreator cgiResponseCreator(requests[csockiter->getSockfd()], responses[csockiter->getSockfd()], "test");
+				CGIResponseCreator cgiResponseCreator(requests[csockiter->getSockfd()], responses[csockiter->getSockfd()], "/test/test.cgi");
 				cgiResponseCreator.setHostName("webserv");
 				cgiResponseCreator.setPortNum(8000);
 				cgiResponseCreators.insert(std::make_pair(csockiter->getSockfd(), cgiResponseCreator));
@@ -408,8 +408,6 @@ bool SocketHandler::handleCGIRequest() {
 		 iter != cgiResponseCreators.end();) {
 		// Request &req = requests[iter->getSockfd()];
 		if (iter->second.getPhase() == CGIResponseCreator::CGISTARTUP) {
-			// Set environment variables
-			iter->second.setEnvVars();
 			// pipe(), fork(), execve()
 			iter->second.execCGIScript();
 			// iter->second.setPhase(Request::CGIWRITE)

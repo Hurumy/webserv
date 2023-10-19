@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/16 20:10:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 21:02:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main(const int argc, const char **argv) {
 
 	sources.push_back(SSocket(8080, IPV4, 1000));
 	sources.push_back(SSocket(8000, IPV4, 1000));
-	SocketHandler socketHandler(sources, 10, 30);
+	SocketHandler socketHandler(sources, 60, 30);
 	socketHandler.initAllSSockets();
 	socketHandler.createPollfds();
 	socketHandler.setRevents();

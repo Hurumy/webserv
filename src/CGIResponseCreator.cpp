@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 19:00:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 20:47:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ char **CGIResponseCreator::_createEnvp() {
 		std::strncpy(*envp, iter->data(), iter->size());
 		envp++;
 	}
+	*envp = NULL;
 	return head;
 }
 
