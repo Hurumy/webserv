@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 17:57:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:26:25 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,7 @@ TEST(MethodGetTest, getActTest_getIndexTest)
 	Result<std::string, bool> cgi_res = handler.isCgi();
 	ASSERT_EQ(cgi_res.isOK(), expected_stat);
 
-	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+	// std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
 	// std::cout << handler.getHostname() << std::endl;
 	// std::cout << handler.getPortNumber() << std::endl;
 
@@ -250,9 +250,10 @@ TEST(MethodGetTest, getActTest_getIndexTest_FromLocation)
 	bool 				expected_stat(false);
 	unsigned int 		expected_status(200);
 	std::string 		expected_string("OK");
+	std::string 		expected_body("What the fuck....");
 	bool 				expected_is_there_content_len(true);
 	std::string			expected_hostname("wtf.net");
-	int					expected_portnum(8080);
+	int					expected_portnum(80);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -274,12 +275,13 @@ TEST(MethodGetTest, getActTest_getIndexTest_FromLocation)
 	Result<std::string, bool> cgi_res = handler.isCgi();
 	ASSERT_EQ(cgi_res.isOK(), expected_stat);
 
-	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+	// std::cout << "response body: " << handler.getResponse().getBody() << std::endl;
 	// std::cout << handler.getHostname() << std::endl;
 	// std::cout << handler.getPortNumber() << std::endl;
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getHostname(), expected_hostname);
 	ASSERT_EQ(handler.getPortNumber(), expected_portnum);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);

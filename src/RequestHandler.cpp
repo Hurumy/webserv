@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 16:43:16 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:14:28 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,7 +279,8 @@ void RequestHandler::setErrorPageBody()
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false) {
+	if (res_1.isOK() == false)
+	{
 		res.addHeader("Content-Length", "0");
 		return;
 	}
