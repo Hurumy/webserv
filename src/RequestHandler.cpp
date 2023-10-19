@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 11:33:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:43:16 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,12 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	{
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++)
 		{
+			//Configの時
 			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
 			{
 				this->confnum = i;
+				this->addressnum = 0; //IPとかの設定がないのでとりあえず0番を指定したことにしておく・・・
+				this->servername = configs.at(i).getServerName().at(t);
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
 			}
@@ -91,10 +94,14 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 			}
 		}
 	}
-	res.setStatus(400);
-	res.setStatusMessage("Bad Request");
-	res.addHeader("Content-Length", "0");
-	return Error<bool>(false);
+
+	// どれとも一致しなかった場合は、Configの一番最初にあるサーバに振り分ける
+	this->confnum = 0;
+	this->addressnum = 0;
+	this->servername = configs.at(confnum).getServerName().at(0);
+	res.addHeader("Server", servername);
+	return Ok<int>(confnum);
+
 }
 
 Result<int, bool> RequestHandler::checkRequiedHeader() {
@@ -306,7 +313,8 @@ void RequestHandler::setErrorPageBody()
 Response RequestHandler::getResponse() { return (this->res); }
 
 Result<std::string, bool> const RequestHandler::isCgi() const {
-	if (iscgi == true) {
+	if (iscgi == true)
+	{
 		return Ok<std::string>(path_to_cgi);
 	}
 	return Error<bool>(false);
