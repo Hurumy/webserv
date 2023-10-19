@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 18:20:13 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:33:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ bool CGIResponseCreator::setEnvVars() {
 	_setQuerySring();
 	_setRemoteAddr();
 	_setRequestMethod();
+	_setServerProtocol();
 	return true;
 }
 
@@ -154,6 +155,7 @@ char **CGIResponseCreator::_createEnvp() {
 	extern char **environ;
 	char **envp;
 	char **head;
+
 	std::vector<std::vector<char> > vstrings;
 	for (std::size_t i_environ = 0; environ[i_environ] != NULL; ++i_environ) {
 		std::vector<char> vcharacters(environ[i_environ], environ[i_environ] + std::strlen(environ[i_environ]));
