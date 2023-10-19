@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 15:58:44 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:20:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ bool CGIResponseCreator::_setServerProtocol() {
 // server hostname 取れるように
 // server port 取れるように
 // SERVER_NAME, SERVER_PORT
-bool CGIResponseCreator::_setEnvVars() {
+bool CGIResponseCreator::setEnvVars() {
 	// For develope
 	_setAuthType();
 	_setContentLength();
@@ -150,8 +150,68 @@ bool CGIResponseCreator::_setEnvVars() {
 	return true;
 }
 
-bool CGIResponseCreator::execCGIScript() {
+char **CGIResponseCreator::_createEnvp() {
 	extern char **environ;
+	char **envp;
+	char **head;
+	std::vector<std::vector<char> > vstrings;
+	for (std::size_t i_environ = 0; environ[i_environ] != NULL; ++i_environ) {
+		std::vector<char> vcharacters(environ[i_environ], environ[i_environ] + std::strlen(environ[i_environ]));
+		vcharacters.push_back('\0');
+		vstrings.push_back(vcharacters);
+	}
+	std::map<std::string, std::string> const &metaVariablesMap = metaVariables.getMetaVariables();
+	for (std::map<std::string, std::string>::const_iterator iter = metaVariablesMap.begin(); iter != metaVariablesMap.end(); ++iter) {
+		std::string metaVar(iter->first + iter->second);
+		std::vector<char> vcharacters(metaVar.c_str(), metaVar.c_str() + metaVar.size());
+		vcharacters.push_back('\0');
+		vstrings.push_back(vcharacters);
+	}
+	std::map<std::string, std::string> const &optionalMetaVariablesMap = metaVariables.getOptionalMetaVariables();
+	for (std::map<std::string, std::string>::const_iterator iter = optionalMetaVariablesMap.begin(); iter != optionalMetaVariablesMap.end(); ++iter) {
+		std::string metaVar(iter->first + iter->second);
+		std::vector<char> vcharacters(metaVar.c_str(), metaVar.c_str() + metaVar.size());
+		vcharacters.push_back('\0');
+		vstrings.push_back(vcharacters);
+	}
+	envp = new(std::nothrow) char*[vstrings.size() + 1];
+	if (envp == NULL) {
+		return NULL;
+	}
+	head = envp;
+	for (std::vector<std::vector<char> >::iterator iter = vstrings.begin(); iter != vstrings.end(); ++iter) {
+		*envp = new(std::nothrow) char[iter->size()];
+		if (*envp == NULL) {
+			char **iteratedEnvp = head;
+			char **deletedEnvp = iteratedEnvp;
+			while (*iteratedEnvp != *envp) {
+				deletedEnvp = iteratedEnvp;
+				iteratedEnvp++;
+				delete []*deletedEnvp;
+			}
+			delete []head;
+			return NULL;
+		}
+		std::strncpy(*envp, iter->data(), iter->size());
+		envp++;
+	}
+	*envp = NULL;
+	if (*envp == NULL) {
+		char **iteratedEnvp = head;
+		char **deletedEnvp = iteratedEnvp;
+		while (*iteratedEnvp != *envp) {
+			deletedEnvp = iteratedEnvp;
+			iteratedEnvp++;
+			delete []*deletedEnvp;
+		}
+		delete []head;
+		return NULL;
+	}
+	return head;
+}
+
+bool CGIResponseCreator::execCGIScript() {
+	char **envp;
 
 	if (pipe(inpfd) == -1) {
 		// error handling
@@ -172,7 +232,10 @@ bool CGIResponseCreator::execCGIScript() {
 		close(inpfd[1]);
 		close(outpfd[0]);
 		close(outpfd[1]);
-		execve("/bin/ls", argv, environ);
+		setEnvVars();
+		envp = _createEnvp();
+		execve("/bin/ls", argv, envp);
+		// delete envp
 		std::exit(EXIT_FAILURE);
 	}
 	return true;

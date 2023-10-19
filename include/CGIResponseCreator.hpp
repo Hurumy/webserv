@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 16:00:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/18 21:25:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,11 @@ class CGIResponseCreator {
 		bool recvCGIOutput();
 		bool setCGIOutput();
 		bool deinit();
+		bool setEnvVars();
 
 	protected:
 	private:
-		bool _setEnvVars();
+		char **_createEnvp();
 		bool _setAuthType();
 		bool _setContentLength();
 		bool _setContentType();

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 20:29:31 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 21:07:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:16:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,12 @@ class MetaVariables {
 		void setOptionalMetaVars(std::string const &varName,
 								 std::string const &varValue);
 		std::size_t getSizeMetaVars() const;
-		std::map<MetaVariables::tag, std::string> const &getMetaVariables() const;
+		std::map<std::string, std::string> const &getMetaVariables() const;
 		std::map<std::string, std::string> const &getOptionalMetaVariables() const;
 
 	protected:
 	private:
-		static std::map<MetaVariables::tag, std::string> initMetaVariables();
-		std::map<MetaVariables::tag, std::string> metaVariablesMap;
+		static std::map<std::string, std::string> initMetaVariables();
+		std::map<std::string, std::string> metaVariablesMap;
 		std::map<std::string, std::string> optinalMetaVarsMap;
 };
