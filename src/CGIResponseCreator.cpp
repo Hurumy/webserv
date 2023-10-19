@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 18:38:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 19:00:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, c
 	  phase(CGIResponseCreator::CGISTARTUP),
 	  monitoredfd(0),
 	  revents(0),
-	  cgiPath(_cgiPath) {
+	  cgiPath(_cgiPath),
+	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
 }
@@ -41,6 +42,21 @@ short CGIResponseCreator::getRevents() const { return revents; }
 
 void CGIResponseCreator::setRevents(short const _revents) {
 	revents = _revents;
+}
+
+void CGIResponseCreator::setPortNum(int const _portNum) {
+	portNum = _portNum;
+}
+
+int CGIResponseCreator::getPortNum() const {
+	return portNum;
+}
+
+void CGIResponseCreator::setHostName(std::string const &_hostName) {
+	hostName = _hostName;
+}
+std::string const &CGIResponseCreator::getHostName() const {
+	return hostName;
 }
 
 bool CGIResponseCreator::_setAuthType() {

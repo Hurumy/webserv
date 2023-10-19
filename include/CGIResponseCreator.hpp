@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/18 21:25:44 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 19:00:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ class CGIResponseCreator {
 		void setPhase(CGIResponseCreator::tag const &_phase);
 		short getRevents() const;
 		void setRevents(short const _revents);
+		void setPortNum(int const _portNum);
+		int getPortNum() const;
+		void setHostName(std::string const &_hostName);
+		std::string const &getHostName() const;
 		bool execCGIScript();
 		int getMonitoredfd() const;
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
@@ -60,5 +64,7 @@ class CGIResponseCreator {
 		short revents;
 		std::string cgiOutput;
 		std::string cgiPath;
+		std::string hostName;
+		int portNum;
 		MetaVariables metaVariables;
 };

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:30:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:59:47 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,11 +324,10 @@ bool SocketHandler::loadRequests() {
 				res.setStatusMessage("OK");
 				res.addHeader("Content-Type", "text/plain");
 				responses[csockiter->getSockfd()] = res;
-				cgiResponseCreators.insert(std::make_pair(
-					csockiter->getSockfd(),
-					CGIResponseCreator(requests[csockiter->getSockfd()],
-									   responses[csockiter->getSockfd()],
-									   "test")));
+				CGIResponseCreator cgiResponseCreator(requests[csockiter->getSockfd()], responses[csockiter->getSockfd()], "test");
+				cgiResponseCreator.setHostName("webserv");
+				cgiResponseCreator.setPortNum(8000);
+				cgiResponseCreators.insert(std::make_pair(csockiter->getSockfd(), cgiResponseCreator));
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
@@ -384,11 +383,12 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
+					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], "test");
+					cgiResponseCreator.setHostName(requestHandler.getHostname());
+					cgiResponseCreator.setPortNum(requestHandler.getPortNumber());
 					cgiResponseCreators.insert(std::make_pair(
 						iter->getSockfd(),
-						CGIResponseCreator(requests[iter->getSockfd()],
-										   responses[iter->getSockfd()],
-										   requestHandler.isCgi().getOk())));
+						cgiResponseCreator));
 				} else {
 					iter->setPhase(CSocket::SEND);
 					removeRequest(iter->getSockfd());
