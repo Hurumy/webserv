@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 17:53:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:04:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	
 	//std::cout << "test" << std::endl;
 
-	//Location,Configでディレクトリリスティングが有効になっているか確認する
+	//Location,Configのいずれかでディレクトリリスティングが有効になっているか確認する
 	if (isloc == true && loc.getDirlist() == true)
 	{
 		//do nothing
@@ -186,6 +186,7 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	}
 	else
 	{
+		//ディレクトリリスティングが無効だった時Indexファイルを検索しに行く
 		Result<int, bool> _res_ind = searchIndex();
 		if (_res_ind.isOK() == true)
 		{
