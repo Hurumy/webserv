@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 21:03:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 21:55:39 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,11 +409,14 @@ bool SocketHandler::handleCGIRequest() {
 		// Request &req = requests[iter->getSockfd()];
 		if (iter->second.getPhase() == CGIResponseCreator::CGISTARTUP) {
 			// pipe(), fork(), execve()
-			iter->second.execCGIScript();
-			// iter->second.setPhase(Request::CGIWRITE)
-			iter->second.setPhase(CGIResponseCreator::CGIWRITE);
-			// Set inpfd[1]to monitoredfd
-			iter->second.setMonitoredfd(CGIResponseCreator::CGIWRITE);
+			if (iter->second.execCGIScript() == false) {
+				// error handling
+			} else {
+				// iter->second.setPhase(Request::CGIWRITE)
+				iter->second.setPhase(CGIResponseCreator::CGIWRITE);
+				// Set inpfd[1]to monitoredfd
+				iter->second.setMonitoredfd(CGIResponseCreator::CGIWRITE);
+			}
 			++iter;
 		} else if (iter->second.getPhase() == CGIResponseCreator::CGIWRITE &&
 				   (iter->second.getRevents() & POLLOUT) == POLLOUT) {

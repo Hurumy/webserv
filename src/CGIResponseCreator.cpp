@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 20:47:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/19 22:11:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,19 +222,36 @@ bool CGIResponseCreator::execCGIScript() {
 
 	if (pipe(inpfd) == -1) {
 		// error handling
+		putSytemError("pipe");
+		return false;
 	}
 	if (pipe(outpfd) == -1) {
 		// error handling
+		putSytemError("pipe");
+		close(inpfd[0]);
+		close(inpfd[1]);
+		return false;
 	}
 	pid_t const pid = fork();
 	if (pid == -1) {
+		putSytemError("fork");
+		deinit();
 		// error handling
+		return false;
 	}
 	if (pid == 0) {
 		// for developement
 		char *const argv[] = {strdup("/bin/ls"), NULL};
-		dup2(inpfd[0], 0);
-		dup2(outpfd[1], 1);
+		if (dup2(inpfd[0], 0) == -1) {
+			putSytemError("dup2");
+			deinit();
+			std::exit(EXIT_FAILURE);
+		}
+		if (dup2(outpfd[1], 1) == -1) {
+			putSytemError("dup2");
+			deinit();
+			std::exit(EXIT_FAILURE);
+		}
 		close(inpfd[0]);
 		close(inpfd[1]);
 		close(outpfd[0]);
@@ -302,20 +319,20 @@ bool CGIResponseCreator::setCGIOutput() {
 
 bool CGIResponseCreator::deinit() {
 	if (close(inpfd[0]) == -1) {
-		putSytemError("read");
+		putSytemError("close");
 		// error handling
 	}
 	if (close(inpfd[1]) == -1) {
 		// error handling
-		putSytemError("read");
+		putSytemError("close");
 	}
 	if (close(outpfd[0]) == -1) {
 		// error handling
-		putSytemError("read");
+		putSytemError("close");
 	}
 	if (close(outpfd[1]) == -1) {
 		// error handling
-		putSytemError("read");
+		putSytemError("close");
 	}
 	return true;
 }
