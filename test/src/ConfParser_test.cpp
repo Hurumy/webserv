@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:31:09 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:02:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,24 @@
 #define CONF_FILE_PATH "testconfs/simple.conf"
 #define CONF_FILE_PATH_2 "testconfs/location_dir.conf"
 
-TEST(ConfigParserTest, pAddressesTest) {
+TEST(ConfigParserTest, pAddressesTest)
+{
 	std::vector<Config> tmp;
+	bool	expected(true);
+	unsigned long	vecsize_1(2);
 	int expected_1(8660);
 	int expected_2(80);
+	unsigned long	vecsize_2(2);
 	int expected_3(8080);
 	int expected_4(80);
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	ASSERT_EQ(res.isOK(), expected);
 	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getAddresses().size(), vecsize_1);
 	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getPort(), expected_1);
 	ASSERT_EQ(tmp.at(0).getAddresses().at(1).getPort(), expected_2);
+	ASSERT_EQ(tmp.at(1).getAddresses().size(), vecsize_2);
 	ASSERT_EQ(tmp.at(1).getAddresses().at(0).getPort(), expected_3);
 	ASSERT_EQ(tmp.at(1).getAddresses().at(1).getPort(), expected_4);
 }

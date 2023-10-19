@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:40:18 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 14:22:45 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,15 @@
 #include "Result.hpp"
 #include "webserv.hpp"
 
-class RequestHandler {
+class RequestHandler
+{
    private:
 	std::vector<Config> const &configs;
 	Request req;
 	Response res;
 	size_t confnum;
+	size_t addressnum;
+	std::string	servername;
 	bool iscgi;
 	std::string path_to_cgi;
 	Result<std::string, bool> _openFile(std::string filename);
@@ -39,4 +42,6 @@ class RequestHandler {
 	void setErrorPageBody();
 	Response getResponse();
 	Result<std::string, bool> const isCgi() const;
+	std::string const	getHostname() const;
+	int					getPortNumber() const;
 };
