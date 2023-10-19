@@ -6,131 +6,205 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 15:52:02 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 18:03:20 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-static int setPortNumber(std::string line, Address &add) {
-	int tmp;
-	unsigned long long port;
-	std::stringstream ss;
+static int rL_searchipv6(Address &add, std::string oneline)
+{
+	size_t	start;
+	size_t	end;
+	size_t	tmp;
+	size_t	tmp2;
+	size_t	portsign;
+	std::string	trimedstring;
 
-	//ポート番号があるはずの文字列の中身が全て数字であることを確認
-	tmp = isNumber(line);
-	if (tmp == false)
-		errorInInit("There are characters not number in Port Numbers ( ◜◡‾)\n");
+	//IPv6の時
+	// []を削除して : があったらポート設定もアドレス設定もある
+	// []の外に何もなかったらアドレス設定のみ(デフォルトポートは80番)
+	// [::]: という形だったらポート設定のみ
 
-	//文字列を数字に変換する
-	ss << line;
-	ss >> port;
+	start = oneline.find('[');
+	end = oneline.find(']');
 
-	//ポート番号が有効であることを確認する
-	if (!(1 <= port && port <= 65535))
-		errorInInit(
-			"Invalid Port Number detected in http:server:listen directive! ⊂(  "
-			"っ☉ω☉)っ\n");
-
-	add.setPort(port);
-	return (0);
-}
-
-//このOnelineの中身はポート番号のみ
-static int checkProtocol(std::string &oneline, Address &add) {
-	size_t start;
-	size_t end;
-	size_t tmp;
-	size_t tmp2;
-	std::vector<std::string> lines;
-
-	start = oneline.find("[", 0);
-	end = oneline.find("]", 0);
-
-	//[]がそれぞれ一つずつしかないことを確認する
-	tmp = oneline.find("[", start + 1);
-	tmp2 = oneline.find("]", end + 1);
-	if (tmp != std::string::npos || tmp2 != std::string::npos)
+	//[]がなかった時(ipv6の設定ではなかった時)
+	if (start == std::string::npos && end == std::string::npos)
+	{
+		return (0);
+	}
+	//[]はあるが、片方しかない時、順序がおかしいとき
+	else if (start == std::string::npos || end == std::string::npos || start >= end)
+	{
 		errorInInit("too many [] signs detected!! (ﾉω<､)\n");
+	}
 
-	if (start == std::string::npos && end == std::string::npos) {
-		//プロトコルをIPv4にセットする
-		add.setIpVers(0);
+	// []がそれぞれ一つずつしかないことを確認する
+	tmp = oneline.find('[', start + 1);
+	tmp2 = oneline.find(']', end + 1);
+	if (tmp != std::string::npos || tmp2 != std::string::npos)
+	{
+		errorInInit("too many [] signs detected!! (ﾉω<､)\n");
+	}
 
-		// v4アドレス部分とポート番号部分に分ける
-		lines = lineSpliter(oneline, ":");
+	// []の中身を切り出す(つまりIPアドレスの設定を読み出す)
+	// []の中身が::だけであれば、それは設定がないのと同じなので何もしない
+	// []の中身が正しいIpv6アドレスの形式になっているかどうかをきちんとチェックするようにしたい
+	trimedstring = oneline.substr(start + 1, end - start - 1);
+	// std::cout << trimedstring << std::endl;
+	if (trimedstring != "::")
+	{
+		add.setIpVers(IPV6);
+		add.setIpAddress(trimedstring);
+	}
 
-		if (lines.size() != 2)
-			errorInInit(
-				"Invalid number of elements detected in http:server:listen "
-				"directive Σ(・ω・ノ)ノ\n");
+	// []の後ろに:があるかどうかを探す
+	portsign = oneline.find(':', end);
 
-		//ポートをセットする
-		setPortNumber(lines.at(1), add);
+	// :がなかった場合→ポートの設定がなく、アドレスの設定のみ
+	// :があったが、[]の直後ではなかった場合
+	if (portsign != end + 1)
+	{
+		errorInInit("syntax error in listen directive (ﾉω<､)\n");
+	}
+	// : が正しい位置にあった場合、ポートの設定を切り出す
+	else if (portsign != std::string::npos)
+	{
+		std::stringstream ss;
+		int				 portnumber;
 
-		// IPv4アドレスをセットする
-		add.setIpAddress(lines.at(0));
-	} else if (start != std::string::npos && end != std::string::npos &&
-			   start <= end) {
-		//プロトコルをIPv6にセットする
-		add.setIpVers(1);
+		ss << oneline.substr(portsign + 1);
+		ss >> portnumber;
 
-		//"["を消し、"]"で文字列を切り分ける(v6アドレスとポートに分かれる)
-		replaceStr(oneline, "[", "");
-		lines = lineSpliter(oneline, "]");
+		//std::cout << "port: " << portnumber << std::endl;
 
-		if (lines.size() != 2)
-			errorInInit(
-				"Invalid number of elements detected in http:server:listen "
-				"directive Σ(・ω・ノ)ノ\n");
+		add.setIpVers(IPV6);
+		add.setPort(portnumber);
+	}
+	// ポートの設定がなかったら初期値を設定する
+	else
+	{
+		add.setIpVers(IPV6);
+		add.setPort(80);
+	}
 
-		//ポートをセットするために、ポート番号の前にある:を消し、関数に送る
-		replaceStr(lines.at(1), ":", "");
-		setPortNumber(lines.at(1), add);
-
-		// IPv6アドレスをセットする
-		add.setIpAddress(lines.at(0));
-	} else
-		errorInInit(
-			"Invalid string detected in http:server:listen directive "
-			"(ﾉ´・ω・)ﾉ⌒✹\n");
-
-	return (0);
+	return (1);
 }
 
-int readListen(Config &conf, std::string oneline) {
+int rL_searchipv4(Address &add, std::string oneline)
+{
+	size_t	colon;
+	size_t	comma;
+	std::stringstream	ss;
+	std::stringstream	sb;
+	std::string		address_str;
+	std::string		tmp;
+	int				portnum;
+
+
+	//IPv4の時
+	// : があったらポート設定もアドレス設定もある
+	// . があったらアドレス設定のみ (デフォルトポートは80番)
+	// . がなかったらポートの設定のみ
+
+	colon = oneline.find(':');
+	// std::cout << "oneline: " << oneline << std::endl;
+	if (colon != std::string::npos)
+	{
+		ss << oneline;
+		std::getline(ss, address_str, ':');
+		std::getline(ss, tmp, ':');
+		// std::cout << "addstr: " << address_str << std::endl;
+		// std::cout << "tmp: " << tmp << std::endl;
+		sb << tmp;
+		sb >> portnum;
+		// std::cout << "portnum: " << portnum << std::endl;
+
+		add.setIpVers(IPV4);
+		add.setIpAddress(address_str);
+		add.setPort(portnum);
+		return (1);
+	}
+	else
+	{
+		comma = oneline.find('.');
+		if (comma != std::string::npos)
+		{
+			add.setIpVers(IPV4);
+			add.setIpAddress(oneline);
+			return (1);
+		}
+		else
+		{
+			ss << oneline;
+			ss >> portnum;
+			add.setIpVers(IPV4);
+			add.setPort(portnum);
+			return (1);
+		}
+	}
+	return (0);	
+}
+
+
+int readListen(Config &conf, std::string oneline)
+{
 	std::vector<std::string> lines;
+	std::string				content;
 	Address add;
 	unsigned long long status;
 
-	// IP設定の有無を確認
-	status = oneline.find(":", 0);
-
-	//スペースで区切る。と、"listen" "(IP):8080"のように切れるはず
+	// std::cout << oneline << std::endl;
 	lines = lineSpliter(oneline, " ");
-
-	//空の文字列を削除して寄せる
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
+	content = lines.at(1);
 
-	// default_serverが設定されていた時
-	if (lines.size() == 3 && lines.at(2) == "default_server")
-		errorInInit(
-			"I'm literally so sorry but you cant set default_server in this "
-			"webserv (ヾﾉ･ω･`)\n");
+	// std::cout << content << std::endl;
 
-	//スペースで区切った後の要素数が2つではないとき
-	if (lines.size() != 2 || lines.at(0) != "listen")
-		errorInInit("invalid number of elements (๑╹ω╹๑ )\n");
+	//IPv6の時
+	// []を削除して : があったらポート設定もアドレス設定もある
+	// []の外に何もなかったらアドレス設定のみ(デフォルトポートは80番)
+	// [::]: という形だったらポート設定のみ
+	status = rL_searchipv6(add, content);
 
-	//:があるかないか(IPの設定があるかないかを確認する)
-	if (status != std::string::npos)
-		checkProtocol(lines.at(1), add);
-	else  //:がないとき
-		setPortNumber(lines.at(1), add);
+
+	//IPv4の時
+	// : があったらポート設定もアドレス設定もある
+	// . があったらアドレス設定のみ (デフォルトポートは80番)
+	// . がなかったらポートの設定のみ
+	if (status != 1)
+		status = rL_searchipv4(add, content);
+
+	// //default_serverの設定があった場合
+	// if (lines.size() == 3)
+	// {
+	// 	if (lines.at(3) == "default_server")
+	// 	{
+
+	// 	}
+	// 	else
+	// 		errorInInit("Unknown directive found....°(ಗдಗ。)°.");
+	// }
+
+
+	//**listenがない場合**
+	//スーパーユーザー権限で実行されている場合は80番ポート
+	//そうでない場合は8080番ポートが利用される
 
 	conf.addAddresses(add);
-	// std::cout << BLUE "port: " << conf.getAddresses().at(0).getPort() <<
-	// RESET << std::endl;
 
 	return (0);
 }
+
+int	thereisnoListen(Config &conf)
+{
+	Address add;
+
+	add.setPort(80);
+	add.setIpVers(IPV4);
+	conf.addAddresses(add);
+	return (0);
+}
+
+

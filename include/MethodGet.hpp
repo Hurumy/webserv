@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:04:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:28:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:21:22 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
+
 #include "AMethod.hpp"
+#include "MakeDirlistHTML.hpp"
 
 class MethodGet : public AMethod {
-	private:
-		std::string getsemantics;
-		static const std::map<std::string, std::string> ext;
-		static std::map<std::string, std::string> initExtMap();
-		Result<int, bool> setContentType(std::string filename);
-		Result<int, bool> checkGetSemantics();
+   private:
+	std::string getsemantics;
+	static const std::map<std::string, std::string> ext;
+	static std::map<std::string, std::string> initExtMap();
+	Result<int, bool> setContentType(std::string filename);
+	Result<int, bool> checkGetSemantics();
+	Result<int, bool> checkIsDirlisting();
 
 	protected:
 	public:

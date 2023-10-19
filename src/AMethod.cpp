@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:54:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:29:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,13 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		res.setStatus(403);
 		res.setStatusMessage("Forbidden");
 		return Error<bool>(false);
+	} else if (fd == -1)
+	{
+		res.setStatus(500);
+		res.setStatusMessage("Internal Server Error");
+		return Error<bool>(false);
 	}
-
+	
 	// read
 	while (status > 0) {
 		status = read(fd, buf, FILE_READ_SIZE);
@@ -121,28 +126,30 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	return Ok<std::string>(body);
 }
 
-void AMethod::setErrorPageBody() {
-	unsigned int prevstatus = res.getStatus();
+void AMethod::setErrorPageBody()
+{
 	Result<std::string, bool> res_1 = conf.getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false) return;
+	//エラーページの設定が存在しなかったとき
+	if (res_1.isOK() == false)
+	{
+		res.addHeader("Content-Length", "0");
+		return;
+	}
 
+	//エラーページのファイル名をとってくる
 	std::string filename = res_1.getOk();
 
 	// bodyをセットする。成功したら抜けるループ
-	// bodyのセットに失敗した場合は、失敗した後のステータスが変わっていればもう一度ファイルを検索する
-	// 変わっていなければBodyなしでヘッダだけ送付する
-	while (1) {
+	// bodyのセット(openとか・・・)に失敗した場合は、Bodyなしでヘッダだけ送付する
+	while (1)
+	{
 		Result<std::string, bool> res_2 = _openFile(filename);
 		if (res_2.isOK() == true)
 			break;
-		else if (res_2.isOK() == false && prevstatus != res.getStatus()) {
-			prevstatus = res.getStatus();
-			Result<std::string, bool> res_3 =
-				conf.getErrorPages(res.getStatus());
-			if (res_3.isOK() == false) break;
-			filename = res_3.getOk();
-		} else {
+		//エラーページがなければ、Content-Lengthを0にセットして終了
+		else
+		{
 			res.addHeader("Content-Length", "0");
 			break;
 		}

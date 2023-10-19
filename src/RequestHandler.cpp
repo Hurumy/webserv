@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:42:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/18 11:33:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,27 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	}
 
 	// Configの中からHostが一致するものを探す
-	for (size_t i = 0; i < configs.size(); i++) {
-		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
-			if (portflag == false &&
-				configs.at(i).getServerName().at(t) == hostname) {
+	for (size_t i = 0; i < configs.size(); i++)
+	{
+		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++)
+		{
+			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
+			{
 				this->confnum = i;
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
-			} else if (portflag == true &&
-					   configs.at(i).getServerName().at(t) == without_port) {
+			}
+			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
+			{
 				//そのサーバーネームに対してポートが合っているか確認する
-				for (size_t j = 0; j < configs.at(i).getAddresses().size();
-					 j++) {
-					if (configs.at(i).getAddresses().at(j).getPort() ==
-						portnum) {
+				for (size_t j = 0; j < configs.at(i).getAddresses().size(); j++)
+				{
+					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
+					{
+						this->addressnum = j;
 						this->confnum = i;
-						res.addHeader("Server",
-									  configs.at(i).getServerName().at(t));
+						this->servername = configs.at(i).getServerName().at(t);
+						res.addHeader("Server", configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
@@ -111,8 +115,10 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 }
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
-Result<int, bool> RequestHandler::routeMethod() {
-	if (req.getMethod() == "GET") {
+Result<int, bool> RequestHandler::routeMethod()
+{
+	if (req.getMethod() == "GET")
+	{
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 
@@ -123,12 +129,14 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		get.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
 		} else {
 			iscgi = false;
-		}
+		} 
 
 		//リダイレクトチェック
 		Result<int, bool> res_rg = get.checkRedirects();
@@ -140,7 +148,9 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	} else if (req.getMethod() == "POST") {
+	}
+	else if (req.getMethod() == "POST")
+	{
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
@@ -151,6 +161,8 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		post.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
@@ -180,6 +192,8 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		del.setURI();
+
+		//cgiだったらcgiの情報をセットして返す
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
@@ -252,7 +266,8 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	return Ok<std::string>(body);
 }
 
-void RequestHandler::setErrorPageBody() {
+void RequestHandler::setErrorPageBody()
+{
 	unsigned int prevstatus = res.getStatus();
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
@@ -285,7 +300,7 @@ void RequestHandler::setErrorPageBody() {
 			break;
 		}
 	}
-	return;
+	return ;
 }
 
 Response RequestHandler::getResponse() { return (this->res); }
@@ -296,3 +311,14 @@ Result<std::string, bool> const RequestHandler::isCgi() const {
 	}
 	return Error<bool>(false);
 }
+
+std::string const	RequestHandler::getHostname() const
+{
+	return (this->servername);
+}
+
+int					RequestHandler::getPortNumber() const
+{
+	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
+}
+

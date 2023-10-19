@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:53:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/17 15:36:22 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,107 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 	return Ok<int>(0);
 }
 
-Result<int, bool> MethodGet::act() {
+Result<int, bool> MethodGet::checkIsDirlisting()
+{
+	int 		status;
+	struct stat t_stat;
+
+	//std::cout << "uri: " << uri << std::endl;
+
+	//URIがディレクトリを指しているか確認する
+	status = stat(uri.c_str(), &t_stat);
+	if (status == -1)
+	{
+		//std::cout << "stat failed" << errno << std::endl;
+		if (errno == ENAMETOOLONG)
+		{
+			res.setStatus(414);
+			res.setStatusMessage("URI Too Long");
+			setErrorPageBody();
+			return Ok<int>(-1);
+		}
+		else if (errno == ENOENT)
+		{
+			res.setStatus(404);
+			res.setStatusMessage("Not Found");
+			setErrorPageBody();
+			return Ok<int>(-1);
+		}
+		else if (errno == EACCES)
+		{
+			res.setStatus(403);
+			res.setStatusMessage("Forbidden");
+			setErrorPageBody();
+			return Ok<int>(-1);
+		}
+		else
+		{
+			res.setStatus(500);
+			res.setStatusMessage("Internal Server Error");
+			setErrorPageBody();
+			return Ok<int>(-1);
+		}
+	}
+
+	//URIが指しているものがディレクトリじゃなかった場合を弾く
+	if (S_ISDIR(t_stat.st_mode) == false)
+	{
+		return Error<bool>(false);
+	}
+	
+	//std::cout << "test" << std::endl;
+
+	//Location,Configでディレクトリリスティングが有効になっているか確認する
+	if (isloc == true && loc.getDirlist() == true)
+	{
+		//do nothing
+	}
+	else if (conf.getDirlist() == true)
+	{
+		//do nothing
+	}
+	else
+	{
+		return Error<bool>(false);
+	}
+	
+	// std::cout << "uri: " << uri << std::endl;
+	
+	//有効になっていたらメソッドを呼んでそのまま帰る
+	MakeDirlistHTML dir(uri);
+	Result<std::string, bool> dir_res = dir.returnHTML();
+	if (dir_res.isOK() == true)
+	{
+		std::stringstream	ss;
+		std::string			fs;
+
+		res.setStatus(200);
+		res.setStatusMessage("OK");
+		// std::cout << dir_res.getOk() << std::endl;
+		res.setBody(dir_res.getOk());
+		ss << dir_res.getOk().length();
+		ss >> fs;
+		res.addHeader("Content-Length", fs);
+		return Ok<int>(0);
+	}
+	else
+	{
+		res.setStatus(500);
+		res.setStatusMessage("Internal Server Error");
+		setErrorPageBody();
+		return Ok<int>(-1);
+	}
+}
+
+Result<int, bool> MethodGet::act()
+{
+	//(ディレクトリリスティングが有効なら)もしくは(この内部処理でエラーが起こっていた→エラーページをセットして)この時点で帰る
+	Result<int, bool> res_dir = checkIsDirlisting();
+	if (res_dir.isOK() == true)
+	{
+		return Ok<int>(0);
+	}
+
 	// Getの条件を確認する
 	checkGetSemantics();
 

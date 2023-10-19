@@ -3,31 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   Address.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:10:30 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:46:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:21:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "webserv.hpp"
+#include "SSocket.hpp"
 
-class Address {
-	private:
-		std::string ipaddress;
-		int port;
-		int ipvers;
+class Address
+{
+   private:
+	std::string ipaddress;
+	int 		port;
+ 	ipvers 		ipver;
+	bool		isaddress;
 
-	protected:
-	public:
-		std::string const getIpAddress() const;
-		int getPort() const;
-		int getIpVers() const;
-		bool setIpAddress(std::string address);
-		bool setPort(int _port);
-		bool setIpVers(int _protocol);
-		// Address();
-		// Address(Address const &add);
+   protected:
+   public:
+	std::string const getIpAddress() const;
+	int getPort() const;
+	int getIpVers() const;
+	bool getIsAddress() const;
+	bool setIpAddress(std::string address);
+	bool setPort(int _port);
+	bool setIpVers(int _protocol);
+	Address();
+	// ~Address();
+	// Address(Address const &add);
 };
