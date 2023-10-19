@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:32:04 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:57:08 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 
 #define CONF_FILE_PATH "testconfs/method_get.conf"
 #define CONF_FILE_DIRLIST_TEST "testconfs/dirlisting_test.conf"
+#define CONF_FILE_WITH_ONE_LOC "testconfs/location_dir.conf"
 
 TEST(MethodGetTest, getHtmlTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
@@ -195,27 +196,92 @@ TEST(MethodGetTest, getActTest_getDirlistTest)
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 
-// TEST (MethodGetTest, getActTest_Error_PermDenied)
-// {
-// 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
-// 	std::vector<Config>			tmp = res.getOk();
-// 	Request						req;
-// 	bool						expected(true);
-// 	unsigned int				expected_status(403);
-// 	std::string					expected_string("Forbidden");
 
-// 	req.setVersion("HTTP/1.1");
-// 	req.setMethod("GET");
-// 	req.addHeader("Host", "_");
-// 	req.setUrl("./www/content/NoPermToRead.txt");
+TEST(MethodGetTest, getActTest_getIndexTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request 			req;
+	bool 				expected(true);
+	bool 				expected_stat(false);
+	unsigned int 		expected_status(200);
+	std::string 		expected_string("OK");
+	bool 				expected_is_there_content_len(true);
+	std::string			expected_hostname("wtf.net");
+	int					expected_portnum(80);
 
-// 	RequestHandler handler = RequestHandler(tmp, req);
-// 	handler.searchMatchHost();
-// 	Result<int, bool> result_1 = handler.checkRequiedHeader();
-// 	ASSERT_EQ(result_1.isOK(), expected);
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_hostname);
+	req.setUrl("/");
 
-// 	handler.routeMethod();
+	//routing
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
 
-// 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
-// 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-// }
+	//request style check
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	ASSERT_EQ(result_1.isOK(), expected);
+
+	//acting
+	handler.routeMethod();
+
+	//cgi test
+	Result<std::string, bool> cgi_res = handler.isCgi();
+	ASSERT_EQ(cgi_res.isOK(), expected_stat);
+
+	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+	// std::cout << handler.getHostname() << std::endl;
+	// std::cout << handler.getPortNumber() << std::endl;
+
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getHostname(), expected_hostname);
+	ASSERT_EQ(handler.getPortNumber(), expected_portnum);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+}
+
+TEST(MethodGetTest, getActTest_getIndexTest_FromLocation)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	std::vector<Config> tmp = res.getOk();
+	Request 			req;
+	bool 				expected(true);
+	bool 				expected_stat(false);
+	unsigned int 		expected_status(200);
+	std::string 		expected_string("OK");
+	bool 				expected_is_there_content_len(true);
+	std::string			expected_hostname("wtf.net");
+	int					expected_portnum(8080);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "wtf.net");
+	req.setUrl("/");
+
+	//routing
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+
+	//request style check
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	ASSERT_EQ(result_1.isOK(), expected);
+
+	//acting
+	handler.routeMethod();
+
+	//cgi test
+	Result<std::string, bool> cgi_res = handler.isCgi();
+	ASSERT_EQ(cgi_res.isOK(), expected_stat);
+
+	std::cout << "handler: " << handler.getResponse().getBody() << std::endl;
+	// std::cout << handler.getHostname() << std::endl;
+	// std::cout << handler.getPortNumber() << std::endl;
+
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getHostname(), expected_hostname);
+	ASSERT_EQ(handler.getPortNumber(), expected_portnum);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+}
+

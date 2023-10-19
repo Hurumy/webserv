@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:04:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 14:03:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 17:07:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class MethodGet : public AMethod {
 	Result<int, bool> setContentType(std::string filename);
 	Result<int, bool> checkGetSemantics();
 	Result<int, bool> checkIsDirlisting();
+	Result<int, bool> searchIndex();
 
    protected:
    public:
