@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/20 12:17:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:21:55 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ class SocketHandler {
 		void setSSockets(const std::vector<SSocket> &_ssockets);
 		std::vector<CSocket> const &getCSockets() const;
 		int getTimeout() const;
+		void setTimeout(const std::size_t _timeout);
+		void setPollTimeout(const int _pollTimeout);
 		void addCSocket(CSocket const &_csocket);
 		bool createPollfds();
 		void clearPollfds();
