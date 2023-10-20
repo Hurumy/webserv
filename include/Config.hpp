@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:00:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/20 12:27:32 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:48:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,9 @@ class Config {
 		std::map<std::string, bool> reqmethod;
 		std::vector<std::string> cgiextension;
 
-	protected:
-	public:
-		std::vector<Address> const getAddresses() const;
-		std::vector<Address> const &getAddressesReference() const;
+   protected:
+   public:
+		std::vector<Address> const &getAddresses() const;
 		Result<Location, bool> const getLocations(std::string key) const;
 		std::vector<std::string> const getServerName() const;
 		std::string const getRootDir() const;

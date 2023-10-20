@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/20 14:22:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:48:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	
 	//std::cout << "test" << std::endl;
 
-	//Location,Configでディレクトリリスティングが有効になっているか確認する
+	//Location,Configのいずれかでディレクトリリスティングが有効になっているか確認する
 	if (isloc == true && loc.getDirlist() == true)
 	{
 		//do nothing
@@ -193,7 +193,20 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	}
 	else
 	{
-		return Error<bool>(false);
+		//ディレクトリリスティングが無効だった時Indexファイルを検索しに行く
+		Result<int, bool> _res_ind = searchIndex();
+		if (_res_ind.isOK() == true)
+		{
+			//ここでOkを返すとすぐに帰るので、Indexの読み込みでエラーが起こった場合なども
+			//Okが帰ってくる(それはエラーページを返すべきだから)
+			return Ok<int>(0);
+		}
+		else
+		{
+			//Indexが存在しなかったときは、Errorで返して、Openで
+			//ディレクトリを開こうとさせてエラーで帰ると思う
+			return Error<bool>(false);	
+		}	
 	}
 	
 	// std::cout << "uri: " << uri << std::endl;
@@ -228,6 +241,118 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	}
 }
 
+Result<int, bool> MethodGet::searchIndex()
+{
+	int status;
+	std::string tmppath;
+
+	// std::cout << "searching index files!!" << std::endl;
+	std::cout << loc.getIndex().size() << std::endl;
+
+	//locationのIndexを見る
+	if (isloc == true && loc.getIndex().size() != 0)
+	{
+		for (size_t i = 0; i < loc.getIndex().size(); i ++)
+		{
+			tmppath = ".";
+			tmppath += conf.getRootDir();
+			if (conf.getRootDir().empty() == false)
+				tmppath += "/";
+			tmppath += loc.getRootDir();
+			if (loc.getRootDir().empty() == false)
+				tmppath += "/";
+			tmppath += loc.getIndex().at(i);
+
+			std::cout << tmppath << std::endl;
+
+			// openしてみて、成功したらそれを打ち返す
+			// 成功しなかったらどんどん次を読みこむ
+			status = open(tmppath.c_str(), O_RDONLY);
+			if (status != -1)
+			{
+				close(status);
+				Result<std::string, bool> const res_read = _openFile(tmppath);
+				if (res_read.isError() == true)
+				{
+					setErrorPageBody();
+					return Ok<int>(0);
+				}
+				else
+				{
+					res.setStatus(200);
+					res.setStatusMessage("OK");
+					return Ok<int>(0);
+				}
+			}
+		}
+	}
+
+
+	//ConfigのIndexを見る
+	if (conf.getIndex().size() != 0)
+	{
+		for (size_t i = 0; i < conf.getIndex().size(); i ++)
+		{
+
+			tmppath = ".";
+			tmppath += conf.getRootDir();
+			if (conf.getRootDir().empty() == false)
+				tmppath += "/";
+			tmppath += conf.getIndex().at(i);
+
+			std::cout << tmppath << std::endl;
+
+			// openしてみて、成功したらそれを打ち返す
+			// 成功しなかったらどんどん次を読みこむ
+			status = open(tmppath.c_str(), O_RDONLY);
+			if (status != -1)
+			{
+				close(status);
+				Result<std::string, bool> const res_read_c = _openFile(tmppath);
+				if (res_read_c.isError() == true)
+				{
+					setErrorPageBody();
+					return Ok<int>(0);
+				}
+				else
+				{
+					res.setStatus(200);
+					res.setStatusMessage("OK");
+					return Ok<int>(0);
+				}
+			}
+		}
+	}
+
+	tmppath = ".";
+	tmppath += conf.getRootDir();
+	tmppath += "/";
+	tmppath += "index.html";
+	std::cout << tmppath << std::endl;
+
+	//index.htmlが存在するか調べる(デフォルトの挙動)
+	status = open(tmppath.c_str(), O_RDONLY);
+	if (status != -1)
+	{
+		close(status);
+		Result<std::string, bool> const res_read_i = _openFile(tmppath);
+		if (res_read_i.isError() == true)
+		{
+			setErrorPageBody();
+			return Ok<int>(0);
+		}
+		else
+		{
+			res.setStatus(200);
+			res.setStatusMessage("OK");
+			return Ok<int>(0);
+		}
+	}
+
+	//存在しなかったときはErrorのTrueで返す
+	return Error<bool>(false);
+}
+
 Result<int, bool> MethodGet::act()
 {
 	//(ディレクトリリスティングが有効なら)もしくは(この内部処理でエラーが起こっていた→エラーページをセットして)この時点で帰る
@@ -245,10 +370,13 @@ Result<int, bool> MethodGet::act()
 
 	// ファイルの中身を読み込んでBodyに詰める
 	Result<std::string, bool> const res_read = _openFile(uri);
-	if (res_read.isError() == true) {
+	if (res_read.isError() == true)
+	{
 		setErrorPageBody();
 		return Error<bool>(false);
-	} else {
+	}
+	else
+	{
 		res.setStatus(200);
 		res.setStatusMessage("OK");
 		return Ok<int>(0);

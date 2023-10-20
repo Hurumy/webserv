@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 17:47:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:43:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:08:32 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int readAutoindex(Config &conf, std::string oneline) {
 
 	if (lines.size() != 2)
 		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+
+	// std::cout << lines.at(1) << std::endl;
 
 	if (lines.at(1) == "on")
 		conf.setDirlist(true);

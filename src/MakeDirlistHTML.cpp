@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:22:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:40:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		st = readdir(ds);
 	}
 	if (errno != 0) return Error<bool>(false);
+	
+	closedir(ds);
 
 	//終わりの部分を書き込む
 	html += "</pre><hr></body>\n";
