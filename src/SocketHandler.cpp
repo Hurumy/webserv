@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/20 12:22:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:35:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ std::vector<SSocket> const &SocketHandler::getSSockets() const {
 	return ssockets;
 }
 
-void setSSockets(const std::vector<SSocket> &_ssockets) {
+void SocketHandler::setSSockets(const std::vector<SSocket> &_ssockets) {
 	ssockets = _ssockets;	
 }
 
@@ -101,11 +101,11 @@ std::vector<CSocket> const &SocketHandler::getCSockets() const {
 
 int SocketHandler::getTimeout() const { return pollTimeout; }
 
-void setTimeout(const std::size_t _timeout) {
+void SocketHandler::setTimeout(const std::size_t _timeout) {
 	timeout = _timeout;	
 }
 
-void setPollTimeout(const int _pollTimeout) {
+void SocketHandler::setPollTimeout(const int _pollTimeout) {
 	pollTimeout = _pollTimeout;	
 }
 
