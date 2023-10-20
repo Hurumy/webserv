@@ -6,13 +6,13 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:49:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:34:29 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
-std::vector<Address> const Config::getAddresses() const {
+std::vector<Address> const &Config::getAddresses() const {
 	return (this->addresses);
 }
 

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:53:48 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 16:59:34 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,14 +74,15 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort_2) {
 	ASSERT_EQ(result_1.isOK(), expected);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
+{
 	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
 	Request req;
 	bool expected(true);
-	unsigned int expected_status(400);
-	std::string expected_statusMessage("Bad Request");
+	int default_portnum(8660);
+	std::string default_hostname("_");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -89,29 +90,39 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
-	ASSERT_EQ(result_1.isError(), expected);
-	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
-	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
+	ASSERT_EQ(result_1.isOK(), expected);
+	
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.getPortNumber(), default_portnum);
+	ASSERT_EQ(handler.getHostname(), default_hostname);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2) {
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
+{
 	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
 	Request req;
 	bool expected(true);
-	unsigned int expected_status(400);
-	std::string expected_statusMessage("Bad Request");
+	int default_portnum(8660);
+	std::string default_hostname("_");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "www.kawaii.test:9999");
+	req.setUrl("/");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
-	ASSERT_EQ(result_1.isError(), expected);
-	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
-	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
+	ASSERT_EQ(result_1.isOK(), expected);
+	
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.getPortNumber(), default_portnum);
+	ASSERT_EQ(handler.getHostname(), default_hostname);
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
@@ -120,8 +131,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
 	tmp = res.getOk();
 	Request req;
 	bool expected(true);
-	unsigned int expected_status(400);
-	std::string expected_statusMessage("Bad Request");
+	int default_portnum(8660);
+	std::string default_hostname("_");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -129,9 +140,14 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
-	ASSERT_EQ(result_1.isError(), expected);
-	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
-	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_statusMessage);
+	ASSERT_EQ(result_1.isOK(), expected);
+
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.getPortNumber(), default_portnum);
+	ASSERT_EQ(handler.getHostname(), default_hostname);
+
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
@@ -139,9 +155,9 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
 	Request req;
-	bool expected(false);
-	unsigned int expected_status(400);
-	std::string expected_string("Bad Request");
+	bool expected(true);
+	int default_portnum(8660);
+	std::string default_hostname("_");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -150,8 +166,13 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.isOK(), expected);
-	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
-	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.getPortNumber(), default_portnum);
+	ASSERT_EQ(handler.getHostname(), default_hostname);
+
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest) {
@@ -325,3 +346,28 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.isCgi().getOk(), expected_root + expected_path);
 }
+
+TEST(RequestHandlerTest, getHostnameTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("_");
+	int  expected_port(8660);
+	bool	iscgi(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/dummy/test.cgi");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+}
+

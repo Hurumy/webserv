@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 18:08:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/19 18:01:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,9 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// 	std::cout << i << ", " << line.size() << std::endl;
 	// }
 
+
+	// Configの初期化処理(コンストラクタでやりたくないから・・・)
+	conf.setDirlist(false);
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {
