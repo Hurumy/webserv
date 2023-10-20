@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 21:55:39 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:16:46 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ bool SocketHandler::removeResponse(int const csockfd) {
 
 std::vector<SSocket> const &SocketHandler::getSSockets() const {
 	return ssockets;
+}
+
+void setSSockets(const std::vector<SSocket> &_ssockets) {
+	ssockets = _ssockets;	
 }
 
 std::vector<CSocket> const &SocketHandler::getCSockets() const {

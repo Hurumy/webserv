@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 00:15:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:17:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 
 class SocketHandler {
 	private:
-		SocketHandler();
-
 		std::vector<SSocket> ssockets;
 		std::vector<CSocket> csockets;
 		std::size_t timeout;
@@ -50,6 +48,7 @@ class SocketHandler {
 		bool removeResponse(int const csockfd);
 		bool removeClosedCSockets();
 		std::vector<SSocket> const &getSSockets() const;
+		void setSSockets(const std::vector<SSocket> &_ssockets);
 		std::vector<CSocket> const &getCSockets() const;
 		int getTimeout() const;
 		void addCSocket(CSocket const &_csocket);
