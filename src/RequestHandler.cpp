@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 11:33:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 15:31:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,11 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.setVersion("HTTP/1.1");
 
 	// Hostヘッダー自体が含まれていない場合(どうにもならない)
-	if (result_1.isOK() == false) {
+	if (result_1.isOK() == false)
+	{
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -66,8 +70,10 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// Configの中からHostが一致するものを探す
 	for (size_t i = 0; i < configs.size(); i++)
 	{
+		//std::cout << YELLOW << "conf siz: " << configs.size() << RESET << std::endl;
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++)
 		{
+			//std::cout << YELLOW << configs.at(i).getServerName().at(t) << RESET << std::endl;
 			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
 			{
 				this->confnum = i;
@@ -76,6 +82,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 			}
 			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
 			{
+				//std::cout << YELLOW << "in portflag == true" << RESET << std::endl;
 				//そのサーバーネームに対してポートが合っているか確認する
 				for (size_t j = 0; j < configs.at(i).getAddresses().size(); j++)
 				{
@@ -91,6 +98,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 			}
 		}
 	}
+
 	res.setStatus(400);
 	res.setStatusMessage("Bad Request");
 	res.addHeader("Content-Length", "0");
@@ -230,6 +238,9 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT" << RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);

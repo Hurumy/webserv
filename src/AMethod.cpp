@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 15:29:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 14:22:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,15 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	unsigned long long bodysize = 0;
 	int status = 1;
 	std::string body;
-	char buf[FILE_READ_SIZE];
+	char buf[FILE_READ_SIZE + 1];
 
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);
@@ -94,6 +98,10 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		return Error<bool>(false);
 	} else if (fd == -1)
 	{
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile open失敗。エラーコードがHTTPステータスコードと対応しない" << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		return Error<bool>(false);
@@ -111,6 +119,10 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	close(fd);
 
 	if (status == -1) {
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile read失敗。" << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		return Error<bool>(false);
@@ -161,6 +173,8 @@ Result<int, bool> AMethod::checkURI() {
 	std::string origin = req.getUrl();
 	std::string rel;
 
+	//std::cout << RED << origin << RESET << std::endl;
+
 	//絶対URIか相対URIか判定する
 	if (origin.find("http://") == 0 || origin.find("https://") == 0) {
 		std::string tmp;
@@ -177,9 +191,15 @@ Result<int, bool> AMethod::checkURI() {
 		}
 		// std::cout << rel << std::endl;
 
-	} else if (origin.find("/") == 0) {
+	}
+	else if (origin.find("/") == 0)
+	{
 		rel = req.getUrl();
 	} else {
+		// リクエストのURIが/から始まっていなかった時にBad Requestとして処理する
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "URIが/から始まってないよ〜(；ω；)" << RESET << std::endl;
+		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		return Error<bool>(false);
