@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/17 01:01:36 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/20 12:26:02 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ endif
 
 SRC_FILES	:= \
 				main.cpp \
+				Server.cpp \
 				APayload.cpp \
 				Response.cpp \
 				Request.cpp \
