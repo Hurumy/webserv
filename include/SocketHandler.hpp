@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/20 12:21:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:53:46 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ class SocketHandler {
 
 	protected:
 	public:
+		SocketHandler();
 		SocketHandler(std::vector<SSocket> &_ssockets,
 					  std::size_t const _timeout, int _pollTimeout);
 
