@@ -3,16 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Config.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 09:11:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:49:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/20 12:27:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 
 std::vector<Address> const Config::getAddresses() const {
+	return (this->addresses);
+}
+
+std::vector<Address> const &Config::getAddressesReference() const {
 	return (this->addresses);
 }
 
