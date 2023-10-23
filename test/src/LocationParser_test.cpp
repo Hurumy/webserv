@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:01:49 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:48:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,3 +232,14 @@ TEST(LocationParserTest, pCgiExtensionTest) {
 				  .isOK(),
 			  ex_3);
 }
+
+TEST(LocationParserTest, pAliasTest) {
+	std::vector<Config> tmp;
+	std::string location_path("/test/conf/");
+	std::string expected_1("/mint/");
+
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getAlias(), expected_1);
+}
+
