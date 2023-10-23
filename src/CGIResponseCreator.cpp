@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 22:11:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 19:44:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,23 @@ bool CGIResponseCreator::_setRequestMethod() {
 	return true;
 }
 
+bool CGIResponseCreator::_setScriptName() {
+	std::string filename;
+	std::string scriptName;
+
+	if (cgiPath.rfind("/") != std::string::npos) {
+		filename = cgiPath.substr(cgiPath.rfind("/"));
+	} else {
+		filename = cgiPath;
+	}
+	if (request.getUrl().find(filename) == std::string::npos) {
+		return false;
+	}
+	scriptName = request.getUrl().substr(0, request.getUrl().find(filename) + filename.size());
+	metaVariables.setMetaVar(MetaVariables::SCRIPT_NAME, scriptName);
+	return true;
+}
+
 bool CGIResponseCreator::_setServerProtocol() {
 	metaVariables.setMetaVar(MetaVariables::SERVER_PROTOCOL, WS_HTTP_VERSION);
 	return true;
@@ -163,6 +180,7 @@ bool CGIResponseCreator::setEnvVars() {
 	_setQuerySring();
 	_setRemoteAddr();
 	_setRequestMethod();
+	_setScriptName();
 	_setServerProtocol();
 	return true;
 }
