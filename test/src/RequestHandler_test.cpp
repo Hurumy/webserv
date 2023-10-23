@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 16:59:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:17:31 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 #include "webserv.hpp"
 
 #define CONF_FILE_PATH "testconfs/simple.conf"
-#define CONF_FILE_WITH_ONE_LOC "testconfs/location_dif.conf"
+#define CONF_FILE_WITH_ONE_LOC "testconfs/location_dir.conf"
+#define CONF_FOR_ALIAS_TEST "testconfs/alias_test.conf"
 
 TEST(RequestHandlerTest, searchMatchHostTest) {
 	std::vector<Config> tmp;
@@ -330,6 +331,7 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	bool expected_status(true);
 	std::string expected_path("/dummy/test.cgi");
 	std::string expected_root("/usr/share/nginx/html");
+	// std::string expected_path("")
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -369,5 +371,37 @@ TEST(RequestHandlerTest, getHostnameTest)
 	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
 	ASSERT_EQ(handler.getHostname(), expected_host);
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
+}
+
+TEST(RequestHandlerTest, setAliasTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_ALIAS_TEST);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("_");
+	int  expected_port(8660);
+	unsigned int 		expected_status(200);
+	std::string 		expected_string("OK");
+	std::string 		expected_body("What the fuck....");
+	bool 				expected_is_there_content_len(true);
+	bool	iscgi(false);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/test/conf/wtf.txt");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
 

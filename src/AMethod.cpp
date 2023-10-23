@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:22:45 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:18:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,26 +200,57 @@ void AMethod::setURI() {
 	// uriを一つずつ長くしていって、最長一致なLocationを探す
 	std::stringstream ss;
 	std::string shortpath;
+	std::string	locpath;
 	ss << uri;
 	isloc = false;
 	std::getline(ss, tmp, '/');
-	while (ss.eof() == false) {
+	while (ss.eof() == false)
+	{
 		shortpath += tmp;
 		shortpath += '/';
-		std::cout << shortpath << std::endl;
+		//std::cout << shortpath << std::endl;
 
 		//locationの設定が適用されるか否か、されるとしたらどのLocationかを検索する
 		if (conf.getLocations(shortpath).isOK() == true)
 		{
 			isloc = true;
 			loc = conf.getLocations(shortpath).getOk();
+			locpath = shortpath;
 		}
 		std::getline(ss, tmp, '/');
 	}
 
-	// ROOTをURIの頭にくっつける
+	//Locationの設定があった場合、
+	// 1. aliasがあったらaliasを優先で適用する(LocationのRootの部分を置き換える)
+	// 2. Locationの中のRootを見て、それがあれば頭にただくっつける
+	if (isloc == true)
+	{
+		//aliasを適用(Locationで指定されているパスをAliasの指定で置き換える)
+		if (loc.getAlias().empty() == false)
+		{
+			std::string alpath = loc.getAlias() + '/';
+			while (1)
+			{
+				size_t	pos = uri.find(locpath);
+				if (pos == std::string::npos)
+					break;
+				size_t	len = locpath.length();
+				uri.replace(pos, len, alpath);
+			}
+		}
+		//locationのrootをくっつける(URIの頭につけるだけ)
+		if (loc.getRootDir().empty() == false)
+		{
+			tmp = loc.getRootDir() + '/' + uri;
+			uri = tmp;
+		}
+	}
+
+	//std::cout << "uri: " << uri << std::endl;
+
+	// ConfigのrootがあればさらにURIの頭にくっつける
 	if (conf.getRootDir().empty() == false) {
-		tmp = conf.getRootDir() + uri;
+		tmp = conf.getRootDir() + '/' + uri;
 		uri = tmp;
 	}
 
@@ -251,7 +282,6 @@ void AMethod::setURI() {
 					if (_res.isOK() == true) {
 						//これはcgiだ！
 						iscgi = true;
-						path_to_cgi = cgipath;
 						break;
 					}
 				}
@@ -259,6 +289,18 @@ void AMethod::setURI() {
 		}
 		cgipath += "/";
 	}
+
+	//二重のスラッシュがあったら一つにする
+	while (1)
+	{
+		size_t pos = uri.find("//");
+		if (pos == std::string::npos)
+			break;
+		size_t len = 2;
+		uri.replace(pos, len, "/");
+	}
+
+	path_to_cgi = uri;
 
 	//最初に.をつけて開けるようにする
 	tmp = "." + uri;
