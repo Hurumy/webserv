@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:14:28 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:59:31 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
-		// URIチェック
+		// POSTの時は、UploadPathの指定がなかった時のみURIチェック
 		Result<int, bool> res_uri = post.checkURI();
 		if (res_uri.isOK() == false) {
 			setErrorPageBody();

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 12:54:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 14:52:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ int MethodDelete::openResourceDelete() {
 			status = deleteFile();
 			return (status);
 		} else {
+			#if defined(_DEBUGFLAG)
+				std::cout << RED << "Error in MethodDelete::openResourseDelete" << RESET << std::endl;
+			#endif
 			res.setStatus(401);
 			res.setStatusMessage("Unauthorized");
 			return (401);

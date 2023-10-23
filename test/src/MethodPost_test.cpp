@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:29:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 15:00:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,3 +114,38 @@ TEST(MethodPostTest, postTextFileTest_Error_methodNotAllowed) {
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
 }
+
+TEST(MethodPostTest, uploadPathTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected(true);
+	unsigned int expected_status(201);
+	std::string expected_string("Created");
+	std::string expected_content("random string");
+	bool expected_is_there_content_len(true);
+	bool expected_is_there_location(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("POST");
+	req.addHeader("Host", "uploadpath.net");
+	req.setBody(expected_content);
+	req.addHeader("Content-Length", "13");
+	req.setUrl("/post/");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	Result<int, bool> result_2 = handler.searchMatchHost();
+	ASSERT_EQ(result_2.isOK(), expected);
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	ASSERT_EQ(result_1.isOK(), expected);
+	handler.routeMethod();
+	
+	//std::cout << handler.getResponse().getHeader("Location").getOk() << std::endl;
+
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(), expected_is_there_location);
+}
+
