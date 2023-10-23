@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 21:18:00 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 17:31:56 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 15:41:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ std::string const &MetaVariables::getMetaVar(MetaVariables::tag const varName) {
 		case MetaVariables::SERVER_SOFTWARE:
 			return metaVariablesMap["SERVER_SOFTWARE="];
 	}
+	return metaVariablesMap["AUTH_TYPE="];
 }
 
 void MetaVariables::setOptionalMetaVars(std::string const &varName,
