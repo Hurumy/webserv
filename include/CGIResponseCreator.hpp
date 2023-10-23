@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 19:54:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 21:58:09 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ class CGIResponseCreator {
 	protected:
 	private:
 		char **_createEnvp();
+		char **_createArgv();
 		bool _setAuthType();
 		bool _setContentLength();
 		bool _setContentType();
@@ -57,6 +58,7 @@ class CGIResponseCreator {
 		bool _setServerName();
 		bool _setServerPort();
 		bool _setServerProtocol();
+		bool _setRuntime();
 
 		Request &request;
 		Response &response;
@@ -65,6 +67,7 @@ class CGIResponseCreator {
 		int outpfd[2];
 		int monitoredfd;
 		short revents;
+		std::string runtimePath;
 		std::string cgiOutput;
 		std::string cgiPath;
 		std::string hostName;

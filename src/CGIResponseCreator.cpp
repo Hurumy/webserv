@@ -6,14 +6,17 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 19:59:01 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 23:16:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGIResponseCreator.hpp"
 
+#include <string>
 #include <cstring>
 #include <algorithm>
+#include <cstdlib>
+#include <unistd.h>
 
 #include "Result.hpp"
 #include "puterror.hpp"
@@ -100,6 +103,7 @@ bool CGIResponseCreator::_setPathInfo() {
 	std::string postFilename;
 	std::size_t posCut;
 
+	std::clog << cgiPath << std::endl;
 	filename = cgiPath.substr(cgiPath.rfind("/"));
 	postFilename = request.getUrl().substr(request.getUrl().find(filename) + filename.size());
 	posCut = std::min(postFilename.find("?"), postFilename.find("#"));
@@ -250,8 +254,80 @@ char **CGIResponseCreator::_createEnvp() {
 	return head;
 }
 
+char **CGIResponseCreator::_createArgv() {
+	char **argv;
+	char **head;
+
+	argv = new(std::nothrow) char*[3];
+	if (argv == NULL) {
+		return NULL;
+	}
+	head = argv;
+	*argv = new(std::nothrow) char[runtimePath.size() + 1];
+	if (*argv == NULL) {
+		delete []argv;
+		return NULL;
+	}
+	std::strncpy(*argv, runtimePath.c_str(), runtimePath.size() + 1);
+	argv++;
+	*argv = new(std::nothrow) char[cgiPath.size() + 1];
+	if (*argv == NULL) {
+		delete []*(argv - 1);
+		delete []argv;
+		return NULL;
+	}
+	std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
+	// *argv[cgiPath.size() + 1] = '\0';
+	argv++;
+	*argv = NULL;
+	return head;
+}
+
+bool CGIResponseCreator::_setRuntime() {
+	std::size_t posExtension;
+	std::string extension;
+	std::string runtimeName;
+	char *path;
+
+	posExtension = cgiPath.rfind(".");
+	if (posExtension != std::string::npos) {
+		extension = cgiPath.substr(posExtension);
+		if (extension.compare(".py") == 0) {
+			runtimeName = "python";
+		} else if (extension.compare(".pl") == 0) {
+			runtimeName = "perl";
+		} else if (extension.compare(".php") == 0) {
+			runtimeName = "php";
+		} else {
+			runtimeName = "sh";
+		}
+	} else {
+		runtimeName = "sh";
+	}
+	path = std::getenv("PATH");
+	if (path == NULL) {
+		runtimePath = "./" + runtimeName;
+	} else {
+		std::string candidatePath;
+		std::istringstream iss(path);
+
+		while (iss.eof() == false) {
+			std::getline(iss, candidatePath, ':');
+			candidatePath.append("/" + runtimeName);
+			if (access(candidatePath.c_str(), X_OK) == 0) {
+				runtimePath = candidatePath;
+				return true;
+			}
+		}
+		runtimePath = "./" + runtimeName;
+	}
+	
+	return true;
+}
+
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
+	char **argv;
 
 	if (pipe(inpfd) == -1) {
 		// error handling
@@ -274,7 +350,6 @@ bool CGIResponseCreator::execCGIScript() {
 	}
 	if (pid == 0) {
 		// for developement
-		char *const argv[] = {strdup("/bin/ls"), NULL};
 		if (dup2(inpfd[0], 0) == -1) {
 			putSytemError("dup2");
 			deinit();
@@ -291,7 +366,13 @@ bool CGIResponseCreator::execCGIScript() {
 		close(outpfd[1]);
 		setEnvVars();
 		envp = _createEnvp();
-		execve("/bin/ls", argv, envp);
+		_setRuntime();
+		argv = _createArgv();
+		std::clog << "Runtime paht: " << runtimePath << std::endl;
+		std::clog << "agrv[0]: " << argv[0] << std::endl;
+		std::clog << "agrv[1]: " << argv[1] << std::endl;
+		execve(runtimePath.c_str(), argv, envp);
+		putSytemError("execve");
 		// delete envp
 		std::exit(EXIT_FAILURE);
 	}
@@ -340,6 +421,9 @@ bool CGIResponseCreator::recvCGIOutput() {
 		return true;
 	}
 	// for develope
+	response.setStatus(200);
+	response.setStatusMessage("OK");
+	response.addHeader("Content-Type", "text/plain");
 	cgiOutput.append(buf, readLen);
 	phase = CGIResponseCreator::CGIRECVFIN;
 	return true;
