@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 19:58:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 19:59:01 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,8 @@ bool CGIResponseCreator::setEnvVars() {
 	_setRemoteAddr();
 	_setRequestMethod();
 	_setScriptName();
+	_setServerName();
+	_setServerPort();
 	_setServerProtocol();
 	return true;
 }
