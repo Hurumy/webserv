@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/20 13:03:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/23 14:59:53 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ bool SocketHandler::closeAllSSockets() {
 bool SocketHandler::removeClosedCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
+		// if ((iter->getRevents() & POLLHUP) == POLLHUP ||
+		// 	(iter->getPhase() == CSocket::CLOSE) ||
+		// 	(iter->getRevents() & POLLRDHUP) == POLLRDHUP) {
 		if ((iter->getRevents() & POLLHUP) == POLLHUP ||
 			(iter->getPhase() == CSocket::CLOSE)) {
 			iter->closeSockfd();
@@ -131,6 +134,7 @@ bool SocketHandler::createPollfds() {
 			 iter != csockets.end(); ++iter) {
 			std::memset(&added_pollfd, 0, sizeof(added_pollfd));
 			added_pollfd.fd = iter->getSockfd();
+			// added_pollfd.events = POLLIN | POLLOUT | POLLHUP | POLLRDHUP;
 			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
 			pollfds.push_back(added_pollfd);
 		}
@@ -207,10 +211,12 @@ bool SocketHandler::recieveCSockets() {
 							(socklen_t *)&addrsize);
 			if (sockfd == -1) {
 				// error handling?
-				return false;
+				putSytemError("accept");
+				// return false;
+			} else {
+				fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
+				csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr));
 			}
-			fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
-			csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr));
 		}
 	}
 	return true;
@@ -272,6 +278,9 @@ bool SocketHandler::sendResponses() {
 		 csockiter != csockets.end(); ++csockiter) {
 		if (csockiter->getPhase() == CSocket::SEND &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
+			// for develop
+			// responses[csockiter->getSockfd()].addHeader("Connection",
+			// 											"Keep-Alive");
 #if defined(_DEBUGFLAG)
 			std::clog << responses[csockiter->getSockfd()].getLines()
 					  << std::endl;
