@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/02 18:13:20 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:58:05 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:40:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 class Location {
    private:
 	std::string uri;
+	std::string	alias;
 	std::string rootdir;
 	unsigned long long maxbodysize;
 	std::map<int, std::string> errorpages;
@@ -37,6 +38,7 @@ class Location {
    protected:
    public:
 	std::string const getUri() const;
+	std::string	const getAlias() const;
 	std::string const getRootDir() const;
 	unsigned long long getMaxBodySize() const;
 	Result<std::string, bool> const getErrorPages(int status) const;
@@ -53,6 +55,7 @@ class Location {
 
 	// for test
 	bool setUri(std::string _uri);
+	bool setAlias(std::string _alias);
 	bool setRootDir(std::string _root);
 	bool setMaxBodySize(unsigned long long siz);
 	bool addErrorPages(int key, std::string val);

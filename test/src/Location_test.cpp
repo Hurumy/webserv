@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:51:04 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 11:00:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:43:07 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,3 +144,12 @@ TEST(LocationTest, cgiExtensionTest) {
 	ASSERT_EQ(location.getCgiExtension(ext_2).isOK(), expected_2);
 	ASSERT_EQ(location.getCgiExtension(ext_3).isOK(), expected_3);
 }
+
+TEST(LocationTest, aliasTest) {
+	Location location;
+	std::string loc_1("/mint/");
+
+	location.setAlias(loc_1);
+	ASSERT_EQ(location.getAlias(), loc_1);
+}
+

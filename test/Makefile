@@ -6,7 +6,7 @@
 #    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/16 14:29:08 by komatsud         ###   ########.fr        #
+#    Updated: 2023/10/23 11:44:14 by komatsud         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -88,6 +88,7 @@ WS_SRC_FILES	:= \
 					parseConf_parseLocation.cpp \
 					pC_location.cpp \
 					pC_cgi_path.cpp \
+					pC_alias.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

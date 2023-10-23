@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 17:58:27 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:39:42 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int l_readIndex(Location &loc, std::string oneline);
 int l_readUploadPath(Location &loc, std::string oneline);
 int l_readAllowedMethods(Location &loc, std::string oneline);
 int l_readCGIExtension(Location &loc, std::string oneline);
+int l_readAlias(Location &loc, std::string oneline);
 
 std::vector<std::string> lineSpliter(std::string origin, std::string delim);
 Result<std::vector<std::string>, bool> cutConfByDirective(std::string filepath);
