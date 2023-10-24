@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 12:59:59 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:34:36 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -406,7 +406,7 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					CGIResponseCreator cgiResponseCreator(*iter, requests[iter->getSockfd()], responses[iter->getSockfd()], "." + requestHandler.isCgi().getOk());
+					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], "." + requestHandler.isCgi().getOk());
 					cgiResponseCreator.setHostName(requestHandler.getHostname());
 					cgiResponseCreator.setPortNum(requestHandler.getPortNumber());
 					cgiResponseCreators.insert(std::make_pair(
@@ -454,15 +454,27 @@ bool SocketHandler::handleCGIRequest() {
 				++iter;
 			} break;
 			case CGIResponseCreator::CGIRECV: {
-				if ((iter->second.getRevents() & POLLIN) != POLLIN) { ++iter; break ; }
-				// Reade output from outpfd[0]
-				iter->second.recvCGIOutput();
-				// deinit inpfd, outpfd, monitoredfd
-				iter->second.setCGIOutput();
+				if ((iter->second.getRevents() & POLLIN) == POLLIN) {
+					// Reade output from outpfd[0]
+					iter->second.recvCGIOutput();
+					// deinit inpfd, outpfd, monitoredfd
+					iter->second.setCGIOutput();
+				}
+				iter->second.waitChildProc();
 				++iter;
 			} break ;
-			case CGIResponseCreator::CGIRECVFIN: {
-				iter->second.setCSocketPhase(CSocket::SEND);
+			case CGIResponseCreator::CGIWAIT: {
+				iter->second.waitChildProc();
+				++iter;
+			} break ;
+			case CGIResponseCreator::CGIFIN: {
+				// iter->second.setCSocketPhase(CSocket::SEND);
+				for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
+					if (csockiter->getSockfd() == iter->first) {
+						csockiter->setPhase(CSocket::SEND);
+						break ;
+					}
+				}
 				iter->second.deinit();
 				std::map<int, CGIResponseCreator>::iterator erasedIter = iter;
 				++iter;
@@ -481,6 +493,10 @@ bool SocketHandler::closeTimeoutCSockets() {
 		 iter != csockets.end(); ++iter) {
 		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
 			iter->setPhase(CSocket::CLOSE);
+			std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
+			if (cgiiter != cgiResponseCreators.end()) {
+				cgiResponseCreators.erase(cgiiter);
+			}
 		}
 	}
 	return true;

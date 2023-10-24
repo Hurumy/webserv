@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 12:58:02 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:27:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,8 @@
 #include "Result.hpp"
 #include "puterror.hpp"
 
-CGIResponseCreator::CGIResponseCreator(CSocket &_csocket, Request &_request, Response &_response, const std::string &_cgiPath)
-	: csocket(_csocket),
-	  request(_request),
+CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath)
+	: request(_request),
 	  response(_response),
 	  phase(CGIResponseCreator::CGISTARTUP),
 	  monitoredfd(0),
@@ -32,10 +31,6 @@ CGIResponseCreator::CGIResponseCreator(CSocket &_csocket, Request &_request, Res
 	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
-}
-
-void CGIResponseCreator::setCSocketPhase(CSocket::tag const &_phase) {
-	csocket.setPhase(_phase);
 }
 
 CGIResponseCreator::tag const &CGIResponseCreator::getPhase() const {
@@ -421,37 +416,37 @@ bool CGIResponseCreator::recvCGIOutput() {
 		putSytemError("read");
 		return false;
 	}
-	if (readLen == 0) {
-		phase = CGIResponseCreator::CGIRECVFIN;
-		return true;
-	}
+	// if (readLen == 0) {
+	// 	phase = CGIResponseCreator::CGIFIN;
+	// 	return true;
+	// }
 	// for develope
 	response.setStatus(200);
 	response.setStatusMessage("OK");
 	response.addHeader("Content-Type", "text/plain");
 	cgiOutput.append(buf, readLen);
-	phase = CGIResponseCreator::CGIRECVFIN;
+	phase = CGIResponseCreator::CGIFIN;
 	return true;
 }
 
-// pid_t CGIResponseCreator::waitChildProc() {
-// 	pid_t rwait;
+pid_t CGIResponseCreator::waitChildProc() {
+	pid_t rwait;
 
-// 	rwait = waitpid(pid, &wstatus, WNOHANG | WUNTRACED);
-// 	switch (rwait) {
-// 		case -1: {
-// 			phase = CGIResponseCreator::CGIRECVFIN;
-// 			putSytemError("waitpid");
-// 		} break;
-// 		case 0: {
-// 			//
-// 		} break;
-// 		default: {
-// 			phase = CGIResponseCreator::CGIRECV;
-// 		} break;
-// 	}
-// 	return rwait;
-// }
+	rwait = waitpid(pid, &wstatus, WNOHANG | WUNTRACED);
+	switch (rwait) {
+		case -1: {
+			phase = CGIResponseCreator::CGIFIN;
+			putSytemError("waitpid");
+		} break;
+		case 0: {
+			phase = CGIResponseCreator::CGIRECV;
+		} break;
+		default: {
+			phase = CGIResponseCreator::CGIFIN;
+		} break;
+	}
+	return rwait;
+}
 
 bool CGIResponseCreator::setCGIOutput() {
 	response.setBody(cgiOutput);

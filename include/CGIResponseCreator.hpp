@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 13:01:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:27:06 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 
 class CGIResponseCreator {
 	public:
-		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
-		CGIResponseCreator(CSocket &_csocket, Request &_request, Response &_response, const std::string &_cgiPath);
+		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIWAIT, CGIFIN };
+		// enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
+		CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath);
 
-		void setCSocketPhase(CSocket::tag const &_phase);
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);
 		short getRevents() const;
@@ -39,7 +39,7 @@ class CGIResponseCreator {
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
 		bool writeMessageBody() const;
 		bool recvCGIOutput();
-		// pid_t waitChildProc();
+		pid_t waitChildProc();
 		bool setCGIOutput();
 		bool deinit();
 		bool setEnvVars();
@@ -63,12 +63,12 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 
-		CSocket &csocket;
+		// CSocket &csocket;
 		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;
 		pid_t pid;
-		// int wstatus;
+		int wstatus;
 		int inpfd[2];
 		int outpfd[2];
 		int monitoredfd;
