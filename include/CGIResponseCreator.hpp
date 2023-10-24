@@ -6,13 +6,14 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 12:06:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:01:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include "MetaVariables.hpp"
+#include "CSocket.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 
@@ -22,8 +23,9 @@
 class CGIResponseCreator {
 	public:
 		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
-		CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath);
+		CGIResponseCreator(CSocket &_csocket, Request &_request, Response &_response, const std::string &_cgiPath);
 
+		void setCSocketPhase(CSocket::tag const &_phase);
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);
 		short getRevents() const;
@@ -37,7 +39,7 @@ class CGIResponseCreator {
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
 		bool writeMessageBody() const;
 		bool recvCGIOutput();
-		// bool waitChildProc();
+		// pid_t waitChildProc();
 		bool setCGIOutput();
 		bool deinit();
 		bool setEnvVars();
@@ -61,10 +63,12 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 
+		CSocket &csocket;
 		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;
 		pid_t pid;
+		// int wstatus;
 		int inpfd[2];
 		int outpfd[2];
 		int monitoredfd;

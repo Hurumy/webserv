@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 12:06:36 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:58:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 #include "Result.hpp"
 #include "puterror.hpp"
 
-CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath)
-	: request(_request),
+CGIResponseCreator::CGIResponseCreator(CSocket &_csocket, Request &_request, Response &_response, const std::string &_cgiPath)
+	: csocket(_csocket),
+	  request(_request),
 	  response(_response),
 	  phase(CGIResponseCreator::CGISTARTUP),
 	  monitoredfd(0),
@@ -31,6 +32,10 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, c
 	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
+}
+
+void CGIResponseCreator::setCSocketPhase(CSocket::tag const &_phase) {
+	csocket.setPhase(_phase);
 }
 
 CGIResponseCreator::tag const &CGIResponseCreator::getPhase() const {
@@ -429,8 +434,23 @@ bool CGIResponseCreator::recvCGIOutput() {
 	return true;
 }
 
-// bool CGIResponseCreator::waitChildProc() {
-	
+// pid_t CGIResponseCreator::waitChildProc() {
+// 	pid_t rwait;
+
+// 	rwait = waitpid(pid, &wstatus, WNOHANG | WUNTRACED);
+// 	switch (rwait) {
+// 		case -1: {
+// 			phase = CGIResponseCreator::CGIRECVFIN;
+// 			putSytemError("waitpid");
+// 		} break;
+// 		case 0: {
+// 			//
+// 		} break;
+// 		default: {
+// 			phase = CGIResponseCreator::CGIRECV;
+// 		} break;
+// 	}
+// 	return rwait;
 // }
 
 bool CGIResponseCreator::setCGIOutput() {
