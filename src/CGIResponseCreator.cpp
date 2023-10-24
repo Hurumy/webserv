@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 16:27:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 20:24:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <unistd.h>
+#include <signal.h>
 
 #include "Result.hpp"
 #include "puterror.hpp"
@@ -25,6 +26,7 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response, c
 	: request(_request),
 	  response(_response),
 	  phase(CGIResponseCreator::CGISTARTUP),
+	  pid(0),
 	  monitoredfd(0),
 	  revents(0),
 	  cgiPath(_cgiPath),
@@ -368,9 +370,6 @@ bool CGIResponseCreator::execCGIScript() {
 		envp = _createEnvp();
 		_setRuntime();
 		argv = _createArgv();
-		std::clog << "Runtime paht: " << runtimePath << std::endl;
-		std::clog << "agrv[0]: " << argv[0] << std::endl;
-		std::clog << "agrv[1]: " << argv[1] << std::endl;
 		execve(runtimePath.c_str(), argv, envp);
 		putSytemError("execve");
 		// delete envp
@@ -432,7 +431,7 @@ bool CGIResponseCreator::recvCGIOutput() {
 pid_t CGIResponseCreator::waitChildProc() {
 	pid_t rwait;
 
-	rwait = waitpid(pid, &wstatus, WNOHANG | WUNTRACED);
+	rwait = waitpid(pid, &wstatus, WNOHANG);
 	switch (rwait) {
 		case -1: {
 			phase = CGIResponseCreator::CGIFIN;
@@ -453,22 +452,38 @@ bool CGIResponseCreator::setCGIOutput() {
 	return true;
 }
 
+bool CGIResponseCreator::waitDeadCGIProc() {
+	if(waitpid(pid, &wstatus, 0) == -1) {
+		putSytemError("waitpid");
+		return false;
+	}
+	return true;
+}
+
 bool CGIResponseCreator::deinit() {
-	if (close(inpfd[0]) == -1) {
-		putSytemError("close");
-		// error handling
+	if (inpfd[0] != 0) {
+		if (close(inpfd[0]) == -1) {
+			putSytemError("close");
+			// error handling
+		}
 	}
-	if (close(inpfd[1]) == -1) {
-		// error handling
-		putSytemError("close");
+	if (inpfd[1] != 0) {
+		if (close(inpfd[1]) == -1) {
+			// error handling
+			putSytemError("close");
+		}
 	}
-	if (close(outpfd[0]) == -1) {
-		// error handling
-		putSytemError("close");
+	if (outpfd[0] != 0) {
+		if (close(outpfd[0]) == -1) {
+			// error handling
+			putSytemError("close");
+		}
 	}
-	if (close(outpfd[1]) == -1) {
-		// error handling
-		putSytemError("close");
+	if (outpfd[1] != 0) {
+		if (close(outpfd[1]) == -1) {
+			// error handling
+			putSytemError("close");
+		}
 	}
 	return true;
 }

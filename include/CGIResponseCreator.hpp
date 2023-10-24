@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 16:27:06 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 20:24:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ class CGIResponseCreator {
 		bool recvCGIOutput();
 		pid_t waitChildProc();
 		bool setCGIOutput();
+		bool waitDeadCGIProc();
 		bool deinit();
 		bool setEnvVars();
 
@@ -63,7 +64,6 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 
-		// CSocket &csocket;
 		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;

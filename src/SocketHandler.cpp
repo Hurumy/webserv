@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 16:37:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 20:24:51 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ bool SocketHandler::removeClosedCSockets() {
 		// 	(iter->getRevents() & POLLRDHUP) == POLLRDHUP) {
 		if ((iter->getRevents() & POLLHUP) == POLLHUP ||
 			(iter->getPhase() == CSocket::CLOSE)) {
+			std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
+			if (cgiiter != cgiResponseCreators.end()) {
+				cgiiter->second.waitDeadCGIProc();
+				cgiiter->second.deinit();
+				cgiResponseCreators.erase(cgiiter);
+			}
 			iter->closeSockfd();
 			iter = csockets.erase(iter);
 		} else {
@@ -492,10 +498,6 @@ bool SocketHandler::closeTimeoutCSockets() {
 		 iter != csockets.end(); ++iter) {
 		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
 			iter->setPhase(CSocket::CLOSE);
-			std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
-			if (cgiiter != cgiResponseCreators.end()) {
-				cgiResponseCreators.erase(cgiiter);
-			}
 		}
 	}
 	return true;
