@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 23:16:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:06:36 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -341,7 +341,7 @@ bool CGIResponseCreator::execCGIScript() {
 		close(inpfd[1]);
 		return false;
 	}
-	pid_t const pid = fork();
+	pid = fork();
 	if (pid == -1) {
 		putSytemError("fork");
 		deinit();
@@ -428,6 +428,10 @@ bool CGIResponseCreator::recvCGIOutput() {
 	phase = CGIResponseCreator::CGIRECVFIN;
 	return true;
 }
+
+// bool CGIResponseCreator::waitChildProc() {
+	
+// }
 
 bool CGIResponseCreator::setCGIOutput() {
 	response.setBody(cgiOutput);

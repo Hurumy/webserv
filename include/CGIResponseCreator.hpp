@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 21:58:09 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:06:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class CGIResponseCreator {
 		void setMonitoredfd(CGIResponseCreator::tag const &_phase);
 		bool writeMessageBody() const;
 		bool recvCGIOutput();
+		// bool waitChildProc();
 		bool setCGIOutput();
 		bool deinit();
 		bool setEnvVars();
@@ -63,6 +64,7 @@ class CGIResponseCreator {
 		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;
+		pid_t pid;
 		int inpfd[2];
 		int outpfd[2];
 		int monitoredfd;
