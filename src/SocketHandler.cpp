@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 16:34:36 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 16:37:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,7 +468,6 @@ bool SocketHandler::handleCGIRequest() {
 				++iter;
 			} break ;
 			case CGIResponseCreator::CGIFIN: {
-				// iter->second.setCSocketPhase(CSocket::SEND);
 				for (std::vector<CSocket>::iterator csockiter = csockets.begin(); csockiter != csockets.end(); ++csockiter) {
 					if (csockiter->getSockfd() == iter->first) {
 						csockiter->setPhase(CSocket::SEND);
