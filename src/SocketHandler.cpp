@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 14:59:53 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/24 12:47:52 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,12 +281,9 @@ bool SocketHandler::sendResponses() {
 			// for develop
 			// responses[csockiter->getSockfd()].addHeader("Connection",
 			// 											"Keep-Alive");
-#if defined(_DEBUGFLAG)
-			std::clog << responses[csockiter->getSockfd()].getLines()
-					  << std::endl;
-#endif
 			std::stringstream ss;
 			ss << responses[csockiter->getSockfd()].getBody().size();
+			// for develope
 			responses[csockiter->getSockfd()].addHeader("Content-Length",
 														ss.str());
 			if (csockiter->sendData(
@@ -295,6 +292,8 @@ bool SocketHandler::sendResponses() {
 			}
 			// for develop
 #if defined(_DEBUGFLAG)
+			std::clog << responses[csockiter->getSockfd()].getLines()
+					  << std::endl;
 			{
 				int fd = open("./Makefile", O_RDONLY);
 				std::clog << "open fd: " << fd << std::endl;
@@ -407,7 +406,7 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], "test");
+					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], "." + requestHandler.isCgi().getOk());
 					cgiResponseCreator.setHostName(requestHandler.getHostname());
 					cgiResponseCreator.setPortNum(requestHandler.getPortNumber());
 					cgiResponseCreators.insert(std::make_pair(
@@ -431,35 +430,38 @@ bool SocketHandler::handleCGIRequest() {
 			 cgiResponseCreators.begin();
 		 iter != cgiResponseCreators.end();) {
 		// Request &req = requests[iter->getSockfd()];
-		if (iter->second.getPhase() == CGIResponseCreator::CGISTARTUP) {
-			// pipe(), fork(), execve()
-			if (iter->second.execCGIScript() == false) {
-				// error handling
-			} else {
-				// iter->second.setPhase(Request::CGIWRITE)
-				iter->second.setPhase(CGIResponseCreator::CGIWRITE);
-				// Set inpfd[1]to monitoredfd
-				iter->second.setMonitoredfd(CGIResponseCreator::CGIWRITE);
-			}
-			++iter;
-		} else if (iter->second.getPhase() == CGIResponseCreator::CGIWRITE &&
-				   (iter->second.getRevents() & POLLOUT) == POLLOUT) {
-			// write message body to pipe
-			if (iter->second.writeMessageBody() == true) {
-				// iter->second.setPhase(Request::CGIRECV)
-				iter->second.setPhase(CGIResponseCreator::CGIRECV);
-				// Set outpfd[0]to monitoredfd
-				iter->second.setMonitoredfd(CGIResponseCreator::CGIRECV);
-			}
-			++iter;
-		} else if (iter->second.getPhase() == CGIResponseCreator::CGIRECV &&
-				   (iter->second.getRevents() & POLLIN) == POLLIN) {
-			// Reade output from outpfd[0]
-			iter->second.recvCGIOutput();
-			// deinit inpfd, outpfd, monitoredfd
-			iter->second.setCGIOutput();
-			// iter->setPhase(CSocket::SEND)
-			if (iter->second.getPhase() == CGIResponseCreator::CGIRECVFIN) {
+		switch (iter->second.getPhase()) {
+			case CGIResponseCreator::CGISTARTUP: {
+				// pipe(), fork(), execve()
+				if (iter->second.execCGIScript() == false) {
+					// error handling
+				} else {
+					// iter->second.setPhase(Request::CGIWRITE)
+					iter->second.setPhase(CGIResponseCreator::CGIWRITE);
+					// Set inpfd[1]to monitoredfd
+					iter->second.setMonitoredfd(CGIResponseCreator::CGIWRITE);
+				}
+				++iter;
+			} break ;
+			case CGIResponseCreator::CGIWRITE: {
+				if ((iter->second.getRevents() & POLLOUT) != POLLOUT) { ++iter; break ; }
+				if (iter->second.writeMessageBody() == true) {
+					// iter->second.setPhase(Request::CGIRECV)
+					iter->second.setPhase(CGIResponseCreator::CGIRECV);
+					// Set outpfd[0]to monitoredfd
+					iter->second.setMonitoredfd(CGIResponseCreator::CGIRECV);
+				}
+				++iter;
+			} break;
+			case CGIResponseCreator::CGIRECV: {
+				if ((iter->second.getRevents() & POLLIN) != POLLIN) { ++iter; break ; }
+				// Reade output from outpfd[0]
+				iter->second.recvCGIOutput();
+				// deinit inpfd, outpfd, monitoredfd
+				iter->second.setCGIOutput();
+				++iter;
+			} break ;
+			case CGIResponseCreator::CGIRECVFIN: {
 				for (std::vector<CSocket>::iterator csockiter =
 						 csockets.begin();
 					 csockiter != csockets.end(); ++csockiter) {
@@ -470,13 +472,9 @@ bool SocketHandler::handleCGIRequest() {
 				}
 				iter->second.deinit();
 				std::map<int, CGIResponseCreator>::iterator erasedIter = iter;
-				iter++;
-				cgiResponseCreators.erase(erasedIter);
-			} else {
 				++iter;
-			}
-		} else {
-			++iter;
+				cgiResponseCreators.erase(erasedIter);
+			} break ;
 		}
 	}
 	return true;
