@@ -6,13 +6,18 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:46:18 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 10:59:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 11:41:01 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
 
 std::string const Location::getUri() const { return (this->uri); }
+
+std::string const Location::getAlias() const
+{
+	return (this->alias);
+}
 
 std::string const Location::getRootDir() const { return (this->rootdir); }
 
@@ -74,6 +79,12 @@ Result<int, bool> const Location::getCgiExtension(std::string _ext) const {
 
 bool Location::setUri(std::string _uri) {
 	this->uri = _uri;
+	return (true);
+}
+
+bool Location::setAlias(std::string _alias)
+{
+	this->alias = _alias;
 	return (true);
 }
 

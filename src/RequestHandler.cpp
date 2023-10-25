@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:14:28 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:55:28 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,11 +138,21 @@ Result<int, bool> RequestHandler::routeMethod()
 		get.setURI();
 
 		//cgiだったらcgiの情報をセットして返す
-		if (get.isCgi().isOK() == true) {
+		if (get.isCgi().isOK() == true)
+		{
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
+			
 			iscgi = false;
+
+			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			//エラーページはすでにセットされているので、あと送るだけ。
+			if (get.isCgi().getError() == true)
+			{
+				return Error<bool>(false);
+			}
 		} 
 
 		//リダイレクトチェック
@@ -161,7 +171,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
-		// URIチェック
+		// POSTの時は、UploadPathの指定がなかった時のみURIチェック
 		Result<int, bool> res_uri = post.checkURI();
 		if (res_uri.isOK() == false) {
 			setErrorPageBody();
@@ -173,8 +183,16 @@ Result<int, bool> RequestHandler::routeMethod()
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
 			iscgi = false;
+
+			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			//エラーページはすでにセットされているので、あと送るだけ。
+			if (post.isCgi().getError() == true)
+			{
+				return Error<bool>(false);
+			}
 		}
 
 		//リダイレクトチェック
@@ -204,8 +222,16 @@ Result<int, bool> RequestHandler::routeMethod()
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
 			iscgi = false;
+
+			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			//エラーページはすでにセットされているので、あと送るだけ。
+			if (del.isCgi().getError() == true)
+			{
+				return Error<bool>(false);
+			}
 		}
 
 		//リダイレクトチェック

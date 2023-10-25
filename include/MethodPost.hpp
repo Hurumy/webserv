@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/25 12:29:47 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 12:39:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ class MethodPost : public AMethod {
    private:
 	std::string filename;
 	int openPostResource();
-	std::string makeFilename();
+	std::string makeFilename(std::string _uppath);
 	int writeToFile(int fd);
 	Result<int, bool> checkMaxBodySize();
 
