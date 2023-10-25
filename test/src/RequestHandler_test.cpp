@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 12:12:52 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:15:50 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -465,4 +465,5 @@ TEST(RequestHandlerTest, setAliasTest)
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
 }
+
 
