@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 15:34:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:35:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class AMethod {
 	bool isloc;
 	Location loc;
 	bool iscgi;
+	bool iscgicanaccess;
 	std::string path_to_cgi;
 	Result<std::string, bool> const _openFile(std::string filename);
 	static std::map<unsigned int, std::string> const statusmap;

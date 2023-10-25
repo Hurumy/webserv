@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 12:17:31 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:12:52 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -324,19 +324,18 @@ TEST(RequestHandlerTest, redirectionTest) {
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 }
 
-TEST(RequestHandlerTest, getCgiInfoTest) {
+TEST(RequestHandlerTest, getCgiInfoTest)
+{
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
 	bool expected_status(true);
-	std::string expected_path("/dummy/test.cgi");
-	std::string expected_root("/usr/share/nginx/html");
-	// std::string expected_path("")
+	std::string expected_path("/cgis/test.cgi");
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
-	req.addHeader("Host", "_");
-	req.setUrl("/dummy/test.cgi");
+	req.addHeader("Host", "cgi.test");
+	req.setUrl(expected_path);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -344,9 +343,71 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	handler.routeMethod();
 	handler.isCgi();
 
-	// std::cout << handler.getResponse().getLines() << std::endl;
+	//std::cout << handler.getResponse().getLines() << std::endl;
+
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
-	ASSERT_EQ(handler.isCgi().getOk(), expected_root + expected_path);
+	ASSERT_EQ(handler.isCgi().getOk(), "." + expected_path);
+	
+}
+
+TEST(RequestHandlerTest, Error_ENOENT_getCgiInfoTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected_status(false);
+	std::string expected_path("/cgis/noent.cgi");
+	unsigned int	expected_num(404);
+	bool	is_there_content_length(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "cgi.test");
+	req.setUrl(expected_path);
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+	handler.isCgi();
+
+	//std::cout << handler.getResponse().getLines() << std::endl;
+
+	//isOKでErrorだった場合、どちらにせよすぐ打ち返す
+	//(普通のリクエストだった時と同じオペレーション)	
+	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_num);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), is_there_content_length);
+}
+
+TEST(RequestHandlerTest, Error_EACCES_getCgiInfoTest)
+{
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	bool expected_status(false);
+	std::string expected_path("/cgis/cannotexec.cgi");
+	unsigned int	expected_num(403);
+	bool	is_there_content_length(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "cgi.test");
+	req.setUrl(expected_path);
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+	handler.isCgi();
+
+	//std::cout << handler.getResponse().getLines() << std::endl;
+
+	//isOKでErrorだった場合、どちらにせよすぐ打ち返す
+	//(普通のリクエストだった時と同じオペレーション)	
+	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_num);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), is_there_content_length);
 }
 
 TEST(RequestHandlerTest, getHostnameTest)
@@ -356,12 +417,12 @@ TEST(RequestHandlerTest, getHostnameTest)
 	Request req;
 	std::string expected_host("_");
 	int  expected_port(8660);
-	bool	iscgi(true);
+	bool	iscgi(false);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
-	req.setUrl("/dummy/test.cgi");
+	req.setUrl("/dummy/test");
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
