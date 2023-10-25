@@ -279,7 +279,7 @@ char **CGIResponseCreator::_createArgv() {
 	argv++;
 	*argv = new(std::nothrow) char[cgiPath.size() + 1];
 	if (*argv == NULL) {
-		delete[] *(argv - 1);
+		delete[] argv[0];
 		delete[] argv;
 		return NULL;
 	}
