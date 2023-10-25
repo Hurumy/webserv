@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 11:59:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:23:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,27 @@ bool SocketHandler::closeAllSSockets() {
 	return true;
 }
 
+std::vector<CSocket>::iterator SocketHandler::_deinitCSocket(std::vector<CSocket>::iterator &csockiter) {
+	int const csockfd(csockiter->getSockfd());
+
+	std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(csockfd);
+	if (cgiiter != cgiResponseCreators.end()) {
+		cgiiter->second.waitDeadCGIProc();
+		cgiiter->second.deinit();
+		cgiResponseCreators.erase(cgiiter);
+	}
+	std::map<int, Request>::iterator reqiter = requests.find(csockfd);
+	if (reqiter != requests.end()) {
+		requests.erase(reqiter);
+	}
+	std::map<int, Response>::iterator resiter = responses.find(csockfd);
+	if (resiter != responses.end()) {
+		responses.erase(resiter);
+	}
+	csockiter->closeSockfd();
+	return csockets.erase(csockiter);
+}
+
 bool SocketHandler::removeClosedCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
@@ -65,22 +86,7 @@ bool SocketHandler::removeClosedCSockets() {
 		// 	(iter->getRevents() & POLLRDHUP) == POLLRDHUP) {
 		if ((iter->getRevents() & POLLHUP) == POLLHUP ||
 			(iter->getPhase() == CSocket::CLOSE)) {
-			std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
-			if (cgiiter != cgiResponseCreators.end()) {
-				cgiiter->second.waitDeadCGIProc();
-				cgiiter->second.deinit();
-				cgiResponseCreators.erase(cgiiter);
-			}
-			std::map<int, Request>::iterator reqiter = requests.find(iter->getSockfd());
-			if (reqiter != requests.end()) {
-				requests.erase(reqiter);
-			}
-			std::map<int, Response>::iterator resiter = responses.find(iter->getSockfd());
-			if (resiter != responses.end()) {
-				responses.erase(resiter);
-			}
-			iter->closeSockfd();
-			iter = csockets.erase(iter);
+			iter = _deinitCSocket(iter);
 		} else {
 			iter++;
 		}
