@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include "Result.hpp"
 #include "puterror.hpp"
