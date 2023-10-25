@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 12:39:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:20:47 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -427,7 +427,7 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], "." + requestHandler.isCgi().getOk());
+					CGIResponseCreator cgiResponseCreator(requests[iter->getSockfd()], responses[iter->getSockfd()], requestHandler.isCgi().getOk());
 					cgiResponseCreator.setHostName(requestHandler.getHostname());
 					cgiResponseCreator.setPortNum(requestHandler.getPortNumber());
 					cgiResponseCreators.insert(std::make_pair(
