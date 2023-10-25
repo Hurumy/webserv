@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 20:24:51 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:59:16 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ bool SocketHandler::removeClosedCSockets() {
 				cgiiter->second.waitDeadCGIProc();
 				cgiiter->second.deinit();
 				cgiResponseCreators.erase(cgiiter);
+			}
+			std::map<int, Request>::iterator reqiter = requests.find(iter->getSockfd());
+			if (reqiter != requests.end()) {
+				requests.erase(reqiter);
+			}
+			std::map<int, Response>::iterator resiter = responses.find(iter->getSockfd());
+			if (resiter != responses.end()) {
+				responses.erase(resiter);
 			}
 			iter->closeSockfd();
 			iter = csockets.erase(iter);
