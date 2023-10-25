@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   APayload.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/21 18:20:20 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:05:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,12 @@ Result<std::string, bool> const APayload::getHeader(
 }
 
 bool APayload::addHeader(std::string const &key, std::string const &value) {
-	if (header.find(key) != header.end())
-		return (false);
-	else
-		header[key] = value;
-	return (true);
+	return header.insert(std::make_pair(key, value)).second;
+}
+
+bool APayload::setHeader(std::string const &key, std::string const &value) {
+	header[key] = value;
+	return true;
 }
 
 std::string const &APayload::getVersion() const { return (version); }

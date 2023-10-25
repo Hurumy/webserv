@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AMethod.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 11:35:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:17:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,28 +22,28 @@
 #include "webserv.hpp"
 
 class AMethod {
-   private:
-   protected:
-	AMethod(Config _conf, Request _req, Response &_res);
-	~AMethod();
-	Config conf;
-	Request req;
-	Response &res;
-	std::string uri;
-	bool isloc;
-	Location loc;
-	bool iscgi;
-	bool iscgicanaccess;
-	std::string path_to_cgi;
-	Result<std::string, bool> const _openFile(std::string filename);
-	static std::map<unsigned int, std::string> const statusmap;
-	static std::map<unsigned int, std::string> initStatusMap();
-	// Result<int, bool>					searchSettingsOfURI();
-   public:
-	virtual Result<int, bool> act() = 0;
-	Result<int, bool> checkRedirects();
-	Result<int, bool> checkURI();
-	void setURI();
-	void setErrorPageBody();
-	Result<std::string, bool> const isCgi() const;
+	private:
+	protected:
+		AMethod(Config _conf, Request _req, Response &_res);
+		~AMethod();
+		Config conf;
+		Request req;
+		Response &res;
+		std::string uri;
+		bool isloc;
+		Location loc;
+		bool iscgi;
+		bool iscgicanaccess;
+		std::string path_to_cgi;
+		Result<std::string, bool> const _openFile(std::string filename);
+		static std::map<unsigned int, std::string> const statusmap;
+		static std::map<unsigned int, std::string> initStatusMap();
+		// Result<int, bool>					searchSettingsOfURI();
+	public:
+		virtual Result<int, bool> act() = 0;
+		Result<int, bool> checkRedirects();
+		Result<int, bool> checkURI();
+		void setURI();
+		void setErrorPageBody();
+		Result<std::string, bool> const isCgi() const;
 };

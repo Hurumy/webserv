@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 15:36:37 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/04 17:48:24 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/16 20:40:22 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,23 +30,29 @@ jobs:
         sudo apt install clang-format
     - name: Refactor codes
       run: |
-        cpp_files=$(find . -type f -name '*.cpp' -path "./src/*")
+        cd ./src
+        cpp_files=$(find . -type f -name '*.cpp')
         for file in $cpp_files; do
           echo "Running clang-format for $file..."
-          clang-format --style=file ./src/.clang-format "$file"
+          clang-format -i "$file"
         done
-        hpp_files=$(find . -type f -name '*.hpp' -path "./include/*")
+        cd ..
+        cd ./include
+        hpp_files=$(find . -type f -name '*.hpp')
         for file in $hpp_files; do
           echo "Running clang-format for $file..."
-          clang-format --style=file ./include/.clang-format "$file"
+          clang-format -i "$file"
         done
+        cd ..
     - name: Refactor unit test codes
       run: |
-        cpp_files=$(find . -type f -name '*.cpp' -path "./test/src/*")
+        cd ./test
+        cpp_files=$(find . -type f -name '*.cpp')
         for file in $cpp_files; do
           echo "Running clang-format for $file..."
-          clang-format --style=file ./test/.clang-format "$file"
+          clang-format -i "$file"
         done
+        cd ..
     - name: Remove unnecessary file
       run: rm -f ".clang-fomat file"
     - name: Create Pull Request

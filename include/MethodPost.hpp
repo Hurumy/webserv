@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 12:39:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:13:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ class MethodPost : public AMethod {
 	int writeToFile(int fd);
 	Result<int, bool> checkMaxBodySize();
 
-   protected:
-   public:
-	MethodPost(Config _conf, Request _req, Response &_res);
-	~MethodPost();
-	Result<int, bool> act();
+	protected:
+	public:
+		MethodPost(Config _conf, Request _req, Response &_res);
+		~MethodPost();
+		Result<int, bool> act();
 };

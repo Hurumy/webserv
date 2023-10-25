@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:39:18 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:14:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,9 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 		}
 		else if (errno == ENOENT)
 		{
+			#if defined(_DEBUGFLAG)
+			std::cout << RED << "MethodGet::checkIsDirlisting stat失敗。ENOENT" << RESET << std::endl;
+			#endif
 			res.setStatus(404);
 			res.setStatusMessage("Not Found");
 			setErrorPageBody();
@@ -160,6 +163,10 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 		}
 		else
 		{
+			#if defined(_DEBUGFLAG)
+			std::cout << RED << "MethodGet::checkIsDirlisting stat失敗。エラーコードなし" << RESET << std::endl;
+			std::cout << RED << "Filename: " << uri << RESET << std::endl;
+			#endif
 			res.setStatus(500);
 			res.setStatusMessage("Internal Server Error");
 			setErrorPageBody();
@@ -223,6 +230,10 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	}
 	else
 	{
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "MethodGet::checkIsDirlisting MakeDirlistHTMLが失敗している" << RESET << std::endl;
+		std::cout << RED << "Filename: " << uri << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		setErrorPageBody();

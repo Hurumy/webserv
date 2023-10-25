@@ -22,15 +22,15 @@
 #include "webserv.hpp"
 
 class MakeDirlistHTML {
-   private:
-	std::string path;
-	std::string html;
-	static const std::string header;
-	static const size_t bufsize;
+	private:
+		std::string path;
+		std::string html;
+		static const std::string header;
+		static const size_t bufsize;
 
-   protected:
-   public:
-	MakeDirlistHTML(std::string _path);
-	~MakeDirlistHTML();
-	Result<std::string, bool> returnHTML();
+	protected:
+	public:
+		MakeDirlistHTML(std::string _path);
+		~MakeDirlistHTML();
+		Result<std::string, bool> returnHTML();
 };

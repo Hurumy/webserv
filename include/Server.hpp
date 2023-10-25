@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Version.hpp                                        :+:      :+:    :+:   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/25 18:32:26 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/04 14:21:25 by shtanemu         ###   ########.fr       */
+/*   Created: 2023/10/20 11:01:32 by shtanemu          #+#    #+#             */
+/*   Updated: 2023/10/20 12:45:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>
-#include <vector>
+#include "SocketHandler.hpp"
+#include "SSocket.hpp"
+#include "Config.hpp"
 
-#include "Result.hpp"
-
-class Version {
+class Server {
 	private:
-		static const std::vector<std::string> versions;
-
+		SocketHandler socketHandler;
+		std::vector<SSocket> sources;
+		std::vector<Config> configs;
 	protected:
 	public:
-		static Result<std::string, bool> getVersion(std::string const &version);
-		static std::vector<std::string> createVersions();
+		bool startUp(std::string const &pathConfig);
+		bool serverLoop();
+		bool down();
 };

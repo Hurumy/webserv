@@ -18,23 +18,23 @@
 
 template <typename E>
 class Error {
-   public:
-	Error(E const &_e) : e(_e) {}
-	Error(Error const &sourceError) { *this = sourceError; }
-	Error &operator=(Error const &sourceError) {
-		if (this != &sourceError) {
-			e = sourceError.e;
+	public:
+		Error(E const &_e) : e(_e) {}
+		Error(Error const &sourceError) { *this = sourceError; }
+		Error &operator=(Error const &sourceError) {
+				if (this != &sourceError) {
+						e = sourceError.e;
+				}
+				return *this;
 		}
-		return *this;
-	}
-	~Error() {}
-	template <typename T, typename V>
-	operator Result<T, V>() const {
-		return Result<T, V>(e);
-	}
+		~Error() {}
+		template <typename T, typename V>
+		operator Result<T, V>() const {
+				return Result<T, V>(e);
+		}
 
-   private:
-	Error() {}
+	private:
+		Error() {}
 
-	E e;
+		E e;
 };

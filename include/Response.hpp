@@ -16,15 +16,15 @@
 #include "webserv.hpp"
 
 class Response : public virtual APayload {
-   private:
-	unsigned int status;
-	std::string statusMessage;
+	private:
+		unsigned int status;
+		std::string statusMessage;
 
-   protected:
-   public:
-	std::string const getLines() const;
-	bool setStatus(unsigned int status);
-	unsigned int getStatus() const;
-	bool setStatusMessage(std::string const &message);
-	std::string const &getStatusMessage() const;
+	protected:
+	public:
+		std::string const getLines() const;
+		bool setStatus(unsigned int status);
+		unsigned int getStatus() const;
+		bool setStatusMessage(std::string const &message);
+		std::string const &getStatusMessage() const;
 };

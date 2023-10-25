@@ -49,7 +49,7 @@ static int twocontents(Config &conf, std::vector<std::string> lines) {
 	int num;
 
 	//要素数が1つのときはステータスかURLしか入らない
-	//URLの時はステータスを302にしてよい
+	// URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;
@@ -127,7 +127,7 @@ static int l_twocontents(Location &loc, std::vector<std::string> lines) {
 	int num;
 
 	//要素数が1つのときはステータスかURLしか入らない
-	//URLの時はステータスを302にしてよい
+	// URLの時はステータスを302にしてよい
 	if (isNumber(lines.at(1)) == true) {
 		ss << lines.at(1);
 		ss >> num;

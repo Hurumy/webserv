@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 14:52:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:14:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ int MethodDelete::deleteFile() {
 
 	status = unlink(uri.c_str());
 	if (status == -1) {
+		#if defined(_DEBUGFLAG)
+		std::cout << RED << "MethodDelete::deleteFile unlink失敗。" << RESET << std::endl;
+		std::cout << RED << "Filename: " << uri << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		return (500);

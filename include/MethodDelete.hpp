@@ -14,13 +14,13 @@
 #include "webserv.hpp"
 
 class MethodDelete : public AMethod {
-   private:
-	int openResourceDelete();
-	int deleteFile();
+	private:
+		int openResourceDelete();
+		int deleteFile();
 
-   protected:
-   public:
-	MethodDelete(Config _conf, Request _req, Response &_res);
-	~MethodDelete();
-	Result<int, bool> act();
+	protected:
+	public:
+		MethodDelete(Config _conf, Request _req, Response &_res);
+		~MethodDelete();
+		Result<int, bool> act();
 };
