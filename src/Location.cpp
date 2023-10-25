@@ -14,10 +14,7 @@
 
 std::string const Location::getUri() const { return (this->uri); }
 
-std::string const Location::getAlias() const
-{
-	return (this->alias);
-}
+std::string const Location::getAlias() const { return (this->alias); }
 
 std::string const Location::getRootDir() const { return (this->rootdir); }
 
@@ -82,8 +79,7 @@ bool Location::setUri(std::string _uri) {
 	return (true);
 }
 
-bool Location::setAlias(std::string _alias)
-{
+bool Location::setAlias(std::string _alias) {
 	this->alias = _alias;
 	return (true);
 }

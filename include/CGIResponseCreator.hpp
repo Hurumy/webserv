@@ -12,8 +12,8 @@
 
 #pragma once
 
-#include "MetaVariables.hpp"
 #include "CSocket.hpp"
+#include "MetaVariables.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
 
@@ -24,7 +24,8 @@ class CGIResponseCreator {
 	public:
 		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGILASTRECV, CGIFIN };
 		// enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGIRECVFIN };
-		CGIResponseCreator(Request &_request, Response &_response, const std::string &_cgiPath);
+		CGIResponseCreator(Request &_request, Response &_response,
+						   const std::string &_cgiPath);
 
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);

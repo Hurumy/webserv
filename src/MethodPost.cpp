@@ -78,8 +78,7 @@ std::string MethodPost::makeFilename(std::string _uppath) {
 	return (filename);
 }
 
-Result<int, bool> MethodPost::checkMaxBodySize()
-{
+Result<int, bool> MethodPost::checkMaxBodySize() {
 	std::stringstream ss;
 	unsigned long long filesize;
 
@@ -94,16 +93,14 @@ Result<int, bool> MethodPost::checkMaxBodySize()
 	ss << header.getOk();
 	ss >> filesize;
 
-	//locationのMaxBodySizeを見る
-	if (filesize > loc.getMaxBodySize())
-	{
+	// locationのMaxBodySizeを見る
+	if (filesize > loc.getMaxBodySize()) {
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
 	}
-	//configのMaxBodySizeを見る
-	else if (filesize > conf.getMaxBodySize())
-	{
+	// configのMaxBodySizeを見る
+	else if (filesize > conf.getMaxBodySize()) {
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
@@ -115,31 +112,29 @@ Result<int, bool> MethodPost::checkMaxBodySize()
 int MethodPost::openPostResource() {
 	int status = 0;
 	int fd;
-	std::string	uppath;
+	std::string uppath;
 
-	//locationでUploadPathが設定されていたらそれを使う
-	if (isloc == true && loc.getUploadPath().empty() == false)
-	{
+	// locationでUploadPathが設定されていたらそれを使う
+	if (isloc == true && loc.getUploadPath().empty() == false) {
 		uppath = loc.getUploadPath();
 	}
-	//configでUploadPathが設定されていたらそれを使う
-	else if (conf.getUploadPath().empty() == false)
-	{
+	// configでUploadPathが設定されていたらそれを使う
+	else if (conf.getUploadPath().empty() == false) {
 		uppath = conf.getUploadPath();
 	}
 	//どちらも設定がなければURIをそのまま使う
-	else
-	{
+	else {
 		uppath = uri;
 	}
 
 	//パス自体へのアクセスを調べる
 	status = access(uppath.c_str(), W_OK);
 	if (status == -1) {
-		#if defined(_DEBUGFLAG)
-			std::cout << RED << "Error in MethodPost::openPostResource" << RESET << std::endl;
-			std::cout << RED << "uppath: " << uppath << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "Error in MethodPost::openPostResource" << RESET
+				  << std::endl;
+		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+#endif
 		res.setStatus(401);
 		res.setStatusMessage("Unauthorized");
 		return (401);

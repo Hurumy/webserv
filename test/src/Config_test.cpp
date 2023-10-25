@@ -11,22 +11,21 @@
 /* ************************************************************************** */
 
 #include "Config.hpp"
-#include "SSocket.hpp"
 
 #include <gtest/gtest.h>
 
 #include <string>
 
 #include "Address.hpp"
+#include "SSocket.hpp"
 
-TEST(ConfigTest, addressesTest)
-{
-	Config 					config;
-	Address 				add;
-	std::vector<Address> 	res;
-	std::string		 		expected("111.108.92.125");
-	int 					expected_port(8080);
-	int 					expected_ver(IPV4);
+TEST(ConfigTest, addressesTest) {
+	Config config;
+	Address add;
+	std::vector<Address> res;
+	std::string expected("111.108.92.125");
+	int expected_port(8080);
+	int expected_ver(IPV4);
 
 	add.setIpAddress(expected);
 	add.setPort(expected_port);

@@ -16,7 +16,7 @@ MetaVariables::MetaVariables() : metaVariablesMap(initMetaVariables()) {}
 
 std::map<std::string, std::string> MetaVariables::initMetaVariables() {
 	std::map<std::string, std::string> initialMetaVariables;
-	
+
 	initialMetaVariables["AUTH_TYPE="] = "";
 	initialMetaVariables["CONTENT_LENGTH="] = "";
 	initialMetaVariables["CONTENT_TYPE="] = "";
@@ -143,10 +143,12 @@ std::size_t MetaVariables::getSizeMetaVars() const {
 	return metaVariablesMap.size() + optinalMetaVarsMap.size();
 }
 
-std::map<std::string, std::string> const &MetaVariables::getMetaVariables() const {
+std::map<std::string, std::string> const &MetaVariables::getMetaVariables()
+	const {
 	return metaVariablesMap;
 }
 
-std::map<std::string, std::string> const &MetaVariables::getOptionalMetaVariables() const {
+std::map<std::string, std::string> const &
+MetaVariables::getOptionalMetaVariables() const {
 	return optinalMetaVarsMap;
 }

@@ -28,7 +28,8 @@
 
 class SocketHandler {
 	private:
-		std::vector<CSocket>::iterator _deinitCSocket(std::vector<CSocket>::iterator &csockiter);
+		std::vector<CSocket>::iterator _deinitCSocket(
+			std::vector<CSocket>::iterator &csockiter);
 
 		std::vector<SSocket> ssockets;
 		std::vector<CSocket> csockets;

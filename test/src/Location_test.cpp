@@ -152,4 +152,3 @@ TEST(LocationTest, aliasTest) {
 	location.setAlias(loc_1);
 	ASSERT_EQ(location.getAlias(), loc_1);
 }
-

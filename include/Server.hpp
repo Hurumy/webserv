@@ -12,15 +12,16 @@
 
 #pragma once
 
-#include "SocketHandler.hpp"
-#include "SSocket.hpp"
 #include "Config.hpp"
+#include "SSocket.hpp"
+#include "SocketHandler.hpp"
 
 class Server {
 	private:
 		SocketHandler socketHandler;
 		std::vector<SSocket> sources;
 		std::vector<Config> configs;
+
 	protected:
 	public:
 		bool startUp(std::string const &pathConfig);

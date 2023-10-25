@@ -12,8 +12,7 @@
 
 #include "ConfParser.hpp"
 
-int l_readAlias(Location &loc, std::string oneline)
-{
+int l_readAlias(Location &loc, std::string oneline) {
 	std::vector<std::string> lines;
 
 	lines = lineSpliter(oneline, " ");
@@ -24,12 +23,9 @@ int l_readAlias(Location &loc, std::string oneline)
 		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit(
-			"Too many elements in alias directives _(´ω`_)⌒)_ ))");
+		errorInInit("Too many elements in alias directives _(´ω`_)⌒)_ ))");
 
 	loc.setAlias(lines.at(1));
 
 	return (0);
 }
-
-

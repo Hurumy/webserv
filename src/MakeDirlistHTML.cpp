@@ -87,7 +87,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		st = readdir(ds);
 	}
 	if (errno != 0) return Error<bool>(false);
-	
+
 	closedir(ds);
 
 	//終わりの部分を書き込む

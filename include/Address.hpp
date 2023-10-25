@@ -12,27 +12,26 @@
 
 #pragma once
 
-#include "webserv.hpp"
 #include "SSocket.hpp"
+#include "webserv.hpp"
 
-class Address
-{
-   private:
-	std::string ipaddress;
-	int 		port;
- 	ipvers 		ipver;
-	bool		isaddress;
+class Address {
+	private:
+		std::string ipaddress;
+		int port;
+		ipvers ipver;
+		bool isaddress;
 
-   protected:
-   public:
-	std::string const getIpAddress() const;
-	int getPort() const;
-	int getIpVers() const;
-	bool getIsAddress() const;
-	bool setIpAddress(std::string address);
-	bool setPort(int _port);
-	bool setIpVers(int _protocol);
-	Address();
-	// ~Address();
-	// Address(Address const &add);
+	protected:
+	public:
+		std::string const getIpAddress() const;
+		int getPort() const;
+		int getIpVers() const;
+		bool getIsAddress() const;
+		bool setIpAddress(std::string address);
+		bool setPort(int _port);
+		bool setIpVers(int _protocol);
+		Address();
+		// ~Address();
+		// Address(Address const &add);
 };

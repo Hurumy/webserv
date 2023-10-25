@@ -14,9 +14,10 @@
 
 #define BUFFER_SIZE 1000
 
+#include <stdint.h>
+
 #include <ctime>
 #include <string>
-#include <stdint.h>
 
 #include "Result.hpp"
 

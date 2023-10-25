@@ -312,6 +312,4 @@ void Request::setRemoteAddr(std::string const &_remoteAddr) {
 	remoteAddr = _remoteAddr;
 }
 
-std::string const &Request::getRemoteAddr() const {
-	return remoteAddr;
-}
+std::string const &Request::getRemoteAddr() const { return remoteAddr; }
