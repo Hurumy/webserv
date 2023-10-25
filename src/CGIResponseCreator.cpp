@@ -265,7 +265,7 @@ char **CGIResponseCreator::_createArgv() {
 	char **argv;
 	char **head;
 
-	argv = (char **)new(std::nothrow) char*[3];
+	argv = new(std::nothrow) char*[3];
 	if (argv == NULL) {
 		return NULL;
 	}
@@ -279,8 +279,8 @@ char **CGIResponseCreator::_createArgv() {
 	argv++;
 	*argv = new(std::nothrow) char[cgiPath.size() + 1];
 	if (*argv == NULL) {
-		delete []*(argv - 1);
-		delete []argv;
+		delete[] *(argv - 1);
+		delete[] argv;
 		return NULL;
 	}
 	std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
