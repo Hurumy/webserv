@@ -272,15 +272,15 @@ char **CGIResponseCreator::_createArgv() {
 	head = argv;
 	*argv = new(std::nothrow) char[runtimePath.size() + 1];
 	if (*argv == NULL) {
-		delete []argv;
+		delete []head;
 		return NULL;
 	}
 	std::strncpy(*argv, runtimePath.c_str(), runtimePath.size() + 1);
 	argv++;
 	*argv = new(std::nothrow) char[cgiPath.size() + 1];
 	if (*argv == NULL) {
-		delete[] argv[0];
-		delete[] argv;
+		delete[] head[0];
+		delete[] head;
 		return NULL;
 	}
 	std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
