@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/20 14:20:02 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:14:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ int MethodDelete::openResourceDelete() {
 			status = deleteFile();
 			return (status);
 		} else {
+			#if defined(_DEBUGFLAG)
+				std::cout << RED << "Error in MethodDelete::openResourseDelete" << RESET << std::endl;
+			#endif
 			res.setStatus(401);
 			res.setStatusMessage("Unauthorized");
 			return (401);

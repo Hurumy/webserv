@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 16:29:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 10:38:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int rL_searchipv6(Address &add, std::string oneline)
 	{
 		return (0);
 	}
+
 	//[]はあるが、片方しかない時、順序がおかしいとき
 	else if (start == std::string::npos || end == std::string::npos || start >= end)
 	{
@@ -52,24 +53,32 @@ static int rL_searchipv6(Address &add, std::string oneline)
 	// []の中身が::だけであれば、それは設定がないのと同じなので何もしない
 	// []の中身が正しいIpv6アドレスの形式になっているかどうかをきちんとチェックするようにしたい
 	trimedstring = oneline.substr(start + 1, end - start - 1);
-	// std::cout << trimedstring << std::endl;
+
+	// []の中に::だけでない文字列が入っていた時(後でちゃんと形式チェックしたい)
 	if (trimedstring != "::")
 	{
 		add.setIpVers(IPV6);
 		add.setIpAddress(trimedstring);
 	}
+	// [::]だった場合、IPに未指定アドレスをセット
+	else
+	{
+		add.setIpVers(IPV6);
+		add.setIpAddress("0:0:0:0:0:0:0:0");
+	}
 
-	// []の後ろに:があるかどうかを探す
+
+	// []の後ろに:があるかどうかを探す(ポート設定の有無を確認)
 	portsign = oneline.find(':', end);
 
-	// :がなかった場合→ポートの設定がなく、アドレスの設定のみ
-	// :があったが、[]の直後ではなかった場合
-	if (portsign != end + 1)
+	// :がなかった場合->ポートの設定がないので、ポートを初期値にセット
+	if (portsign == std::string::npos)
 	{
-		errorInInit("syntax error in listen directive (ﾉω<､)\n");
+		add.setIpVers(IPV6);
+		add.setPort(80);
 	}
-	// : が正しい位置にあった場合、ポートの設定を切り出す
-	else if (portsign != std::string::npos)
+	// :が正しい位置([]の直後)にあった場合、ポートの設定を切り出す
+	else if (portsign == end + 1)
 	{
 		std::stringstream ss;
 		int				 portnumber;
@@ -82,11 +91,10 @@ static int rL_searchipv6(Address &add, std::string oneline)
 		add.setIpVers(IPV6);
 		add.setPort(portnumber);
 	}
-	// ポートの設定がなかったら初期値を設定する
+	// :があったが、[]の直後ではなかった場合、それは変な位置なのでエラー。
 	else
 	{
-		add.setIpVers(IPV6);
-		add.setPort(80);
+		errorInInit("syntax error in listen directive (ﾉω<､)\n");
 	}
 
 	return (1);
@@ -108,8 +116,11 @@ int rL_searchipv4(Address &add, std::string oneline)
 	// . があったらアドレス設定のみ (デフォルトポートは80番)
 	// . がなかったらポートの設定のみ
 
+	// :を探す
 	colon = oneline.find(':');
 	// std::cout << "oneline: " << oneline << std::endl;
+
+	// :があった時(ポートの設定もアドレスの設定もある場合)
 	if (colon != std::string::npos)
 	{
 		ss << oneline;
@@ -126,21 +137,30 @@ int rL_searchipv4(Address &add, std::string oneline)
 		add.setPort(portnum);
 		return (1);
 	}
+	// :がなかった時(ポート設定のみの時かアドレス設定のみの時)
 	else
 	{
 		comma = oneline.find('.');
+		// .があった時(アドレス設定のみの時) 後でちゃんとvalidateしたい
 		if (comma != std::string::npos)
 		{
 			add.setIpVers(IPV4);
 			add.setIpAddress(oneline);
+
+			// アドレスの指定のみでポートの設定がなかった場合、デフォルトでポートを80番に設定する
+			add.setPort(80);
 			return (1);
 		}
+		// .がなかった時(ポート設定のみの時) 後でValidate!
 		else
 		{
 			ss << oneline;
 			ss >> portnum;
 			add.setIpVers(IPV4);
 			add.setPort(portnum);
+
+			//ポートの設定しかなかった場合、IPアドレスを0.0.0.0に設定する
+			add.setIpAddress("0.0.0.0");
 			return (1);
 		}
 	}
@@ -166,6 +186,7 @@ int readListen(Config &conf, std::string oneline)
 	// []を削除して : があったらポート設定もアドレス設定もある
 	// []の外に何もなかったらアドレス設定のみ(デフォルトポートは80番)
 	// [::]: という形だったらポート設定のみ
+	// return: この中でIPv6アドレスだとわかって、セットした場合は1。IPv6でなかった場合は0。エラーの場合は即終了
 	status = rL_searchipv6(add, content);
 
 
@@ -187,20 +208,25 @@ int readListen(Config &conf, std::string oneline)
 	// 		errorInInit("Unknown directive found....°(ಗдಗ。)°.");
 	// }
 
+
+	// std::cout << "ipaddress: " << add.getIpAddress() << std::endl;
+	// std::cout << "port: " << add.getPort() << std::endl;
+
 	conf.addAddresses(add);
 
 	return (0);
 }
 
-//**listenがない場合**
-//スーパーユーザー権限で実行されている場合は80番ポート
-//そうでない場合は8080番ポートが利用される
+// listenが一つもなかった場合にデフォルト設定を書き込む
+// Nginx"スーパーユーザー権限で実行されている場合は80番ポート
+// そうでない場合は8080番ポートが利用される"と書いてあるんですが、全然対応できてないです。。
 int	thereisnoListen(Config &conf)
 {
 	Address add;
 
 	add.setPort(80);
 	add.setIpVers(IPV4);
+	add.setIpAddress("0.0.0.0");
 	conf.addAddresses(add);
 	return (0);
 }

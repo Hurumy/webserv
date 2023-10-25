@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 16:26:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 18:02:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:19:48 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,4 +229,20 @@ TEST(ConfigParserTest, pCgiExtensionTest) {
 	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_1).isOK(), ex_1);
 	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_2).isOK(), ex_2);
 	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_3).isOK(), ex_3);
+}
+
+TEST(ConfigParserTest, pGivenConfFileTest_1)
+{
+	std::vector<Config> tmp;
+	int	ex_port(8080);
+	std::string		ex_ip("0.0.0.0");
+	size_t			ex_address_size(1);
+	size_t			ex_conf_size(1);
+
+	Result<std::vector<Config>, bool> res = parseConf("testconfs/given_1.conf");
+	tmp = res.getOk();
+	ASSERT_EQ(tmp.size(), ex_conf_size);
+	ASSERT_EQ(tmp.at(0).getAddresses().size(), ex_address_size);
+	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getIpAddress(), ex_ip);
+	ASSERT_EQ(tmp.at(0).getAddresses().at(0).getPort(), ex_port);
 }

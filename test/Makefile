@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/17 20:13:56 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/25 13:14:31 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -90,6 +90,7 @@ WS_SRC_FILES	:= \
 					parseConf_parseLocation.cpp \
 					pC_location.cpp \
 					pC_cgi_path.cpp \
+					pC_alias.cpp \
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

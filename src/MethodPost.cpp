@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/16 14:29:05 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/23 14:55:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int MethodPost::writeToFile(int fd) {
 	return (0);
 }
 
-std::string MethodPost::makeFilename() {
+std::string MethodPost::makeFilename(std::string _uppath) {
 	int status = 0;
 	unsigned long long number = 0;
 	std::stringstream ss;
@@ -68,7 +68,7 @@ std::string MethodPost::makeFilename() {
 	do {
 		ss.str("");
 		ss.clear(std::stringstream::goodbit);
-		ss << uri;
+		ss << _uppath;
 		ss << "/";
 		ss << number;
 		filename = ss.str();
@@ -78,7 +78,8 @@ std::string MethodPost::makeFilename() {
 	return (filename);
 }
 
-Result<int, bool> MethodPost::checkMaxBodySize() {
+Result<int, bool> MethodPost::checkMaxBodySize()
+{
 	std::stringstream ss;
 	unsigned long long filesize;
 
@@ -93,7 +94,16 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 	ss << header.getOk();
 	ss >> filesize;
 
-	if (filesize > conf.getMaxBodySize()) {
+	//locationのMaxBodySizeを見る
+	if (filesize > loc.getMaxBodySize())
+	{
+		res.setStatus(413);
+		res.setStatusMessage("Payload Too Large");
+		return Error<bool>(false);
+	}
+	//configのMaxBodySizeを見る
+	else if (filesize > conf.getMaxBodySize())
+	{
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
@@ -105,21 +115,42 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 int MethodPost::openPostResource() {
 	int status = 0;
 	int fd;
+	std::string	uppath;
+
+	//locationでUploadPathが設定されていたらそれを使う
+	if (isloc == true && loc.getUploadPath().empty() == false)
+	{
+		uppath = loc.getUploadPath();
+	}
+	//configでUploadPathが設定されていたらそれを使う
+	else if (conf.getUploadPath().empty() == false)
+	{
+		uppath = conf.getUploadPath();
+	}
+	//どちらも設定がなければURIをそのまま使う
+	else
+	{
+		uppath = uri;
+	}
 
 	//パス自体へのアクセスを調べる
-	status = access(uri.c_str(), W_OK);
+	status = access(uppath.c_str(), W_OK);
 	if (status == -1) {
+		#if defined(_DEBUGFLAG)
+			std::cout << RED << "Error in MethodPost::openPostResource" << RESET << std::endl;
+			std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+		#endif
 		res.setStatus(401);
 		res.setStatusMessage("Unauthorized");
 		return (401);
 	}
 
-	// Configで指定されているMaxBodySizeを超えていないかしらべる
+	// Config/Locationで指定されているMaxBodySizeを超えていないかしらべる
 	Result<int, bool> res_size = checkMaxBodySize();
 	if (res_size.isOK() == false) return (413);
 
 	//被りのないファイル名を調べる
-	filename = makeFilename();
+	filename = makeFilename(uppath);
 	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/20 15:48:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 13:14:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ Result<int, bool> MethodGet::searchIndex()
 	std::string tmppath;
 
 	// std::cout << "searching index files!!" << std::endl;
-	std::cout << loc.getIndex().size() << std::endl;
+	// std::cout << loc.getIndex().size() << std::endl;
 
 	//locationのIndexを見る
 	if (isloc == true && loc.getIndex().size() != 0)
@@ -263,7 +263,7 @@ Result<int, bool> MethodGet::searchIndex()
 				tmppath += "/";
 			tmppath += loc.getIndex().at(i);
 
-			std::cout << tmppath << std::endl;
+			// std::cout << tmppath << std::endl;
 
 			// openしてみて、成功したらそれを打ち返す
 			// 成功しなかったらどんどん次を読みこむ
@@ -300,7 +300,7 @@ Result<int, bool> MethodGet::searchIndex()
 				tmppath += "/";
 			tmppath += conf.getIndex().at(i);
 
-			std::cout << tmppath << std::endl;
+			// std::cout << tmppath << std::endl;
 
 			// openしてみて、成功したらそれを打ち返す
 			// 成功しなかったらどんどん次を読みこむ
@@ -328,7 +328,7 @@ Result<int, bool> MethodGet::searchIndex()
 	tmppath += conf.getRootDir();
 	tmppath += "/";
 	tmppath += "index.html";
-	std::cout << tmppath << std::endl;
+	// std::cout << tmppath << std::endl;
 
 	//index.htmlが存在するか調べる(デフォルトの挙動)
 	status = open(tmppath.c_str(), O_RDONLY);
