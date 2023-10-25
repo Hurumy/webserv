@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 11:48:43 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 10:37:13 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,12 @@ TEST(LocationParserTest, pAliasTest) {
 
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	tmp = res.getOk();
+
+	// std::cout << "num of confs: " << tmp.size() << std::endl; 
+	// std::cout << tmp.at(2).getAddresses().size() << std::endl;
+	// std::cout << tmp.at(2).getAddresses().at(0).getIpAddress() << std::endl;
+	// std::cout << tmp.at(2).getAddresses().at(0).getPort() << std::endl; 
+
 	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getAlias(), expected_1);
 }
 

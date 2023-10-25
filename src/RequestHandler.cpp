@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 12:59:31 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/24 13:36:41 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
 			iscgi = false;
 		} 
@@ -173,6 +174,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
 			iscgi = false;
 		}
@@ -204,6 +206,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
+			return Ok<int>(0);
 		} else {
 			iscgi = false;
 		}
