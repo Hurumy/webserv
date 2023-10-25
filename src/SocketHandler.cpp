@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 13:20:47 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 14:53:16 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,7 +484,7 @@ bool SocketHandler::handleCGIRequest() {
 				iter->second.waitChildProc();
 				++iter;
 			} break ;
-			case CGIResponseCreator::CGIWAIT: {
+			case CGIResponseCreator::CGILASTRECV: {
 				iter->second.waitChildProc();
 				++iter;
 			} break ;
