@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 14:53:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:00:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,8 @@ bool SocketHandler::createPollfds() {
 				 cgiResponseCreators.begin();
 			 iter != cgiResponseCreators.end(); ++iter) {
 			if (iter->second.getPhase() == CGIResponseCreator::CGIWRITE ||
-				iter->second.getPhase() == CGIResponseCreator::CGIRECV) {
+				iter->second.getPhase() == CGIResponseCreator::CGIRECV ||
+				iter->second.getPhase() == CGIResponseCreator::CGILASTRECV) {
 				std::memset(&added_pollfd, 0, sizeof(added_pollfd));
 				added_pollfd.fd = iter->second.getMonitoredfd();
 				added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
@@ -208,7 +209,8 @@ bool SocketHandler::setRevents() {
 			 cgiiter != cgiResponseCreators.end(); ++cgiiter) {
 			CGIResponseCreator::tag _phase = cgiiter->second.getPhase();
 			if ((_phase == CGIResponseCreator::CGIWRITE ||
-				 _phase == CGIResponseCreator::CGIRECV) &&
+				 _phase == CGIResponseCreator::CGIRECV ||
+				 _phase == CGIResponseCreator::CGILASTRECV) &&
 				polliter->fd == cgiiter->second.getMonitoredfd()) {
 				cgiiter->second.setRevents(polliter->revents);
 				break;
@@ -485,7 +487,14 @@ bool SocketHandler::handleCGIRequest() {
 				++iter;
 			} break ;
 			case CGIResponseCreator::CGILASTRECV: {
-				iter->second.waitChildProc();
+				if ((iter->second.getRevents() & POLLIN) == POLLIN) {
+					// Reade output from outpfd[0]
+					iter->second.recvCGIOutput();
+					// deinit inpfd, outpfd, monitoredfd
+					iter->second.setCGIOutput();
+				} else {
+					iter->second.setPhase(CGIResponseCreator::CGIFIN);
+				}
 				++iter;
 			} break ;
 			case CGIResponseCreator::CGIFIN: {
