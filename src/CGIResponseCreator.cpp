@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 20:24:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:12:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -453,6 +453,7 @@ bool CGIResponseCreator::setCGIOutput() {
 }
 
 bool CGIResponseCreator::waitDeadCGIProc() {
+	if (pid == 0 || kill(pid, 0) == -1) { return false; }
 	if(waitpid(pid, &wstatus, 0) == -1) {
 		putSytemError("waitpid");
 		return false;
