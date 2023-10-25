@@ -17,10 +17,11 @@
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
-#include "webserv.hpp"
 #include "SSocket.hpp"
+#include "webserv.hpp"
 
-Result<std::vector<std::string>, bool> cutOutLocation(const std::vector<std::string> &origin, Config &conf);
+Result<std::vector<std::string>, bool> cutOutLocation(
+	const std::vector<std::string> &origin, Config &conf);
 
 int l_readLocation(Location &loc, std::string oneline);
 int l_readRoot(Location &loc, std::string oneline);
@@ -58,7 +59,7 @@ int readUploadPath(Config &conf, std::string oneline);
 int readAllowedMethods(Config &conf, std::string oneline);
 int readCGIExtension(Config &conf, std::string oneline);
 
-int	thereisnoListen(Config &conf);
+int thereisnoListen(Config &conf);
 
 bool isNumber(std::string str);
 bool isSpace(std::string str);

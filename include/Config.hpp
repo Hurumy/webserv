@@ -38,8 +38,8 @@ class Config {
 		std::map<std::string, bool> reqmethod;
 		std::vector<std::string> cgiextension;
 
-   protected:
-   public:
+	protected:
+	public:
 		std::vector<Address> const &getAddresses() const;
 		Result<Location, bool> const getLocations(std::string key) const;
 		std::vector<std::string> const getServerName() const;

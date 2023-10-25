@@ -24,14 +24,13 @@
 #define CONF_FILE_PATH "testconfs/simple.conf"
 #define CONF_FILE_PATH_2 "testconfs/location_dir.conf"
 
-TEST(ConfigParserTest, pAddressesTest)
-{
+TEST(ConfigParserTest, pAddressesTest) {
 	std::vector<Config> tmp;
-	bool	expected(true);
-	unsigned long	vecsize_1(2);
+	bool expected(true);
+	unsigned long vecsize_1(2);
 	int expected_1(8660);
 	int expected_2(80);
-	unsigned long	vecsize_2(2);
+	unsigned long vecsize_2(2);
 	int expected_3(8080);
 	int expected_4(80);
 
@@ -231,13 +230,12 @@ TEST(ConfigParserTest, pCgiExtensionTest) {
 	ASSERT_EQ(tmp.at(0).getCgiExtension(expected_3).isOK(), ex_3);
 }
 
-TEST(ConfigParserTest, pGivenConfFileTest_1)
-{
+TEST(ConfigParserTest, pGivenConfFileTest_1) {
 	std::vector<Config> tmp;
-	int	ex_port(8080);
-	std::string		ex_ip("0.0.0.0");
-	size_t			ex_address_size(1);
-	size_t			ex_conf_size(1);
+	int ex_port(8080);
+	std::string ex_ip("0.0.0.0");
+	size_t ex_address_size(1);
+	size_t ex_conf_size(1);
 
 	Result<std::vector<Config>, bool> res = parseConf("testconfs/given_1.conf");
 	tmp = res.getOk();

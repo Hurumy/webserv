@@ -12,8 +12,8 @@
 
 #include "Server.hpp"
 
-#include "Config.hpp"
 #include "ConfParser.hpp"
+#include "Config.hpp"
 
 bool Server::startUp(std::string const &pathConfig) {
 	Result<std::vector<Config>, bool> result(parseConf(pathConfig));
@@ -22,27 +22,24 @@ bool Server::startUp(std::string const &pathConfig) {
 		return false;
 	}
 	configs = result.getOk();
-	for (std::vector<Config>::iterator confiter = configs.begin(); confiter != configs.end(); ++confiter) {
+	for (std::vector<Config>::iterator confiter = configs.begin();
+		 confiter != configs.end(); ++confiter) {
 		std::vector<Address> const &addresses(confiter->getAddresses());
-		for (std::vector<Address>::const_iterator addriter = addresses.begin(); addriter != addresses.end(); ++addriter) {
+		for (std::vector<Address>::const_iterator addriter = addresses.begin();
+			 addriter != addresses.end(); ++addriter) {
 			sources.push_back(SSocket(addriter->getPort(), IPV4, 1000));
 		}
 	}
 	socketHandler.setSSockets(sources);
 	socketHandler.setTimeout(60);
 	socketHandler.setPollTimeout(10);
-	if (socketHandler.initAllSSockets() == false)
-		return false;
-	if (socketHandler.createPollfds() == false)
-		return false;
-	if (socketHandler.setRevents() == false)
-		return false;
+	if (socketHandler.initAllSSockets() == false) return false;
+	if (socketHandler.createPollfds() == false) return false;
+	if (socketHandler.setRevents() == false) return false;
 	return true;
 }
 
-bool Server::down() {
-	return socketHandler.closeAllSSockets();
-}
+bool Server::down() { return socketHandler.closeAllSSockets(); }
 
 bool Server::serverLoop() {
 	while (true) {

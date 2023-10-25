@@ -77,11 +77,10 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	std::string path;
 	int status = 0;
 
-	//Locationの初期設定
+	// Locationの初期設定
 	res.setDirlist(false);
 
-
-	//1行ずつ読み込んでLocationに設定をセットする
+	// 1行ずつ読み込んでLocationに設定をセットする
 	for (size_t i = 0; i < line.size(); i++) {
 		if (line.at(i).empty() == false) {
 			status = checkLocationSettings(res, line.at(i));
@@ -93,8 +92,7 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 
 	//記述がなかった時などの設定を含める
 
-
-	//Locationの設定を読み終わったらConfigにLocationを追加だ！
+	// Locationの設定を読み終わったらConfigにLocationを追加だ！
 	path = res.getUri();
 	conf.addLocations(path, res);
 

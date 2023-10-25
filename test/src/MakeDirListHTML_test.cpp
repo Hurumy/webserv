@@ -14,8 +14,7 @@
 
 #include <gtest/gtest.h>
 
-TEST(MakeDirListHTMLTest, writeOutTest)
-{
+TEST(MakeDirListHTMLTest, writeOutTest) {
 	MakeDirlistHTML tmp("./www/content/");
 
 	//目以外でチェックするのが厳しいので、

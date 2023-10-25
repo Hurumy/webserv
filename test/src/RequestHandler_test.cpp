@@ -75,8 +75,7 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort_2) {
 	ASSERT_EQ(result_1.isOK(), expected);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
-{
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
 	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
@@ -92,7 +91,7 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.isOK(), expected);
-	
+
 	handler.checkRequiedHeader();
 	handler.routeMethod();
 
@@ -100,8 +99,7 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort)
 	ASSERT_EQ(handler.getHostname(), default_hostname);
 }
 
-TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
-{
+TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2) {
 	std::vector<Config> tmp;
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	tmp = res.getOk();
@@ -118,7 +116,7 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2)
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.isOK(), expected);
-	
+
 	handler.checkRequiedHeader();
 	handler.routeMethod();
 
@@ -148,7 +146,6 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
 
 	ASSERT_EQ(handler.getPortNumber(), default_portnum);
 	ASSERT_EQ(handler.getHostname(), default_hostname);
-
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
@@ -173,7 +170,6 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_WrongHost) {
 
 	ASSERT_EQ(handler.getPortNumber(), default_portnum);
 	ASSERT_EQ(handler.getHostname(), default_hostname);
-
 }
 
 TEST(RequestHandlerTest, searchMatchHostTest_Error_NoHostHeaderInRequest) {
@@ -324,8 +320,7 @@ TEST(RequestHandlerTest, redirectionTest) {
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 }
 
-TEST(RequestHandlerTest, getCgiInfoTest)
-{
+TEST(RequestHandlerTest, getCgiInfoTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
@@ -343,22 +338,20 @@ TEST(RequestHandlerTest, getCgiInfoTest)
 	handler.routeMethod();
 	handler.isCgi();
 
-	//std::cout << handler.getResponse().getLines() << std::endl;
+	// std::cout << handler.getResponse().getLines() << std::endl;
 
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.isCgi().getOk(), "." + expected_path);
-	
 }
 
-TEST(RequestHandlerTest, Error_ENOENT_getCgiInfoTest)
-{
+TEST(RequestHandlerTest, Error_ENOENT_getCgiInfoTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
 	bool expected_status(false);
 	std::string expected_path("/cgis/noent.cgi");
-	unsigned int	expected_num(404);
-	bool	is_there_content_length(true);
+	unsigned int expected_num(404);
+	bool is_there_content_length(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -371,24 +364,24 @@ TEST(RequestHandlerTest, Error_ENOENT_getCgiInfoTest)
 	handler.routeMethod();
 	handler.isCgi();
 
-	//std::cout << handler.getResponse().getLines() << std::endl;
+	// std::cout << handler.getResponse().getLines() << std::endl;
 
-	//isOKでErrorだった場合、どちらにせよすぐ打ち返す
-	//(普通のリクエストだった時と同じオペレーション)	
+	// isOKでErrorだった場合、どちらにせよすぐ打ち返す
+	//(普通のリクエストだった時と同じオペレーション)
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_num);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), is_there_content_length);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  is_there_content_length);
 }
 
-TEST(RequestHandlerTest, Error_EACCES_getCgiInfoTest)
-{
+TEST(RequestHandlerTest, Error_EACCES_getCgiInfoTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
 	bool expected_status(false);
 	std::string expected_path("/cgis/cannotexec.cgi");
-	unsigned int	expected_num(403);
-	bool	is_there_content_length(true);
+	unsigned int expected_num(403);
+	bool is_there_content_length(true);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -401,23 +394,23 @@ TEST(RequestHandlerTest, Error_EACCES_getCgiInfoTest)
 	handler.routeMethod();
 	handler.isCgi();
 
-	//std::cout << handler.getResponse().getLines() << std::endl;
+	// std::cout << handler.getResponse().getLines() << std::endl;
 
-	//isOKでErrorだった場合、どちらにせよすぐ打ち返す
-	//(普通のリクエストだった時と同じオペレーション)	
+	// isOKでErrorだった場合、どちらにせよすぐ打ち返す
+	//(普通のリクエストだった時と同じオペレーション)
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_num);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), is_there_content_length);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  is_there_content_length);
 }
 
-TEST(RequestHandlerTest, getHostnameTest)
-{
+TEST(RequestHandlerTest, getHostnameTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
 	std::string expected_host("_");
-	int  expected_port(8660);
-	bool	iscgi(false);
+	int expected_port(8660);
+	bool iscgi(false);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -434,18 +427,17 @@ TEST(RequestHandlerTest, getHostnameTest)
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
 }
 
-TEST(RequestHandlerTest, setAliasTest)
-{
+TEST(RequestHandlerTest, setAliasTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_ALIAS_TEST);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
 	std::string expected_host("_");
-	int  expected_port(8660);
-	unsigned int 		expected_status(200);
-	std::string 		expected_string("OK");
-	std::string 		expected_body("What the fuck....");
-	bool 				expected_is_there_content_len(true);
-	bool	iscgi(false);
+	int expected_port(8660);
+	unsigned int expected_status(200);
+	std::string expected_string("OK");
+	std::string expected_body("What the fuck....");
+	bool expected_is_there_content_len(true);
+	bool iscgi(false);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
@@ -463,7 +455,6 @@ TEST(RequestHandlerTest, setAliasTest)
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
 }
-
-

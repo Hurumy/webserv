@@ -115,8 +115,7 @@ TEST(MethodPostTest, postTextFileTest_Error_methodNotAllowed) {
 			  expected_is_there_content_len);
 }
 
-TEST(MethodPostTest, uploadPathTest)
-{
+TEST(MethodPostTest, uploadPathTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
@@ -140,12 +139,14 @@ TEST(MethodPostTest, uploadPathTest)
 	Result<int, bool> result_1 = handler.checkRequiedHeader();
 	ASSERT_EQ(result_1.isOK(), expected);
 	handler.routeMethod();
-	
-	//std::cout << handler.getResponse().getHeader("Location").getOk() << std::endl;
+
+	// std::cout << handler.getResponse().getHeader("Location").getOk() <<
+	// std::endl;
 
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
-	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(), expected_is_there_location);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Location").isOK(),
+			  expected_is_there_location);
 }
-

@@ -12,13 +12,13 @@
 
 #include <unistd.h>
 
-#include "Server.hpp"
 #include "ConfParser.hpp"
 #include "Config.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "RequestHandler.hpp"
 #include "Result.hpp"
+#include "Server.hpp"
 #include "SocketHandler.hpp"
 
 #define CONF_FILE_PATH "./conf_files/test.conf"
@@ -29,11 +29,12 @@ int main(const int argc, const char **argv) {
 	}
 	// std::vector<SSocket> sources;
 	// std::map<int, std::string> responses;
-	// Result<std::vector<Config>, bool> result = parseConf(std::string(argv[1]));
-	// std::vector<Config> configs = result.getOk();
+	// Result<std::vector<Config>, bool> result =
+	// parseConf(std::string(argv[1])); std::vector<Config> configs =
+	// result.getOk();
 
-	// Result<std::vector<Config>, bool> res = parseConf("./conf_files/test.conf");
-	// if (res.isError() == true) {
+	// Result<std::vector<Config>, bool> res =
+	// parseConf("./conf_files/test.conf"); if (res.isError() == true) {
 	// 	std::cout << "parsing Configs failed" << std::endl;
 	// 	return (-1);
 	// }
@@ -66,11 +67,10 @@ int main(const int argc, const char **argv) {
 	// 	socketHandler.removeClosedCSockets();
 	// }
 	// socketHandler.closeAllSSockets();
-	
+
 	Server server;
 
-	if (server.startUp(std::string(argv[1])) == false)
-		return 1;
+	if (server.startUp(std::string(argv[1])) == false) return 1;
 	if (server.serverLoop() == false) {
 		return 1;
 	}

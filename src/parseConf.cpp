@@ -12,9 +12,7 @@
 
 #include "ConfParser.hpp"
 
-
-Result<std::vector<Config>, bool> parseConf(std::string filepath)
-{
+Result<std::vector<Config>, bool> parseConf(std::string filepath) {
 	std::vector<std::string> list;
 	std::vector<Config> confs;
 	Config tmp;

@@ -241,11 +241,11 @@ TEST(LocationParserTest, pAliasTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	tmp = res.getOk();
 
-	// std::cout << "num of confs: " << tmp.size() << std::endl; 
+	// std::cout << "num of confs: " << tmp.size() << std::endl;
 	// std::cout << tmp.at(2).getAddresses().size() << std::endl;
 	// std::cout << tmp.at(2).getAddresses().at(0).getIpAddress() << std::endl;
-	// std::cout << tmp.at(2).getAddresses().at(0).getPort() << std::endl; 
+	// std::cout << tmp.at(2).getAddresses().at(0).getPort() << std::endl;
 
-	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getAlias(), expected_1);
+	ASSERT_EQ(tmp.at(0).getLocations(location_path).getOk().getAlias(),
+			  expected_1);
 }
-

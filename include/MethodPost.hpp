@@ -14,12 +14,12 @@
 #include "webserv.hpp"
 
 class MethodPost : public AMethod {
-   private:
-	std::string filename;
-	int openPostResource();
-	std::string makeFilename(std::string _uppath);
-	int writeToFile(int fd);
-	Result<int, bool> checkMaxBodySize();
+	private:
+		std::string filename;
+		int openPostResource();
+		std::string makeFilename(std::string _uppath);
+		int writeToFile(int fd);
+		Result<int, bool> checkMaxBodySize();
 
 	protected:
 	public:

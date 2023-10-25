@@ -47,7 +47,8 @@ class MetaVariables {
 								 std::string const &varValue);
 		std::size_t getSizeMetaVars() const;
 		std::map<std::string, std::string> const &getMetaVariables() const;
-		std::map<std::string, std::string> const &getOptionalMetaVariables() const;
+		std::map<std::string, std::string> const &getOptionalMetaVariables()
+			const;
 
 	protected:
 	private:

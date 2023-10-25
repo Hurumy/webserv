@@ -22,10 +22,11 @@ int MethodDelete::deleteFile() {
 
 	status = unlink(uri.c_str());
 	if (status == -1) {
-		#if defined(_DEBUGFLAG)
-		std::cout << RED << "MethodDelete::deleteFile unlink失敗。" << RESET << std::endl;
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "MethodDelete::deleteFile unlink失敗。" << RESET
+				  << std::endl;
 		std::cout << RED << "Filename: " << uri << RESET << std::endl;
-		#endif
+#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		return (500);
@@ -48,9 +49,10 @@ int MethodDelete::openResourceDelete() {
 			status = deleteFile();
 			return (status);
 		} else {
-			#if defined(_DEBUGFLAG)
-				std::cout << RED << "Error in MethodDelete::openResourseDelete" << RESET << std::endl;
-			#endif
+#if defined(_DEBUGFLAG)
+			std::cout << RED << "Error in MethodDelete::openResourseDelete"
+					  << RESET << std::endl;
+#endif
 			res.setStatus(401);
 			res.setStatusMessage("Unauthorized");
 			return (401);

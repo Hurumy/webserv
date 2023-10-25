@@ -36,8 +36,9 @@ CSocket::CSocket(int const _sockfd, unsigned long s_addr)
 	: sockfd(_sockfd),
 	  revents(0),
 	  phase(CSocket::RECV),
-	  lasttime(std::time(NULL))
-	  { setRemoteAddr(s_addr); }
+	  lasttime(std::time(NULL)) {
+	setRemoteAddr(s_addr);
+}
 
 int CSocket::getSockfd() const { return sockfd; }
 

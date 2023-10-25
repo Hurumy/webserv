@@ -125,48 +125,43 @@ Result<int, bool> MethodGet::checkGetSemantics() {
 	return Ok<int>(0);
 }
 
-Result<int, bool> MethodGet::checkIsDirlisting()
-{
-	int 		status;
+Result<int, bool> MethodGet::checkIsDirlisting() {
+	int status;
 	struct stat t_stat;
 
-	//std::cout << "uri: " << uri << std::endl;
+	// std::cout << "uri: " << uri << std::endl;
 
-	//URIがディレクトリを指しているか確認する
+	// URIがディレクトリを指しているか確認する
 	status = stat(uri.c_str(), &t_stat);
-	if (status == -1)
-	{
-		//std::cout << "stat failed" << errno << std::endl;
-		if (errno == ENAMETOOLONG)
-		{
+	if (status == -1) {
+		// std::cout << "stat failed" << errno << std::endl;
+		if (errno == ENAMETOOLONG) {
 			res.setStatus(414);
 			res.setStatusMessage("URI Too Long");
 			setErrorPageBody();
 			return Ok<int>(-1);
-		}
-		else if (errno == ENOENT)
-		{
-			#if defined(_DEBUGFLAG)
-			std::cout << RED << "MethodGet::checkIsDirlisting stat失敗。ENOENT" << RESET << std::endl;
-			#endif
+		} else if (errno == ENOENT) {
+#if defined(_DEBUGFLAG)
+			std::cout << RED << "MethodGet::checkIsDirlisting stat失敗。ENOENT"
+					  << RESET << std::endl;
+#endif
 			res.setStatus(404);
 			res.setStatusMessage("Not Found");
 			setErrorPageBody();
 			return Ok<int>(-1);
-		}
-		else if (errno == EACCES)
-		{
+		} else if (errno == EACCES) {
 			res.setStatus(403);
 			res.setStatusMessage("Forbidden");
 			setErrorPageBody();
 			return Ok<int>(-1);
-		}
-		else
-		{
-			#if defined(_DEBUGFLAG)
-			std::cout << RED << "MethodGet::checkIsDirlisting stat失敗。エラーコードなし" << RESET << std::endl;
+		} else {
+#if defined(_DEBUGFLAG)
+			std::cout
+				<< RED
+				<< "MethodGet::checkIsDirlisting stat失敗。エラーコードなし"
+				<< RESET << std::endl;
 			std::cout << RED << "Filename: " << uri << RESET << std::endl;
-			#endif
+#endif
 			res.setStatus(500);
 			res.setStatusMessage("Internal Server Error");
 			setErrorPageBody();
@@ -174,50 +169,40 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 		}
 	}
 
-	//URIが指しているものがディレクトリじゃなかった場合を弾く
-	if (S_ISDIR(t_stat.st_mode) == false)
-	{
+	// URIが指しているものがディレクトリじゃなかった場合を弾く
+	if (S_ISDIR(t_stat.st_mode) == false) {
 		return Error<bool>(false);
 	}
-	
-	//std::cout << "test" << std::endl;
 
-	//Location,Configのいずれかでディレクトリリスティングが有効になっているか確認する
-	if (isloc == true && loc.getDirlist() == true)
-	{
-		//do nothing
-	}
-	else if (conf.getDirlist() == true)
-	{
-		//do nothing
-	}
-	else
-	{
+	// std::cout << "test" << std::endl;
+
+	// Location,Configのいずれかでディレクトリリスティングが有効になっているか確認する
+	if (isloc == true && loc.getDirlist() == true) {
+		// do nothing
+	} else if (conf.getDirlist() == true) {
+		// do nothing
+	} else {
 		//ディレクトリリスティングが無効だった時Indexファイルを検索しに行く
 		Result<int, bool> _res_ind = searchIndex();
-		if (_res_ind.isOK() == true)
-		{
+		if (_res_ind.isOK() == true) {
 			//ここでOkを返すとすぐに帰るので、Indexの読み込みでエラーが起こった場合なども
-			//Okが帰ってくる(それはエラーページを返すべきだから)
+			// Okが帰ってくる(それはエラーページを返すべきだから)
 			return Ok<int>(0);
-		}
-		else
-		{
-			//Indexが存在しなかったときは、Errorで返して、Openで
+		} else {
+			// Indexが存在しなかったときは、Errorで返して、Openで
 			//ディレクトリを開こうとさせてエラーで帰ると思う
-			return Error<bool>(false);	
-		}	
+			return Error<bool>(false);
+		}
 	}
-	
+
 	// std::cout << "uri: " << uri << std::endl;
-	
+
 	//有効になっていたらメソッドを呼んでそのまま帰る
 	MakeDirlistHTML dir(uri);
 	Result<std::string, bool> dir_res = dir.returnHTML();
-	if (dir_res.isOK() == true)
-	{
-		std::stringstream	ss;
-		std::string			fs;
+	if (dir_res.isOK() == true) {
+		std::stringstream ss;
+		std::string fs;
 
 		res.setStatus(200);
 		res.setStatusMessage("OK");
@@ -227,13 +212,14 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 		ss >> fs;
 		res.addHeader("Content-Length", fs);
 		return Ok<int>(0);
-	}
-	else
-	{
-		#if defined(_DEBUGFLAG)
-		std::cout << RED << "MethodGet::checkIsDirlisting MakeDirlistHTMLが失敗している" << RESET << std::endl;
+	} else {
+#if defined(_DEBUGFLAG)
+		std::cout
+			<< RED
+			<< "MethodGet::checkIsDirlisting MakeDirlistHTMLが失敗している"
+			<< RESET << std::endl;
 		std::cout << RED << "Filename: " << uri << RESET << std::endl;
-		#endif
+#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		setErrorPageBody();
@@ -241,26 +227,21 @@ Result<int, bool> MethodGet::checkIsDirlisting()
 	}
 }
 
-Result<int, bool> MethodGet::searchIndex()
-{
+Result<int, bool> MethodGet::searchIndex() {
 	int status;
 	std::string tmppath;
 
 	// std::cout << "searching index files!!" << std::endl;
 	// std::cout << loc.getIndex().size() << std::endl;
 
-	//locationのIndexを見る
-	if (isloc == true && loc.getIndex().size() != 0)
-	{
-		for (size_t i = 0; i < loc.getIndex().size(); i ++)
-		{
+	// locationのIndexを見る
+	if (isloc == true && loc.getIndex().size() != 0) {
+		for (size_t i = 0; i < loc.getIndex().size(); i++) {
 			tmppath = ".";
 			tmppath += conf.getRootDir();
-			if (conf.getRootDir().empty() == false)
-				tmppath += "/";
+			if (conf.getRootDir().empty() == false) tmppath += "/";
 			tmppath += loc.getRootDir();
-			if (loc.getRootDir().empty() == false)
-				tmppath += "/";
+			if (loc.getRootDir().empty() == false) tmppath += "/";
 			tmppath += loc.getIndex().at(i);
 
 			// std::cout << tmppath << std::endl;
@@ -268,17 +249,13 @@ Result<int, bool> MethodGet::searchIndex()
 			// openしてみて、成功したらそれを打ち返す
 			// 成功しなかったらどんどん次を読みこむ
 			status = open(tmppath.c_str(), O_RDONLY);
-			if (status != -1)
-			{
+			if (status != -1) {
 				close(status);
 				Result<std::string, bool> const res_read = _openFile(tmppath);
-				if (res_read.isError() == true)
-				{
+				if (res_read.isError() == true) {
 					setErrorPageBody();
 					return Ok<int>(0);
-				}
-				else
-				{
+				} else {
 					res.setStatus(200);
 					res.setStatusMessage("OK");
 					return Ok<int>(0);
@@ -287,17 +264,12 @@ Result<int, bool> MethodGet::searchIndex()
 		}
 	}
 
-
-	//ConfigのIndexを見る
-	if (conf.getIndex().size() != 0)
-	{
-		for (size_t i = 0; i < conf.getIndex().size(); i ++)
-		{
-
+	// ConfigのIndexを見る
+	if (conf.getIndex().size() != 0) {
+		for (size_t i = 0; i < conf.getIndex().size(); i++) {
 			tmppath = ".";
 			tmppath += conf.getRootDir();
-			if (conf.getRootDir().empty() == false)
-				tmppath += "/";
+			if (conf.getRootDir().empty() == false) tmppath += "/";
 			tmppath += conf.getIndex().at(i);
 
 			// std::cout << tmppath << std::endl;
@@ -305,17 +277,13 @@ Result<int, bool> MethodGet::searchIndex()
 			// openしてみて、成功したらそれを打ち返す
 			// 成功しなかったらどんどん次を読みこむ
 			status = open(tmppath.c_str(), O_RDONLY);
-			if (status != -1)
-			{
+			if (status != -1) {
 				close(status);
 				Result<std::string, bool> const res_read_c = _openFile(tmppath);
-				if (res_read_c.isError() == true)
-				{
+				if (res_read_c.isError() == true) {
 					setErrorPageBody();
 					return Ok<int>(0);
-				}
-				else
-				{
+				} else {
 					res.setStatus(200);
 					res.setStatusMessage("OK");
 					return Ok<int>(0);
@@ -330,19 +298,15 @@ Result<int, bool> MethodGet::searchIndex()
 	tmppath += "index.html";
 	// std::cout << tmppath << std::endl;
 
-	//index.htmlが存在するか調べる(デフォルトの挙動)
+	// index.htmlが存在するか調べる(デフォルトの挙動)
 	status = open(tmppath.c_str(), O_RDONLY);
-	if (status != -1)
-	{
+	if (status != -1) {
 		close(status);
 		Result<std::string, bool> const res_read_i = _openFile(tmppath);
-		if (res_read_i.isError() == true)
-		{
+		if (res_read_i.isError() == true) {
 			setErrorPageBody();
 			return Ok<int>(0);
-		}
-		else
-		{
+		} else {
 			res.setStatus(200);
 			res.setStatusMessage("OK");
 			return Ok<int>(0);
@@ -353,12 +317,10 @@ Result<int, bool> MethodGet::searchIndex()
 	return Error<bool>(false);
 }
 
-Result<int, bool> MethodGet::act()
-{
+Result<int, bool> MethodGet::act() {
 	//(ディレクトリリスティングが有効なら)もしくは(この内部処理でエラーが起こっていた→エラーページをセットして)この時点で帰る
 	Result<int, bool> res_dir = checkIsDirlisting();
-	if (res_dir.isOK() == true)
-	{
+	if (res_dir.isOK() == true) {
 		return Ok<int>(0);
 	}
 
@@ -370,13 +332,10 @@ Result<int, bool> MethodGet::act()
 
 	// ファイルの中身を読み込んでBodyに詰める
 	Result<std::string, bool> const res_read = _openFile(uri);
-	if (res_read.isError() == true)
-	{
+	if (res_read.isError() == true) {
 		setErrorPageBody();
 		return Error<bool>(false);
-	}
-	else
-	{
+	} else {
 		res.setStatus(200);
 		res.setStatusMessage("OK");
 		return Ok<int>(0);

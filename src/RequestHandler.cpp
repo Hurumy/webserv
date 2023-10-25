@@ -37,11 +37,10 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.setVersion("HTTP/1.1");
 
 	// Hostヘッダー自体が含まれていない場合(どうにもならない)
-	if (result_1.isOK() == false)
-	{
-		#if defined(_DEBUGFLAG)
+	if (result_1.isOK() == false) {
+#if defined(_DEBUGFLAG)
 		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-		#endif
+#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -68,32 +67,33 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	}
 
 	// Configの中からHostが一致するものを探す
-	for (size_t i = 0; i < configs.size(); i++)
-	{
-		//std::cout << YELLOW << "conf siz: " << configs.size() << RESET << std::endl;
-		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++)
-		{
-			//Configの時
-			if (portflag == false && configs.at(i).getServerName().at(t) == hostname)
-			{
+	for (size_t i = 0; i < configs.size(); i++) {
+		// std::cout << YELLOW << "conf siz: " << configs.size() << RESET <<
+		// std::endl;
+		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
+			// Configの時
+			if (portflag == false &&
+				configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
-				this->addressnum = 0; //IPとかの設定がないのでとりあえず0番を指定したことにしておく・・・
+				this->addressnum =
+					0;	// IPとかの設定がないのでとりあえず0番を指定したことにしておく・・・
 				this->servername = configs.at(i).getServerName().at(t);
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
-			}
-			else if (portflag == true && configs.at(i).getServerName().at(t) == without_port)
-			{
-				//std::cout << YELLOW << "in portflag == true" << RESET << std::endl;
+			} else if (portflag == true &&
+					   configs.at(i).getServerName().at(t) == without_port) {
+				// std::cout << YELLOW << "in portflag == true" << RESET <<
+				// std::endl;
 				//そのサーバーネームに対してポートが合っているか確認する
-				for (size_t j = 0; j < configs.at(i).getAddresses().size(); j++)
-				{
-					if (configs.at(i).getAddresses().at(j).getPort() == portnum)
-					{
+				for (size_t j = 0; j < configs.at(i).getAddresses().size();
+					 j++) {
+					if (configs.at(i).getAddresses().at(j).getPort() ==
+						portnum) {
 						this->addressnum = j;
 						this->confnum = i;
 						this->servername = configs.at(i).getServerName().at(t);
-						res.addHeader("Server", configs.at(i).getServerName().at(t));
+						res.addHeader("Server",
+									  configs.at(i).getServerName().at(t));
 						return Ok<int>(i);
 					}
 				}
@@ -107,7 +107,6 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	this->servername = configs.at(confnum).getServerName().at(0);
 	res.addHeader("Server", servername);
 	return Ok<int>(confnum);
-
 }
 
 Result<int, bool> RequestHandler::checkRequiedHeader() {
@@ -128,10 +127,8 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 }
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
-Result<int, bool> RequestHandler::routeMethod()
-{
-	if (req.getMethod() == "GET")
-	{
+Result<int, bool> RequestHandler::routeMethod() {
+	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
 
@@ -143,23 +140,20 @@ Result<int, bool> RequestHandler::routeMethod()
 		}
 		get.setURI();
 
-		//cgiだったらcgiの情報をセットして返す
-		if (get.isCgi().isOK() == true)
-		{
+		// cgiだったらcgiの情報をセットして返す
+		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
 			return Ok<int>(0);
 		} else {
-			
 			iscgi = false;
 
-			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			// URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
 			//エラーページはすでにセットされているので、あと送るだけ。
-			if (get.isCgi().getError() == true)
-			{
+			if (get.isCgi().getError() == true) {
 				return Error<bool>(false);
 			}
-		} 
+		}
 
 		//リダイレクトチェック
 		Result<int, bool> res_rg = get.checkRedirects();
@@ -171,9 +165,7 @@ Result<int, bool> RequestHandler::routeMethod()
 			return Error<bool>(false);
 		else
 			return Ok<int>(0);
-	}
-	else if (req.getMethod() == "POST")
-	{
+	} else if (req.getMethod() == "POST") {
 		//クラス呼ぶ
 		MethodPost post(configs.at(confnum), req, res);
 
@@ -185,7 +177,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		}
 		post.setURI();
 
-		//cgiだったらcgiの情報をセットして返す
+		// cgiだったらcgiの情報をセットして返す
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
@@ -193,10 +185,9 @@ Result<int, bool> RequestHandler::routeMethod()
 		} else {
 			iscgi = false;
 
-			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			// URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
 			//エラーページはすでにセットされているので、あと送るだけ。
-			if (post.isCgi().getError() == true)
-			{
+			if (post.isCgi().getError() == true) {
 				return Error<bool>(false);
 			}
 		}
@@ -224,7 +215,7 @@ Result<int, bool> RequestHandler::routeMethod()
 		}
 		del.setURI();
 
-		//cgiだったらcgiの情報をセットして返す
+		// cgiだったらcgiの情報をセットして返す
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
@@ -232,10 +223,9 @@ Result<int, bool> RequestHandler::routeMethod()
 		} else {
 			iscgi = false;
 
-			//URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
+			// URIが指すものはcgiではあったもののアクセス権がない場合は、ErrorでTrueが帰ってくる
 			//エラーページはすでにセットされているので、あと送るだけ。
-			if (del.isCgi().getError() == true)
-			{
+			if (del.isCgi().getError() == true) {
 				return Error<bool>(false);
 			}
 		}
@@ -269,9 +259,10 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
-		#if defined(_DEBUGFLAG)
-		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT" << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
+				  << RESET << std::endl;
+#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);
@@ -308,14 +299,12 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	return Ok<std::string>(body);
 }
 
-void RequestHandler::setErrorPageBody()
-{
+void RequestHandler::setErrorPageBody() {
 	unsigned int prevstatus = res.getStatus();
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false)
-	{
+	if (res_1.isOK() == false) {
 		res.addHeader("Content-Length", "0");
 		return;
 	}
@@ -343,26 +332,22 @@ void RequestHandler::setErrorPageBody()
 			break;
 		}
 	}
-	return ;
+	return;
 }
 
 Response RequestHandler::getResponse() { return (this->res); }
 
 Result<std::string, bool> const RequestHandler::isCgi() const {
-	if (iscgi == true)
-	{
+	if (iscgi == true) {
 		return Ok<std::string>(path_to_cgi);
 	}
 	return Error<bool>(false);
 }
 
-std::string const	RequestHandler::getHostname() const
-{
+std::string const RequestHandler::getHostname() const {
 	return (this->servername);
 }
 
-int					RequestHandler::getPortNumber() const
-{
+int RequestHandler::getPortNumber() const {
 	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
 }
-

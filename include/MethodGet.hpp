@@ -16,14 +16,14 @@
 #include "MakeDirlistHTML.hpp"
 
 class MethodGet : public AMethod {
-   private:
-	std::string getsemantics;
-	static const std::map<std::string, std::string> ext;
-	static std::map<std::string, std::string> initExtMap();
-	Result<int, bool> setContentType(std::string filename);
-	Result<int, bool> checkGetSemantics();
-	Result<int, bool> checkIsDirlisting();
-	Result<int, bool> searchIndex();
+	private:
+		std::string getsemantics;
+		static const std::map<std::string, std::string> ext;
+		static std::map<std::string, std::string> initExtMap();
+		Result<int, bool> setContentType(std::string filename);
+		Result<int, bool> checkGetSemantics();
+		Result<int, bool> checkIsDirlisting();
+		Result<int, bool> searchIndex();
 
 	protected:
 	public:
