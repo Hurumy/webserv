@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/24 20:24:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:38:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class CGIResponseCreator {
 
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);
+		pid_t getPid() const;
 		short getRevents() const;
 		void setRevents(short const _revents);
 		void setPortNum(int const _portNum);

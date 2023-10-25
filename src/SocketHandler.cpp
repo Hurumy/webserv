@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 12:23:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:39:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <poll.h>
+#include <signal.h>
 
 #include <algorithm>
 #include <ctime>
@@ -511,6 +512,16 @@ bool SocketHandler::closeTimeoutCSockets() {
 	for (std::vector<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
+			if (iter->getPhase() == CSocket::CGI) {
+				std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.begin();
+				if (cgiiter != cgiResponseCreators.end()) {
+					if (kill(cgiiter->second.getPid(), 0) == 0) {
+						if (kill(cgiiter->second.getPid(), SIGTERM) == -1) {
+							putSytemError("kill");
+						}
+					}
+				}
+			}
 			iter->setPhase(CSocket::CLOSE);
 		}
 	}

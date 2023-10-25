@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 12:12:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:39:53 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@ CGIResponseCreator::tag const &CGIResponseCreator::getPhase() const {
 
 void CGIResponseCreator::setPhase(CGIResponseCreator::tag const &_phase) {
 	phase = _phase;
+}
+
+pid_t CGIResponseCreator::getPid() const {
+	return pid;
 }
 
 short CGIResponseCreator::getRevents() const { return revents; }
