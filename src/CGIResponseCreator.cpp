@@ -265,7 +265,7 @@ char **CGIResponseCreator::_createArgv() {
 	char **argv;
 	char **head;
 
-	argv = new(std::nothrow) char*[3];
+	argv = (char **)new(std::nothrow) char*[3];
 	if (argv == NULL) {
 		return NULL;
 	}
