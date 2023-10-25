@@ -6,18 +6,20 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:00:11 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:23:13 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
-Result<std::vector<Config>, bool> parseConf(std::string filepath) {
+
+Result<std::vector<Config>, bool> parseConf(std::string filepath)
+{
 	std::vector<std::string> list;
 	std::vector<Config> confs;
 	Config tmp;
 
-	//まずポートごとにきりわける
+	//まずファイルを開いて中身を読み出し、ポートごとにきりわける
 	Result<std::vector<std::string>, bool> res = cutConfByDirective(filepath);
 	if (res.isOK() == true)
 		list = res.getOk();

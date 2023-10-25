@@ -6,14 +6,15 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/04 13:17:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/25 12:36:07 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
 
 // Configファイルを開いて一本のStringにする
-static Result<std::string, bool> openAndReadConf(std::string filepath) {
+static Result<std::string, bool> openAndReadConf(std::string filepath)
+{
 	int fd;
 	ssize_t status;
 	char buf[FILE_READ_SIZE + 1];
@@ -133,6 +134,8 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 	std::string rawdata;
 	std::vector<std::string> firstlayer;
 
+
+	//まずファイルの中身を読み出す
 	Result<std::string, bool> res = openAndReadConf(filepath);
 
 	if (res.isOK() == false) return Error<bool>(false);
@@ -142,6 +145,42 @@ Result<std::vector<std::string>, bool> cutConfByDirective(
 	//カッコの数を数えて{==}でなければ弾く
 	status = countParentheses(rawdata, "{", "}");
 	if (status == false) return Error<bool>(false);
+
+	//ここで#でコメントアウトされた行を削除する
+	std::string	trimmedstring = rawdata;
+	std::string p;
+	std::string	s;
+	size_t	offset = 0;
+	size_t	start;
+	size_t	end;
+	while(1)
+	{
+		//#を探す
+		start = trimmedstring.find('#', offset);
+		if (start == std::string::npos)
+			break ;
+		
+		//#の直後にある改行を探す
+		end = trimmedstring.find('\n', start + 1);
+		if (end == std::string::npos)
+		{
+			//#の後に改行かなかった時は、EOFで挟まれているときなので、ここでBreakしない
+			end = trimmedstring.size();
+		}
+		
+		//＃までと＃からに切り分け、それをくっつけてループ
+		p = trimmedstring.substr(0, start);
+		s = trimmedstring.substr(end, trimmedstring.size());
+		trimmedstring = p + s;
+		
+		offset = start;
+
+		//std::cout << trimmedstring << std::endl;
+	}
+
+	//切り出した後のStringをRawdataとして格納し直す
+	rawdata = trimmedstring;
+
 
 	//第一層の頭とカッコを数え、その中身をVectorに切り出す
 	firstlayer = cutPorts(rawdata, "{", "}");
