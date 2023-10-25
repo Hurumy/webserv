@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 13:43:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:05:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ Result<std::string, bool> const APayload::getHeader(
 }
 
 bool APayload::addHeader(std::string const &key, std::string const &value) {
-	header.insert(std::make_pair(key, value));
-	return (true);
+	return header.insert(std::make_pair(key, value)).second;
 }
 
 bool APayload::setHeader(std::string const &key, std::string const &value) {
