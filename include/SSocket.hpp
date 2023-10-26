@@ -6,11 +6,13 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:15:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/11 15:00:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:03:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#include <string>
 
 enum ipvers {
 		IPV4,
@@ -22,6 +24,7 @@ class SSocket {
 		SSocket();
 
 		int sockfd;
+		std::string ipaddr;
 		int port;
 		ipvers ipver;
 		int backlog;
@@ -29,7 +32,7 @@ class SSocket {
 
 	protected:
 	public:
-		SSocket(int _port, ipvers _ipver, int _backlog);
+		SSocket(const std::string &_ipaddr, int _port, ipvers _ipver, int _backlog);
 
 		bool init();
 		bool closeSockfd();

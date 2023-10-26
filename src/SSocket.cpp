@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/28 00:29:07 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:00:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 #include "puterror.hpp"
 
-SSocket::SSocket(int _port, ipvers _ipver, int _backlog)
-	: port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
+SSocket::SSocket(const std::string &_ipaddr, int _port, ipvers _ipver, int _backlog)
+	: ipaddr(_ipaddr), port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
 
 bool SSocket::init() {
 	struct sockaddr_in s_addr;
