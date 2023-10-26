@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:32:25 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:34:11 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 int main(const int argc, const char **argv) {
 	if (argc != 2) {
+		errorInInit("Usage: ./webserv <conf_file_path>");
 		return 1;
 	}
 	// std::vector<SSocket> sources;
