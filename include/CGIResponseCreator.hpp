@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 14:53:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:21:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ class CGIResponseCreator {
 		bool recvCGIOutput();
 		pid_t waitChildProc();
 		bool setCGIOutput();
-		bool waitDeadCGIProc();
 		bool deinit();
 		bool setEnvVars();
 

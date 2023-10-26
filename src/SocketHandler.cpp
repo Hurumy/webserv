@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:07:22 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:22:19 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,13 @@ bool SocketHandler::closeAllSSockets() {
 std::vector<CSocket>::iterator SocketHandler::_deinitCSocket(
 	std::vector<CSocket>::iterator &csockiter) {
 	int const csockfd(csockiter->getSockfd());
+	pid_t cpid;
 
 	std::map<int, CGIResponseCreator>::iterator cgiiter =
 		cgiResponseCreators.find(csockfd);
 	if (cgiiter != cgiResponseCreators.end()) {
-		cgiiter->second.waitDeadCGIProc();
+		cpid = cgiiter->second.getPid();
+		if (cpid != 0) { cpids.push_back(cgiiter->second.getPid()); }
 		cgiiter->second.deinit();
 		cgiResponseCreators.erase(cgiiter);
 	}
@@ -554,6 +556,23 @@ bool SocketHandler::closeTimeoutCSockets() {
 				}
 			}
 			iter->setPhase(CSocket::CLOSE);
+		}
+	}
+	return true;
+}
+
+bool SocketHandler::waitDeadCGIProcs() {
+	int wstatus;
+
+	if (cpids.empty() == true) { return true; }
+	for (std::list<pid_t>::iterator iter = cpids.begin(); iter != cpids.end();) {
+		if (*iter == 0 || kill(*iter, 0) == -1) { iter = cpids.erase(iter);}
+		else {
+			switch (waitpid(*iter, &wstatus, WNOHANG)) {
+				case -1: { putSytemError("waitpid"); ++iter; } break;
+				case 0: { ++iter; } break;
+				default : { iter = cpids.erase(iter); } break;
+			}
 		}
 	}
 	return true;

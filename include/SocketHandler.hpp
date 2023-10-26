@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 12:22:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 14:57:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <list>
 
 #include "CGIResponseCreator.hpp"
 #include "CSocket.hpp"
@@ -33,6 +34,7 @@ class SocketHandler {
 
 		std::vector<SSocket> ssockets;
 		std::vector<CSocket> csockets;
+		std::list<pid_t> cpids;
 		std::size_t timeout;
 		int pollTimeout;
 		std::vector<struct pollfd> pollfds;
@@ -72,4 +74,5 @@ class SocketHandler {
 		bool loadResponses(std::vector<Config> const &configs);
 		bool handleCGIRequest();
 		bool closeTimeoutCSockets();
+		bool waitDeadCGIProcs();
 };

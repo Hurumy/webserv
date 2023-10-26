@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 15:03:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:21:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -472,17 +472,6 @@ bool CGIResponseCreator::setCGIOutput() {
 	// for develope
 	response.setHeader("Content-Type", "text/plain");
 	response.setBody(cgiOutput);
-	return true;
-}
-
-bool CGIResponseCreator::waitDeadCGIProc() {
-	if (pid == 0 || kill(pid, 0) == -1) {
-		return false;
-	}
-	if (waitpid(pid, &wstatus, 0) == -1) {
-		putSytemError("waitpid");
-		return false;
-	}
 	return true;
 }
 

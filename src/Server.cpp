@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:02:46 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:17:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ bool Server::serverLoop() {
 		socketHandler.setRevents();
 		socketHandler.closeTimeoutCSockets();
 		socketHandler.removeClosedCSockets();
+		socketHandler.waitDeadCGIProcs();
 	}
 	return true;
 }
