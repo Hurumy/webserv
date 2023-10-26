@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:07:23 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/09/09 16:38:57 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:12:48 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <gtest/gtest.h>
 
 TEST(SSocketTest, constructorTest) {
-	SSocket ssocket(8080, IPV4, 100);
+	SSocket ssocket("0.0.0.0", 8080, IPV4, 100);
 
 	ASSERT_EQ(ssocket.getPort(), 8080);
 	ASSERT_EQ(ssocket.getIpVer(), IPV4);
@@ -23,7 +23,7 @@ TEST(SSocketTest, constructorTest) {
 }
 
 TEST(SSocketTest, SSocketInitTest) {
-	SSocket ssocket(8080, IPV4, 100);
+	SSocket ssocket("0.0.0.0", 8080, IPV4, 100);
 
 	ASSERT_TRUE(ssocket.init());
 	std::clog << "sockfd: " << ssocket.getSockfd() << std::endl;

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:11:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:13:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@
 TEST(SocketHandlerTest, constructorTest) {
 	std::vector<SSocket> sources;
 
-	sources.push_back(SSocket(8080, IPV4, 100));
-	sources.push_back(SSocket(8000, IPV4, 100));
-	sources.push_back(SSocket(4040, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8000, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 4040, IPV4, 100));
 	SocketHandler socketHandler(sources, 1000, 100);
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
 	ASSERT_EQ(ssockets.at(0).getPort(), 8080);
@@ -37,9 +37,9 @@ TEST(SocketHandlerTest, constructorTest) {
 TEST(SocketHandlerTest, pollfdsTest) {
 	std::vector<SSocket> sources;
 
-	sources.push_back(SSocket(8080, IPV4, 100));
-	sources.push_back(SSocket(8000, IPV4, 100));
-	sources.push_back(SSocket(4040, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8000, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 4040, IPV4, 100));
 	SocketHandler socketHandler(sources, 1000, 100);
 	socketHandler.createPollfds();
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
@@ -51,9 +51,9 @@ TEST(SocketHandlerTest, pollfdsTest) {
 TEST(SocketHandlerTest, setReventsTest) {
 	std::vector<SSocket> sources;
 
-	sources.push_back(SSocket(8080, IPV4, 100));
-	sources.push_back(SSocket(8000, IPV4, 100));
-	sources.push_back(SSocket(4040, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 8000, IPV4, 100));
+	sources.push_back(SSocket("0.0.0.0", 4040, IPV4, 100));
 	SocketHandler socketHandler(sources, 1000, 100);
 	socketHandler.createPollfds();
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
