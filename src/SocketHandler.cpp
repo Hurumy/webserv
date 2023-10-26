@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 15:00:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:07:22 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ bool SocketHandler::recieveCSockets() {
 				// return false;
 			} else {
 				fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
-				csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr));
+				csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr, ssockiter->getIpaddr(), ssockiter->getPort()));
 			}
 		}
 	}
@@ -354,6 +354,10 @@ bool SocketHandler::loadRequests() {
 				requests[csockiter->getSockfd()] = request;
 				requests[csockiter->getSockfd()].setRemoteAddr(
 					csockiter->getRemoteAddr());
+				requests[csockiter->getSockfd()].setLocalAddr(
+					csockiter->getLocalAddr());
+				requests[csockiter->getSockfd()].setLocalPort(
+					csockiter->getLocalPort());
 			}
 			if (requests[csockiter->getSockfd()].loadPayload(*csockiter) ==
 				false) {

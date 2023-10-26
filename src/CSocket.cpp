@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/22 19:48:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:18:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,13 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 
-CSocket::CSocket(int const _sockfd)
+CSocket::CSocket(int const _sockfd, unsigned long s_addr, std::string const &_localAddr, unsigned int const _localPort)
 	: sockfd(_sockfd),
 	  revents(0),
 	  phase(CSocket::RECV),
-	  lasttime(std::time(NULL)) {}
-
-CSocket::CSocket(int const _sockfd, unsigned long s_addr)
-	: sockfd(_sockfd),
-	  revents(0),
-	  phase(CSocket::RECV),
-	  lasttime(std::time(NULL)) {
+	  lasttime(std::time(NULL)),
+	  localAddr(_localAddr),
+	  localPort(_localPort) {
 	setRemoteAddr(s_addr);
 }
 
@@ -135,3 +131,7 @@ void CSocket::setRemoteAddr(u_int32_t s_addr) {
 }
 
 std::string const &CSocket::getRemoteAddr() const { return remoteAddr; }
+
+std::string const &CSocket::getLocalAddr() const { return localAddr; }
+
+unsigned int CSocket::getLocalPort() const { return localPort; }

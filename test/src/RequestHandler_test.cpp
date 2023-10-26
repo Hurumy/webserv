@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler_test.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 12:57:49 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:34:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ TEST(RequestHandlerTest, searchMatchHostTest) {
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test");
 
+	std::clog << RED << "Segmentatio fault" << RESET << std::endl;
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
