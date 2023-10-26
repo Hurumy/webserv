@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:15:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:18:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:42:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ class SSocket {
 		bool closeSockfd();
 		int getPort() const;
 		int getSockfd() const;
+		std::string const &getIpaddr() const;
 		ipvers getIpVer() const;
 		int getBacklog() const;
 		short getRevents() const;

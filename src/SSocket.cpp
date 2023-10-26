@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:30:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:43:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ bool SSocket::closeSockfd() {
 }
 
 int SSocket::getSockfd() const { return sockfd; }
+
+std::string const &SSocket::getIpaddr() const { return ipaddr; }
 
 ipvers SSocket::getIpVer() const { return ipver; }
 
