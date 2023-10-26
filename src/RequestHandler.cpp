@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:30:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 12:02:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,9 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 		// std::endl;
 		for (size_t t = 0; t < configs.at(i).getServerName().size(); t++) {
 			// Configの時
-			if (portflag == false &&
-				configs.at(i).getServerName().at(t) == hostname) {
+			if (portflag == false && configs.at(i).getServerName().at(t) == hostname) {
 				this->confnum = i;
-				this->addressnum =
-					0;	// IPとかの設定がないのでとりあえず0番を指定したことにしておく・・・
+				this->addressnum = 0;	// IPとかの設定がないのでとりあえず0番を指定したことにしておく・・・
 				this->servername = configs.at(i).getServerName().at(t);
 				res.addHeader("Server", configs.at(i).getServerName().at(t));
 				return Ok<int>(i);
@@ -87,8 +85,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 				//そのサーバーネームに対してポートが合っているか確認する
 				for (size_t j = 0; j < configs.at(i).getAddresses().size();
 					 j++) {
-					if (configs.at(i).getAddresses().at(j).getPort() ==
-						portnum) {
+					if (configs.at(i).getAddresses().at(j).getPort() == portnum) {
 						this->addressnum = j;
 						this->confnum = i;
 						this->servername = configs.at(i).getServerName().at(t);
@@ -104,7 +101,14 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// どれとも一致しなかった場合は、Configの一番最初にあるサーバに振り分ける
 	this->confnum = 0;
 	this->addressnum = 0;
-	this->servername = configs.at(confnum).getServerName().at(0);
+	if (configs.size() != 0 && configs.at(0).getServerName().size() != 0)
+	{
+		this->servername = configs.at(confnum).getServerName().at(0);
+	}
+	else
+	{
+		servername = "";
+	}
 	res.addHeader("Server", servername);
 	return Ok<int>(confnum);
 }

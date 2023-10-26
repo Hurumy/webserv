@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:34:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 13:12:38 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,12 @@ static int isServerSetting(std::string raw) {
 
 	pos = line.find("server", 0);
 
+	//一番上の階層に存在したディレクティブがServerでなかった場合はエラーを返す
 	if (pos == std::string::npos)
-		return (-1);
+		errorInInit("Unknown directive (OvO)");
 	else
 		return (0);
+	return (0);
 }
 
 // Confファイルの1行1行をみてなんの設定なのか解釈する
