@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 15:21:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:24:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ bool CGIResponseCreator::_setPathInfo() {
 	std::string postFilename;
 	std::size_t posCut;
 
-	std::clog << cgiPath << std::endl;
 	filename = cgiPath.substr(cgiPath.rfind("/"));
 	postFilename = request.getUrl().substr(request.getUrl().find(filename) +
 										   filename.size());
