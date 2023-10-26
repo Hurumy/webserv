@@ -41,7 +41,7 @@ TEST(RequestHandlerTest, searchMatchHostTest) {
 	req.setLocalAddr("0.0.0.0");
 	req.setLocalPort(8080);
 
-	//std::clog << RED << "Segmentation fault" << RESET << std::endl;
+	// std::clog << RED << "Segmentation fault" << RESET << std::endl;
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
@@ -354,7 +354,7 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	handler.routeMethod();
 	handler.isCgi();
 
-	//std::cout << handler.getResponse().getLines() << std::endl;
+	// std::cout << handler.getResponse().getLines() << std::endl;
 
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.isCgi().getOk(), "." + expected_path);
@@ -506,6 +506,6 @@ TEST(RequestHandlerTest, routingTest_1) {
 	ASSERT_EQ(handler.getHostname(), expected_host);
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
 	ASSERT_EQ(handler.getResponse().getHeader("Host").getOk(), expected_host);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
+			  expected_is_there_content_len);
 }
-

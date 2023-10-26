@@ -12,8 +12,8 @@
 
 #include "RequestHandler.hpp"
 
-#include "Address.hpp"
 #include "AMethod.hpp"
+#include "Address.hpp"
 #include "MethodDelete.hpp"
 #include "MethodGet.hpp"
 #include "MethodPost.hpp"
@@ -39,11 +39,10 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.addHeader("Server", "webserv - shtanemu, komatsud");
 
 	// Hostヘッダーが含まれていない場合は400を返して良い。
-	if (result_1.isOK() == false)
-	{
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-		#endif
+	if (result_1.isOK() == false) {
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -53,64 +52,59 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	hostname = result_1.getOk();
 
 	// Requestで指定されているhostnameの中にPortの指定が存在するかどうかを確認する
-	if (hostname.find(':') != std::string::npos)
-	{
+	if (hostname.find(':') != std::string::npos) {
 		std::stringstream ss;
 		std::stringstream sb;
-		std::string	tmp;
+		std::string tmp;
 
 		ss << hostname;
 		std::getline(ss, without_port, ':');
 		std::getline(ss, tmp, ':');
 
-		//std::cout << RED"tmp: " << tmp << RESET << std::endl;
-		
+		// std::cout << RED"tmp: " << tmp << RESET << std::endl;
+
 		sb << tmp;
 		sb >> portnum;
 
 		//実際にリクエストが届いたポートと、ホスト名に付けられているポートが異なっていた場合は400を返す
-		if (req.getLocalPort() != portnum)
-		{
+		if (req.getLocalPort() != portnum) {
 			res.setStatus(400);
 			res.setStatusMessage("Bad Request");
 			res.addHeader("Content-Length", "0");
 			return Error<bool>(false);
 		}
 
-	}
-	else
-	{
+	} else {
 		without_port = hostname;
 	}
-
 
 	// まずIP,ポートを利用してConfigを探す
 	// locationにはIP、ポートは設定できないので検索する必要なし
 	// IP、ポートが一致したものについて、さらにHost名をチェックし、そこまで一致したConfigを選ぶ
 	// 見つからなかった場合はデフォルトサーバーに振り分ける
-	
+
 	// Configを順番に見ていく
-	for (size_t i = 0; i < configs.size(); i ++)
-	{
+	for (size_t i = 0; i < configs.size(); i++) {
 		std::vector<Address> addr;
 		addr = configs.at(i).getAddresses();
 
 		// 一つのConfigの中のアドレスを順番に検索する
-		for (size_t j = 0; j < addr.size(); j ++)
-		{
+		for (size_t j = 0; j < addr.size(); j++) {
 			// リクエストが送られてきたサーバーのIPアドレスと、Configでサーバーが設定されているIPアドレスが一致する
 			// IPアドレスが0.0.0.0だった場合はワイルドカード
-			if (req.getLocalAddr() == addr.at(j).getIpAddress() || req.getLocalAddr() == "0.0.0.0" || addr.at(j).getIpAddress() == "0.0.0.0")
-			{
+			if (req.getLocalAddr() == addr.at(j).getIpAddress() ||
+				req.getLocalAddr() == "0.0.0.0" ||
+				addr.at(j).getIpAddress() == "0.0.0.0") {
 				// IPアドレスに加え、ポート番号も一致する
-				if (req.getLocalPort() == (unsigned int)addr.at(j).getPort())
-				{
+				if (req.getLocalPort() == (unsigned int)addr.at(j).getPort()) {
 					// さらにホスト名をチェックする
 					// ワイルドカードは"_"
-					for (size_t k = 0; k < configs.at(i).getServerName().size(); k++)
-					{
-						if (without_port == configs.at(i).getServerName().at(k) || without_port == "_" || configs.at(i).getServerName().at(k) == "_")
-						{
+					for (size_t k = 0; k < configs.at(i).getServerName().size();
+						 k++) {
+						if (without_port ==
+								configs.at(i).getServerName().at(k) ||
+							without_port == "_" ||
+							configs.at(i).getServerName().at(k) == "_") {
 							addressnum = j;
 							confnum = i;
 							servername = configs.at(i).getServerName().at(k);
