@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/17 20:24:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:56:33 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,3 +313,9 @@ void Request::setRemoteAddr(std::string const &_remoteAddr) {
 }
 
 std::string const &Request::getRemoteAddr() const { return remoteAddr; }
+
+void Request::setLocalAddr(std::string const &_localAddr) {
+	localAddr = _localAddr;
+}
+
+std::string const &Request::getLocalAddr() const { return localAddr; }

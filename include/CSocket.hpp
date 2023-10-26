@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:52:01 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:53:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ class CSocket {
 		void setLasttime(std::time_t const &_lasttime);
 		void setRemoteAddr(u_int32_t s_addr);
 		std::string const &getRemoteAddr() const;
+		std::string const &getLocalAddr() const;
 
 	private:
 		CSocket();
