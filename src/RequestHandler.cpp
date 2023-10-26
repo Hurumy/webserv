@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:14:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:59 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
+		res.setHeader("Connection", "close");
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
@@ -286,6 +287,7 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	if (status == -1) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 

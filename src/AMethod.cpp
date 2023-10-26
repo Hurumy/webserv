@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AMethod.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:13:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:28 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 #endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 
@@ -136,6 +137,7 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 #endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 
@@ -351,6 +353,7 @@ void AMethod::setURI() {
 			} else if (errno == ELOOP) {
 				res.setStatus(500);
 				res.setStatusMessage(statusmap.at(500));
+				res.setHeader("Connection", "close");
 				setErrorPageBody();
 			} else {
 				res.setStatus(400);

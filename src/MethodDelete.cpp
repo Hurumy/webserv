@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodDelete.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 14:17:40 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:14:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int MethodDelete::deleteFile() {
 #endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		return (500);
 	}
 	res.setStatus(204);

@@ -64,3 +64,7 @@ NoPermToRead.txt
 
 # playground
 playground
+
+# for no perm test
+noreadperm.conf
+
