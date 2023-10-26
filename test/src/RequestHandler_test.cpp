@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 16:49:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:08:25 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test:80");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(80);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -73,6 +75,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort_2) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_:8660");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8660);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -91,6 +95,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test:28282");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(28282);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -116,6 +122,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2) {
 	req.setMethod("GET");
 	req.addHeader("Host", "www.kawaii.test:9999");
 	req.setUrl("/");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(9999);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -140,6 +148,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_:9999");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(9999);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();

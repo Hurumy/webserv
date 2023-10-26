@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 16:50:32 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:06:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	Result<std::string, bool> result_1 = req.getHeader("Host");
 	std::string hostname;
 	std::string without_port;
-	bool portflag;
-	int portnum;
+	unsigned int portnum;
 
 	//レスポンスに最低限をセットする
 	res.setVersion("HTTP/1.1");
@@ -40,7 +39,8 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.addHeader("Server", "webserv - shtanemu, komatsud");
 
 	// Hostヘッダーが含まれていない場合は400を返して良い。
-	if (result_1.isOK() == false) {
+	if (result_1.isOK() == false)
+	{
 		#if defined(_DEBUGFLAG)
 				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
 		#endif
@@ -59,7 +59,6 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 		std::stringstream sb;
 		std::string	tmp;
 
-		portflag = true;
 		ss << hostname;
 		std::getline(ss, without_port, ':');
 		std::getline(ss, tmp, ':');
@@ -68,10 +67,19 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 		
 		sb << tmp;
 		sb >> portnum;
+
+		//実際にリクエストが届いたポートと、ホスト名に付けられているポートが異なっていた場合は400を返す
+		if (req.getLocalPort() != portnum)
+		{
+			res.setStatus(400);
+			res.setStatusMessage("Bad Request");
+			res.addHeader("Content-Length", "0");
+			return Error<bool>(false);
+		}
+
 	}
 	else
 	{
-		portflag = false;
 		without_port = hostname;
 	}
 
