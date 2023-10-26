@@ -232,6 +232,8 @@ void Request::setLocalAddr(std::string const &_localAddr) {
 
 std::string const &Request::getLocalAddr() const { return localAddr; }
 
-void Request::setLocalPort(unsigned int const _localPort) { localPort = _localPort; }
+void Request::setLocalPort(unsigned int const _localPort) {
+	localPort = _localPort;
+}
 
 unsigned int Request::getLocalPort() const { return localPort; }

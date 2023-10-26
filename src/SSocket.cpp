@@ -23,8 +23,13 @@
 
 #include "puterror.hpp"
 
-SSocket::SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver, int _backlog)
-	: ipaddr(_ipaddr), port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
+SSocket::SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver,
+				 int _backlog)
+	: ipaddr(_ipaddr),
+	  port(_port),
+	  ipver(_ipver),
+	  backlog(_backlog),
+	  revents(0) {}
 
 u_int32_t SSocket::_convertIpstrToUint() const {
 	u_int32_t s_addr(0);

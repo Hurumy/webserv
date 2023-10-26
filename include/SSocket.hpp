@@ -37,7 +37,8 @@ class SSocket {
 
 	protected:
 	public:
-		SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver, int _backlog);
+		SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver,
+				int _backlog);
 
 		bool init();
 		bool closeSockfd();
