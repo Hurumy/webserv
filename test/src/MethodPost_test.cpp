@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 11:52:26 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 16:57:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:16:22 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ TEST(MethodPostTest, postTextFileTest) {
 	req.setMethod("POST");
 	req.addHeader("Host", "_");
 	req.setBody(expected_content);
+	req.setLocalAddr("111.108.92.125:8660");
+	req.setLocalPort(8660);
 	req.addHeader("Content-Length", "11");
 	req.setUrl("/post");
 

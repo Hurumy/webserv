@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 17:08:25 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:17:02 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ TEST(RequestHandlerTest, searchMatchHostTest) {
 	req.setLocalAddr("0.0.0.0");
 	req.setLocalPort(8080);
 
-	std::clog << RED << "Segmentation fault" << RESET << std::endl;
+	//std::clog << RED << "Segmentation fault" << RESET << std::endl;
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
@@ -436,6 +436,8 @@ TEST(RequestHandlerTest, getHostnameTest) {
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
 	req.setUrl("/dummy/test");
+	req.setLocalPort(expected_port);
+	req.setLocalAddr(expected_host);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
