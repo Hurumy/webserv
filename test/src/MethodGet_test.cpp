@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:25:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:40:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 16:56:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,8 @@ TEST(MethodGetTest, getActTest_getDirlistTest) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8080);
 	req.setUrl("/www/content/");
 
 	// routing
@@ -206,11 +208,13 @@ TEST(MethodGetTest, getActTest_getIndexTest) {
 	std::string expected_string("OK");
 	bool expected_is_there_content_len(true);
 	std::string expected_hostname("wtf.net");
-	int expected_portnum(80);
+	int expected_portnum(25565);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", expected_hostname);
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(expected_portnum);
 	req.setUrl("/");
 
 	// routing
@@ -251,11 +255,13 @@ TEST(MethodGetTest, getActTest_getIndexTest_FromLocation) {
 	std::string expected_body("What the fuck....");
 	bool expected_is_there_content_len(true);
 	std::string expected_hostname("wtf.net");
-	int expected_portnum(80);
+	int expected_portnum(25565);
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "wtf.net");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(expected_portnum);
 	req.setUrl("/");
 
 	// routing

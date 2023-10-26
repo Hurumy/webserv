@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler_test.cpp                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:34:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:17:02 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #define CONF_FILE_PATH "testconfs/simple.conf"
 #define CONF_FILE_WITH_ONE_LOC "testconfs/location_dir.conf"
 #define CONF_FOR_ALIAS_TEST "testconfs/alias_test.conf"
+#define CONF_FOR_ROUTING_TEST "testconfs/routingtest.conf"
 
 TEST(RequestHandlerTest, searchMatchHostTest) {
 	std::vector<Config> tmp;
@@ -37,8 +38,10 @@ TEST(RequestHandlerTest, searchMatchHostTest) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8080);
 
-	std::clog << RED << "Segmentatio fault" << RESET << std::endl;
+	//std::clog << RED << "Segmentation fault" << RESET << std::endl;
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
 	ASSERT_EQ(result_1.getOk(), expected);
@@ -54,6 +57,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test:80");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(80);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -70,6 +75,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_withPort_2) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_:8660");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8660);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -88,6 +95,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "kawaii.test:28282");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(28282);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -113,6 +122,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_2) {
 	req.setMethod("GET");
 	req.addHeader("Host", "www.kawaii.test:9999");
 	req.setUrl("/");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(9999);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -137,6 +148,8 @@ TEST(RequestHandlerTest, searchMatchHostTest_Error_withWrongPort_3) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "_:9999");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(9999);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	Result<int, bool> result_1 = handler.searchMatchHost();
@@ -331,6 +344,8 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "cgi.test");
+	req.setLocalPort(8080);
+	req.setLocalAddr("0.0.0.0");
 	req.setUrl(expected_path);
 
 	RequestHandler handler = RequestHandler(tmp, req);
@@ -339,7 +354,7 @@ TEST(RequestHandlerTest, getCgiInfoTest) {
 	handler.routeMethod();
 	handler.isCgi();
 
-	// std::cout << handler.getResponse().getLines() << std::endl;
+	//std::cout << handler.getResponse().getLines() << std::endl;
 
 	ASSERT_EQ(handler.isCgi().isOK(), expected_status);
 	ASSERT_EQ(handler.isCgi().getOk(), "." + expected_path);
@@ -357,6 +372,8 @@ TEST(RequestHandlerTest, Error_ENOENT_getCgiInfoTest) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "cgi.test");
+	req.setLocalPort(8080);
+	req.setLocalAddr("0.0.0.0");
 	req.setUrl(expected_path);
 
 	RequestHandler handler = RequestHandler(tmp, req);
@@ -387,6 +404,8 @@ TEST(RequestHandlerTest, Error_EACCES_getCgiInfoTest) {
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
 	req.addHeader("Host", "cgi.test");
+	req.setLocalPort(8080);
+	req.setLocalAddr("0.0.0.0");
 	req.setUrl(expected_path);
 
 	RequestHandler handler = RequestHandler(tmp, req);
@@ -417,6 +436,8 @@ TEST(RequestHandlerTest, getHostnameTest) {
 	req.setMethod("GET");
 	req.addHeader("Host", "_");
 	req.setUrl("/dummy/test");
+	req.setLocalPort(expected_port);
+	req.setLocalAddr(expected_host);
 
 	RequestHandler handler = RequestHandler(tmp, req);
 	handler.searchMatchHost();
@@ -459,3 +480,32 @@ TEST(RequestHandlerTest, setAliasTest) {
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
 }
+
+TEST(RequestHandlerTest, routingTest_1) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_ROUTING_TEST);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("lastserver");
+	int expected_port(4040);
+	bool expected_is_there_content_len(true);
+	bool iscgi(false);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_host);
+	req.setUrl("/test/conf/wtf.txt");
+	req.setLocalAddr("1.1.1.1");
+	req.setLocalPort(expected_port);
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getHeader("Host").getOk(), expected_host);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(), expected_is_there_content_len);
+}
+
