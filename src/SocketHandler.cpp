@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 17:26:47 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:27:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,20 +363,6 @@ bool SocketHandler::loadRequests() {
 						  << std::endl;
 #endif
 				csockiter->setPhase(CSocket::PASS);
-				// csockiter->setPhase(CSocket::CGI);
-				// Response res;
-				// res.setVersion("HTTP/1.1");
-				// res.setStatus(200);
-				// res.setStatusMessage("OK");
-				// res.addHeader("Content-Type", "text/plain");
-				// responses[csockiter->getSockfd()] = res;
-				// CGIResponseCreator
-				// cgiResponseCreator(requests[csockiter->getSockfd()],
-				// responses[csockiter->getSockfd()], "/test/test.cgi");
-				// cgiResponseCreator.setHostName("webserv");
-				// cgiResponseCreator.setPortNum(8000);
-				// cgiResponseCreators.insert(std::make_pair(csockiter->getSockfd(),
-				// cgiResponseCreator));
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
