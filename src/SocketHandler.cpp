@@ -240,7 +240,9 @@ bool SocketHandler::recieveCSockets() {
 				// return false;
 			} else {
 				fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
-				csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr, ssockiter->getIpaddr(), ssockiter->getPort()));
+				csockets.push_back(CSocket(sockfd, s_addr.sin_addr.s_addr,
+										   ssockiter->getIpaddr(),
+										   ssockiter->getPort()));
 			}
 		}
 	}

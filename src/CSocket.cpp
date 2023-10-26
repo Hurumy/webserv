@@ -26,7 +26,8 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 
-CSocket::CSocket(int const _sockfd, unsigned long s_addr, std::string const &_localAddr, unsigned int const _localPort)
+CSocket::CSocket(int const _sockfd, unsigned long s_addr,
+				 std::string const &_localAddr, unsigned int const _localPort)
 	: sockfd(_sockfd),
 	  revents(0),
 	  phase(CSocket::RECV),

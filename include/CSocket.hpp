@@ -26,7 +26,8 @@ typedef uint32_t u_int32_t;
 class CSocket {
 	protected:
 	public:
-		CSocket(int const _sockfd, unsigned long s_addr, std::string const &_localAddr, unsigned int const _localPort);
+		CSocket(int const _sockfd, unsigned long s_addr,
+				std::string const &_localAddr, unsigned int const _localPort);
 		enum tag {
 				RECV,
 				LOAD,
