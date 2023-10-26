@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:10:21 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:16:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ class Request : public virtual APayload {
 		enum tag {
 				REQLINE,
 				HEADER,
-				BODY,
-				CGISTARTUP,
-				CGIWRITE,
-				CGIRECV,
+				BODY
 		};
 		Request();
 
@@ -40,14 +37,6 @@ class Request : public virtual APayload {
 		void setPhase(Request::tag _phase);
 		bool loadPayload(CSocket &csocket);
 		bool loadHeader(CSocket &csocket);
-		int getMonitoredfd() const;
-		void setMonitoredfd(Request::tag _phase);
-		short getRevents() const;
-		void setRevents(short const _revents);
-		bool setEnvVars() const;
-		bool execCGIScript();
-		bool writeMessageBody() const;
-		bool recvCGIOutput() const;
 		void setRemoteAddr(std::string const &_remoteAddr);
 		std::string const &getRemoteAddr() const;
 		void setLocalAddr(std::string const &_localAddr);
@@ -61,12 +50,7 @@ class Request : public virtual APayload {
 		std::string method;
 		std::size_t contentLength;
 		std::size_t lastContentLength;
-		bool isCompleteHeader;
 		tag phase;
-		int inpfd[2];
-		int outpfd[2];
-		int monitoredfd;
-		short revents;
 		std::string remoteAddr;
 		std::string localAddr;
 		unsigned int localPort;
