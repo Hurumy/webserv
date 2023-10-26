@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:09:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:18:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,6 @@
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
-
-CSocket::CSocket(int const _sockfd)
-	: sockfd(_sockfd),
-	  revents(0),
-	  phase(CSocket::RECV),
-	  lasttime(std::time(NULL)) {}
 
 CSocket::CSocket(int const _sockfd, unsigned long s_addr, std::string const &_localAddr, unsigned int const _localPort)
 	: sockfd(_sockfd),
