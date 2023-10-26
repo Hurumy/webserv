@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+apt update
 
 echo "${0}: install telnet."
 apt install -y telnet
@@ -27,7 +28,8 @@ if [ $status -ne 0 ]; then
 fi
 
 echo "${0}: compile sources."
-make re
+make fclean
+make debug
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to compile: $status"
