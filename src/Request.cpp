@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 10:56:33 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:11:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,3 +319,7 @@ void Request::setLocalAddr(std::string const &_localAddr) {
 }
 
 std::string const &Request::getLocalAddr() const { return localAddr; }
+
+void Request::setLocalPort(unsigned int const _localPort) { localPort = _localPort; }
+
+unsigned int Request::getLocalPort() const { return localPort; }

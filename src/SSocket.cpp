@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:43:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:08:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 #include "puterror.hpp"
 
-SSocket::SSocket(const std::string &_ipaddr, int _port, ipvers _ipver, int _backlog)
+SSocket::SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver, int _backlog)
 	: ipaddr(_ipaddr), port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
 
 u_int32_t SSocket::_convertIpstrToUint() const {
@@ -90,7 +90,7 @@ std::string const &SSocket::getIpaddr() const { return ipaddr; }
 
 ipvers SSocket::getIpVer() const { return ipver; }
 
-int SSocket::getPort() const { return port; }
+unsigned int SSocket::getPort() const { return port; }
 
 int SSocket::getBacklog() const { return backlog; }
 

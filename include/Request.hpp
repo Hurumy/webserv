@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:59:27 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 10:56:05 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:10:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ class Request : public virtual APayload {
 		std::string const &getRemoteAddr() const;
 		void setLocalAddr(std::string const &_localAddr);
 		std::string const &getLocalAddr() const;
+		void setLocalPort(unsigned int const _localPort);
+		unsigned int getLocalPort() const;
 
 	protected:
 	private:
@@ -67,6 +69,7 @@ class Request : public virtual APayload {
 		short revents;
 		std::string remoteAddr;
 		std::string localAddr;
+		unsigned int localPort;
 
 		static std::vector<std::string> initMethods();
 		bool loadRequestLine(CSocket &csocket);
