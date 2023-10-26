@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 14:57:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:30:12 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@
 
 class SocketHandler {
 	private:
-		std::vector<CSocket>::iterator _deinitCSocket(
-			std::vector<CSocket>::iterator &csockiter);
+		std::list<CSocket>::iterator _deinitCSocket(
+			std::list<CSocket>::iterator &csockiter);
 
 		std::vector<SSocket> ssockets;
-		std::vector<CSocket> csockets;
+		std::list<CSocket> csockets;
 		std::list<pid_t> cpids;
 		std::size_t timeout;
 		int pollTimeout;
@@ -55,7 +55,7 @@ class SocketHandler {
 		bool removeClosedCSockets();
 		std::vector<SSocket> const &getSSockets() const;
 		void setSSockets(const std::vector<SSocket> &_ssockets);
-		std::vector<CSocket> const &getCSockets() const;
+		std::list<CSocket> const &getCSockets() const;
 		int getTimeout() const;
 		void setTimeout(const std::size_t _timeout);
 		void setPollTimeout(const int _pollTimeout);

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 15:22:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 15:29:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ bool SocketHandler::closeAllSSockets() {
 	return true;
 }
 
-std::vector<CSocket>::iterator SocketHandler::_deinitCSocket(
-	std::vector<CSocket>::iterator &csockiter) {
+std::list<CSocket>::iterator SocketHandler::_deinitCSocket(
+	std::list<CSocket>::iterator &csockiter) {
 	int const csockfd(csockiter->getSockfd());
 	pid_t cpid;
 
@@ -84,7 +84,7 @@ std::vector<CSocket>::iterator SocketHandler::_deinitCSocket(
 }
 
 bool SocketHandler::removeClosedCSockets() {
-	for (std::vector<CSocket>::iterator iter = csockets.begin();
+	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
 		// if ((iter->getRevents() & POLLHUP) == POLLHUP ||
 		// 	(iter->getPhase() == CSocket::CLOSE) ||
@@ -125,7 +125,7 @@ void SocketHandler::setSSockets(const std::vector<SSocket> &_ssockets) {
 	ssockets = _ssockets;
 }
 
-std::vector<CSocket> const &SocketHandler::getCSockets() const {
+std::list<CSocket> const &SocketHandler::getCSockets() const {
 	return csockets;
 }
 
@@ -155,7 +155,7 @@ bool SocketHandler::createPollfds() {
 		}
 	}
 	if (csockets.empty() == false) {
-		for (std::vector<CSocket>::iterator iter = csockets.begin();
+		for (std::list<CSocket>::iterator iter = csockets.begin();
 			 iter != csockets.end(); ++iter) {
 			std::memset(&added_pollfd, 0, sizeof(added_pollfd));
 			added_pollfd.fd = iter->getSockfd();
@@ -201,7 +201,7 @@ bool SocketHandler::setRevents() {
 				break;
 			}
 		}
-		for (std::vector<CSocket>::iterator csockiter = csockets.begin();
+		for (std::list<CSocket>::iterator csockiter = csockets.begin();
 			 csockiter != csockets.end(); ++csockiter) {
 			if (polliter->fd == csockiter->getSockfd()) {
 				csockiter->setRevents(polliter->revents);
@@ -255,7 +255,7 @@ bool SocketHandler::recvCSocketsData() {
 	if (csockets.empty() == true) {
 		return false;
 	}
-	for (std::vector<CSocket>::iterator iter = csockets.begin();
+	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if ((iter->getRevents() & POLLIN) == POLLIN &&
 			iter->getPhase() == CSocket::RECV) {
@@ -283,7 +283,7 @@ bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) {
 	}
 	for (std::map<int, std::string>::const_iterator dataiter = dataMap.begin();
 		 dataiter != dataMap.end(); ++dataiter) {
-		for (std::vector<CSocket>::iterator csockiter = csockets.begin();
+		for (std::list<CSocket>::iterator csockiter = csockets.begin();
 			 csockiter != csockets.end(); ++csockiter) {
 			if ((csockiter->getRevents() & POLLOUT) == POLLOUT) {
 				if (dataiter->first == csockiter->getSockfd()) {
@@ -303,7 +303,7 @@ bool SocketHandler::sendResponses() {
 	if (responses.empty() == true) {
 		return false;
 	}
-	for (std::vector<CSocket>::iterator csockiter = csockets.begin();
+	for (std::list<CSocket>::iterator csockiter = csockets.begin();
 		 csockiter != csockets.end(); ++csockiter) {
 		if (csockiter->getPhase() == CSocket::SEND &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
@@ -350,7 +350,7 @@ bool SocketHandler::loadRequests() {
 	if (csockets.empty() == true) {
 		return false;
 	}
-	for (std::vector<CSocket>::iterator csockiter = csockets.begin();
+	for (std::list<CSocket>::iterator csockiter = csockets.begin();
 		 csockiter != csockets.end(); ++csockiter) {
 		if ((csockiter->getRevents() & POLLIN) == POLLIN &&
 			csockiter->getPhase() == CSocket::LOAD) {
@@ -402,7 +402,7 @@ std::map<int, Request> const &SocketHandler::getRequests() const {
 std::map<int, std::string> SocketHandler::createResponse() {
 	std::map<int, std::string> response;
 
-	for (std::vector<CSocket>::iterator iter = csockets.begin();
+	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
 			response[iter->getSockfd()] = std::string(
@@ -415,7 +415,7 @@ std::map<int, std::string> SocketHandler::createResponse() {
 }
 
 bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
-	for (std::vector<CSocket>::iterator iter = csockets.begin();
+	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (iter->getPhase() == CSocket::PASS) {
 			RequestHandler requestHandler =
@@ -519,7 +519,7 @@ bool SocketHandler::handleCGIRequest() {
 				++iter;
 			} break;
 			case CGIResponseCreator::CGIFIN: {
-				for (std::vector<CSocket>::iterator csockiter =
+				for (std::list<CSocket>::iterator csockiter =
 						 csockets.begin();
 					 csockiter != csockets.end(); ++csockiter) {
 					if (csockiter->getSockfd() == iter->first) {
@@ -541,7 +541,7 @@ bool SocketHandler::closeTimeoutCSockets() {
 	if (csockets.empty() == true) {
 		return true;
 	}
-	for (std::vector<CSocket>::iterator iter = csockets.begin();
+	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end(); ++iter) {
 		if (std::difftime(std::time(NULL), iter->getLasttime()) > timeout) {
 			if (iter->getPhase() == CSocket::CGI) {
