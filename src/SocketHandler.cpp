@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 16:19:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 17:26:47 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,29 +288,6 @@ bool SocketHandler::recvCSocketsData() {
 	return true;
 }
 
-bool SocketHandler::sendDataMap(std::map<int, std::string> const &dataMap) {
-	if (dataMap.empty() == true) {
-		// error handling
-		return false;
-	}
-	for (std::map<int, std::string>::const_iterator dataiter = dataMap.begin();
-		 dataiter != dataMap.end(); ++dataiter) {
-		for (std::list<CSocket>::iterator csockiter = csockets.begin();
-			 csockiter != csockets.end(); ++csockiter) {
-			if ((csockiter->getRevents() & POLLOUT) == POLLOUT) {
-				if (dataiter->first == csockiter->getSockfd()) {
-					if (csockiter->sendData(dataiter->second) == false) {
-						// error handling
-					}
-					csockiter->setPhase(CSocket::RECV);
-					break;
-				}
-			}
-		}
-	}
-	return true;
-}
-
 bool SocketHandler::sendResponses() {
 	if (responses.empty() == true) {
 		return false;
@@ -409,21 +386,6 @@ bool SocketHandler::loadRequests() {
 
 std::map<int, Request> const &SocketHandler::getRequests() const {
 	return requests;
-}
-
-std::map<int, std::string> SocketHandler::createResponse() {
-	std::map<int, std::string> response;
-
-	for (std::list<CSocket>::iterator iter = csockets.begin();
-		 iter != csockets.end(); ++iter) {
-		if (iter->getPhase() == CSocket::PASS) {
-			response[iter->getSockfd()] = std::string(
-				"HTTP/1.1 200 OK\r\nContent-Type: "
-				"text/plain\r\nContent-Length: 14\r\n\r\nHello world!\r\n");
-			removeRequest(iter->getSockfd());
-		}
-	}
-	return response;
 }
 
 bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
