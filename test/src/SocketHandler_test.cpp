@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:13:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:31:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,19 @@
 
 TEST(SocketHandlerTest, constructorTest) {
 	std::vector<SSocket> sources;
+	unsigned int expected00(8080);
+	unsigned int expected01(8000);
+	unsigned int expected02(4040);
 
 	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));
 	sources.push_back(SSocket("0.0.0.0", 8000, IPV4, 100));
 	sources.push_back(SSocket("0.0.0.0", 4040, IPV4, 100));
 	SocketHandler socketHandler(sources, 1000, 100);
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
-	ASSERT_EQ(ssockets.at(0).getPort(), 8080);
-	ASSERT_EQ(ssockets.at(1).getPort(), 8000);
-	ASSERT_EQ(ssockets.at(2).getPort(), 4040);
-	socketHandler.addCSocket(CSocket(0, 2110443574));
+	ASSERT_EQ(ssockets.at(0).getPort(), expected00);
+	ASSERT_EQ(ssockets.at(1).getPort(), expected01);
+	ASSERT_EQ(ssockets.at(2).getPort(), expected02);
+	socketHandler.addCSocket(CSocket(3, 2110443574, "127.0.0.1", 8080));
 	std::vector<CSocket> const &csockets = socketHandler.getCSockets();
 	ASSERT_EQ(csockets.at(0).getRevents(), 0);
 }
