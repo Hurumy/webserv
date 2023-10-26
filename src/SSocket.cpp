@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:00:15 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:30:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,28 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 
 #include "puterror.hpp"
 
 SSocket::SSocket(const std::string &_ipaddr, int _port, ipvers _ipver, int _backlog)
 	: ipaddr(_ipaddr), port(_port), ipver(_ipver), backlog(_backlog), revents(0) {}
+
+u_int32_t SSocket::_convertIpstrToUint() const {
+	u_int32_t s_addr(0);
+	std::stringstream ss(ipaddr);
+	int byte(0);
+	int bitshift(0);
+	char dot;
+
+	while (ss.eof() == false) {
+		ss >> byte;
+		ss >> dot;
+		s_addr += byte << bitshift;
+		bitshift += 8;
+	}
+	return s_addr;
+}
 
 bool SSocket::init() {
 	struct sockaddr_in s_addr;
@@ -39,7 +56,7 @@ bool SSocket::init() {
 		return false;
 	}
 	s_addr.sin_port = htons(port);
-	s_addr.sin_addr.s_addr = INADDR_ANY;
+	s_addr.sin_addr.s_addr = _convertIpstrToUint();
 	addrsize = sizeof(s_addr);
 	sockfd = socket(s_addr.sin_family, SOCK_STREAM, 0);
 	if (sockfd == -1) {

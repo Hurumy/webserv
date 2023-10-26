@@ -6,13 +6,17 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:15:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:03:08 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:18:16 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
+#include <stdint.h>
+
 #include <string>
+
+typedef uint32_t u_int32_t;
 
 enum ipvers {
 		IPV4,
@@ -22,6 +26,7 @@ enum ipvers {
 class SSocket {
 	private:
 		SSocket();
+		u_int32_t _convertIpstrToUint() const;
 
 		int sockfd;
 		std::string ipaddr;
