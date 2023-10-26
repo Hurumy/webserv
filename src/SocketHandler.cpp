@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 15:29:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 16:19:28 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <signal.h>
+#include <sys/wait.h>
 
 #include <algorithm>
 #include <ctime>
@@ -84,12 +85,18 @@ std::list<CSocket>::iterator SocketHandler::_deinitCSocket(
 }
 
 bool SocketHandler::removeClosedCSockets() {
+	short pollhup;
+
+#if defined(_LINUX)
+	pollhup = POLLRDHUP;
+#elif defined(_DARWIN)
+	pollhup = POLLHUP;
+#else
+	pollhup = POLLHUP;
+#endif
 	for (std::list<CSocket>::iterator iter = csockets.begin();
 		 iter != csockets.end();) {
-		// if ((iter->getRevents() & POLLHUP) == POLLHUP ||
-		// 	(iter->getPhase() == CSocket::CLOSE) ||
-		// 	(iter->getRevents() & POLLRDHUP) == POLLRDHUP) {
-		if ((iter->getRevents() & POLLHUP) == POLLHUP ||
+		if ((iter->getRevents() & pollhup) == pollhup ||
 			(iter->getPhase() == CSocket::CLOSE)) {
 			iter = _deinitCSocket(iter);
 		} else {
@@ -159,8 +166,13 @@ bool SocketHandler::createPollfds() {
 			 iter != csockets.end(); ++iter) {
 			std::memset(&added_pollfd, 0, sizeof(added_pollfd));
 			added_pollfd.fd = iter->getSockfd();
-			// added_pollfd.events = POLLIN | POLLOUT | POLLHUP | POLLRDHUP;
+#if defined(_LINUX)
+			added_pollfd.events = POLLIN | POLLOUT | POLLRDHUP;
+#elif defined(_DARWIN)
 			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
+#else
+			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
+#endif
 			pollfds.push_back(added_pollfd);
 		}
 	}

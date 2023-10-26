@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/25 13:13:01 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/10/26 16:23:24 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,14 @@ CC			:= c++
 CFLAGS		:= -Wall -Wextra -Werror -std=c++98
 UNAME_OS	:= $(shell uname -s)
 ifeq ($(UNAME_OS), Linux)
-	DFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+	DBFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+	CFLAGS	+= -D_LINUX
 else ifeq ($(UNAME_OS), Darwin)
-	DFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+	DBFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+	CFLAGS	+= -D_DARWIN
 endif
 ifeq ($(MAKECMDGOALS), debug)
-	CFLAGS += $(DFLAGS)
+	CFLAGS += $(DBFLAGS)
 endif
 
 SRC_FILES	:= \
