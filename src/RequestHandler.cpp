@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 12:02:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/27 14:27:53 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 
 	//レスポンスに最低限をセットする
 	res.setVersion("HTTP/1.1");
+	res.addHeader("Connection", "keep-alive");
 
 	// Hostヘッダー自体が含まれていない場合(どうにもならない)
 	if (result_1.isOK() == false) {

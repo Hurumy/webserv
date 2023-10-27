@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 12:57:49 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/27 14:33:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -457,4 +457,29 @@ TEST(RequestHandlerTest, setAliasTest) {
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
+}
+
+TEST(RequestHandlerTest, setConnectionHeaderTest) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("kawaii.test");
+	int expected_port(8080);
+	bool iscgi(false);
+	bool isthereconnectionheader(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_host);
+	req.setUrl("/");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
 }
