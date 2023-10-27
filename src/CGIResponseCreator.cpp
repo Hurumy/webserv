@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 15:24:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/27 22:45:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -434,13 +434,12 @@ bool CGIResponseCreator::recvCGIOutput() {
 		putSytemError("read");
 		return false;
 	}
-	// if (readLen == 0) {
-	// 	phase = CGIResponseCreator::CGIFIN;
-	// 	return true;
-	// }
+	if (readLen == 0) {
+		phase = CGIResponseCreator::CGIFIN;
+		return true;
+	}
 	// for develope
 	cgiOutput.append(buf, readLen);
-	phase = CGIResponseCreator::CGIFIN;
 	return true;
 }
 
@@ -466,9 +465,9 @@ pid_t CGIResponseCreator::waitChildProc() {
 }
 
 bool CGIResponseCreator::setCGIOutput() {
+	// for develope
 	response.setStatus(200);
 	response.setStatusMessage("OK");
-	// for develope
 	response.setHeader("Content-Type", "text/plain");
 	response.setBody(cgiOutput);
 	return true;
