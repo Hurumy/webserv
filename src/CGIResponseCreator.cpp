@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/27 22:45:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/28 17:26:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,12 +464,67 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
+CGIResponseCreator::responseType CGIResponseCreator::_loadCGIReponse() {
+	std::istringstream issline(cgiOutput);
+	std::string line;
+
+	std::getline(issline, line);
+	if (line.empty() == false) {
+		std::istringstream issheader(line);
+		std::string key;
+		
+		std::getline(issheader, key, ':');
+		if (key.compare("Content-Type") == 0) {
+			std::string value;
+			
+			issheader >> value;
+			response.addHeader("Content-Type", value);
+			while (issline.eof() == false) {
+				std::getline(issline, line);
+				if (line.empty() == true) {
+					std::string body;
+
+					while (issline.eof() == false) {
+						std::getline(issline, body);
+						if (issline.eof() == true) { response.addBody(body); }
+						else { response.addBody(body + "\r\n"); }
+					}
+				} else {
+					issheader.clear();
+					issheader.str(line);
+					std::getline(issheader, key, ':');
+					issheader >> value;
+					response.addHeader(key, value);
+				}
+			}
+			response.setStatus(200);
+			response.setStatusMessage("OK");
+			return CGIResponseCreator::DOC;
+		} else if (key.compare("Location") == 0) {
+			std::string location;
+
+			issheader >> location;
+			if (location.at(0) == '/') { return CGIResponseCreator::LOCALREDIR; }
+			if (location.find(':') != std::string::npos) { return CGIResponseCreator::CLIENTREDIR; }
+			return CGIResponseCreator::OTHER;
+		} else {
+			return CGIResponseCreator::OTHER;
+		}
+	}
+	return CGIResponseCreator::OTHER;
+}
+
 bool CGIResponseCreator::setCGIOutput() {
-	// for develope
-	response.setStatus(200);
-	response.setStatusMessage("OK");
-	response.setHeader("Content-Type", "text/plain");
-	response.setBody(cgiOutput);
+	switch (_loadCGIReponse()) {
+		case CGIResponseCreator::DOC: {
+		} break;
+		case CGIResponseCreator::LOCALREDIR: {
+		} break;
+		case CGIResponseCreator::CLIENTREDIR: {
+		} break;
+		case CGIResponseCreator::OTHER: {
+		} break;
+	}
 	return true;
 }
 
