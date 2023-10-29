@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 16:07:00 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:43:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
+			query = get.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -206,6 +207,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
+			query = post.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -244,6 +246,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
+			query = del.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -376,4 +379,9 @@ std::string const RequestHandler::getHostname() const {
 
 int RequestHandler::getPortNumber() const {
 	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
+}
+
+std::string const &	RequestHandler::getQuery() const
+{
+	return (query);
 }

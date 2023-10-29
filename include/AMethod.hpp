@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AMethod.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:17:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:30:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ class AMethod {
 		Request req;
 		Response &res;
 		std::string uri;
+		std::string query;
 		bool isloc;
 		Location loc;
 		bool iscgi;
@@ -45,5 +46,6 @@ class AMethod {
 		Result<int, bool> checkURI();
 		void setURI();
 		void setErrorPageBody();
+		std::string const &getQuery() const;
 		Result<std::string, bool> const isCgi() const;
 };

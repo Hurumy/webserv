@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 14:53:41 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:39:03 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,6 @@ Result<int, bool> AMethod::checkURI() {
 			i++;
 		}
 		// std::cout << rel << std::endl;
-
 	} else if (origin.find("/") == 0) {
 		rel = req.getUrl();
 	} else {
@@ -212,6 +211,20 @@ Result<int, bool> AMethod::checkURI() {
 		res.setStatusMessage(statusmap.at(400));
 		return Error<bool>(false);
 	}
+
+	std::string tmp;
+	std::stringstream sb;
+
+	// クエリを一旦無視する
+	if (rel.find("?") != std::string::npos)
+	{
+		sb << origin;
+		std::getline(sb, tmp, '?');
+		rel = tmp;
+		std::getline(sb, tmp, '?');
+		query = tmp;
+	}
+
 
 	// // サーバーのルートより上を見ようとしていないかチェック
 	// いりませんでした。ルートより上を見ようとしていた場合はルートのパスに変更されて届くみたい
@@ -496,4 +509,9 @@ Result<std::string, bool> const AMethod::isCgi() const {
 
 	// CGiが指定されていなかった場合、ErrorでFalseを返します
 	return Error<bool>(false);
+}
+
+std::string const	&AMethod::getQuery() const
+{
+	return (query);
 }
