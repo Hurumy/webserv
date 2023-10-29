@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 12:55:56 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 14:53:41 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ Result<int, bool> AMethod::checkURI() {
 	std::string origin = req.getUrl();
 	std::string rel;
 
-	// std::cout << RED << origin << RESET << std::endl;
+	//std::cout << RED << "origin: " << origin << RESET << std::endl;
 
 	//ここRFC見てもっと判定頑張らないとならない部分です
 	//絶対URIか相対URIか判定する
@@ -213,7 +213,44 @@ Result<int, bool> AMethod::checkURI() {
 		return Error<bool>(false);
 	}
 
-	//　サーバー自体のルートより上を見ようとしていないか、
+	// // サーバーのルートより上を見ようとしていないかチェック
+	// いりませんでした。ルートより上を見ようとしていた場合はルートのパスに変更されて届くみたい
+	// std::stringstream	sc;
+	// std::string			tmp;
+	// int					counter;
+	// std::cout << "rel: " << rel << std::endl;
+	// sc << rel;
+
+	// std::vector<std::string> t = lineSpliter(conf.getRootDir(), "/");
+	// counter = t.size() - 1;
+	// std::cout << "length of root: " << counter << std::endl;
+
+	// while (sc.eof() == false) {
+	// 	std::getline(sc, tmp, '/');
+	// 	std::cout << "tmp: " << tmp << std::endl;
+	// 	if (tmp.empty() == true || tmp == ".")
+	// 	{
+			
+	// 	}
+	// 	else if (tmp == "..")
+	// 	{
+	// 		counter --;
+	// 	}
+	// 	else
+	// 	{
+	// 		counter ++;
+	// 	}
+	// }
+	// if (counter < 0)
+	// {
+	// 	#if defined(_DEBUGFLAG)
+	// 		std::cout << RED << "AMethod::setUri: URI tried forbidden access" << RESET << std::endl;
+	// 	#endif
+	// 	res.setStatus(400);
+	// 	res.setStatusMessage(statusmap.at(400));
+	// 	setErrorPageBody();
+	// }
+
 	//　変な指定がないかなどのチェックを足す
 
 	uri = rel;
@@ -295,7 +332,7 @@ void AMethod::setURI() {
 	while (sb.eof() == false) {
 		std::getline(sb, tmp, '/');
 		cgipath += tmp;
-		std::cout << "cgipath: " << cgipath << std::endl;
+		//std::cout << "cgipath: " << cgipath << std::endl;
 		if (cgipath.find('.') != std::string::npos) {
 			std::vector<std::string> lines;
 			lines = lineSpliter(tmp, ".");
@@ -341,8 +378,8 @@ void AMethod::setURI() {
 		int status;
 		errno = 0;
 
-		std::cout << "uri: " << uri << std::endl;
-		std::cout << "path_to_cgi: " << path_to_cgi << std::endl;
+		// std::cout << "uri: " << uri << std::endl;
+		// std::cout << "path_to_cgi: " << path_to_cgi << std::endl;
 
 		status = access(path_to_cgi.c_str(), X_OK);
 		if (status == -1) {
