@@ -303,7 +303,7 @@ TEST(MethodGetTest, getQueryTest) {
 	std::string expected_body("What the fuck....");
 	bool expected_is_there_content_len(true);
 	std::string expected_hostname("wtf.net");
-	std::string	expected_query("test=query");
+	std::string expected_query("test=query");
 	int expected_portnum(25565);
 
 	req.setVersion("HTTP/1.1");
@@ -340,4 +340,3 @@ TEST(MethodGetTest, getQueryTest) {
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
 }
-

@@ -28,7 +28,7 @@ class RequestHandler {
 		size_t confnum;
 		size_t addressnum;
 		std::string servername;
-		std::string	query;
+		std::string query;
 		bool iscgi;
 		std::string path_to_cgi;
 		Result<std::string, bool> _openFile(std::string filename);

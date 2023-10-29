@@ -51,8 +51,7 @@ TEST(SocketHandlerTest, pollfdsTest) {
 	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLHUP);
 }
 
-TEST(SocketHandlerTest, setReventsTest)
-{
+TEST(SocketHandlerTest, setReventsTest) {
 	std::vector<SSocket> sources;
 
 	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));

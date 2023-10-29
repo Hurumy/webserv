@@ -123,7 +123,7 @@ static std::vector<std::string> cutPorts(std::string rawdata, std::string start,
 			}
 		}
 	}
-	//std::cout << "num of servers: " << list.size() << std::endl;
+	// std::cout << "num of servers: " << list.size() << std::endl;
 	return (list);
 }
 

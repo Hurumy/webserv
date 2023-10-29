@@ -34,12 +34,11 @@ Result<std::vector<Config>, bool> parseConf(std::string filepath) {
 		}
 	}
 
-	//Configファイルが一つもなかった時に、エラーを返す
-	// #if defined(_DEBUGFLAG)
-	// 	std::cout << RED << "Number of Configs: " << confs.size() << RESET << std::endl;
-	// #endif
-	if (confs.size() <= 0)
-	{
+	// Configファイルが一つもなかった時に、エラーを返す
+	//  #if defined(_DEBUGFLAG)
+	//  	std::cout << RED << "Number of Configs: " << confs.size() << RESET
+	//  << std::endl; #endif
+	if (confs.size() <= 0) {
 		errorInInit("No server settings find...((((；ﾟДﾟ)))))))");
 	}
 
