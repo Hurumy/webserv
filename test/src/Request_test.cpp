@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:51:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/17 20:11:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:28:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "CSocket.hpp"
 
 TEST(RequestTest, setRequestLine01Test) {
-	CSocket csocket(3, 2110443574);
+	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
 	Request request;
 
 	csocket.setData(
@@ -36,7 +36,7 @@ TEST(RequestTest, setRequestLine01Test) {
 }
 
 TEST(RequestTest, setRequestLine02Test) {
-	CSocket csocket(3, 2110443574);
+	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
 	Request request;
 
 	csocket.setData("GET / HTTP/1.1\r\n");
@@ -47,7 +47,7 @@ TEST(RequestTest, setRequestLine02Test) {
 }
 
 TEST(RequestTest, setRequestLineError01Test) {
-	CSocket csocket(3, 2110443574);
+	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
 	Request request;
 
 	csocket.setData("GET /");
@@ -55,7 +55,7 @@ TEST(RequestTest, setRequestLineError01Test) {
 }
 
 TEST(RequestTest, setRequestLineError02Test) {
-	CSocket csocket(3, 2110443574);
+	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
 	Request request;
 
 	csocket.setData("");
@@ -63,7 +63,7 @@ TEST(RequestTest, setRequestLineError02Test) {
 }
 
 TEST(RequestTest, setRequestLineError03Test) {
-	CSocket csocket(3, 2110443574);
+	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
 	Request request;
 
 	csocket.setData(
