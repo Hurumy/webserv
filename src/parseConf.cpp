@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:37:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 12:23:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:12:32 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,15 @@ Result<std::vector<Config>, bool> parseConf(std::string filepath) {
 			tmp = eachconf.getOk();
 			confs.push_back(tmp);
 		}
+	}
+
+	//Configファイルが一つもなかった時に、エラーを返す
+	// #if defined(_DEBUGFLAG)
+	// 	std::cout << RED << "Number of Configs: " << confs.size() << RESET << std::endl;
+	// #endif
+	if (confs.size() <= 0)
+	{
+		errorInInit("No server settings find...((((；ﾟДﾟ)))))))");
 	}
 
 	// return

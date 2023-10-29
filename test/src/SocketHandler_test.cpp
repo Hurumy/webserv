@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketHandler_test.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:31:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:59:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ TEST(SocketHandlerTest, pollfdsTest) {
 	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLHUP);
 }
 
-TEST(SocketHandlerTest, setReventsTest) {
+TEST(SocketHandlerTest, setReventsTest)
+{
 	std::vector<SSocket> sources;
 
 	sources.push_back(SSocket("0.0.0.0", 8080, IPV4, 100));

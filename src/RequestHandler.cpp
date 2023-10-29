@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 17:06:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:43:26 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,15 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 
 	//レスポンスに最低限をセットする
 	res.setVersion("HTTP/1.1");
+	res.addHeader("Connection", "keep-alive");
 	// ( -`ω-)✧
 	res.addHeader("Server", "webserv - shtanemu, komatsud");
 
 	// Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -120,8 +121,15 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// どれとも一致しなかった場合は、Configの一番最初にあるサーバに振り分ける
 	this->confnum = 0;
 	this->addressnum = 0;
-	this->servername = configs.at(confnum).getServerName().at(0);
-	res.addHeader("Host", servername);
+	if (configs.size() != 0 && configs.at(0).getServerName().size() != 0)
+	{
+		this->servername = configs.at(confnum).getServerName().at(0);
+	}
+	else
+	{
+		servername = "";
+	}
+	res.addHeader("Server", servername);
 	return Ok<int>(confnum);
 }
 
@@ -129,6 +137,7 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
+		res.setHeader("Connection", "close");
 		setErrorPageBody();
 		return Error<bool>(false);
 	}
@@ -160,6 +169,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
+			query = get.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -197,6 +207,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (post.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = post.isCgi().getOk();
+			query = post.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -235,6 +246,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (del.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = del.isCgi().getOk();
+			query = del.getQuery();
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -275,10 +287,10 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
-				  << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
+						<< RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);
@@ -302,6 +314,7 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	if (status == -1) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 
@@ -366,4 +379,9 @@ std::string const RequestHandler::getHostname() const {
 
 int RequestHandler::getPortNumber() const {
 	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
+}
+
+std::string const &	RequestHandler::getQuery() const
+{
+	return (query);
 }

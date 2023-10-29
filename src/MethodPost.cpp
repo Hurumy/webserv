@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 14:55:46 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:50 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int MethodPost::writeToFile(int fd) {
 		if (status == -1) {
 			res.setStatus(500);
 			res.setStatusMessage("Internal Server Error");
+			res.setHeader("Connection", "close");
 			return (500);
 		}
 		i = i - status;
@@ -55,6 +56,7 @@ int MethodPost::writeToFile(int fd) {
 	if (status == -1) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		return (500);
 	}
 	return (0);
@@ -153,6 +155,7 @@ int MethodPost::openPostResource() {
 	if (status == -1) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		return (500);
 	} else {
 		res.setStatus(201);

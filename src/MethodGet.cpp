@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodGet.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:14:20 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:41 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 #endif
 			res.setStatus(500);
 			res.setStatusMessage("Internal Server Error");
+			res.setHeader("Connection", "close");
 			setErrorPageBody();
 			return Ok<int>(-1);
 		}
@@ -222,6 +223,7 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 #endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
 		setErrorPageBody();
 		return Ok<int>(-1);
 	}

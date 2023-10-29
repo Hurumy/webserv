@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 12:36:07 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 12:40:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ static std::vector<std::string> cutPorts(std::string rawdata, std::string start,
 			}
 		}
 	}
+	//std::cout << "num of servers: " << list.size() << std::endl;
 	return (list);
 }
 

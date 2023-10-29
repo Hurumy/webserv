@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 10:02:46 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:07:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ bool Server::startUp(std::string const &pathConfig) {
 		return false;
 	}
 	configs = result.getOk();
+
 	for (std::vector<Config>::iterator confiter = configs.begin();
 		 confiter != configs.end(); ++confiter) {
 		std::vector<Address> const &addresses(confiter->getAddresses());

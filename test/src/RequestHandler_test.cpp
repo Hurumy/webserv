@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 17:17:02 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:45:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #define CONF_FILE_PATH "testconfs/simple.conf"
 #define CONF_FILE_WITH_ONE_LOC "testconfs/location_dir.conf"
 #define CONF_FOR_ALIAS_TEST "testconfs/alias_test.conf"
+#define CONF_FOR_CGI "testconfs/cgi_test.conf"
 #define CONF_FOR_ROUTING_TEST "testconfs/routingtest.conf"
 
 TEST(RequestHandlerTest, searchMatchHostTest) {
@@ -481,6 +482,58 @@ TEST(RequestHandlerTest, setAliasTest) {
 			  expected_is_there_content_len);
 }
 
+TEST(RequestHandlerTest, setConnectionHeaderTest) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("kawaii.test");
+	int expected_port(8080);
+	bool iscgi(false);
+	bool isthereconnectionheader(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_host);
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8080);
+	req.setUrl("/");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+}
+
+TEST(RequestHandlerTest, getCgiWithSomeQuerysTest) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_CGI);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("cgi.test");
+	int expected_port(80);
+	bool iscgi(true);
+	bool isthereconnectionheader(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_host);
+	req.setUrl("/cgis/test.py/test?test=query");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+}
+
 TEST(RequestHandlerTest, routingTest_1) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_ROUTING_TEST);
 	std::vector<Config> tmp = res.getOk();
@@ -509,3 +562,30 @@ TEST(RequestHandlerTest, routingTest_1) {
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").isOK(),
 			  expected_is_there_content_len);
 }
+
+TEST(RequestHandlerTest, getQueryTest) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FOR_CGI);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	std::string expected_host("cgi.test");
+	int expected_port(80);
+	bool iscgi(true);
+	bool isthereconnectionheader(true);
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", expected_host);
+	req.setUrl("/cgis/test.py/test?test=query");
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	handler.checkRequiedHeader();
+	handler.routeMethod();
+
+	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
+	ASSERT_EQ(handler.getHostname(), expected_host);
+	ASSERT_EQ(handler.getPortNumber(), expected_port);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+	ASSERT_EQ(handler.getQuery(), "test=query");
+}
+
