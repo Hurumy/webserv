@@ -16,8 +16,7 @@
 
 #include "webserv.hpp"
 
-int errorInInit(std::string errormessage)
-{
+int errorInInit(std::string errormessage) {
 	std::string tmp;
 	tmp = RED + errormessage + RESET;
 	perror(tmp.c_str());

@@ -41,9 +41,9 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 
 	// Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -121,12 +121,9 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// どれとも一致しなかった場合は、Configの一番最初にあるサーバに振り分ける
 	this->confnum = 0;
 	this->addressnum = 0;
-	if (configs.size() != 0 && configs.at(0).getServerName().size() != 0)
-	{
+	if (configs.size() != 0 && configs.at(0).getServerName().size() != 0) {
 		this->servername = configs.at(confnum).getServerName().at(0);
-	}
-	else
-	{
+	} else {
 		servername = "";
 	}
 	res.addHeader("Server", servername);
@@ -287,10 +284,10 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
-						<< RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
+				  << RESET << std::endl;
+#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);
@@ -381,7 +378,4 @@ int RequestHandler::getPortNumber() const {
 	return (configs.at(confnum).getAddresses().at(addressnum).getPort());
 }
 
-std::string const &	RequestHandler::getQuery() const
-{
-	return (query);
-}
+std::string const &RequestHandler::getQuery() const { return (query); }

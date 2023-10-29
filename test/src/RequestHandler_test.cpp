@@ -506,7 +506,8 @@ TEST(RequestHandlerTest, setConnectionHeaderTest) {
 	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
 	ASSERT_EQ(handler.getHostname(), expected_host);
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
-	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(),
+			  isthereconnectionheader);
 }
 
 TEST(RequestHandlerTest, getCgiWithSomeQuerysTest) {
@@ -531,7 +532,8 @@ TEST(RequestHandlerTest, getCgiWithSomeQuerysTest) {
 	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
 	ASSERT_EQ(handler.getHostname(), expected_host);
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
-	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(),
+			  isthereconnectionheader);
 }
 
 TEST(RequestHandlerTest, routingTest_1) {
@@ -585,7 +587,7 @@ TEST(RequestHandlerTest, getQueryTest) {
 	ASSERT_EQ(handler.isCgi().isOK(), iscgi);
 	ASSERT_EQ(handler.getHostname(), expected_host);
 	ASSERT_EQ(handler.getPortNumber(), expected_port);
-	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), isthereconnectionheader);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(),
+			  isthereconnectionheader);
 	ASSERT_EQ(handler.getQuery(), "test=query");
 }
-

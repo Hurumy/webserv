@@ -92,11 +92,11 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(404);
 		res.setStatusMessage(statusmap.at(404));
 		return Error<bool>(false);
@@ -105,13 +105,13 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		res.setStatusMessage(statusmap.at(403));
 		return Error<bool>(false);
 	} else if (fd == -1) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED
-						<< "AMethod::_openFile "
-							"open失敗。エラーコードがHTTPステータスコードと対応しない"
-						<< RESET << std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED
+				  << "AMethod::_openFile "
+					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
+				  << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -130,11 +130,11 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	close(fd);
 
 	if (status == -1) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile read失敗。" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile read失敗。" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -181,7 +181,7 @@ Result<int, bool> AMethod::checkURI() {
 	std::string origin = req.getUrl();
 	std::string rel;
 
-	//std::cout << RED << "origin: " << origin << RESET << std::endl;
+	// std::cout << RED << "origin: " << origin << RESET << std::endl;
 
 	//ここRFC見てもっと判定頑張らないとならない部分です
 	//絶対URIか相対URIか判定する
@@ -202,11 +202,11 @@ Result<int, bool> AMethod::checkURI() {
 	} else if (origin.find("/") == 0) {
 		rel = req.getUrl();
 	} else {
-	// リクエストのURIが/から始まっていなかった時にBad Requestとして処理する
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "URIが/から始まってないよ〜(；ω；)" << RESET
-						<< std::endl;
-		#endif
+		// リクエストのURIが/から始まっていなかった時にBad Requestとして処理する
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "URIが/から始まってないよ〜(；ω；)" << RESET
+				  << std::endl;
+#endif
 		res.setStatus(400);
 		res.setStatusMessage(statusmap.at(400));
 		return Error<bool>(false);
@@ -216,15 +216,13 @@ Result<int, bool> AMethod::checkURI() {
 	std::stringstream sb;
 
 	// クエリを一旦無視する
-	if (rel.find("?") != std::string::npos)
-	{
+	if (rel.find("?") != std::string::npos) {
 		sb << origin;
 		std::getline(sb, tmp, '?');
 		rel = tmp;
 		std::getline(sb, tmp, '?');
 		query = tmp;
 	}
-
 
 	// // サーバーのルートより上を見ようとしていないかチェック
 	// いりませんでした。ルートより上を見ようとしていた場合はルートのパスに変更されて届くみたい
@@ -243,7 +241,7 @@ Result<int, bool> AMethod::checkURI() {
 	// 	std::cout << "tmp: " << tmp << std::endl;
 	// 	if (tmp.empty() == true || tmp == ".")
 	// 	{
-			
+
 	// 	}
 	// 	else if (tmp == "..")
 	// 	{
@@ -257,9 +255,8 @@ Result<int, bool> AMethod::checkURI() {
 	// if (counter < 0)
 	// {
 	// 	#if defined(_DEBUGFLAG)
-	// 		std::cout << RED << "AMethod::setUri: URI tried forbidden access" << RESET << std::endl;
-	// 	#endif
-	// 	res.setStatus(400);
+	// 		std::cout << RED << "AMethod::setUri: URI tried forbidden access" <<
+	// RESET << std::endl; 	#endif 	res.setStatus(400);
 	// 	res.setStatusMessage(statusmap.at(400));
 	// 	setErrorPageBody();
 	// }
@@ -345,7 +342,7 @@ void AMethod::setURI() {
 	while (sb.eof() == false) {
 		std::getline(sb, tmp, '/');
 		cgipath += tmp;
-		//std::cout << "cgipath: " << cgipath << std::endl;
+		// std::cout << "cgipath: " << cgipath << std::endl;
 		if (cgipath.find('.') != std::string::npos) {
 			std::vector<std::string> lines;
 			lines = lineSpliter(tmp, ".");
@@ -378,7 +375,7 @@ void AMethod::setURI() {
 	//最初に.をつけて開けるようにする(要審議...)
 	tmp = "." + uri;
 	uri = tmp;
-	//cgi本体(拡張子を含むところまでのパス)を指したパスにも頭に.をつけて開けるようにする
+	// cgi本体(拡張子を含むところまでのパス)を指したパスにも頭に.をつけて開けるようにする
 	tmp = "." + cgipath;
 	path_to_cgi = tmp;
 
@@ -398,38 +395,46 @@ void AMethod::setURI() {
 		if (status == -1) {
 			iscgicanaccess = false;
 			if (errno == EACCES) {
-				#if defined(_DEBUGFLAG)
-					std::cout << RED << "AMethod::setUri: CGI Path Check...EACCES" << RESET << std::endl;
-				#endif
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: CGI Path Check...EACCES"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(403);
 				res.setStatusMessage(statusmap.at(403));
 				setErrorPageBody();
 			} else if (errno == ENOENT) {
-				#if defined(_DEBUGFLAG)
-					std::cout << RED << "AMethod::setUri: CGI Path Check...ENOENT" << RESET << std::endl;
-				#endif
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: CGI Path Check...ENOENT"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(404);
 				res.setStatusMessage(statusmap.at(404));
 				setErrorPageBody();
 			} else if (errno == ENAMETOOLONG) {
-				#if defined(_DEBUGFLAG)
-					std::cout << RED << "AMethod::setUri: sCGI Path Check...ENAMETOOLONG" << RESET << std::endl;
-				#endif
+#if defined(_DEBUGFLAG)
+				std::cout << RED
+						  << "AMethod::setUri: sCGI Path Check...ENAMETOOLONG"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(414);
 				res.setStatusMessage(statusmap.at(414));
 				setErrorPageBody();
 			} else if (errno == ELOOP) {
-				#if defined(_DEBUGFLAG)
-					std::cout << RED << "AMethod::setUri: sCGI Path Check...ELOOP" << RESET << std::endl;
-				#endif
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: sCGI Path Check...ELOOP"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(500);
 				res.setStatusMessage(statusmap.at(500));
 				res.setHeader("Connection", "close");
 				setErrorPageBody();
 			} else {
-				#if defined(_DEBUGFLAG)
-					std::cout << RED << "AMethod::setUri: sCGI Path Check...Some error with access()" << RESET << std::endl;
-				#endif
+#if defined(_DEBUGFLAG)
+				std::cout << RED
+						  << "AMethod::setUri: sCGI Path Check...Some error "
+							 "with access()"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(400);
 				res.setStatusMessage(statusmap.at(400));
 				setErrorPageBody();
@@ -511,7 +516,4 @@ Result<std::string, bool> const AMethod::isCgi() const {
 	return Error<bool>(false);
 }
 
-std::string const	&AMethod::getQuery() const
-{
-	return (query);
-}
+std::string const &AMethod::getQuery() const { return (query); }
