@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/28 17:26:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:27:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 
 CGIResponseCreator::tag const &CGIResponseCreator::getPhase() const {
 	return phase;
+}
+
+CGIResponseCreator::type const &CGIResponseCreator::getResponseType() const {
+	return responseType;
 }
 
 void CGIResponseCreator::setPhase(CGIResponseCreator::tag const &_phase) {
@@ -464,7 +468,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
-CGIResponseCreator::responseType CGIResponseCreator::_loadCGIReponse() {
+CGIResponseCreator::type CGIResponseCreator::_loadCGIReponse() {
 	std::istringstream issline(cgiOutput);
 	std::string line;
 
@@ -504,7 +508,10 @@ CGIResponseCreator::responseType CGIResponseCreator::_loadCGIReponse() {
 			std::string location;
 
 			issheader >> location;
-			if (location.at(0) == '/') { return CGIResponseCreator::LOCALREDIR; }
+			if (location.at(0) == '/') {
+				request.setUrl(location);
+				return CGIResponseCreator::LOCALREDIR;
+			}
 			if (location.find(':') != std::string::npos) { return CGIResponseCreator::CLIENTREDIR; }
 			return CGIResponseCreator::OTHER;
 		} else {
@@ -514,18 +521,9 @@ CGIResponseCreator::responseType CGIResponseCreator::_loadCGIReponse() {
 	return CGIResponseCreator::OTHER;
 }
 
-bool CGIResponseCreator::setCGIOutput() {
-	switch (_loadCGIReponse()) {
-		case CGIResponseCreator::DOC: {
-		} break;
-		case CGIResponseCreator::LOCALREDIR: {
-		} break;
-		case CGIResponseCreator::CLIENTREDIR: {
-		} break;
-		case CGIResponseCreator::OTHER: {
-		} break;
-	}
-	return true;
+CGIResponseCreator::type CGIResponseCreator::setCGIOutput() {
+	responseType = _loadCGIReponse();
+	return responseType;
 }
 
 bool CGIResponseCreator::deinit() {

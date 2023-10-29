@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 17:27:20 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:28:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,16 +403,18 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					CGIResponseCreator cgiResponseCreator(
-						requests[iter->getSockfd()],
-						responses[iter->getSockfd()],
-						requestHandler.isCgi().getOk());
-					cgiResponseCreator.setHostName(
-						requestHandler.getHostname());
-					cgiResponseCreator.setPortNum(
-						requestHandler.getPortNumber());
-					cgiResponseCreators.insert(
-						std::make_pair(iter->getSockfd(), cgiResponseCreator));
+					if (cgiResponseCreators.find(iter->getSockfd()) == cgiResponseCreators.end()) {
+						CGIResponseCreator cgiResponseCreator(
+							requests[iter->getSockfd()],
+							responses[iter->getSockfd()],
+							requestHandler.isCgi().getOk());
+						cgiResponseCreator.setHostName(
+							requestHandler.getHostname());
+						cgiResponseCreator.setPortNum(
+							requestHandler.getPortNumber());
+						cgiResponseCreators.insert(
+							std::make_pair(iter->getSockfd(), cgiResponseCreator));
+					}
 				} else {
 					iter->setPhase(CSocket::SEND);
 					removeRequest(iter->getSockfd());
@@ -483,7 +485,11 @@ bool SocketHandler::handleCGIRequest() {
 						 csockets.begin();
 					 csockiter != csockets.end(); ++csockiter) {
 					if (csockiter->getSockfd() == iter->first) {
-						csockiter->setPhase(CSocket::SEND);
+						if (iter->second.getResponseType() == CGIResponseCreator::LOCALREDIR) {
+							csockiter->setPhase(CSocket::PASS);
+						} else {
+							csockiter->setPhase(CSocket::SEND);
+						}
 						break;
 					}
 				}

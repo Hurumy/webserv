@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/28 17:11:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 20:23:53 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@
 class CGIResponseCreator {
 	public:
 		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGILASTRECV, CGIFIN };
-		enum responseType { DOC, LOCALREDIR, CLIENTREDIR, OTHER };
+		enum type { DOC, LOCALREDIR, CLIENTREDIR, OTHER };
 		CGIResponseCreator(Request &_request, Response &_response,
 						   const std::string &_cgiPath);
 
 		CGIResponseCreator::tag const &getPhase() const;
 		void setPhase(CGIResponseCreator::tag const &_phase);
+		CGIResponseCreator::type const &getResponseType() const;
 		pid_t getPid() const;
 		short getRevents() const;
 		void setRevents(short const _revents);
@@ -42,7 +43,7 @@ class CGIResponseCreator {
 		bool writeMessageBody() const;
 		bool recvCGIOutput();
 		pid_t waitChildProc();
-		bool setCGIOutput();
+		CGIResponseCreator::type setCGIOutput();
 		bool deinit();
 		bool setEnvVars();
 
@@ -64,11 +65,12 @@ class CGIResponseCreator {
 		bool _setServerPort();
 		bool _setServerProtocol();
 		bool _setRuntime();
-		CGIResponseCreator::responseType _loadCGIReponse();
+		CGIResponseCreator::type _loadCGIReponse();
 
 		Request &request;
 		Response &response;
 		CGIResponseCreator::tag phase;
+		CGIResponseCreator::type responseType;
 		pid_t pid;
 		int wstatus;
 		int inpfd[2];
