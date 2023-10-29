@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/29 20:27:13 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:24:37 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -468,7 +468,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
-CGIResponseCreator::type CGIResponseCreator::_loadCGIReponse() {
+bool CGIResponseCreator::setCGIOutput() {
 	std::istringstream issline(cgiOutput);
 	std::string line;
 
@@ -503,27 +503,32 @@ CGIResponseCreator::type CGIResponseCreator::_loadCGIReponse() {
 			}
 			response.setStatus(200);
 			response.setStatusMessage("OK");
-			return CGIResponseCreator::DOC;
+			responseType = CGIResponseCreator::DOC;
+			return true;
 		} else if (key.compare("Location") == 0) {
 			std::string location;
 
 			issheader >> location;
 			if (location.at(0) == '/') {
 				request.setUrl(location);
-				return CGIResponseCreator::LOCALREDIR;
+				responseType = CGIResponseCreator::LOCALREDIR;
+				return true;
 			}
-			if (location.find(':') != std::string::npos) { return CGIResponseCreator::CLIENTREDIR; }
-			return CGIResponseCreator::OTHER;
+			if (location.find(':') != std::string::npos) {
+				responseType = CGIResponseCreator::CLIENTREDIR;
+				return true;
+			}
+			else {
+				responseType = CGIResponseCreator::OTHER;
+				return false;
+			}
 		} else {
-			return CGIResponseCreator::OTHER;
+			responseType = CGIResponseCreator::OTHER;
+				return false;
 		}
 	}
-	return CGIResponseCreator::OTHER;
-}
-
-CGIResponseCreator::type CGIResponseCreator::setCGIOutput() {
-	responseType = _loadCGIReponse();
-	return responseType;
+	responseType = CGIResponseCreator::OTHER;
+	return false;
 }
 
 bool CGIResponseCreator::deinit() {

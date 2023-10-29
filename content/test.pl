@@ -1,1 +1,2 @@
-print "Hello, Perl CGI.\n";
+# Local redirect response
+print "Location: /\n";
