@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/27 14:27:53 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/29 12:43:11 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 
 	// Hostヘッダー自体が含まれていない場合(どうにもならない)
 	if (result_1.isOK() == false) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -265,10 +265,10 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	// open
 	fd = open(filename.c_str(), O_RDONLY);
 	if (fd == -1 && errno == ENOENT) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
-				  << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "RequestHandler::_openFile OPEN失敗。ENOENT"
+						<< RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage("Not Found");
 		return Error<bool>(false);

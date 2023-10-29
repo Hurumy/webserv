@@ -2,4 +2,6 @@ import time
 
 print("Hello, Python CGI")
 
-time.sleep(20)
+time.sleep(1)
+
+print("sleep ended")
