@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/29 21:24:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 21:57:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,12 +416,14 @@ void CGIResponseCreator::setMonitoredfd(CGIResponseCreator::tag const &_phase) {
 	}
 }
 
-bool CGIResponseCreator::writeMessageBody() const {
+bool CGIResponseCreator::writeMessageBody() {
 	// for develope
 	if ((revents & POLLOUT) != POLLOUT) {
 		return false;
 	}
-	write(inpfd[1], "Makefile", 8);
+	write(inpfd[1], request.getBody().c_str(), request.getBody().size());
+	close(inpfd[1]);
+	inpfd[1] = 0;
 	return true;
 }
 
