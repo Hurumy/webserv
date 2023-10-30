@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 15:02:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:41:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int MethodPost::openPostResource() {
 	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
-	std::ofstream	ofs(filename, std::ios::binary);
+	std::ofstream	ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
