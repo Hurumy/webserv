@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 15:41:21 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:23:51 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,11 @@ int MethodPost::openPostResource() {
 	//パス自体へのアクセスを調べる
 	status = access(uppath.c_str(), W_OK);
 	if (status == -1) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "Error in MethodPost::openPostResource" << RESET
-				  << std::endl;
-		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "Error in MethodPost::openPostResource" << RESET
+						<< std::endl;
+				std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+		#endif
 		res.setStatus(401);
 		res.setStatusMessage("Unauthorized");
 		return (401);
@@ -112,6 +112,10 @@ int MethodPost::openPostResource() {
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "Error in MethodPost::openPostResource Internal Server Error" << RESET << std::endl;
+				std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		res.setHeader("Connection", "close");
@@ -138,14 +142,13 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
-	std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET
-			  << std::endl;
-	std::cout << BLUE "MethodPost:: Request class's bodysize: "
-			  << req.getBody().size() << RESET << std::endl;
+	// std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET
+	// 		  << std::endl;
+	// std::cout << BLUE "MethodPost:: Request class's bodysize: "
+	// 		  << req.getBody().size() << RESET << std::endl;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0;
-		 i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
+	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
 
 	ofs.close();
