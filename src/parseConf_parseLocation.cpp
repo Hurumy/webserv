@@ -91,9 +91,7 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	}
 
 	//記述がなかった時などの設定を含める
-	if (res.getMaxBodySize() == 0)
-		res.setMaxBodySize(ULLONG_MAX);
-
+	if (res.getMaxBodySize() == 0) res.setMaxBodySize(ULLONG_MAX);
 
 	// Locationの設定を読み終わったらConfigにLocationを追加だ！
 	path = res.getUri();

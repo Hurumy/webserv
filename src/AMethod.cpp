@@ -84,13 +84,13 @@ AMethod::~AMethod() {}
 
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
-	std::ifstream	ifs(filename.c_str(), std::ios::in | std::ios::binary);
+	std::ifstream ifs(filename.c_str(), std::ios::in | std::ios::binary);
 	if (!ifs && errno == ENOENT) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(404);
 		res.setStatusMessage(statusmap.at(404));
 		return Error<bool>(false);
@@ -99,13 +99,13 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		res.setStatusMessage(statusmap.at(403));
 		return Error<bool>(false);
 	} else if (!ifs) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED
-						<< "AMethod::_openFile "
-							"open失敗。エラーコードがHTTPステータスコードと対応しない"
-						<< RESET << std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED
+				  << "AMethod::_openFile "
+					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
+				  << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -117,18 +117,19 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	long long int size = ifs.tellg();
 	ifs.seekg(0);
 
-	//read
+	// read
 	std::string body;
-	char		buf[size + 1];
+	char buf[size + 1];
 
 	ifs.read(buf, size);
 
-	if ((ifs.rdstate() & std::ios_base::failbit) != 0 || (ifs.rdstate() & std::ios_base::badbit) != 0) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile read失敗。" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+	if ((ifs.rdstate() & std::ios_base::failbit) != 0 ||
+		(ifs.rdstate() & std::ios_base::badbit) != 0) {
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile read失敗。" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -140,8 +141,10 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 
 	ifs.close();
 
-	std::cout << BLUE"AMethod:: bodysize: " << body.size() << RESET << std::endl;
-	std::cout << BLUE"AMethod:: content-length: " << size << RESET << std::endl;
+	std::cout << BLUE "AMethod:: bodysize: " << body.size() << RESET
+			  << std::endl;
+	std::cout << BLUE "AMethod:: content-length: " << size << RESET
+			  << std::endl;
 
 	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
 	std::stringstream ss;

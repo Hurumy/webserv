@@ -341,7 +341,6 @@ TEST(MethodGetTest, getQueryTest) {
 			  expected_is_there_content_len);
 }
 
-
 TEST(MethodGetTest, getBinaryTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
@@ -354,7 +353,7 @@ TEST(MethodGetTest, getBinaryTest) {
 	bool expected_is_there_content_len(true);
 	std::string expected_body;
 
-	//expected_bodyを作る
+	// expected_bodyを作る
 	std::ifstream ifs("./www/content/icon.jpg", std::ios_base::binary);
 	ifs.seekg(0, std::ios::end);
 	long long int size = ifs.tellg();
@@ -365,7 +364,7 @@ TEST(MethodGetTest, getBinaryTest) {
 	expected_body.assign(buf, size);
 	ifs.close();
 
-	//std::cout << expected_body << std::endl;
+	// std::cout << expected_body << std::endl;
 
 	req.setVersion("HTTP/1.1");
 	req.setMethod("GET");
