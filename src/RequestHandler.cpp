@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 16:43:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:43:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.setVersion("HTTP/1.1");
 	res.addHeader("Connection", "keep-alive");
 	// ( -`ω-)✧
-	res.addHeader("Server", "webserv - shtanemu, komatsud");
+	res.addHeader("Server", "webserv_by_shtanemu,komatsud");
 
 	// Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
