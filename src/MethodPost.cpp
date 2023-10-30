@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 14:35:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:02:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,14 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
+	std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET << std::endl;
+	std::cout << BLUE "MethodPost:: Request class's bodysize: " << req.getBody().size() << RESET << std::endl;
+
 	//ファイルに書き込みをする
-	ofs.write(req.getBody().c_str(), sizeof(req.getBody().c_str()));
+	for (unsigned long long i = 0; i < filesize / sizeof(char) && req.getBody().c_str()[i]; i ++)
+		ofs.write(&req.getBody().c_str()[i], sizeof(char));
+
+	ofs.close();
 
 	// ofsを閉じる
 	if ((ofs.rdstate() & std::ios_base::failbit) != 0 || (ofs.rdstate() & std::ios_base::badbit) != 0) {
@@ -148,8 +154,6 @@ int MethodPost::openPostResource() {
 		res.setHeader("Connection", "close");
 		return (500);
 	}
-
-	ofs.close();
 	
 	return (201);
 }
