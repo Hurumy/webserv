@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 10:03:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 16:30:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 13:45:17 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <iterator>
 
 class AMethod {
 	private:
