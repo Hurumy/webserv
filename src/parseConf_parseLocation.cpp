@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 14:33:36 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 17:58:44 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 
 	// Locationの初期設定
 	res.setDirlist(false);
+	res.setIsReturn(false);
 
 	// 1行ずつ読み込んでLocationに設定をセットする
 	for (size_t i = 0; i < line.size(); i++) {
