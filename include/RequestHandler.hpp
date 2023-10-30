@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:21:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/29 16:42:47 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class RequestHandler {
 		size_t confnum;
 		size_t addressnum;
 		std::string servername;
+		std::string query;
 		bool iscgi;
 		std::string path_to_cgi;
 		Result<std::string, bool> _openFile(std::string filename);
@@ -42,5 +43,6 @@ class RequestHandler {
 		Response getResponse();
 		Result<std::string, bool> const isCgi() const;
 		std::string const getHostname() const;
+		std::string const &getQuery() const;
 		int getPortNumber() const;
 };

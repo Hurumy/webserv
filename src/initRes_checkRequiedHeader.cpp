@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/16 14:40:45 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 13:02:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/26 11:30:27 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ Result<std::string, bool> checkRequiredHeader(Request req, Response &res,
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 	if (conf.getReqMethod(req.getMethod()).isOK() == false) {

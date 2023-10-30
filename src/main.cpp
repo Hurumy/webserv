@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 17:26:13 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:29:10 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 int main(const int argc, const char **argv) {
 	if (argc != 2) {
+		errorInInit("Usage: ./webserv <conf_file_path>");
 		return 1;
 	}
 

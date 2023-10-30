@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AMethod.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 13:13:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:06:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,66 +83,70 @@ AMethod::AMethod(Config _conf, Request _req, Response &_res)
 AMethod::~AMethod() {}
 
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
-	int fd;
-	unsigned long long bodysize = 0;
-	int status = 1;
-	std::string body;
-	char buf[FILE_READ_SIZE + 1];
-
 	// open
-	fd = open(filename.c_str(), O_RDONLY);
-	if (fd == -1 && errno == ENOENT) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-				  << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	std::ifstream	ifs(filename.c_str(), std::ios::in | std::ios::binary);
+	if (!ifs && errno == ENOENT) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+						<< std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage(statusmap.at(404));
 		return Error<bool>(false);
-	} else if (fd == -1 && errno == EACCES) {
+	} else if (!ifs && errno == EACCES) {
 		res.setStatus(403);
 		res.setStatusMessage(statusmap.at(403));
 		return Error<bool>(false);
-	} else if (fd == -1) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED
-				  << "AMethod::_openFile "
-					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
-				  << RESET << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	} else if (!ifs) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED
+						<< "AMethod::_openFile "
+							"open失敗。エラーコードがHTTPステータスコードと対応しない"
+						<< RESET << std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 
-	// read
-	while (status > 0) {
-		status = read(fd, buf, FILE_READ_SIZE);
-		if (status != -1) {
-			buf[status] = '\0';
-			body += buf;
-			bodysize += status;
-		}
-	}
-	close(fd);
+	// サイズを測る
+	ifs.seekg(0, std::ios::end);
+	long long int size = ifs.tellg();
+	ifs.seekg(0);
 
-	if (status == -1) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "AMethod::_openFile read失敗。" << RESET
-				  << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	//read
+	std::string body;
+	char		buf[size + 1];
+
+	ifs.read(buf, size);
+
+	if ((ifs.rdstate() & std::ios_base::failbit) != 0 || (ifs.rdstate() & std::ios_base::badbit) != 0) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::_openFile read失敗。" << RESET
+						<< std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
+		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
+
+	buf[size] = '\0';
+	body.assign(buf, size);
+
+	ifs.close();
+
+	std::cout << BLUE"AMethod:: bodysize: " << body.size() << RESET << std::endl;
+	std::cout << BLUE"AMethod:: content-length: " << size << RESET << std::endl;
 
 	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
 	std::stringstream ss;
 	std::string length;
-	ss << bodysize;
+	ss << size;
 	ss >> length;
 	res.addHeader("Content-Length", length);
 	res.setBody(body);
@@ -179,8 +183,9 @@ Result<int, bool> AMethod::checkURI() {
 	std::string origin = req.getUrl();
 	std::string rel;
 
-	// std::cout << RED << origin << RESET << std::endl;
+	// std::cout << RED << "origin: " << origin << RESET << std::endl;
 
+	//ここRFC見てもっと判定頑張らないとならない部分です
 	//絶対URIか相対URIか判定する
 	if (origin.find("http://") == 0 || origin.find("https://") == 0) {
 		std::string tmp;
@@ -196,11 +201,10 @@ Result<int, bool> AMethod::checkURI() {
 			i++;
 		}
 		// std::cout << rel << std::endl;
-
 	} else if (origin.find("/") == 0) {
 		rel = req.getUrl();
 	} else {
-// リクエストのURIが/から始まっていなかった時にBad Requestとして処理する
+		// リクエストのURIが/から始まっていなかった時にBad Requestとして処理する
 #if defined(_DEBUGFLAG)
 		std::cout << RED << "URIが/から始まってないよ〜(；ω；)" << RESET
 				  << std::endl;
@@ -210,7 +214,55 @@ Result<int, bool> AMethod::checkURI() {
 		return Error<bool>(false);
 	}
 
-	//　サーバー自体のルートより上を見ようとしていないか、
+	std::string tmp;
+	std::stringstream sb;
+
+	// クエリを一旦無視する
+	if (rel.find("?") != std::string::npos) {
+		sb << origin;
+		std::getline(sb, tmp, '?');
+		rel = tmp;
+		std::getline(sb, tmp, '?');
+		query = tmp;
+	}
+
+	// // サーバーのルートより上を見ようとしていないかチェック
+	// いりませんでした。ルートより上を見ようとしていた場合はルートのパスに変更されて届くみたい
+	// std::stringstream	sc;
+	// std::string			tmp;
+	// int					counter;
+	// std::cout << "rel: " << rel << std::endl;
+	// sc << rel;
+
+	// std::vector<std::string> t = lineSpliter(conf.getRootDir(), "/");
+	// counter = t.size() - 1;
+	// std::cout << "length of root: " << counter << std::endl;
+
+	// while (sc.eof() == false) {
+	// 	std::getline(sc, tmp, '/');
+	// 	std::cout << "tmp: " << tmp << std::endl;
+	// 	if (tmp.empty() == true || tmp == ".")
+	// 	{
+
+	// 	}
+	// 	else if (tmp == "..")
+	// 	{
+	// 		counter --;
+	// 	}
+	// 	else
+	// 	{
+	// 		counter ++;
+	// 	}
+	// }
+	// if (counter < 0)
+	// {
+	// 	#if defined(_DEBUGFLAG)
+	// 		std::cout << RED << "AMethod::setUri: URI tried forbidden access" <<
+	// RESET << std::endl; 	#endif 	res.setStatus(400);
+	// 	res.setStatusMessage(statusmap.at(400));
+	// 	setErrorPageBody();
+	// }
+
 	//　変な指定がないかなどのチェックを足す
 
 	uri = rel;
@@ -273,6 +325,14 @@ void AMethod::setURI() {
 		uri = tmp;
 	}
 
+	//二重のスラッシュがあったら一つにする
+	while (1) {
+		size_t pos = uri.find("//");
+		if (pos == std::string::npos) break;
+		size_t len = 2;
+		uri.replace(pos, len, "/");
+	}
+
 	// cgiかどうかチェック！！
 	iscgi = false;
 	iscgicanaccess = false;
@@ -284,7 +344,8 @@ void AMethod::setURI() {
 	while (sb.eof() == false) {
 		std::getline(sb, tmp, '/');
 		cgipath += tmp;
-		if (tmp.find('.') != std::string::npos) {
+		// std::cout << "cgipath: " << cgipath << std::endl;
+		if (cgipath.find('.') != std::string::npos) {
 			std::vector<std::string> lines;
 			lines = lineSpliter(tmp, ".");
 			if (lines.size() == 2) {
@@ -304,6 +365,7 @@ void AMethod::setURI() {
 					if (_res.isOK() == true) {
 						//これはcgiだ！
 						iscgi = true;
+						path_to_cgi = cgipath;
 						break;
 					}
 				}
@@ -312,19 +374,16 @@ void AMethod::setURI() {
 		cgipath += "/";
 	}
 
-	//二重のスラッシュがあったら一つにする
-	while (1) {
-		size_t pos = uri.find("//");
-		if (pos == std::string::npos) break;
-		size_t len = 2;
-		uri.replace(pos, len, "/");
-	}
-
 	//最初に.をつけて開けるようにする(要審議...)
 	tmp = "." + uri;
 	uri = tmp;
+	// cgi本体(拡張子を含むところまでのパス)を指したパスにも頭に.をつけて開けるようにする
+	tmp = "." + cgipath;
+	path_to_cgi = tmp;
 
-	path_to_cgi = uri;
+	/* 例えば、/content/test.py/test?test=query ときたら   */
+	/* uri = "./content/test.py/test?test=query"		*/
+	/* path_to_cgi = "./content/test.py" 				*/
 
 	// cgiだった場合のファイルの権限・存在チェックをする
 	if (iscgi == true) {
@@ -332,27 +391,52 @@ void AMethod::setURI() {
 		errno = 0;
 
 		// std::cout << "uri: " << uri << std::endl;
+		// std::cout << "path_to_cgi: " << path_to_cgi << std::endl;
 
-		status = access(uri.c_str(), X_OK);
+		status = access(path_to_cgi.c_str(), X_OK);
 		if (status == -1) {
 			iscgicanaccess = false;
 			if (errno == EACCES) {
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: CGI Path Check...EACCES"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(403);
 				res.setStatusMessage(statusmap.at(403));
 				setErrorPageBody();
 			} else if (errno == ENOENT) {
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: CGI Path Check...ENOENT"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(404);
 				res.setStatusMessage(statusmap.at(404));
 				setErrorPageBody();
 			} else if (errno == ENAMETOOLONG) {
+#if defined(_DEBUGFLAG)
+				std::cout << RED
+						  << "AMethod::setUri: sCGI Path Check...ENAMETOOLONG"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(414);
 				res.setStatusMessage(statusmap.at(414));
 				setErrorPageBody();
 			} else if (errno == ELOOP) {
+#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::setUri: sCGI Path Check...ELOOP"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(500);
 				res.setStatusMessage(statusmap.at(500));
+				res.setHeader("Connection", "close");
 				setErrorPageBody();
 			} else {
+#if defined(_DEBUGFLAG)
+				std::cout << RED
+						  << "AMethod::setUri: sCGI Path Check...Some error "
+							 "with access()"
+						  << RESET << std::endl;
+#endif
 				res.setStatus(400);
 				res.setStatusMessage(statusmap.at(400));
 				setErrorPageBody();
@@ -433,3 +517,5 @@ Result<std::string, bool> const AMethod::isCgi() const {
 	// CGiが指定されていなかった場合、ErrorでFalseを返します
 	return Error<bool>(false);
 }
+
+std::string const &AMethod::getQuery() const { return (query); }

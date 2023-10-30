@@ -6,11 +6,12 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:34:54 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:39:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
+#include <limits.h>
 
 //そのディレクティブにServerと書かれていることを確認する
 static int isServerSetting(std::string raw) {
@@ -23,10 +24,12 @@ static int isServerSetting(std::string raw) {
 
 	pos = line.find("server", 0);
 
+	//一番上の階層に存在したディレクティブがServerでなかった場合はエラーを返す
 	if (pos == std::string::npos)
-		return (-1);
+		errorInInit("Unknown directive (OvO)");
 	else
 		return (0);
+	return (0);
 }
 
 // Confファイルの1行1行をみてなんの設定なのか解釈する
@@ -137,9 +140,12 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	}
 
 	//重複・初期化処理ない時の処理
-	if (conf.getAddresses().size() == 0) {
+	if (conf.getAddresses().size() == 0)
 		thereisnoListen(conf);
-	}
+	if (conf.getServerName().size() == 0)
+		errorInInit("There is no server name...（＾ω＾）");
+	if (conf.getMaxBodySize() == 0)
+		conf.setMaxBodySize(ULLONG_MAX);
 
 	//返す
 	return Ok<Config>(conf);

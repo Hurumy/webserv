@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 17:28:11 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:29:14 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ bool Server::startUp(std::string const &pathConfig) {
 
 	if (result.isError() == true) { return false; }
 	configs = result.getOk();
+
 	for (std::vector<Config>::iterator confiter = configs.begin();
 		 confiter != configs.end(); ++confiter) {
 		std::vector<Address> const &addresses(confiter->getAddresses());
