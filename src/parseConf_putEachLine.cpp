@@ -6,11 +6,12 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 14:32:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:39:35 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfParser.hpp"
+#include <limits.h>
 
 //そのディレクティブにServerと書かれていることを確認する
 static int isServerSetting(std::string raw) {

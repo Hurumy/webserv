@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 15:05:43 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:38:40 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ AMethod::~AMethod() {}
 
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
-	std::ifstream	ifs(filename, std::ios::in | std::ios::binary);
+	std::ifstream	ifs(filename.c_str(), std::ios::in | std::ios::binary);
 	if (!ifs && errno == ENOENT) {
 		#if defined(_DEBUGFLAG)
 				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
