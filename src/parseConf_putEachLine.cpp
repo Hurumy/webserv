@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ConfParser.hpp"
 #include <limits.h>
+
+#include "ConfParser.hpp"
 
 //そのディレクティブにServerと書かれていることを確認する
 static int isServerSetting(std::string raw) {
@@ -140,12 +141,10 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	}
 
 	//重複・初期化処理ない時の処理
-	if (conf.getAddresses().size() == 0)
-		thereisnoListen(conf);
+	if (conf.getAddresses().size() == 0) thereisnoListen(conf);
 	if (conf.getServerName().size() == 0)
 		errorInInit("There is no server name...（＾ω＾）");
-	if (conf.getMaxBodySize() == 0)
-		conf.setMaxBodySize(ULLONG_MAX);
+	if (conf.getMaxBodySize() == 0) conf.setMaxBodySize(ULLONG_MAX);
 
 	//返す
 	return Ok<Config>(conf);

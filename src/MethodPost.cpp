@@ -110,7 +110,7 @@ int MethodPost::openPostResource() {
 	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
-	std::ofstream	ofs(filename.c_str(), std::ios::binary);
+	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
@@ -138,23 +138,27 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
-	std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET << std::endl;
-	std::cout << BLUE "MethodPost:: Request class's bodysize: " << req.getBody().size() << RESET << std::endl;
+	std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET
+			  << std::endl;
+	std::cout << BLUE "MethodPost:: Request class's bodysize: "
+			  << req.getBody().size() << RESET << std::endl;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0; i < filesize / sizeof(char) && req.getBody().c_str()[i]; i ++)
+	for (unsigned long long i = 0;
+		 i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
 
 	ofs.close();
 
 	// ofsを閉じる
-	if ((ofs.rdstate() & std::ios_base::failbit) != 0 || (ofs.rdstate() & std::ios_base::badbit) != 0) {
+	if ((ofs.rdstate() & std::ios_base::failbit) != 0 ||
+		(ofs.rdstate() & std::ios_base::badbit) != 0) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		res.setHeader("Connection", "close");
 		return (500);
 	}
-	
+
 	return (201);
 }
 

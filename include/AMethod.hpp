@@ -12,6 +12,11 @@
 
 #pragma once
 
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+
 #include "ConfParser.hpp"
 #include "Config.hpp"
 #include "Error.hpp"
@@ -20,10 +25,6 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "webserv.hpp"
-#include <iostream>
-#include <fstream>
-#include <algorithm>
-#include <iterator>
 
 class AMethod {
 	private:
