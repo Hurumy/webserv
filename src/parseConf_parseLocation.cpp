@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 11:41:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:33:36 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,9 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	}
 
 	//記述がなかった時などの設定を含める
+	if (res.getMaxBodySize() == 0)
+		res.setMaxBodySize(ULLONG_MAX);
+
 
 	// Locationの設定を読み終わったらConfigにLocationを追加だ！
 	path = res.getUri();

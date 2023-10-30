@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   webserv.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:09:11 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/03 13:38:23 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:51:50 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
+#include <limits.h>
+#include <climits>
 
 //文字色
 #define RESET "\033[0m"

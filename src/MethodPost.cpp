@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:30:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 15:41:21 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,48 +19,6 @@ MethodPost::MethodPost(Config _conf, Request _req, Response &_res)
 	: AMethod(_conf, _req, _res) {}
 
 MethodPost::~MethodPost() {}
-
-int MethodPost::writeToFile(int fd) {
-	int status;
-	std::stringstream ss;
-	std::string str;
-	unsigned long long filesize;
-
-	//ファイルサイズを取得する
-	Result<std::string, bool> result = req.getHeader("Content-Length");
-	if (result.isOK() == true)
-		str = result.getOk();
-	else {
-		res.setStatus(411);
-		res.setStatusMessage("Length Required");
-		return (411);
-	}
-	ss << str;
-	ss >> filesize;
-
-	//ファイルに書き込みをする
-	size_t i = filesize;
-	while (i > 0) {
-		status = write(fd, req.getBody().c_str(), i);
-		if (status == -1) {
-			res.setStatus(500);
-			res.setStatusMessage("Internal Server Error");
-			res.setHeader("Connection", "close");
-			return (500);
-		}
-		i = i - status;
-	}
-
-	// FDを閉じる
-	status = close(fd);
-	if (status == -1) {
-		res.setStatus(500);
-		res.setStatusMessage("Internal Server Error");
-		res.setHeader("Connection", "close");
-		return (500);
-	}
-	return (0);
-}
 
 std::string MethodPost::makeFilename(std::string _uppath) {
 	int status = 0;
@@ -97,12 +55,14 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 
 	// locationのMaxBodySizeを見る
 	if (filesize > loc.getMaxBodySize()) {
+		std::cout << "location: " << loc.getMaxBodySize() << std::endl;
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
 	}
 	// configのMaxBodySizeを見る
 	else if (filesize > conf.getMaxBodySize()) {
+		std::cout << "config: " << conf.getMaxBodySize() << std::endl;
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
@@ -113,7 +73,6 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 
 int MethodPost::openPostResource() {
 	int status = 0;
-	int fd;
 	std::string uppath;
 
 	// locationでUploadPathが設定されていたらそれを使う
@@ -151,8 +110,8 @@ int MethodPost::openPostResource() {
 	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
-	status = open(filename.c_str(), O_WRONLY | O_CREAT, 0777);
-	if (status == -1) {
+	std::ofstream	ofs(filename.c_str(), std::ios::binary);
+	if (!ofs) {
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		res.setHeader("Connection", "close");
@@ -163,12 +122,40 @@ int MethodPost::openPostResource() {
 	}
 
 	//書き込む
-	fd = status;
-	status = writeToFile(fd);
-	if (status == 0)
-		return (201);
-	else
-		return (status);
+	std::stringstream ss;
+	std::string str;
+	unsigned long long filesize;
+
+	//ファイルサイズを取得する
+	Result<std::string, bool> result = req.getHeader("Content-Length");
+	if (result.isOK() == true)
+		str = result.getOk();
+	else {
+		res.setStatus(411);
+		res.setStatusMessage("Length Required");
+		return (411);
+	}
+	ss << str;
+	ss >> filesize;
+
+	std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET << std::endl;
+	std::cout << BLUE "MethodPost:: Request class's bodysize: " << req.getBody().size() << RESET << std::endl;
+
+	//ファイルに書き込みをする
+	for (unsigned long long i = 0; i < filesize / sizeof(char) && req.getBody().c_str()[i]; i ++)
+		ofs.write(&req.getBody().c_str()[i], sizeof(char));
+
+	ofs.close();
+
+	// ofsを閉じる
+	if ((ofs.rdstate() & std::ios_base::failbit) != 0 || (ofs.rdstate() & std::ios_base::badbit) != 0) {
+		res.setStatus(500);
+		res.setStatusMessage("Internal Server Error");
+		res.setHeader("Connection", "close");
+		return (500);
+	}
+	
+	return (201);
 }
 
 Result<int, bool> MethodPost::act() {

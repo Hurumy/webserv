@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 16:39:03 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:06:37 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,68 +83,70 @@ AMethod::AMethod(Config _conf, Request _req, Response &_res)
 AMethod::~AMethod() {}
 
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
-	int fd;
-	unsigned long long bodysize = 0;
-	int status = 1;
-	std::string body;
-	char buf[FILE_READ_SIZE + 1];
-
 	// open
-	fd = open(filename.c_str(), O_RDONLY);
-	if (fd == -1 && errno == ENOENT) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-				  << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	std::ifstream	ifs(filename.c_str(), std::ios::in | std::ios::binary);
+	if (!ifs && errno == ENOENT) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+						<< std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(404);
 		res.setStatusMessage(statusmap.at(404));
 		return Error<bool>(false);
-	} else if (fd == -1 && errno == EACCES) {
+	} else if (!ifs && errno == EACCES) {
 		res.setStatus(403);
 		res.setStatusMessage(statusmap.at(403));
 		return Error<bool>(false);
-	} else if (fd == -1) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED
-				  << "AMethod::_openFile "
-					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
-				  << RESET << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	} else if (!ifs) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED
+						<< "AMethod::_openFile "
+							"open失敗。エラーコードがHTTPステータスコードと対応しない"
+						<< RESET << std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
 
-	// read
-	while (status > 0) {
-		status = read(fd, buf, FILE_READ_SIZE);
-		if (status != -1) {
-			buf[status] = '\0';
-			body += buf;
-			bodysize += status;
-		}
-	}
-	close(fd);
+	// サイズを測る
+	ifs.seekg(0, std::ios::end);
+	long long int size = ifs.tellg();
+	ifs.seekg(0);
 
-	if (status == -1) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "AMethod::_openFile read失敗。" << RESET
-				  << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
+	//read
+	std::string body;
+	char		buf[size + 1];
+
+	ifs.read(buf, size);
+
+	if ((ifs.rdstate() & std::ios_base::failbit) != 0 || (ifs.rdstate() & std::ios_base::badbit) != 0) {
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "AMethod::_openFile read失敗。" << RESET
+						<< std::endl;
+				std::cout << RED << "Filename: " << filename << RESET << std::endl;
+		#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
 		return Error<bool>(false);
 	}
+
+	buf[size] = '\0';
+	body.assign(buf, size);
+
+	ifs.close();
+
+	std::cout << BLUE"AMethod:: bodysize: " << body.size() << RESET << std::endl;
+	std::cout << BLUE"AMethod:: content-length: " << size << RESET << std::endl;
 
 	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
 	std::stringstream ss;
 	std::string length;
-	ss << bodysize;
+	ss << size;
 	ss >> length;
 	res.addHeader("Content-Length", length);
 	res.setBody(body);
