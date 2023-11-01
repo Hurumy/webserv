@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/30 16:29:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/01 12:15:24 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,38 +296,30 @@ bool SocketHandler::sendResponses() {
 		 csockiter != csockets.end(); ++csockiter) {
 		if (csockiter->getPhase() == CSocket::SEND &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
-			// for develop
-			// responses[csockiter->getSockfd()].addHeader("Connection",
-			// 											"Keep-Alive");
-			std::stringstream ss;
-			ss << responses[csockiter->getSockfd()].getBody().size();
-			// for develope
-			responses[csockiter->getSockfd()].addHeader("Content-Length",
-														ss.str());
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
 				// error handling
-			}
-			// for develop
+			} else {
 #if defined(_DEBUGFLAG)
 			std::clog << responses[csockiter->getSockfd()].getLines()
-					  << std::endl;
+					<< std::endl;
 			{
 				int fd = open("./Makefile", O_RDONLY);
 				std::clog << "open fd: " << fd << std::endl;
 				close(fd);
 				std::clog << "the number of CGIResponseCreators: "
-						  << cgiResponseCreators.size() << std::endl;
+						<< cgiResponseCreators.size() << std::endl;
 				std::clog << "the number of Response: " << responses.size()
-						  << std::endl;
+						<< std::endl;
 				std::clog << "the number of Request: " << requests.size()
-						  << std::endl;
+						<< std::endl;
 				std::clog << "the number of CSocket: " << csockets.size()
-						  << std::endl;
+						<< std::endl;
 			}
 #endif
-			csockiter->setPhase(CSocket::RECV);
-			removeResponse(csockiter->getSockfd());
+				csockiter->setPhase(CSocket::RECV);
+				removeResponse(csockiter->getSockfd());
+			}
 		}
 	}
 	return true;
