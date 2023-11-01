@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 17:23:39 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/01 12:59:30 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/11/01 21:17:17 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ jobs:
         run: |
           cd ./integrationtest
           echo HOST_NAME='127.0.0.1' >> .env
-          echo PORT=8000 >> .env
+          echo PORT=8081 >> .env
           echo PROJECT_ROOT='../' >> .env
           echo CONFFILE='${PROJECT_ROOT}conf_files/test.conf' >> .env
           echo WEBSERV='${PROJECT_ROOT}webserv' >> .env
