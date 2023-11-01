@@ -18,7 +18,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET /nosuchpage HTTP/1.1 thisisextra\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 
 	def test_insufficient_word(self):
@@ -28,7 +28,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET / \r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 
 	def test_invalid_location01(self):
@@ -38,7 +38,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET ../ HTTP/1.1\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 
 	def test_invalid_location02(self):
@@ -48,7 +48,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET ./ HTTP/1.1\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 		print('Status: ', self.client.status)
 
@@ -59,7 +59,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET /you/../../ HTTP/1.1\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 
 	def test_invalid_location04(self):
@@ -69,7 +69,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET /./../ HTTP/1.1\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)
 
 	def test_invalid_version(self):
@@ -79,5 +79,5 @@ class TestInvalidRequestLine(unittest.TestCase):
 		self.client.send('GET / HTTP/1.11\r\n')
 		self.client.recv()
 		self.client.close()
-		print('Response:\n', self.client.response)
+		print('Response:\n', self.client.response_data)
 		print('Status: ', self.client.status)

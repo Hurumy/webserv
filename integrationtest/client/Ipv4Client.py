@@ -1,4 +1,6 @@
 import socket
+import select
+import time
 
 
 class BaseClient:
@@ -7,7 +9,8 @@ class BaseClient:
 		self.__address = None
 		self.__timeout = timeout
 		self.__buffer = buffer
-		self.response = None
+		self.response_data = ''
+		self.response_body = ''
 		self.status = None
 
 	def connect(self, address, family:int, typ:int, proto:int):
@@ -15,15 +18,28 @@ class BaseClient:
 		self.__socket = socket.socket(family, typ, proto)
 		self.__socket.settimeout(self.__timeout)
 		self.__socket.connect(self.__address)
+		self.__socket.setblocking(False)
 
 	def send(self, message:str) -> None:
 		self.__socket.send(message.encode('utf-8'))
 
 	def recv(self):
-		self.response = self.__socket.recv(self.__buffer).decode('utf-8')
-		reqline_list = self.response.split(' ')
+		while (True):
+			data = ''
+			try:
+				data = self.__socket.recv(self.__buffer).decode('utf-8')
+				if len(data) != 0: self.response_data += data
+				else: break
+			except: time.sleep(2)
+		reqline_list = self.response_data.split(' ')
 		if 3 > len(reqline_list): return
 		self.status = reqline_list[1]
+		response_lines = self.response_data.split('\r\n')
+		is_reach = False
+		for i, response_line in enumerate(response_lines):
+			if (is_reach == True): self.response_body += response_line
+			if (is_reach == True and i != len(response_lines) - 1): self.response_body += '\r\n'
+			if (response_line == ''): is_reach = True
 
 	def close(self):
 		self.__socket.shutdown(socket.SHUT_RDWR)

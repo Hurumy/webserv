@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 12:15:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/01 12:18:26 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,6 +348,9 @@ bool SocketHandler::loadRequests() {
 				false) {
 				// error handling
 				// if request payload's format is invalid
+				if (csockiter->getPhase() == CSocket::CLOSE) {
+					
+				}
 			} else {
 				// For developing CGI
 #if defined(_DEBUGFLAG)
