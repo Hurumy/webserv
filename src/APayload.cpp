@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   APayload.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 16:05:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/01 17:40:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,27 @@
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
+#include <cctype>
+#include <algorithm>
 
 APayload::~APayload() {}
+
+static unsigned char helper_tolower(unsigned char c)
+{
+	if ('A' <= c && c <= 'Z')
+		return (c - 'A' + 'a');
+	else
+		return (c);
+}
+
+std::string const	APayload::toLower(std::string const &_origin) const
+{
+	std::string tmp;
+	std::cout << "origin.len: " << _origin.length() << ": " << _origin << std::endl;
+	tmp.resize(_origin.length());
+	std::transform(_origin.begin(), _origin.end(), tmp.begin(), helper_tolower);
+	return (tmp);
+}
 
 bool APayload::setVersion(std::string const &_version) {
 	version = _version;
@@ -28,21 +47,25 @@ bool APayload::setBody(std::string const &_body) {
 	return (true);
 }
 
-Result<std::string, bool> const APayload::getHeader(
-	std::string const &key) const {
+Result<std::string, bool> const APayload::getHeader(std::string const &_key) const {
+	std::string const tmp = toLower(_key);
+	std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
 	if (header.empty() == true) return Error<bool>(false);
-	if (header.find(key) == header.end())
+	if (header.find(tmp) == header.end())
 		return Error<bool>(false);
 	else
-		return Ok<std::string>(header.at(key));
+		return Ok<std::string>(header.at(tmp));
 }
 
-bool APayload::addHeader(std::string const &key, std::string const &value) {
-	return header.insert(std::make_pair(key, value)).second;
+bool APayload::addHeader(std::string const &key, std::string const &value)
+{
+	std::string const tmp = toLower(key);
+	return header.insert(std::make_pair(tmp, value)).second;
 }
 
 bool APayload::setHeader(std::string const &key, std::string const &value) {
-	header[key] = value;
+	std::string const tmp = toLower(key);
+	header[tmp] = value;
 	return true;
 }
 

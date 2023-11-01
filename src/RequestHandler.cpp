@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 14:43:40 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/01 17:41:32 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// ( -`ω-)✧
 	res.addHeader("Server", "webserv_by_shtanemu,komatsud");
 
+
+	std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
 	// Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-#endif
+		#if defined(_DEBUGFLAG)
+				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");

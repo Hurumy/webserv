@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 16:06:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/01 16:47:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,6 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	body.assign(buf, size);
 
 	ifs.close();
-
-	std::cout << BLUE "AMethod:: bodysize: " << body.size() << RESET
-			  << std::endl;
-	std::cout << BLUE "AMethod:: content-length: " << size << RESET
-			  << std::endl;
 
 	// Bodyの読み込みが成功していたら、bodysizeとBodyをセットして返る
 	std::stringstream ss;
