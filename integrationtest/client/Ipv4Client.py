@@ -17,7 +17,7 @@ class BaseClient:
 		self.__buffer = buffer
 		self.response_data = ''
 		self.response_body = ''
-		self.status = None
+		self.status = 0
 
 	def connect(self, address, family:int, typ:int, proto:int):
 		self.__address = address
@@ -38,7 +38,7 @@ class BaseClient:
 				continue
 		reqline_list = self.response_data.split(' ')
 		if 3 > len(reqline_list): return
-		self.status = reqline_list[1]
+		self.status = int(reqline_list[1])
 		response_lines = self.response_data.split('\r\n')
 		is_reach = False
 		for i, response_line in enumerate(response_lines):
