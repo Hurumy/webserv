@@ -1,8 +1,14 @@
 import socket
 import select
 import time
+from random import randint
 
-
+'''
+This 'BaseClient' class is for the integration tests which check the behaviour
+of the webserv such as receiving data little by little, HTTP request format's error and
+so for. Therefore, this class does not consider to receive larger data than 1024 bytes, and
+it lacks some bytes if it happens.
+'''
 class BaseClient:
 	def __init__(self, timeout:int=10, buffer:int=1024):
 		self.__socket = None
@@ -24,13 +30,7 @@ class BaseClient:
 		self.__socket.send(message.encode('utf-8'))
 
 	def recv(self):
-		while (True):
-			data = ''
-			try:
-				data = self.__socket.recv(self.__buffer).decode('utf-8')
-				if len(data) != 0: self.response_data += data
-				else: break
-			except: time.sleep(2)
+		self.response_data = self.__socket.recv(self.__buffer).decode('utf-8')
 		reqline_list = self.response_data.split(' ')
 		if 3 > len(reqline_list): return
 		self.status = reqline_list[1]
