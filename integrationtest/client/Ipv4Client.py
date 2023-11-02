@@ -30,7 +30,12 @@ class BaseClient:
 		self.__socket.send(message.encode('utf-8'))
 
 	def recv(self):
-		self.response_data = self.__socket.recv(self.__buffer).decode('utf-8')
+		while (True):
+			try:
+				self.response_data = self.__socket.recv(self.__buffer).decode('utf-8')
+				break
+			except:
+				continue
 		reqline_list = self.response_data.split(' ')
 		if 3 > len(reqline_list): return
 		self.status = reqline_list[1]
