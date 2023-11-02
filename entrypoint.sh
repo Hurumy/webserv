@@ -19,8 +19,8 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
-echo "${0}: install python-dotenv."
-pip install python-dotenv
+echo "${0}: install python libraries"
+python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to install python-dotenv: $status"
