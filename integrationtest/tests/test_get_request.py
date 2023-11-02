@@ -18,9 +18,6 @@ class TestGetRequest(unittest.TestCase):
 
 		with open('./content/readme.html') as fs:
 			file_text = fs.read()
-		# self.client.send('GET /readme.html HTTP/1.1\r\nHost: ' + HOST_NAME + ':' + PORT + '\r\n\r\n')
-		# self.client.recv()
-		# self.client.close()
 		r = requests.get(URI_TOP + '/readme.html')
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
@@ -31,12 +28,16 @@ class TestGetRequest(unittest.TestCase):
 		print('\n===========================')
 		print('TEST: test little by little')
 		print('===========================\n')
+
+		with open('./content/helloworld.txt') as fs:
+			file_text = fs.read()
 		client = Ipv4Client(HOST_NAME, int(PORT))
-		client.send('GET /nos')
-		client.send('uchpage HTTP/1.1\r\nHo')
+		client.send('GET /hel')
+		client.send('loworld.txt HTTP/1.1\r\nHo')
 		client.send('st: ' + HOST_NAME + ':' + PORT + '\r\n\r\n')
 		client.recv()
 		client.close()
-		print('Response:\n', client.response_data)
-		print('Status: ', client.status)
-		self.assertEqual(client.status, '404')
+		print('Response:\n',client.response_data)
+		print('Status: ',client.status)
+		self.assertEqual(client.response_body, file_text)
+		self.assertEqual(client.status, 200)
