@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 12:18:26 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/02 19:57:22 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,7 +294,7 @@ bool SocketHandler::sendResponses() {
 	}
 	for (std::list<CSocket>::iterator csockiter = csockets.begin();
 		 csockiter != csockets.end(); ++csockiter) {
-		if (csockiter->getPhase() == CSocket::SEND &&
+		if ((csockiter->getPhase() == CSocket::SEND || csockiter->getPhase() == CSocket::CSENDERROR) &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
@@ -317,7 +317,11 @@ bool SocketHandler::sendResponses() {
 						<< std::endl;
 			}
 #endif
-				csockiter->setPhase(CSocket::RECV);
+				if (csockiter->getPhase() == CSocket::CSENDERROR) {
+					csockiter->setPhase(CSocket::CLOSE);
+				} else {
+					csockiter->setPhase(CSocket::RECV);
+				}
 				removeResponse(csockiter->getSockfd());
 			}
 		}
@@ -415,6 +419,14 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 					removeRequest(iter->getSockfd());
 				}
 			}
+		} else if (iter->getPhase() == CSocket::CSETERROR) {
+			Response response;
+			response.setVersion("HTTP/1.1");
+			response.setStatus(400);
+			response.setStatusMessage("Bad Request");
+			response.setHeader("Connecion", "close");
+			responses[iter->getSockfd()] = response;
+			iter->setPhase(CSocket::CSENDERROR);
 		}
 	}
 	return true;

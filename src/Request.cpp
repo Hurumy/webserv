@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 18:03:39 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/02 19:56:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	iss >> extra;
 	if (extra.empty() == false) {
 		csocket.popDataLine();
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	if (_method.empty() == true) {
