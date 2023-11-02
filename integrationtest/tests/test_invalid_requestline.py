@@ -19,6 +19,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_insufficient_word(self):
 		print('\n===========================')
