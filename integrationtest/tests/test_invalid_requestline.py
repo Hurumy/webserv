@@ -31,6 +31,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_invalid_location01(self):
 		print('\n===========================')
@@ -42,6 +43,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_invalid_location02(self):
 		print('\n===========================')
@@ -54,6 +56,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_invalid_location03(self):
 		print('\n===========================')
@@ -65,6 +68,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_invalid_location04(self):
 		print('\n===========================')
@@ -76,6 +80,7 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
 
 	def test_invalid_version(self):
 		print('\n===========================')
@@ -87,3 +92,4 @@ class TestInvalidRequestLine(unittest.TestCase):
 		client.close()
 		print('Response:\n', client.response_data)
 		print('Status: ', client.status)
+		self.assertEqual(client.status, 400)
