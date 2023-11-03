@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:09:55 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:28:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// URIチェック
 		Result<int, bool> res_uri = get.checkURI();
 		if (res_uri.isOK() == false) {
-			setErrorPageBody();
+			get.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		get.setURI();
@@ -197,7 +197,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// POSTの時は、UploadPathの指定がなかった時のみURIチェック
 		Result<int, bool> res_uri = post.checkURI();
 		if (res_uri.isOK() == false) {
-			setErrorPageBody();
+			post.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		post.setURI();
@@ -236,7 +236,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// URIチェック
 		Result<int, bool> res_uri = del.checkURI();
 		if (res_uri.isOK() == false) {
-			setErrorPageBody();
+			del.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		del.setURI();
@@ -386,7 +386,16 @@ void	RequestHandler::setCgiResponse(Response &_origin)
 	else
 		res.setHeader("Connection", "keep-alive");
 	res.setHeader("Server", "webserv_by_shtanemu,komatsud");
-	setErrorPageBody();
+
+	//AMethodのSetErrorPageBodyを使用する
+	MethodGet get(configs.at(confnum), req, res);
+	Result<int, bool> res_uri = get.checkURI();
+	if (res_uri.isOK() == false) {
+		setErrorPageBody();
+	}
+	get.setURI();
+	get.setErrorPageBody();
+	//std::cout << res.getBody() << std::endl;
 
 	//これを呼んだらすぐgetResponse()でだいじょうぶです。
 	return ;

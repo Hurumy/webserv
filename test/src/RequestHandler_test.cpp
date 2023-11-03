@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:08:26 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:31:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -627,3 +627,40 @@ TEST(RequestHandlerTest, setCgiResponseTest) {
 	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(), expected_contentlen);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 }
+
+TEST(RequestHandlerTest, setErrorPageWithLocationTest) {
+	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
+	std::vector<Config> tmp = res.getOk();
+	Request req;
+	Response	_res;
+	bool expected(true);
+	unsigned int expected_status(404);
+	std::string expected_string("Not Found");
+	std::string expected_body("<H1>HTTP 404 Not Found</H1>\n\n<p>The requested URL was not found on this server.</p>");
+	std::string expected_contentlen("83");
+
+	req.setVersion("HTTP/1.1");
+	req.setMethod("GET");
+	req.addHeader("Host", "_");
+	req.setUrl("/test/conf/aokwndjskdnakjwnw.html");
+	req.setLocalAddr("0.0.0.0");
+	req.setLocalPort(8660);
+	_res.setStatus(expected_status);
+	_res.setStatusMessage(expected_string);
+
+	RequestHandler handler = RequestHandler(tmp, req);
+	handler.searchMatchHost();
+	Result<int, bool> result_1 = handler.checkRequiedHeader();
+	handler.setCgiResponse(_res);
+
+	// std::cout << handler.getResponse().getBody() << std::endl;
+	// std::cout << handler.getResponse().getLines() << std::endl;
+
+	ASSERT_EQ(result_1.isOK(), expected);
+	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), true);
+	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
+	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(), expected_contentlen);
+	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
+}
+
