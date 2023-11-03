@@ -4,6 +4,9 @@ source .env set
 
 echo 
 echo "==== Compile webserv ====="
+if [ "$1" = "remake" ]; then
+	make fclean -C ${PROJECT_ROOT}
+fi
 make -C ${PROJECT_ROOT}
 
 echo 
