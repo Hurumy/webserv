@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/30 14:17:39 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:34:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,8 @@ char **CGIResponseCreator::_createEnvp() {
 char **CGIResponseCreator::_createArgv() {
 	char **argv;
 	char **head;
+	std::size_t posDir(0);
+	std::string cgiScriptFileName;
 
 	argv = new (std::nothrow) char *[3];
 	if (argv == NULL) {
@@ -301,7 +303,13 @@ char **CGIResponseCreator::_createArgv() {
 		delete[] head;
 		return NULL;
 	}
-	std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
+	posDir = cgiPath.rfind('/');
+	if (posDir == std::string::npos) {
+		std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
+	} else {
+		cgiScriptFileName = "." + cgiPath.substr(posDir);
+		std::strncpy(*argv, cgiScriptFileName.c_str(), cgiScriptFileName.size() + 1);
+	}
 	// *argv[cgiPath.size() + 1] = '\0';
 	argv++;
 	*argv = NULL;
@@ -350,6 +358,20 @@ bool CGIResponseCreator::_setRuntime() {
 	return true;
 }
 
+bool CGIResponseCreator::_chDirectory() {
+	std::string cgiDirPath;
+	std::size_t posDir(0);
+
+	posDir = cgiPath.rfind('/');
+	if (posDir == std::string::npos) { return true; }
+	cgiDirPath = cgiPath.substr(0, posDir + 1);
+	if (chdir(cgiDirPath.c_str()) == -1) {
+		putSytemError("chdir");
+		return false;
+	}
+	return true;
+}
+
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
@@ -389,6 +411,7 @@ bool CGIResponseCreator::execCGIScript() {
 		close(inpfd[1]);
 		close(outpfd[0]);
 		close(outpfd[1]);
+		if (_chDirectory() == false) { std::exit(EXIT_FAILURE); }
 		setEnvVars();
 		envp = _createEnvp();
 		_setRuntime();
@@ -473,6 +496,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 bool CGIResponseCreator::setCGIOutput() {
 	std::istringstream issline(cgiOutput);
 	std::string line;
+	std::size_t bodySize(0);
 
 	std::getline(issline, line);
 	if (line.empty() == false) {
@@ -505,6 +529,12 @@ bool CGIResponseCreator::setCGIOutput() {
 			}
 			response.setStatus(200);
 			response.setStatusMessage("OK");
+			bodySize = response.getBody().size();
+			if (bodySize != 0) {
+				std::stringstream ss;
+				ss << bodySize;
+				response.addHeader("Content-Length", ss.str());
+			}
 			responseType = CGIResponseCreator::DOC;
 			return true;
 		} else if (key.compare("Location") == 0) {
@@ -555,6 +585,12 @@ bool CGIResponseCreator::setCGIOutput() {
 				} else {
 					response.setStatus(302);
 					response.setStatusMessage("Found");
+				}
+				bodySize = response.getBody().size();
+				if (bodySize != 0) {
+					std::stringstream ss;
+					ss << bodySize;
+					response.addHeader("Content-Length", ss.str());
 				}
 				responseType = CGIResponseCreator::CLIENTREDIR;
 				return true;

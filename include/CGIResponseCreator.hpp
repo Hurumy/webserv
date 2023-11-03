@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/29 21:56:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/03 13:51:41 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ class CGIResponseCreator {
 		bool _setServerPort();
 		bool _setServerProtocol();
 		bool _setRuntime();
+		bool _chDirectory();
 
 		Request &request;
 		Response &response;
