@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:27:56 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:37:13 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:30:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ TEST(LocationParserTest, pErrorPagesTest) {
 	std::vector<Config> tmp;
 	bool getstatus(true);
 	std::string location_path("/test/conf/");
-	std::string expected_1("/404.html");
+	std::string expected_1("error_pages/404.html");
 	std::string expected_2("/500.html");
 	std::string expected_3("error_pages/505.html");
 

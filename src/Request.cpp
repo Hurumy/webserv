@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:17:52 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/01 17:33:33 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				if (csocket.getData().compare(0, 2, "\r\n") == 0) {
 					csocket.popDataLine();
 					std::map<std::string, std::string>::iterator clengthiter =
-						header.find("Content-Length");
+						header.find("content-length");
 					if (clengthiter != header.end()) {
 						std::stringstream ss(clengthiter->second);
 						ss >> contentLength;

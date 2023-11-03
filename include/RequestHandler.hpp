@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 16:42:47 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 13:41:57 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,5 @@ class RequestHandler {
 		std::string const getHostname() const;
 		std::string const &getQuery() const;
 		int getPortNumber() const;
+		void	setCgiResponse(Response &_origin);
 };
