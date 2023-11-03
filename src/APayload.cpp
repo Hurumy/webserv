@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 17:40:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 13:54:43 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static unsigned char helper_tolower(unsigned char c)
 std::string const	APayload::toLower(std::string const &_origin) const
 {
 	std::string tmp;
-	std::cout << "origin.len: " << _origin.length() << ": " << _origin << std::endl;
+	//std::cout << "origin.len: " << _origin.length() << ": " << _origin << std::endl;
 	tmp.resize(_origin.length());
 	std::transform(_origin.begin(), _origin.end(), tmp.begin(), helper_tolower);
 	return (tmp);
@@ -49,7 +49,7 @@ bool APayload::setBody(std::string const &_body) {
 
 Result<std::string, bool> const APayload::getHeader(std::string const &_key) const {
 	std::string const tmp = toLower(_key);
-	std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
+	//std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
 	if (header.empty() == true) return Error<bool>(false);
 	if (header.find(tmp) == header.end())
 		return Error<bool>(false);

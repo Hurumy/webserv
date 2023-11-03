@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/01 17:41:32 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:09:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	res.addHeader("Server", "webserv_by_shtanemu,komatsud");
 
 
-	std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
+	//std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
 	// Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
 		#if defined(_DEBUGFLAG)
@@ -323,12 +323,12 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	ss << bodysize;
 	ss >> length;
 	res.addHeader("Content-Length", length);
+	//std::cout << body << std::endl;
 	res.setBody(body);
 	return Ok<std::string>(body);
 }
 
 void RequestHandler::setErrorPageBody() {
-	unsigned int prevstatus = res.getStatus();
 	Result<std::string, bool> res_1 =
 		configs.at(confnum).getErrorPages(res.getStatus());
 
@@ -340,21 +340,11 @@ void RequestHandler::setErrorPageBody() {
 	std::string filename = res_1.getOk();
 
 	// bodyをセットする。成功したら抜けるループ
-	// bodyのセットに失敗した場合は、失敗した後のステータスが変わっていればもう一度ファイルを検索する
-	//変わっていなければBodyなしでヘッダだけ送付する
+	// bodyのセットに失敗した場合は、Bodyなしでヘッダだけ送付する
 	while (1) {
 		Result<std::string, bool> res_2 = _openFile(filename);
-		if (res_2.isOK() == true)
+		if (res_2.isOK() == true) {
 			break;
-		else if (res_2.isOK() == false && prevstatus != res.getStatus()) {
-			prevstatus = res.getStatus();
-			Result<std::string, bool> res_3 =
-				configs.at(confnum).getErrorPages(res.getStatus());
-			if (res_3.isOK() == false) {
-				res.addHeader("Content-Length", "0");
-				break;
-			}
-			filename = res_3.getOk();
 		} else {
 			res.addHeader("Content-Length", "0");
 			break;
@@ -381,3 +371,23 @@ int RequestHandler::getPortNumber() const {
 }
 
 std::string const &RequestHandler::getQuery() const { return (query); }
+
+void	RequestHandler::setCgiResponse(Response &_origin)
+{
+	//すでにRequestは回されていて、ConfigやLocationは既知である前提
+
+	unsigned int	status = _origin.getStatus();
+
+	res = _origin;
+	//レスポンスに最低限をセットする
+	res.setVersion("HTTP/1.1");
+	if (500 <= status && status < 600)
+		res.setHeader("Connection", "close");
+	else
+		res.setHeader("Connection", "keep-alive");
+	res.setHeader("Server", "webserv_by_shtanemu,komatsud");
+	setErrorPageBody();
+
+	//これを呼んだらすぐgetResponse()でだいじょうぶです。
+	return ;
+}
