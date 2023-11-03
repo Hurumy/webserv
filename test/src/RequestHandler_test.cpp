@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 18:17:48 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:31:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:45:47 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,7 +304,6 @@ TEST(RequestHandlerTest, setErrorPageBodyTest_Error_HTTPVersion) {
 	ASSERT_EQ(result_1.isOK(), expected);
 
 	// errorPageBody
-	handler.setErrorPageBody();
 	Result<std::string, bool> res_1 =
 		handler.getResponse().getHeader("Content-Length");
 	std::string content_len = res_1.getOk();

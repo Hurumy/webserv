@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:26:53 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:40:36 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,9 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 
 void AMethod::setErrorPageBody()
 {
+	unsigned int const orist = res.getStatus();
+	std::string const oristm = res.getStatusMessage();
+
 	//Locationの指定を優先して参照する
 	if (isloc == true)
 	{
@@ -169,11 +172,13 @@ void AMethod::setErrorPageBody()
 			}
 			else
 			{
-				res.addHeader("Content-Length", "0");
+				res.setStatus(orist);
+				res.setStatusMessage(oristm);
+				res.setHeader("Content-Length", "0");
 				return ;
 			}
 			//Locationの設定が存在しなかった場合などにConfigの中身を確認する
-		}			
+		}
 	}
 
 	//次にConfigのエラーページの設定を確認する
@@ -181,21 +186,25 @@ void AMethod::setErrorPageBody()
 
 	//エラーページの設定が存在しなかったとき
 	if (res_1.isOK() == false) {
-		res.addHeader("Content-Length", "0");
+		res.setStatus(orist);
+		res.setStatusMessage(oristm);
+		res.setHeader("Content-Length", "0");
 		return;
 	}
 
 	//エラーページのファイル名をとってくる
 	std::string filename = res_1.getOk();
 
-	// bodyをセットする。成功したら抜けるループ
+	// bodyをセットする
 	// bodyのセット(openとか・・・)に失敗した場合は、Bodyなしでヘッダだけ送付する
 	Result<std::string, bool> res_2 = _openFile(filename);
 	if (res_2.isOK() == true)
 		return ;
 	//エラーページがなければ、Content-Lengthを0にセットして終了
 	else {
-		res.addHeader("Content-Length", "0");
+		res.setStatus(orist);
+		res.setStatusMessage(oristm);
+		res.setHeader("Content-Length", "0");
 		return ;
 	}
 }
