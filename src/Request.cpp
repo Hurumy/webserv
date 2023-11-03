@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/02 19:56:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/03 12:59:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,16 +131,16 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	}
 	if (_method.empty() == true) {
 		csocket.popDataLine();
-		csocket.setPhase(CSocket::RECV);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	if (isValidURL(_url) == false) {
 		// Should return error page
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	} else if (isVersion(_version) == false) {
 		// Should return error page
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	setMethod(_method);
