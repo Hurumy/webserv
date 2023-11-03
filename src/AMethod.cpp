@@ -86,11 +86,11 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
 	std::ifstream ifs(filename.c_str(), std::ios::in | std::ios::binary);
 	if (!ifs && errno == ENOENT) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(404);
 		res.setStatusMessage(statusmap.at(404));
 		return Error<bool>(false);
@@ -99,13 +99,13 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 		res.setStatusMessage(statusmap.at(403));
 		return Error<bool>(false);
 	} else if (!ifs) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED
-						<< "AMethod::_openFile "
-							"open失敗。エラーコードがHTTPステータスコードと対応しない"
-						<< RESET << std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED
+				  << "AMethod::_openFile "
+					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
+				  << RESET << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -125,11 +125,11 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 
 	if ((ifs.rdstate() & std::ios_base::failbit) != 0 ||
 		(ifs.rdstate() & std::ios_base::badbit) != 0) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "AMethod::_openFile read失敗。" << RESET
-						<< std::endl;
-				std::cout << RED << "Filename: " << filename << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "AMethod::_openFile read失敗。" << RESET
+				  << std::endl;
+		std::cout << RED << "Filename: " << filename << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage(statusmap.at(500));
 		res.setHeader("Connection", "close");
@@ -151,33 +151,27 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	return Ok<std::string>(body);
 }
 
-void AMethod::setErrorPageBody()
-{
+void AMethod::setErrorPageBody() {
 	unsigned int const orist = res.getStatus();
 	std::string const oristm = res.getStatusMessage();
 
-	//Locationの指定を優先して参照する
-	if (isloc == true)
-	{
+	// Locationの指定を優先して参照する
+	if (isloc == true) {
 		Result<std::string, bool> locres = loc.getErrorPages(res.getStatus());
 
-		//Locationの中にエラーページの設定が存在したらまずそちらを確認する
-		if (locres.isOK() == true)
-		{
+		// Locationの中にエラーページの設定が存在したらまずそちらを確認する
+		if (locres.isOK() == true) {
 			std::string fln = locres.getOk();
 			Result<std::string, bool> locres_2 = _openFile(fln);
-			if (locres_2.isOK() == true)
-			{
-				return ;
-			}
-			else
-			{
+			if (locres_2.isOK() == true) {
+				return;
+			} else {
 				res.setStatus(orist);
 				res.setStatusMessage(oristm);
 				res.setHeader("Content-Length", "0");
-				return ;
+				return;
 			}
-			//Locationの設定が存在しなかった場合などにConfigの中身を確認する
+			// Locationの設定が存在しなかった場合などにConfigの中身を確認する
 		}
 	}
 
@@ -198,14 +192,13 @@ void AMethod::setErrorPageBody()
 	// bodyをセットする
 	// bodyのセット(openとか・・・)に失敗した場合は、Bodyなしでヘッダだけ送付する
 	Result<std::string, bool> res_2 = _openFile(filename);
-	if (res_2.isOK() == true)
-		return ;
+	if (res_2.isOK() == true) return;
 	//エラーページがなければ、Content-Lengthを0にセットして終了
 	else {
 		res.setStatus(orist);
 		res.setStatusMessage(oristm);
 		res.setHeader("Content-Length", "0");
-		return ;
+		return;
 	}
 }
 

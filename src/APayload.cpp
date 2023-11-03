@@ -12,26 +12,26 @@
 
 #include "APayload.hpp"
 
+#include <algorithm>
+#include <cctype>
+
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
-#include <cctype>
-#include <algorithm>
 
 APayload::~APayload() {}
 
-static unsigned char helper_tolower(unsigned char c)
-{
+static unsigned char helper_tolower(unsigned char c) {
 	if ('A' <= c && c <= 'Z')
 		return (c - 'A' + 'a');
 	else
 		return (c);
 }
 
-std::string const	APayload::toLower(std::string const &_origin) const
-{
+std::string const APayload::toLower(std::string const &_origin) const {
 	std::string tmp;
-	//std::cout << "origin.len: " << _origin.length() << ": " << _origin << std::endl;
+	// std::cout << "origin.len: " << _origin.length() << ": " << _origin <<
+	// std::endl;
 	tmp.resize(_origin.length());
 	std::transform(_origin.begin(), _origin.end(), tmp.begin(), helper_tolower);
 	return (tmp);
@@ -47,9 +47,10 @@ bool APayload::setBody(std::string const &_body) {
 	return (true);
 }
 
-Result<std::string, bool> const APayload::getHeader(std::string const &_key) const {
+Result<std::string, bool> const APayload::getHeader(
+	std::string const &_key) const {
 	std::string const tmp = toLower(_key);
-	//std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
+	// std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
 	if (header.empty() == true) return Error<bool>(false);
 	if (header.find(tmp) == header.end())
 		return Error<bool>(false);
@@ -57,8 +58,7 @@ Result<std::string, bool> const APayload::getHeader(std::string const &_key) con
 		return Ok<std::string>(header.at(tmp));
 }
 
-bool APayload::addHeader(std::string const &key, std::string const &value)
-{
+bool APayload::addHeader(std::string const &key, std::string const &value) {
 	std::string const tmp = toLower(key);
 	return header.insert(std::make_pair(tmp, value)).second;
 }

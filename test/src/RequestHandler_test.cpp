@@ -595,11 +595,13 @@ TEST(RequestHandlerTest, setCgiResponseTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_PATH);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
-	Response	_res;
+	Response _res;
 	bool expected(true);
 	unsigned int expected_status(404);
 	std::string expected_string("Not Found");
-	std::string expected_body("<H1>HTTP 404 Not Found</H1>\n\n<p>The requested URL was not found on this server.</p>");
+	std::string expected_body(
+		"<H1>HTTP 404 Not Found</H1>\n\n<p>The requested URL was not found on "
+		"this server.</p>");
 	std::string expected_contentlen("83");
 
 	req.setVersion("HTTP/1.1");
@@ -623,7 +625,8 @@ TEST(RequestHandlerTest, setCgiResponseTest) {
 	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), true);
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(), expected_contentlen);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(),
+			  expected_contentlen);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 }
 
@@ -631,11 +634,13 @@ TEST(RequestHandlerTest, setErrorPageWithLocationTest) {
 	Result<std::vector<Config>, bool> res = parseConf(CONF_FILE_WITH_ONE_LOC);
 	std::vector<Config> tmp = res.getOk();
 	Request req;
-	Response	_res;
+	Response _res;
 	bool expected(true);
 	unsigned int expected_status(404);
 	std::string expected_string("Not Found");
-	std::string expected_body("<H1>HTTP 404 Not Found</H1>\n\n<p>The requested URL was not found on this server.</p>");
+	std::string expected_body(
+		"<H1>HTTP 404 Not Found</H1>\n\n<p>The requested URL was not found on "
+		"this server.</p>");
 	std::string expected_contentlen("83");
 
 	req.setVersion("HTTP/1.1");
@@ -659,7 +664,7 @@ TEST(RequestHandlerTest, setErrorPageWithLocationTest) {
 	ASSERT_EQ(handler.getResponse().getHeader("Connection").isOK(), true);
 	ASSERT_EQ(handler.getResponse().getStatus(), expected_status);
 	ASSERT_EQ(handler.getResponse().getStatusMessage(), expected_string);
-	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(), expected_contentlen);
+	ASSERT_EQ(handler.getResponse().getHeader("Content-Length").getOk(),
+			  expected_contentlen);
 	ASSERT_EQ(handler.getResponse().getBody(), expected_body);
 }
-
