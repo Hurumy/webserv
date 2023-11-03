@@ -45,5 +45,5 @@ class RequestHandler {
 		std::string const getHostname() const;
 		std::string const &getQuery() const;
 		int getPortNumber() const;
-		void	setCgiResponse(Response &_origin);
+		void setCgiResponse(Response &_origin);
 };

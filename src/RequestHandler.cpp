@@ -39,13 +39,12 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// ( -`ω-)✧
 	res.addHeader("Server", "webserv_by_shtanemu,komatsud");
 
-
-	//std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
-	// Hostヘッダーが含まれていない場合は400を返して良い。
+	// std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
+	//  Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "no Host Header is detected" << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
+#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
 		res.addHeader("Content-Length", "0");
@@ -137,7 +136,6 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 	MethodGet get(configs.at(confnum), req, res);
 	get.checkURI();
 	get.setURI();
-
 
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
@@ -338,7 +336,7 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	ss << bodysize;
 	ss >> length;
 	res.addHeader("Content-Length", length);
-	//std::cout << body << std::endl;
+	// std::cout << body << std::endl;
 	res.setBody(body);
 	return Ok<std::string>(body);
 }
@@ -387,8 +385,7 @@ int RequestHandler::getPortNumber() const {
 
 std::string const &RequestHandler::getQuery() const { return (query); }
 
-void	RequestHandler::setCgiResponse(Response &_origin)
-{
+void RequestHandler::setCgiResponse(Response &_origin) {
 	//すでにRequestは回されていて、ConfigやLocationは既知である前提
 
 	unsigned int const status = _origin.getStatus();
@@ -403,7 +400,7 @@ void	RequestHandler::setCgiResponse(Response &_origin)
 		res.setHeader("Connection", "keep-alive");
 	res.setHeader("Server", "webserv_by_shtanemu,komatsud");
 
-	//AMethodのSetErrorPageBodyを使用する
+	// AMethodのSetErrorPageBodyを使用する
 	MethodGet get(configs.at(confnum), req, res);
 	get.checkURI();
 	get.setURI();
@@ -411,7 +408,6 @@ void	RequestHandler::setCgiResponse(Response &_origin)
 	res.setStatusMessage(oristm);
 	get.setErrorPageBody();
 
-
 	//これを呼んだらすぐgetResponse()でだいじょうぶです。
-	return ;
+	return;
 }
