@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request_test.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:51:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:28:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/01 17:20:10 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,35 @@ TEST(RequestTest, setRequestLineError03Test) {
 	ASSERT_STREQ(request.getMethod().c_str(), "GET");
 	ASSERT_STREQ(request.getUrl().c_str(), "/");
 	ASSERT_STREQ(request.getVersion().c_str(), "HTTP/1.1");
+}
+
+TEST(RequestTest, getHeaderIgnoringCasesTest) {
+	Request request;
+	std::string contentlen("50011");
+	std::string server("VeryGoodServer");
+	std::string con("keep-alive");
+
+	request.addHeader("Content-Length", contentlen);
+	request.addHeader("Server", server);
+	request.addHeader("CONNECT", con);
+
+	ASSERT_EQ(request.getHeader("content-length").getOk(), contentlen);
+	ASSERT_EQ(request.getHeader("server").getOk(), server);
+	ASSERT_EQ(request.getHeader("connect").getOk(), con);
+}
+
+TEST(RequestTest, setHeaderTest) {
+	Request request;
+	std::string contentlen("50011");
+	std::string server("VeryGoodServer");
+	std::string con("keep-alive");
+
+	request.addHeader("Content-Length", contentlen);
+	request.addHeader("Server", server);
+	request.addHeader("CONNECT", "close");
+	request.setHeader("Connect", con);
+
+	ASSERT_EQ(request.getHeader("content-length").getOk(), contentlen);
+	ASSERT_EQ(request.getHeader("server").getOk(), server);
+	ASSERT_EQ(request.getHeader("connect").getOk(), con);
 }

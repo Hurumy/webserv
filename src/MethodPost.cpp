@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 18:23:51 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:33:51 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,11 +141,6 @@ int MethodPost::openPostResource() {
 	}
 	ss << str;
 	ss >> filesize;
-
-	// std::cout << BLUE "MethodPost:: Content-Length: " << filesize << RESET
-	// 		  << std::endl;
-	// std::cout << BLUE "MethodPost:: Request class's bodysize: "
-	// 		  << req.getBody().size() << RESET << std::endl;
 
 	//ファイルに書き込みをする
 	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)

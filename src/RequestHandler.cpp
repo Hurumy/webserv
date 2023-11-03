@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 17:53:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:34:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	// ( -`ω-)✧
 	res.addHeader("Server", "webserv_by_shtanemu,komatsud");
 
-	// Hostヘッダーが含まれていない場合は400を返して良い。
+	// std::cout << "isThereHostHeader: " << result_1.isOK() << std::endl;
+	//  Hostヘッダーが含まれていない場合は400を返して良い。
 	if (result_1.isOK() == false) {
 #if defined(_DEBUGFLAG)
 		std::cout << RED << "no Host Header is detected" << RESET << std::endl;
@@ -131,18 +132,23 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 }
 
 Result<int, bool> RequestHandler::checkRequiedHeader() {
+	//クラス呼ぶ
+	MethodGet get(configs.at(confnum), req, res);
+	get.checkURI();
+	get.setURI();
+
 	if (req.getVersion() != "HTTP/1.1") {
 		res.setStatus(505);
 		res.setStatusMessage("HTTP Version Not Supported");
 		res.setHeader("Connection", "close");
-		setErrorPageBody();
+		get.setErrorPageBody();
 		return Error<bool>(false);
 	}
 	if (this->confnum < configs.size() &&
 		configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false) {
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
-		setErrorPageBody();
+		get.setErrorPageBody();
 		return Error<bool>(false);
 	}
 	return Ok<int>(0);
@@ -157,10 +163,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// URIチェック
 		Result<int, bool> res_uri = get.checkURI();
 		if (res_uri.isOK() == false) {
-			#if defined(_DEBUGFLAG)
-					std::cout << RED << "RequestHandler::routeMethod:get checkURI() failed" << RESET << std::endl;
-			#endif
-			setErrorPageBody();
+			get.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		get.setURI();
@@ -204,10 +207,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// POSTの時は、UploadPathの指定がなかった時のみURIチェック
 		Result<int, bool> res_uri = post.checkURI();
 		if (res_uri.isOK() == false) {
-			#if defined(_DEBUGFLAG)
-				std::cout << RED << "RequestHandler::routeMethod:post checkURI() failed" << RESET << std::endl;
-			#endif
-			setErrorPageBody();
+			post.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		post.setURI();
@@ -246,10 +246,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		// URIチェック
 		Result<int, bool> res_uri = del.checkURI();
 		if (res_uri.isOK() == false) {
-			#if defined(_DEBUGFLAG)
-				std::cout << RED << "RequestHandler::routeMethod:del checkURI() failed" << RESET << std::endl;
-			#endif
-			setErrorPageBody();
+			del.setErrorPageBody();
 			return Error<bool>(false);
 		}
 		del.setURI();
@@ -282,9 +279,18 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Ok<int>(0);
 	} else {
 		// Methodがこの3つ以外だった場合、Not Allowedを返す
+		//クラス呼ぶ
+		MethodGet get(configs.at(confnum), req, res);
+		Result<int, bool> res_uri = get.checkURI();
+		if (res_uri.isOK() == false) {
+			get.setErrorPageBody();
+			return Error<bool>(false);
+		}
+		get.setURI();
+
 		res.setStatus(405);
 		res.setStatusMessage("Method Not Allowed");
-		setErrorPageBody();
+		get.setErrorPageBody();
 		return Error<bool>(false);
 	}
 }
@@ -336,45 +342,35 @@ Result<std::string, bool> RequestHandler::_openFile(std::string filename) {
 	ss << bodysize;
 	ss >> length;
 	res.addHeader("Content-Length", length);
+	// std::cout << body << std::endl;
 	res.setBody(body);
 	return Ok<std::string>(body);
 }
 
-void RequestHandler::setErrorPageBody() {
-	unsigned int prevstatus = res.getStatus();
-	Result<std::string, bool> res_1 =
-		configs.at(confnum).getErrorPages(res.getStatus());
+// void RequestHandler::setErrorPageBody() {
+// 	Result<std::string, bool> res_1 =
+// 		configs.at(confnum).getErrorPages(res.getStatus());
 
-	if (res_1.isOK() == false) {
-		res.addHeader("Content-Length", "0");
-		return;
-	}
+// 	if (res_1.isOK() == false) {
+// 		res.addHeader("Content-Length", "0");
+// 		return;
+// 	}
 
-	std::string filename = res_1.getOk();
+// 	std::string filename = res_1.getOk();
 
-	// bodyをセットする。成功したら抜けるループ
-	// bodyのセットに失敗した場合は、失敗した後のステータスが変わっていればもう一度ファイルを検索する
-	//変わっていなければBodyなしでヘッダだけ送付する
-	while (1) {
-		Result<std::string, bool> res_2 = _openFile(filename);
-		if (res_2.isOK() == true)
-			break;
-		else if (res_2.isOK() == false && prevstatus != res.getStatus()) {
-			prevstatus = res.getStatus();
-			Result<std::string, bool> res_3 =
-				configs.at(confnum).getErrorPages(res.getStatus());
-			if (res_3.isOK() == false) {
-				res.addHeader("Content-Length", "0");
-				break;
-			}
-			filename = res_3.getOk();
-		} else {
-			res.addHeader("Content-Length", "0");
-			break;
-		}
-	}
-	return;
-}
+// 	// bodyをセットする。成功したら抜けるループ
+// 	// bodyのセットに失敗した場合は、Bodyなしでヘッダだけ送付する
+// 	while (1) {
+// 		Result<std::string, bool> res_2 = _openFile(filename);
+// 		if (res_2.isOK() == true) {
+// 			break;
+// 		} else {
+// 			res.addHeader("Content-Length", "0");
+// 			break;
+// 		}
+// 	}
+// 	return;
+// }
 
 Response RequestHandler::getResponse() { return (this->res); }
 
@@ -394,3 +390,30 @@ int RequestHandler::getPortNumber() const {
 }
 
 std::string const &RequestHandler::getQuery() const { return (query); }
+
+void RequestHandler::setCgiResponse(Response &_origin) {
+	//すでにRequestは回されていて、ConfigやLocationは既知である前提
+
+	unsigned int const status = _origin.getStatus();
+	std::string const oristm = _origin.getStatusMessage();
+
+	res = _origin;
+	//レスポンスに最低限をセットする
+	res.setVersion("HTTP/1.1");
+	if (500 <= status && status < 600)
+		res.setHeader("Connection", "close");
+	else
+		res.setHeader("Connection", "keep-alive");
+	res.setHeader("Server", "webserv_by_shtanemu,komatsud");
+
+	// AMethodのSetErrorPageBodyを使用する
+	MethodGet get(configs.at(confnum), req, res);
+	get.checkURI();
+	get.setURI();
+	res.setStatus(status);
+	res.setStatusMessage(oristm);
+	get.setErrorPageBody();
+
+	//これを呼んだらすぐgetResponse()でだいじょうぶです。
+	return;
+}

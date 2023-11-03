@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:08:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/28 17:01:51 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:33:22 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ class APayload {
 		std::string version;
 		std::string body;
 		std::map<std::string, std::string> header;
+		std::string const toLower(std::string const &_origin) const;
 
 	public:
 		virtual ~APayload();

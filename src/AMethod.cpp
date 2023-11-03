@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/02 12:15:55 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:33:29 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,35 +146,60 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	std::string length;
 	ss << size;
 	ss >> length;
-	res.addHeader("Content-Length", length);
+	res.setHeader("Content-Length", length);
 	res.setBody(body);
 	return Ok<std::string>(body);
 }
 
 void AMethod::setErrorPageBody() {
+	unsigned int const orist = res.getStatus();
+	std::string const oristm = res.getStatusMessage();
+
+	// Locationの指定を優先して参照する
+	if (isloc == true) {
+		Result<std::string, bool> locres = loc.getErrorPages(res.getStatus());
+
+		// Locationの中にエラーページの設定が存在したらまずそちらを確認する
+		if (locres.isOK() == true) {
+			std::string fln = locres.getOk();
+			Result<std::string, bool> locres_2 = _openFile(fln);
+			if (locres_2.isOK() == true) {
+				return;
+			} else {
+				res.setStatus(orist);
+				res.setStatusMessage(oristm);
+				res.setHeader("Content-Length", "0");
+				return;
+			}
+			// Locationの設定が存在しなかった場合などにConfigの中身を確認する
+		}
+	}
+
+	//次にConfigのエラーページの設定を確認する
 	Result<std::string, bool> res_1 = conf.getErrorPages(res.getStatus());
 
 	//エラーページの設定が存在しなかったとき
 	if (res_1.isOK() == false) {
-		res.addHeader("Content-Length", "0");
+		res.setStatus(orist);
+		res.setStatusMessage(oristm);
+		res.setHeader("Content-Length", "0");
 		return;
 	}
 
 	//エラーページのファイル名をとってくる
 	std::string filename = res_1.getOk();
 
-	// bodyをセットする。成功したら抜けるループ
+	// bodyをセットする
 	// bodyのセット(openとか・・・)に失敗した場合は、Bodyなしでヘッダだけ送付する
-	while (1) {
-		Result<std::string, bool> res_2 = _openFile(filename);
-		if (res_2.isOK() == true) break;
-		//エラーページがなければ、Content-Lengthを0にセットして終了
-		else {
-			res.addHeader("Content-Length", "0");
-			break;
-		}
+	Result<std::string, bool> res_2 = _openFile(filename);
+	if (res_2.isOK() == true) return;
+	//エラーページがなければ、Content-Lengthを0にセットして終了
+	else {
+		res.setStatus(orist);
+		res.setStatusMessage(oristm);
+		res.setHeader("Content-Length", "0");
+		return;
 	}
-	return;
 }
 
 Result<int, bool> AMethod::checkURI() {
