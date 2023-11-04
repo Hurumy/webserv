@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/03 13:51:41 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/04 18:24:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ class CGIResponseCreator {
 		int monitoredfd;
 		short revents;
 		std::string runtimePath;
+		std::string cgiIntput;
 		std::string cgiOutput;
 		std::string cgiPath;
 		std::string hostName;

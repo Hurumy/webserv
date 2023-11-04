@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/03 14:34:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/04 18:36:56 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 	  pid(0),
 	  monitoredfd(0),
 	  revents(0),
+	  cgiIntput(request.getBody()),
 	  cgiPath(_cgiPath),
 	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
@@ -381,12 +382,24 @@ bool CGIResponseCreator::execCGIScript() {
 		putSytemError("pipe");
 		return false;
 	}
+	if (fcntl(inpfd[0], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
+	if (fcntl(inpfd[1], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
 	if (pipe(outpfd) == -1) {
 		// error handling
 		putSytemError("pipe");
 		close(inpfd[0]);
 		close(inpfd[1]);
 		return false;
+	}
+	if (fcntl(outpfd[0], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
+	if (fcntl(outpfd[1], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
 	}
 	pid = fork();
 	if (pid == -1) {
@@ -440,11 +453,19 @@ void CGIResponseCreator::setMonitoredfd(CGIResponseCreator::tag const &_phase) {
 }
 
 bool CGIResponseCreator::writeMessageBody() {
-	// for develope
+	ssize_t lenWrite(0);
+
 	if ((revents & POLLOUT) != POLLOUT) {
 		return false;
 	}
-	write(inpfd[1], request.getBody().c_str(), request.getBody().size());
+	if (cgiIntput.empty() == false) {
+		lenWrite = write(inpfd[1], cgiIntput.c_str(), cgiIntput.size());
+		switch (lenWrite) {
+			case -1: break ;
+			default : { cgiIntput.erase(0, lenWrite); } break ;
+		}
+	}
+	if (cgiIntput.empty() == false) { return false; }
 	close(inpfd[1]);
 	inpfd[1] = 0;
 	return true;
@@ -482,7 +503,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 			putSytemError("waitpid");
 		} break;
 		case 0: {
-			phase = CGIResponseCreator::CGIRECV;
+			// nothing to do
 		} break;
 		default: {
 			if (phase != CGIResponseCreator::CGIFIN) {
