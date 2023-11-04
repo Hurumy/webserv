@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:25:16 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 13:41:57 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:50:20 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ class RequestHandler {
 		Result<int, bool> searchMatchHost();
 		Result<int, bool> checkRequiedHeader();
 		Result<int, bool> routeMethod();
-		void setErrorPageBody();
+		// void setErrorPageBody();
 		Response getResponse();
 		Result<std::string, bool> const isCgi() const;
 		std::string const getHostname() const;
