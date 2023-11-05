@@ -12,12 +12,12 @@
 
 #include "APayload.hpp"
 
-#include "sComp.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
+#include "sComp.hpp"
 
-APayload::~APayload(){}
+APayload::~APayload() {}
 
 bool APayload::setVersion(std::string const &_version) {
 	version = _version;
@@ -51,6 +51,7 @@ std::string const &APayload::getVersion() const { return (version); }
 
 std::string const &APayload::getBody() const { return (body); }
 
-std::map<std::string, std::string, sComp> const &APayload::getAllHeader() const {
+std::map<std::string, std::string, sComp> const &APayload::getAllHeader()
+	const {
 	return header;
 }

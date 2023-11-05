@@ -14,12 +14,11 @@
 
 #include "webserv.hpp"
 
-class sComp
-{
-    private:
-        static unsigned char helper_tolower(unsigned char c);
-    protected:
-    public:
-        bool    operator() (std::string const &s1, std::string const &s2) const;
-};
+class sComp {
+	private:
+		static unsigned char helper_tolower(unsigned char c);
 
+	protected:
+	public:
+		bool operator()(std::string const &s1, std::string const &s2) const;
+};

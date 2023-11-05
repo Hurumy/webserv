@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include "Request.hpp"
-#include "sComp.hpp"
 
 #include <gtest/gtest.h>
 
 #include "CSocket.hpp"
+#include "sComp.hpp"
 
 TEST(RequestTest, setRequestLine01Test) {
 	CSocket csocket(3, 2110443574, "127.0.0.1", 8080);
