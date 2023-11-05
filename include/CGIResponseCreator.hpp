@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/04 18:24:02 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 17:40:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "MetaVariables.hpp"
 #include "Request.hpp"
 #include "Response.hpp"
+#include "Config.hpp"
+#include "RequestHandler.hpp"
 
 #define WS_CGI_VERSION "CGI/1.1"
 #define WS_HTTP_VERSION "HTTP/1.1"
@@ -43,7 +45,7 @@ class CGIResponseCreator {
 		bool writeMessageBody();
 		bool recvCGIOutput();
 		pid_t waitChildProc();
-		bool setCGIOutput();
+		bool setCGIOutput(std::vector<Config> const &configs);
 		bool deinit();
 		bool setEnvVars();
 

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/30 16:29:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 17:37:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ bool Server::serverLoop() {
 		if (socketHandler.getCSockets().empty() == false) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
-			socketHandler.handleCGIRequest();
+			socketHandler.handleCGIRequest(configs);
 			socketHandler.loadResponses(configs);
 			socketHandler.sendResponses();
 		}

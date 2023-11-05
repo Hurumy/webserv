@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 16:07:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 18:00:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,7 +432,7 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 	return true;
 }
 
-bool SocketHandler::handleCGIRequest() {
+bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 	if (cgiResponseCreators.empty() == true) {
 		return false;
 	}
@@ -473,7 +473,7 @@ bool SocketHandler::handleCGIRequest() {
 					// Reade output from outpfd[0]
 					iter->second.recvCGIOutput();
 					// deinit inpfd, outpfd, monitoredfd
-					iter->second.setCGIOutput();
+					// iter->second.setCGIOutput(configs);
 				}
 				iter->second.waitChildProc();
 				++iter;
@@ -483,13 +483,14 @@ bool SocketHandler::handleCGIRequest() {
 					// Reade output from outpfd[0]
 					iter->second.recvCGIOutput();
 					// deinit inpfd, outpfd, monitoredfd
-					iter->second.setCGIOutput();
+					// iter->second.setCGIOutput(configs);
 				} else {
 					iter->second.setPhase(CGIResponseCreator::CGIFIN);
 				}
 				++iter;
 			} break;
 			case CGIResponseCreator::CGIFIN: {
+				iter->second.setCGIOutput(configs);
 				for (std::list<CSocket>::iterator csockiter =
 						 csockets.begin();
 					 csockiter != csockets.end(); ++csockiter) {

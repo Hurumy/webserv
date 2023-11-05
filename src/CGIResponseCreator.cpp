@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 16:02:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 18:03:47 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,11 +515,21 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
-bool CGIResponseCreator::setCGIOutput() {
+bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 	std::istringstream issline(cgiOutput);
 	std::string line;
 	std::size_t bodySize(0);
 
+	if (WIFEXITED(wstatus) != 1) {
+		RequestHandler requestHandler(configs, request);
+		requestHandler.searchMatchHost();
+		response.setStatus(500);
+		response.setStatusMessage("Internal Server Error");
+		requestHandler.setCgiResponse(response);
+		response.addHeader("Content-Length", "0");
+		responseType = CGIResponseCreator::OTHER;
+		return false;
+	}
 	std::getline(issline, line);
 	if (line.empty() == false) {
 		std::istringstream issheader(line);
@@ -618,14 +628,32 @@ bool CGIResponseCreator::setCGIOutput() {
 				return true;
 			}
 			else {
+				RequestHandler requestHandler(configs, request);
+				requestHandler.searchMatchHost();
+				response.setStatus(500);
+				response.setStatusMessage("Internal Server Error");
+				requestHandler.setCgiResponse(response);
+				response.addHeader("Content-Length", "0");
 				responseType = CGIResponseCreator::OTHER;
 				return false;
 			}
 		} else {
+			RequestHandler requestHandler(configs, request);
+			requestHandler.searchMatchHost();
+			response.setStatus(500);
+			response.setStatusMessage("Internal Server Error");
+			requestHandler.setCgiResponse(response);
+			response.addHeader("Content-Length", "0");
 			responseType = CGIResponseCreator::OTHER;
-				return false;
+			return false;
 		}
 	}
+	RequestHandler requestHandler(configs, request);
+	requestHandler.searchMatchHost();
+	response.setStatus(500);
+	response.setStatusMessage("Internal Server Error");
+	requestHandler.setCgiResponse(response);
+	response.addHeader("Content-Length", "0");
 	responseType = CGIResponseCreator::OTHER;
 	return false;
 }
