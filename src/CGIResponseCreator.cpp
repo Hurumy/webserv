@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 19:55:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 20:52:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -520,16 +520,6 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 	std::string line;
 	std::size_t bodySize(0);
 
-	if (WIFSIGNALED(wstatus) == 1) {
-		RequestHandler requestHandler(configs, request);
-		requestHandler.searchMatchHost();
-		response.setStatus(500);
-		response.setStatusMessage("Internal Server Error");
-		requestHandler.setCgiResponse(response);
-		response = requestHandler.getResponse();
-		responseType = CGIResponseCreator::OTHER;
-		return false;
-	}
 	std::getline(issline, line);
 	if (line.empty() == false) {
 		std::istringstream issheader(line);
