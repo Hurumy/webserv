@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/02 19:57:22 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 16:07:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -455,6 +455,7 @@ bool SocketHandler::handleCGIRequest() {
 			} break;
 			case CGIResponseCreator::CGIWRITE: {
 				if ((iter->second.getRevents() & POLLOUT) != POLLOUT) {
+					iter->second.waitChildProc();
 					++iter;
 					break;
 				}
@@ -464,6 +465,7 @@ bool SocketHandler::handleCGIRequest() {
 					// Set outpfd[0]to monitoredfd
 					iter->second.setMonitoredfd(CGIResponseCreator::CGIRECV);
 				}
+				iter->second.waitChildProc();
 				++iter;
 			} break;
 			case CGIResponseCreator::CGIRECV: {

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/04 18:36:56 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 16:02:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -508,6 +508,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 		default: {
 			if (phase != CGIResponseCreator::CGIFIN) {
 				phase = CGIResponseCreator::CGILASTRECV;
+				setMonitoredfd(CGIResponseCreator::CGIRECV);
 			}
 		} break;
 	}
