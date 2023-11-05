@@ -6,11 +6,12 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:51:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 17:20:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 14:42:42 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
+#include "sComp.hpp"
 
 #include <gtest/gtest.h>
 
@@ -24,7 +25,7 @@ TEST(RequestTest, setRequestLine01Test) {
 		"GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: "
 		"Mozilla/5.0\r\nAccept: text/html, */*\r\n\r\nHellow!");
 	request.loadPayload(csocket);
-	std::map<std::string, std::string> header = request.getAllHeader();
+	std::map<std::string, std::string, sComp> header = request.getAllHeader();
 	for (std::map<std::string, std::string>::iterator iter = header.begin();
 		 iter != header.end(); ++iter) {
 		std::clog << "key: " << iter->first << std::endl;
@@ -70,7 +71,7 @@ TEST(RequestTest, setRequestLineError03Test) {
 		"GET / HTTP/1.1\r\nHost: www.example.com\r\nUser-Agent: "
 		"Mozilla/5.0\r\nAccept: text/html, */*");
 	request.loadPayload(csocket);
-	std::map<std::string, std::string> header = request.getAllHeader();
+	std::map<std::string, std::string, sComp> header = request.getAllHeader();
 	for (std::map<std::string, std::string>::iterator iter = header.begin();
 		 iter != header.end(); ++iter) {
 		std::clog << "key: " << iter->first << std::endl;
@@ -107,7 +108,7 @@ TEST(RequestTest, setHeaderTest) {
 	request.addHeader("CONNECT", "close");
 	request.setHeader("Connect", con);
 
-	ASSERT_EQ(request.getHeader("content-length").getOk(), contentlen);
-	ASSERT_EQ(request.getHeader("server").getOk(), server);
-	ASSERT_EQ(request.getHeader("connect").getOk(), con);
+	ASSERT_EQ(request.getHeader("Content-Length").getOk(), contentlen);
+	ASSERT_EQ(request.getHeader("Server").getOk(), server);
+	ASSERT_EQ(request.getHeader("Connect").getOk(), con);
 }

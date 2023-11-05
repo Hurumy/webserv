@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:08:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 16:34:25 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 14:37:14 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 #include "Result.hpp"
 #include "webserv.hpp"
+#include "sComp.hpp"
 
 class APayload {
 	private:
 	protected:
 		std::string version;
 		std::string body;
-		std::map<std::string, std::string> header;
-		std::string const toLower(std::string const &_origin) const;
+		std::map<std::string, std::string, sComp> header;
 
 	public:
 		virtual ~APayload();
@@ -34,5 +34,5 @@ class APayload {
 		bool addHeader(std::string const &key, std::string const &value);
 		bool setHeader(std::string const &key, std::string const &value);
 		Result<std::string, bool> const getHeader(std::string const &key) const;
-		std::map<std::string, std::string> const &getAllHeader() const;
+		std::map<std::string, std::string, sComp> const &getAllHeader() const;
 };

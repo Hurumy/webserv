@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 12:50:38 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/01 17:07:38 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 14:43:36 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ TEST(ResponseTest, headerTest04) {
 #define EXPECTED \
 	"\
 HTTP/1.1 200 OK\r\n\
-content-length: 14\r\n\
-content-type: text/html;charset=UTF-8\r\n\
-date: Fri, 16 Mar 2018 17:36 27 GMT\r\n\
-server: test server\r\n\
+Content-Length: 14\r\n\
+Content-Type: text/html;charset=UTF-8\r\n\
+Date: Fri, 16 Mar 2018 17:36 27 GMT\r\n\
+Server: test server\r\n\
 \r\n\
 Hello, world."
 
