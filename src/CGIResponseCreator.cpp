@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 21:01:56 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 21:05:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -506,7 +506,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 		} break;
 		case 0: {
 			// nothing to do
-			if (10 > std::difftime(std::time(NULL), startTime)) { break; }
+			if (20 > std::difftime(std::time(NULL), startTime)) { break; }
 			if (kill(pid, SIGTERM) == -1) { putSytemError("kill"); }
 		} break;
 		default: {
