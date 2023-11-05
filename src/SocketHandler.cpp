@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 18:00:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 21:09:26 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -444,7 +444,7 @@ bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 			case CGIResponseCreator::CGISTARTUP: {
 				// pipe(), fork(), execve()
 				if (iter->second.execCGIScript() == false) {
-					// error handling
+					iter->second.setPhase(CGIResponseCreator::CGIFIN);
 				} else {
 					// iter->second.setPhase(Request::CGIWRITE)
 					iter->second.setPhase(CGIResponseCreator::CGIWRITE);

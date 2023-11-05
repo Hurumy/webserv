@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 21:05:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 21:16:56 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,7 +377,9 @@ bool CGIResponseCreator::_chDirectory() {
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
+	static std::size_t cntExecTime(0);
 
+	if (cntExecTime > 10) { return false; }
 	if (pipe(inpfd) == -1) {
 		// error handling
 		putSytemError("pipe");
@@ -436,6 +438,7 @@ bool CGIResponseCreator::execCGIScript() {
 		std::exit(EXIT_FAILURE);
 	}
 	startTime = std::time(NULL);
+	cntExecTime++;
 	return true;
 }
 
