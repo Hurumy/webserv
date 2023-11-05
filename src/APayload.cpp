@@ -6,15 +6,13 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/04 11:23:50 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 14:38:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "APayload.hpp"
 
-#include <algorithm>
-#include <cctype>
-
+#include "sComp.hpp"
 #include "Error.hpp"
 #include "Ok.hpp"
 #include "Result.hpp"
@@ -33,23 +31,19 @@ bool APayload::setBody(std::string const &_body) {
 
 Result<std::string, bool> const APayload::getHeader(
 	std::string const &_key) const {
-	std::string const tmp = toLower(_key);
-	// std::cout << "tmp: " << tmp.size() << ": " << tmp << std::endl;
 	if (header.empty() == true) return Error<bool>(false);
-	if (header.find(tmp) == header.end())
+	if (header.find(_key) == header.end())
 		return Error<bool>(false);
 	else
-		return Ok<std::string>(header.at(tmp));
+		return Ok<std::string>(header.at(_key));
 }
 
 bool APayload::addHeader(std::string const &key, std::string const &value) {
-	std::string const tmp = toLower(key);
-	return header.insert(std::make_pair(tmp, value)).second;
+	return header.insert(std::make_pair(key, value)).second;
 }
 
 bool APayload::setHeader(std::string const &key, std::string const &value) {
-	std::string const tmp = toLower(key);
-	header[tmp] = value;
+	header[key] = value;
 	return true;
 }
 
@@ -57,6 +51,6 @@ std::string const &APayload::getVersion() const { return (version); }
 
 std::string const &APayload::getBody() const { return (body); }
 
-std::map<std::string, std::string> const &APayload::getAllHeader() const {
+std::map<std::string, std::string, sComp> const &APayload::getAllHeader() const {
 	return header;
 }
