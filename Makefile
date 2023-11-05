@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/10/26 16:23:24 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/11/05 15:25:10 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,7 @@ SRC_FILES	:= \
 				pC_location.cpp \
 				pC_cgi_path.cpp \
 				pC_alias.cpp \
+				sComp.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj
