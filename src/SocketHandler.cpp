@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 15:22:04 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:53:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,7 +416,11 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 							std::make_pair(iter->getSockfd(), cgiResponseCreator));
 					} else {
 						cgiiter->second.setPhase(CGIResponseCreator::CGISTARTUP);
-						std::clog << "LOCALREDIR LOOP" << std::endl;
+						cgiiter->second.setCGIPath(requestHandler.isCgi().getOk());
+						cgiiter->second.setHostName(
+							requestHandler.getHostname());
+						cgiiter->second.setPortNum(
+							requestHandler.getPortNumber());
 					}
 				} else {
 					iter->setPhase(CSocket::SEND);

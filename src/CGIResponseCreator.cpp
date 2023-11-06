@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 15:23:40 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 16:04:18 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -661,31 +661,39 @@ bool CGIResponseCreator::deinit() {
 			putSytemError("close");
 			// error handling
 		}
+		inpfd[0] = 0;
 	}
 	if (inpfd[1] != 0) {
 		if (close(inpfd[1]) == -1) {
 			// error handling
 			putSytemError("close");
 		}
+		inpfd[1] = 0;
 	}
 	if (outpfd[0] != 0) {
 		if (close(outpfd[0]) == -1) {
 			// error handling
 			putSytemError("close");
 		}
+		outpfd[0] = 0;
 	}
 	if (outpfd[1] != 0) {
 		if (close(outpfd[1]) == -1) {
 			// error handling
 			putSytemError("close");
 		}
+		outpfd[1] = 0;
 	}
 	runtimePath.clear();
 	cgiIntput.clear();
 	cgiOutput.clear();
 	cgiPath.clear();
 	hostName.clear();
-	metaVariables.deinit();
+	metaVariables.init();
 	startTime = 0;
 	return true;
+}
+
+void CGIResponseCreator::setCGIPath(const std::string &_cgiPath) {
+	cgiPath = _cgiPath;
 }

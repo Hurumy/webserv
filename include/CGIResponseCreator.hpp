@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 14:40:46 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:51:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ class CGIResponseCreator {
 		bool setCGIOutput(std::vector<Config> const &configs);
 		bool deinit();
 		bool setEnvVars();
+		void setCGIPath(const std::string &_cgiPath);
 
 	protected:
 	private:
