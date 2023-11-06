@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 16:04:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 17:28:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -569,10 +569,16 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 		} else if (key.compare("Location") == 0) {
 			std::string location;
 
-			issheader >> location;
+			std::getline(issheader, location);
 			if (location.at(0) == '/') {
-				request.setUrl(location);
+				std::string extra;
 
+				request.setUrl(location);
+				std::getline(issheader, extra);
+				if (extra.empty() == false) {
+					responseType = CGIResponseCreator::OTHER;
+					return false;
+				}
 				responseType = CGIResponseCreator::LOCALREDIR;
 				return true;
 			}
