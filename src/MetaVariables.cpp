@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 21:18:00 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/23 15:41:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 14:53:17 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,4 +151,9 @@ std::map<std::string, std::string> const &MetaVariables::getMetaVariables()
 std::map<std::string, std::string> const &
 MetaVariables::getOptionalMetaVariables() const {
 	return optinalMetaVarsMap;
+}
+
+void MetaVariables::deinit() {
+	metaVariablesMap.clear();
+	optinalMetaVarsMap.clear();
 }

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 20:29:31 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/19 17:16:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 14:52:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class MetaVariables {
 		std::map<std::string, std::string> const &getMetaVariables() const;
 		std::map<std::string, std::string> const &getOptionalMetaVariables()
 			const;
+		void deinit();
 
 	protected:
 	private:
