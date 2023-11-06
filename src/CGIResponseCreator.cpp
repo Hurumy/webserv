@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 21:16:56 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:21:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 	  revents(0),
 	  cgiIntput(request.getBody()),
 	  cgiPath(_cgiPath),
-	  portNum(0) {
+	  portNum(0),
+	  cntExecTime(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
 }
@@ -377,7 +378,6 @@ bool CGIResponseCreator::_chDirectory() {
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
-	static std::size_t cntExecTime(0);
 
 	if (cntExecTime > 10) { return false; }
 	if (pipe(inpfd) == -1) {
@@ -680,5 +680,12 @@ bool CGIResponseCreator::deinit() {
 			putSytemError("close");
 		}
 	}
+	runtimePath.clear();
+	cgiIntput.clear();
+	cgiOutput.clear();
+	cgiPath.clear();
+	hostName.clear();
+	metaVariables.deinit();
+	startTime = 0;
 	return true;
 }

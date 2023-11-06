@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 21:09:26 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:22:04 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -402,7 +402,8 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					if (cgiResponseCreators.find(iter->getSockfd()) == cgiResponseCreators.end()) {
+					std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
+					if (cgiiter == cgiResponseCreators.end()) {
 						CGIResponseCreator cgiResponseCreator(
 							requests[iter->getSockfd()],
 							responses[iter->getSockfd()],
@@ -413,6 +414,9 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 							requestHandler.getPortNumber());
 						cgiResponseCreators.insert(
 							std::make_pair(iter->getSockfd(), cgiResponseCreator));
+					} else {
+						cgiiter->second.setPhase(CGIResponseCreator::CGISTARTUP);
+						std::clog << "LOCALREDIR LOOP" << std::endl;
 					}
 				} else {
 					iter->setPhase(CSocket::SEND);
@@ -441,6 +445,7 @@ bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 		 iter != cgiResponseCreators.end();) {
 		// Request &req = requests[iter->getSockfd()];
 		switch (iter->second.getPhase()) {
+			case CGIResponseCreator::CGIREADY: { ++iter; } break;
 			case CGIResponseCreator::CGISTARTUP: {
 				// pipe(), fork(), execve()
 				if (iter->second.execCGIScript() == false) {
@@ -504,6 +509,11 @@ bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 					}
 				}
 				iter->second.deinit();
+				if (iter->second.getResponseType() == CGIResponseCreator::LOCALREDIR) {
+					iter->second.setPhase(CGIResponseCreator::CGISTARTUP);
+					++iter;
+					break;
+				}
 				std::map<int, CGIResponseCreator>::iterator erasedIter = iter;
 				++iter;
 				cgiResponseCreators.erase(erasedIter);

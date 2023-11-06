@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 20:57:16 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 14:40:46 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 class CGIResponseCreator {
 	public:
-		enum tag { CGISTARTUP, CGIWRITE, CGIRECV, CGILASTRECV, CGIFIN };
+		enum tag { CGIREADY, CGISTARTUP, CGIWRITE, CGIRECV, CGILASTRECV, CGIFIN };
 		enum type { DOC, LOCALREDIR, CLIENTREDIR, OTHER };
 		CGIResponseCreator(Request &_request, Response &_response,
 						   const std::string &_cgiPath);
@@ -89,4 +89,5 @@ class CGIResponseCreator {
 		int portNum;
 		MetaVariables metaVariables;
 		std::time_t startTime;
+		std::size_t cntExecTime;
 };
