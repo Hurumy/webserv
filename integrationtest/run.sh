@@ -9,6 +9,10 @@ if [ "$1" = "remake" ]; then
 fi
 make -C ${PROJECT_ROOT}
 
+if [ "$?" -ne 0 ]; then
+	exit 1
+fi
+
 echo 
 echo "==== Start webserv ====="
 ${WEBSERV} ${CONFFILE} &
