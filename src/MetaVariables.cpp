@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 21:18:00 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 14:53:17 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/06 15:33:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,6 @@ MetaVariables::getOptionalMetaVariables() const {
 }
 
 void MetaVariables::deinit() {
-	metaVariablesMap.clear();
+	metaVariablesMap = initMetaVariables();
 	optinalMetaVarsMap.clear();
 }
