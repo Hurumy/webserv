@@ -10,6 +10,26 @@ URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 class TestCGIRequest(unittest.TestCase):
 
+	def test_simple_document_response(self):
+		print('\n===========================')
+		print('TEST: Simple Document response')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/test.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 200)
+
+	def test_simple_client_redirect_response(self):
+		print('\n===========================')
+		print('TEST: Simple Client redirect response')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/test.pl')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 300)
+
 	def test_too_large_request(self):
 		print('\n===========================')
 		print('TEST: Too large request body')
@@ -21,3 +41,13 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)
+
+	def test_infinite_loop_local_redirect(self):
+		print('\n===========================')
+		print('TEST: Infinite loop local redirect response')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/infinite_loop_local_redirect_response.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 500)
