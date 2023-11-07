@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:03:08 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/07 12:24:48 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:46:02 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
+#include <cstring>
 #include <errno.h>
 
 #include "webserv.hpp"
@@ -37,7 +38,7 @@ namespace ft {
 	}
 
 	void putSystemError(char const *msg) {
-		std::cerr << RED << "webserv: error: " << msg << ": " << strerror(errno)
+		std::cerr << RED << "webserv: error: " << msg << ": " << std::strerror(errno)
 				<< RESET << std::endl;
 	}
 }
