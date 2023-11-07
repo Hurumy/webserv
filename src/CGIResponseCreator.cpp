@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/07 12:51:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 17:24:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -534,7 +534,6 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 		std::string key;
 		
 		std::getline(issheader, key, ':');
-		// if (key.compare("Content-Type") == 0) {
 		if (ft::strcmpCaseIns(key, "Content-Type") == true) {
 			std::string value;
 			
