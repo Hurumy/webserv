@@ -81,3 +81,13 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 500)
+
+	def test_invalid_cgi_no_content_type_with_body(self):
+		print('\n===========================')
+		print('TEST: Invalid CGI Script (No Content-Type with body)')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/invalid_cgi_no_content_type_with_body.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 500)
