@@ -91,3 +91,13 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 500)
+
+	def test_invalid_cgi_invalid_header_without_colon(self):
+		print('\n===========================')
+		print('TEST: Invalid CGI Script (Invalid header without colon)')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/invalid_cgi_invalid_header_withou_colon.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 500)
