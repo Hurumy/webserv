@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/07 12:23:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:51:35 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -568,7 +568,7 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 			}
 			responseType = CGIResponseCreator::DOC;
 			return true;
-		} else if (key.compare("Location") == 0) {
+		} else if (ft::strcmpCaseIns(key, "Location") == true) {
 			std::string location;
 
 			std::getline(issheader, location);
@@ -615,9 +615,6 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 					ssStatus >> statusCode;
 					ssStatus >> reasonPhrase;
 					response.setStatus(statusCode);
-					std::clog << result.getOk() << std::endl;
-					std::clog << statusCode << std::endl;
-					std::clog << reasonPhrase << std::endl;
 					response.setStatusMessage(reasonPhrase);
 				} else {
 					response.setStatus(302);
