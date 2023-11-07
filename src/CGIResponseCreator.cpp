@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 17:28:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:07:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #include <string>
 #include <ctime>
 
+#include "ft.hpp"
 #include "Result.hpp"
 #include "puterror.hpp"
 
@@ -533,7 +534,8 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 		std::string key;
 		
 		std::getline(issheader, key, ':');
-		if (key.compare("Content-Type") == 0) {
+		// if (key.compare("Content-Type") == 0) {
+		if (ft::strcmpCaseIns(key, "Content-Type") == true) {
 			std::string value;
 			
 			issheader >> value;
