@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/05 14:34:38 by komatsud         ###   ########.fr        #
+#    Updated: 2023/11/07 12:26:30 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,6 @@ WS_SRC_FILES	:= \
 					SocketHandler.cpp \
 					CGIResponseCreator.cpp \
 					MetaVariables.cpp \
-					puterror.cpp \
 					parseRequest.cpp \
 					stringCleaner.cpp \
 					parseConf.cpp \
@@ -92,6 +91,7 @@ WS_SRC_FILES	:= \
 					pC_cgi_path.cpp \
 					pC_alias.cpp \
 					sComp.cpp \
+					ft.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
