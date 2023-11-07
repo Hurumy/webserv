@@ -61,3 +61,23 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 500)
+
+	def test_invalid_cgi_script_empty_response(self):
+		print('\n===========================')
+		print('TEST: Invalid CGI Script (Empty response)')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/invalid_cgi_script_empty_response.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 500)
+
+	def test_invalid_cgi_infinite_sleep(self):
+		print('\n===========================')
+		print('TEST: Invalid CGI Script (Infinite sleep)')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/invalid_cgi_infinite_sleep.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 500)
