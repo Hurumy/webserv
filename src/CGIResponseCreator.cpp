@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/07 12:07:00 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:23:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 #include "ft.hpp"
 #include "Result.hpp"
-#include "puterror.hpp"
+#include "ft.hpp"
 
 CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 									   const std::string &_cgiPath)
@@ -370,7 +370,7 @@ bool CGIResponseCreator::_chDirectory() {
 	if (posDir == std::string::npos) { return true; }
 	cgiDirPath = cgiPath.substr(0, posDir + 1);
 	if (chdir(cgiDirPath.c_str()) == -1) {
-		putSytemError("chdir");
+		ft::putSystemError("chdir");
 		return false;
 	}
 	return true;
@@ -383,7 +383,7 @@ bool CGIResponseCreator::execCGIScript() {
 	if (cntExecTime > 10) { return false; }
 	if (pipe(inpfd) == -1) {
 		// error handling
-		putSytemError("pipe");
+		ft::putSystemError("pipe");
 		return false;
 	}
 	if (fcntl(inpfd[0], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
@@ -394,7 +394,7 @@ bool CGIResponseCreator::execCGIScript() {
 	}
 	if (pipe(outpfd) == -1) {
 		// error handling
-		putSytemError("pipe");
+		ft::putSystemError("pipe");
 		close(inpfd[0]);
 		close(inpfd[1]);
 		return false;
@@ -407,7 +407,7 @@ bool CGIResponseCreator::execCGIScript() {
 	}
 	pid = fork();
 	if (pid == -1) {
-		putSytemError("fork");
+		ft::putSystemError("fork");
 		deinit();
 		// error handling
 		return false;
@@ -415,12 +415,12 @@ bool CGIResponseCreator::execCGIScript() {
 	if (pid == 0) {
 		// for developement
 		if (dup2(inpfd[0], 0) == -1) {
-			putSytemError("dup2");
+			ft::putSystemError("dup2");
 			deinit();
 			std::exit(EXIT_FAILURE);
 		}
 		if (dup2(outpfd[1], 1) == -1) {
-			putSytemError("dup2");
+			ft::putSystemError("dup2");
 			deinit();
 			std::exit(EXIT_FAILURE);
 		}
@@ -434,7 +434,7 @@ bool CGIResponseCreator::execCGIScript() {
 		_setRuntime();
 		argv = _createArgv();
 		execve(runtimePath.c_str(), argv, envp);
-		putSytemError("execve");
+		ft::putSystemError("execve");
 		// delete envp
 		std::exit(EXIT_FAILURE);
 	}
@@ -487,7 +487,7 @@ bool CGIResponseCreator::recvCGIOutput() {
 	readLen = read(outpfd[0], buf, BUFFER_SIZE);
 	if (readLen == -1) {
 		// errorhandling
-		putSytemError("read");
+		ft::putSystemError("read");
 		return false;
 	}
 	if (readLen == 0) {
@@ -506,12 +506,12 @@ pid_t CGIResponseCreator::waitChildProc() {
 	switch (rwait) {
 		case -1: {
 			phase = CGIResponseCreator::CGIFIN;
-			putSytemError("waitpid");
+			ft::putSystemError("waitpid");
 		} break;
 		case 0: {
 			// nothing to do
 			if (15 > std::difftime(std::time(NULL), startTime)) { break; }
-			if (kill(pid, SIGTERM) == -1) { putSytemError("kill"); }
+			if (kill(pid, SIGTERM) == -1) { ft::putSystemError("kill"); }
 		} break;
 		default: {
 			if (phase != CGIResponseCreator::CGIFIN) {
@@ -666,7 +666,7 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 bool CGIResponseCreator::deinit() {
 	if (inpfd[0] != 0) {
 		if (close(inpfd[0]) == -1) {
-			putSytemError("close");
+			ft::putSystemError("close");
 			// error handling
 		}
 		inpfd[0] = 0;
@@ -674,21 +674,21 @@ bool CGIResponseCreator::deinit() {
 	if (inpfd[1] != 0) {
 		if (close(inpfd[1]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
 		inpfd[1] = 0;
 	}
 	if (outpfd[0] != 0) {
 		if (close(outpfd[0]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
 		outpfd[0] = 0;
 	}
 	if (outpfd[1] != 0) {
 		if (close(outpfd[1]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
 		outpfd[1] = 0;
 	}

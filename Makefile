@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/07 12:03:37 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/11/07 12:17:42 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,6 @@ SRC_FILES	:= \
 				pC_uploadpath.cpp \
 				pC_allowedmethods.cpp \
 				RequestHandler.cpp \
-				puterror.cpp \
 				stringCleaner.cpp \
 				MakeDirlistHTML.cpp \
 				Location.cpp \

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 17:39:24 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:23:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 #include "RequestHandler.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
-#include "puterror.hpp"
+#include "ft.hpp"
 
 SocketHandler::SocketHandler() {}
 
@@ -201,7 +201,7 @@ std::vector<struct pollfd> const &SocketHandler::getPollfds() const {
 
 bool SocketHandler::setRevents() {
 	if (poll(pollfds.data(), pollfds.size(), pollTimeout) == -1) {
-		putSytemError("poll");
+		ft::putSystemError("poll");
 		std::exit(EXIT_FAILURE);
 	}
 	for (std::vector<struct pollfd>::iterator polliter = pollfds.begin();
@@ -250,7 +250,7 @@ bool SocketHandler::recieveCSockets() {
 							(socklen_t *)&addrsize);
 			if (sockfd == -1) {
 				// error handling?
-				putSytemError("accept");
+				ft::putSystemError("accept");
 				// return false;
 			} else {
 				fcntl(sockfd, F_SETFL, O_NONBLOCK, FD_CLOEXEC);
@@ -540,7 +540,7 @@ bool SocketHandler::closeTimeoutCSockets() {
 				if (cgiiter != cgiResponseCreators.end()) {
 					if (kill(cgiiter->second.getPid(), 0) == 0) {
 						if (kill(cgiiter->second.getPid(), SIGTERM) == -1) {
-							putSytemError("kill");
+							ft::putSystemError("kill");
 						}
 					}
 				}
@@ -559,7 +559,7 @@ bool SocketHandler::waitDeadCGIProcs() {
 		if (*iter == 0 || kill(*iter, 0) == -1) { iter = cpids.erase(iter);}
 		else {
 			switch (waitpid(*iter, &wstatus, WNOHANG)) {
-				case -1: { putSytemError("waitpid"); ++iter; } break;
+				case -1: { ft::putSystemError("waitpid"); ++iter; } break;
 				case 0: { ++iter; } break;
 				default : { iter = cpids.erase(iter); } break;
 			}

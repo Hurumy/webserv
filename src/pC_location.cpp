@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_location.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:13:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/05 11:21:35 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int l_readLocation(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "location")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit(
+		ft::errorInInit(
 			"There are no settings in some Location directive(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.at(1).empty() == false) {

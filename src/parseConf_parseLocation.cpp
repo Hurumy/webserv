@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 15:33:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int checkLocationSettings(Location &res, std::string str) {
 				break;
 			} else if (lines.at(i).empty() == false) {
 				std::cout << RED << lines.at(i) << RESET << std::endl;
-				errorInInit("Unknown directive was detected.(｀・ω・´)");
+				ft::errorInInit("Unknown directive was detected.(｀・ω・´)");
 			}
 			if (status == -1) break;
 		}

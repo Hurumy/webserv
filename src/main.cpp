@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/02 15:15:14 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/30 16:29:10 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:23:36 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,11 @@
 #include "Result.hpp"
 #include "Server.hpp"
 #include "SocketHandler.hpp"
-
-#define CONF_FILE_PATH "./conf_files/test.conf"
+#include "ft.hpp"
 
 int main(const int argc, const char **argv) {
 	if (argc != 2) {
-		errorInInit("Usage: ./webserv <conf_file_path>");
+		ft::errorInInit("Usage: ./webserv <conf_file_path>");
 		return 1;
 	}
 
