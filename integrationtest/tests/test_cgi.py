@@ -52,6 +52,16 @@ class TestCGIRequest(unittest.TestCase):
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)
 
+	def test_valid_cgi_insensitive_content_type(self):
+		print('\n===========================')
+		print('TEST: Valid Client redirect response (Case insensitive Location)')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/valid_cgi_case_insensitive_location.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 200)
+
 	def test_invalid_local_redirect_response_extra_lines(self):
 		print('\n===========================')
 		print('TEST: Invalid local redirect response (Extra lines)')
