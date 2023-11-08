@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 12:43:42 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 12:54:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -620,56 +620,44 @@ bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, st
 	return true;
 }
 
-bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
-	std::istringstream issline(cgiOutput);
-	std::string line;
-
-	std::getline(issline, line);
-	if (line.empty() == false) {
-		std::istringstream issheader(line);
-		std::string key;
-		
-		std::getline(issheader, key, ':');
-		if (ft::strcmpCaseIns(key, "Content-Type") == true) {
-			return _setDocumentRedirResponse(issline, line, issheader, key);
-		} else if (ft::strcmpCaseIns(key, "Location") == true) {
-			std::string location;
-
-			std::getline(issheader, location);
-			if (location.at(0) == '/') {
-				return _setLocalRedirResponse(issheader, location);
-			}
-			if (location.find(':') != std::string::npos) {
-				return _setClientRedirResponse(issline, line, issheader, location);
-			}
-			else {
-				RequestHandler requestHandler(configs, request);
-				requestHandler.searchMatchHost();
-				response.setStatus(500);
-				response.setStatusMessage("Internal Server Error");
-				requestHandler.setCgiResponse(response);
-				response = requestHandler.getResponse();
-				responseType = CGIResponseCreator::OTHER;
-				return false;
-			}
-		} else {
-			RequestHandler requestHandler(configs, request);
-			requestHandler.searchMatchHost();
-			response.setStatus(500);
-			response.setStatusMessage("Internal Server Error");
-			requestHandler.setCgiResponse(response);
-			response = requestHandler.getResponse();
-			responseType = CGIResponseCreator::OTHER;
-			return false;
-		}
-	}
+void CGIResponseCreator::_setCGIErrorResponse(std::vector<Config> const &configs) {
 	RequestHandler requestHandler(configs, request);
+
 	requestHandler.searchMatchHost();
 	response.setStatus(500);
 	response.setStatusMessage("Internal Server Error");
 	requestHandler.setCgiResponse(response);
 	response = requestHandler.getResponse();
 	responseType = CGIResponseCreator::OTHER;
+}
+
+bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
+	std::istringstream issline(cgiOutput);
+	std::string line;
+
+	std::getline(issline, line);
+	if (line.empty() == true) {
+		_setCGIErrorResponse(configs);
+		return false;
+	}
+	std::istringstream issheader(line);
+	std::string key;
+	
+	std::getline(issheader, key, ':');
+	if (ft::strcmpCaseIns(key, "Content-Type") == true) {
+		return _setDocumentRedirResponse(issline, line, issheader, key);
+	} else if (ft::strcmpCaseIns(key, "Location") == true) {
+		std::string location;
+
+		std::getline(issheader, location);
+		if (location.at(0) == '/') {
+			return _setLocalRedirResponse(issheader, location);
+		}
+		if (location.find(':') != std::string::npos) {
+			return _setClientRedirResponse(issline, line, issheader, location);
+		}
+	}
+	_setCGIErrorResponse(configs);
 	return false;
 }
 
