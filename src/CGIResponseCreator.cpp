@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 12:19:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 12:43:42 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -523,7 +523,7 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
-bool CGIResponseCreator::_setDocumentRedireResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key) {
+bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key) {
 	std::string value;
 	std::size_t bodySize(0);
 	
@@ -559,10 +559,70 @@ bool CGIResponseCreator::_setDocumentRedireResponse(std::istringstream &issline,
 	return true;
 }
 
+bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issheader, std::string &location) {
+	std::string extra;
+
+	request.setUrl(location);
+	std::getline(issheader, extra);
+	if (extra.empty() == false) {
+		responseType = CGIResponseCreator::OTHER;
+		return false;
+	}
+	responseType = CGIResponseCreator::LOCALREDIR;
+	return true;
+}
+
+bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location) {
+	std::string key;
+	std::string value;
+	std::size_t bodySize(0);
+
+	response.setHeader("Location", location);
+	while (issline.eof() == false) {
+		std::getline(issline, line);
+		if (line.empty() == true) {
+			std::string body;
+
+			while (issline.eof() == false) {
+				std::getline(issline, body);
+				if (issline.eof() == true) { response.addBody(body); }
+				else { response.addBody(body + "\r\n"); }
+			}
+		} else {
+			issheader.clear();
+			issheader.str(line);
+			std::getline(issheader, key, ':');
+			std::getline(issheader, value);
+			response.addHeader(key, value);
+		}
+	}
+	Result<std::string, bool> result = response.getHeader("Status");
+	if (result.isOK() == true) {
+		unsigned int statusCode;
+		std::string reasonPhrase;
+
+		std::stringstream ssStatus(result.getOk());
+		ssStatus >> statusCode;
+		ssStatus >> reasonPhrase;
+		response.setStatus(statusCode);
+		response.setStatusMessage(reasonPhrase);
+	} else {
+		response.setStatus(302);
+		response.setStatusMessage("Found");
+	}
+	bodySize = response.getBody().size();
+	if (bodySize != 0) {
+		std::stringstream ss;
+		ss << bodySize;
+		response.addHeader("Content-Length", ss.str());
+	}
+	responseType = CGIResponseCreator::CLIENTREDIR;
+	return true;
+}
+
 bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 	std::istringstream issline(cgiOutput);
 	std::string line;
-	std::size_t bodySize(0);
 
 	std::getline(issline, line);
 	if (line.empty() == false) {
@@ -571,67 +631,16 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 		
 		std::getline(issheader, key, ':');
 		if (ft::strcmpCaseIns(key, "Content-Type") == true) {
-			return _setDocumentRedireResponse(issline, line, issheader, key);
+			return _setDocumentRedirResponse(issline, line, issheader, key);
 		} else if (ft::strcmpCaseIns(key, "Location") == true) {
 			std::string location;
 
 			std::getline(issheader, location);
 			if (location.at(0) == '/') {
-				std::string extra;
-
-				request.setUrl(location);
-				std::getline(issheader, extra);
-				if (extra.empty() == false) {
-					responseType = CGIResponseCreator::OTHER;
-					return false;
-				}
-				responseType = CGIResponseCreator::LOCALREDIR;
-				return true;
+				return _setLocalRedirResponse(issheader, location);
 			}
 			if (location.find(':') != std::string::npos) {
-				std::string value;
-
-				response.setHeader("Location", location);
-				while (issline.eof() == false) {
-					std::getline(issline, line);
-					if (line.empty() == true) {
-						std::string body;
-
-						while (issline.eof() == false) {
-							std::getline(issline, body);
-							if (issline.eof() == true) { response.addBody(body); }
-							else { response.addBody(body + "\r\n"); }
-						}
-					} else {
-						issheader.clear();
-						issheader.str(line);
-						std::getline(issheader, key, ':');
-						std::getline(issheader, value);
-						response.addHeader(key, value);
-					}
-				}
-				Result<std::string, bool> result = response.getHeader("Status");
-				if (result.isOK() == true) {
-					unsigned int statusCode;
-					std::string reasonPhrase;
-
-					std::stringstream ssStatus(result.getOk());
-					ssStatus >> statusCode;
-					ssStatus >> reasonPhrase;
-					response.setStatus(statusCode);
-					response.setStatusMessage(reasonPhrase);
-				} else {
-					response.setStatus(302);
-					response.setStatusMessage("Found");
-				}
-				bodySize = response.getBody().size();
-				if (bodySize != 0) {
-					std::stringstream ss;
-					ss << bodySize;
-					response.addHeader("Content-Length", ss.str());
-				}
-				responseType = CGIResponseCreator::CLIENTREDIR;
-				return true;
+				return _setClientRedirResponse(issline, line, issheader, location);
 			}
 			else {
 				RequestHandler requestHandler(configs, request);

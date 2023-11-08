@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 12:11:59 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 12:39:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 		bool _chDirectory();
-		bool _setDocumentRedireResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key);
+		bool _setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key);
+		bool _setLocalRedirResponse(std::istringstream &issheader, std::string &location);
+		bool _setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location);
 
 		Request &request;
 		Response &response;
