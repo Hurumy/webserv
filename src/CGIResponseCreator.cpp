@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/07 17:24:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 12:19:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -523,6 +523,42 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
+bool CGIResponseCreator::_setDocumentRedireResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key) {
+	std::string value;
+	std::size_t bodySize(0);
+	
+	issheader >> value;
+	response.addHeader("Content-Type", value);
+	while (issline.eof() == false) {
+		std::getline(issline, line);
+		if (line.empty() == true) {
+			std::string body;
+
+			while (issline.eof() == false) {
+				std::getline(issline, body);
+				if (issline.eof() == true) { response.addBody(body); }
+				else { response.addBody(body + "\r\n"); }
+			}
+		} else {
+			issheader.clear();
+			issheader.str(line);
+			std::getline(issheader, key, ':');
+			std::getline(issheader, value);
+			response.addHeader(key, value);
+		}
+	}
+	response.setStatus(200);
+	response.setStatusMessage("OK");
+	bodySize = response.getBody().size();
+	if (bodySize != 0) {
+		std::stringstream ss;
+		ss << bodySize;
+		response.addHeader("Content-Length", ss.str());
+	}
+	responseType = CGIResponseCreator::DOC;
+	return true;
+}
+
 bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 	std::istringstream issline(cgiOutput);
 	std::string line;
@@ -535,38 +571,7 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 		
 		std::getline(issheader, key, ':');
 		if (ft::strcmpCaseIns(key, "Content-Type") == true) {
-			std::string value;
-			
-			issheader >> value;
-			response.addHeader("Content-Type", value);
-			while (issline.eof() == false) {
-				std::getline(issline, line);
-				if (line.empty() == true) {
-					std::string body;
-
-					while (issline.eof() == false) {
-						std::getline(issline, body);
-						if (issline.eof() == true) { response.addBody(body); }
-						else { response.addBody(body + "\r\n"); }
-					}
-				} else {
-					issheader.clear();
-					issheader.str(line);
-					std::getline(issheader, key, ':');
-					std::getline(issheader, value);
-					response.addHeader(key, value);
-				}
-			}
-			response.setStatus(200);
-			response.setStatusMessage("OK");
-			bodySize = response.getBody().size();
-			if (bodySize != 0) {
-				std::stringstream ss;
-				ss << bodySize;
-				response.addHeader("Content-Length", ss.str());
-			}
-			responseType = CGIResponseCreator::DOC;
-			return true;
+			return _setDocumentRedireResponse(issline, line, issheader, key);
 		} else if (ft::strcmpCaseIns(key, "Location") == true) {
 			std::string location;
 

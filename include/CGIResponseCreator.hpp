@@ -6,13 +6,15 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 15:51:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 12:11:59 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <ctime>
+#include <string>
+#include <sstream>
 
 #include "CSocket.hpp"
 #include "MetaVariables.hpp"
@@ -71,6 +73,7 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 		bool _chDirectory();
+		bool _setDocumentRedireResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key);
 
 		Request &request;
 		Response &response;
