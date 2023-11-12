@@ -1,9 +1,9 @@
 import os
 
 print("Content-Type text/plain")
-print("X_TEST00: test")
-print("X_TEST01: test")
-print("X_TEST02: test")
+print("X_TEST00:test")
+print("X_TEST01:test")
+print("X_TEST02:test")
 print("")
 print("Hello, world.")
 print("This is body of CGI.")
