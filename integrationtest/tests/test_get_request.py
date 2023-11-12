@@ -41,3 +41,16 @@ class TestGetRequest(unittest.TestCase):
 		print('Status: ',client.status)
 		self.assertEqual(client.response_body, file_text)
 		self.assertEqual(client.status, 200)
+
+	def test_binary_data(self):
+		print('\n===========================')
+		print('TEST: test GET binary data')
+		print('===========================\n')
+
+		with open('./content/wordpress-logo.jpg', 'rb') as fs:
+			file_text = fs.read()
+		r = requests.get(URI_TOP + '/wordpress-logo.jpg')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.content, file_text)
+		self.assertEqual(r.status_code, 200)
