@@ -25,7 +25,8 @@
 Request::Request()
 	: contentLength(0),
 	  lastContentLength(contentLength),
-	  phase(Request::REQLINE) {}
+	  phase(Request::REQLINE),
+	  cntCGIExec(0) {}
 
 const std::string Request::getLines() const {
 	std::string line;
