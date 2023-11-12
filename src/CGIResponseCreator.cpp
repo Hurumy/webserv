@@ -36,8 +36,7 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 	  revents(0),
 	  cgiIntput(request.getBody()),
 	  cgiPath(_cgiPath),
-	  portNum(0),
-	  cntExecTime(0) {
+	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
 	std::memset(outpfd, 0, sizeof(outpfd));
 }
@@ -380,7 +379,6 @@ bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
 
-	if (cntExecTime > 10) { return false; }
 	if (pipe(inpfd) == -1) {
 		// error handling
 		ft::putSystemError("pipe");
@@ -439,7 +437,6 @@ bool CGIResponseCreator::execCGIScript() {
 		std::exit(EXIT_FAILURE);
 	}
 	startTime = std::time(NULL);
-	cntExecTime++;
 	return true;
 }
 

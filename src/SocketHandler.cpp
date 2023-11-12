@@ -402,8 +402,6 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 				responses[iter->getSockfd()] = requestHandler.getResponse();
 				if (requestHandler.isCgi().isOK() == true) {
 					iter->setPhase(CSocket::CGI);
-					std::map<int, CGIResponseCreator>::iterator cgiiter = cgiResponseCreators.find(iter->getSockfd());
-					if (cgiiter == cgiResponseCreators.end()) {
 						CGIResponseCreator cgiResponseCreator(
 							requests[iter->getSockfd()],
 							responses[iter->getSockfd()],
@@ -414,14 +412,6 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 							requestHandler.getPortNumber());
 						cgiResponseCreators.insert(
 							std::make_pair(iter->getSockfd(), cgiResponseCreator));
-					} else {
-						cgiiter->second.setPhase(CGIResponseCreator::CGISTARTUP);
-						cgiiter->second.setCGIPath(requestHandler.isCgi().getOk());
-						cgiiter->second.setHostName(
-							requestHandler.getHostname());
-						cgiiter->second.setPortNum(
-							requestHandler.getPortNumber());
-					}
 				} else {
 					iter->setPhase(CSocket::SEND);
 					removeRequest(iter->getSockfd());
@@ -513,11 +503,6 @@ bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 					}
 				}
 				iter->second.deinit();
-				if (iter->second.getResponseType() == CGIResponseCreator::LOCALREDIR) {
-					iter->second.setPhase(CGIResponseCreator::CGISTARTUP);
-					++iter;
-					break;
-				}
 				std::map<int, CGIResponseCreator>::iterator erasedIter = iter;
 				++iter;
 				cgiResponseCreators.erase(erasedIter);

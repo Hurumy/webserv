@@ -98,5 +98,4 @@ class CGIResponseCreator {
 		int portNum;
 		MetaVariables metaVariables;
 		std::time_t startTime;
-		std::size_t cntExecTime;
 };
