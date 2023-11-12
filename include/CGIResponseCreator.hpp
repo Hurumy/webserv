@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 12:46:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/08 13:27:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 
 #define WS_CGI_VERSION "CGI/1.1"
 #define WS_HTTP_VERSION "HTTP/1.1"
+#define SCHEMENAME_FOLLOWED_BY_COLON_HTTP "http:"
+#define SCHEMENAME_FOLLOWED_BY_COLON_HTTPS "https:"
 
 class CGIResponseCreator {
 	public:
@@ -74,7 +76,7 @@ class CGIResponseCreator {
 		bool _setRuntime();
 		bool _chDirectory();
 		bool _setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key);
-		bool _setLocalRedirResponse(std::istringstream &issheader, std::string &location);
+		bool _setLocalRedirResponse(std::istringstream &issline, std::string &location);
 		bool _setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location);
 		void _setCGIErrorResponse(std::vector<Config> const &configs);
 

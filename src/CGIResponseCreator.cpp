@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 12:54:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/12 14:40:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -559,11 +559,11 @@ bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, 
 	return true;
 }
 
-bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issheader, std::string &location) {
+bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issline, std::string &location) {
 	std::string extra;
 
 	request.setUrl(location);
-	std::getline(issheader, extra);
+	std::getline(issline, extra);
 	if (extra.empty() == false) {
 		responseType = CGIResponseCreator::OTHER;
 		return false;
@@ -651,9 +651,11 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 
 		std::getline(issheader, location);
 		if (location.at(0) == '/') {
-			return _setLocalRedirResponse(issheader, location);
+			if (_setLocalRedirResponse(issline, location) == true) { return true; }
+
 		}
-		if (location.find(':') != std::string::npos) {
+		else if (location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTP), SCHEMENAME_FOLLOWED_BY_COLON_HTTP) == 0 ||
+			location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTPS), SCHEMENAME_FOLLOWED_BY_COLON_HTTPS) == 0) {
 			return _setClientRedirResponse(issline, line, issheader, location);
 		}
 	}
