@@ -241,3 +241,5 @@ void Request::setLocalPort(unsigned int const _localPort) {
 unsigned int Request::getLocalPort() const { return localPort; }
 
 void Request::countUpCntCGIExec() { cntCGIExec++; }
+
+std::size_t Request::getCntCGIExec() const { return cntCGIExec; }

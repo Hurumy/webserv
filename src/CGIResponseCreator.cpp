@@ -379,6 +379,7 @@ bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
 
+	if (request.getCntCGIExec() > 10) { return false; }
 	if (pipe(inpfd) == -1) {
 		// error handling
 		ft::putSystemError("pipe");
@@ -436,6 +437,7 @@ bool CGIResponseCreator::execCGIScript() {
 		// delete envp
 		std::exit(EXIT_FAILURE);
 	}
+	request.countUpCntCGIExec();
 	startTime = std::time(NULL);
 	return true;
 }

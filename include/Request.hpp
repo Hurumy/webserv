@@ -40,6 +40,7 @@ class Request : public virtual APayload {
 		void setLocalPort(unsigned int const _localPort);
 		unsigned int getLocalPort() const;
 		void countUpCntCGIExec();
+		std::size_t getCntCGIExec() const;
 
 	protected:
 	private:
