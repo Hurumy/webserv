@@ -239,3 +239,5 @@ void Request::setLocalPort(unsigned int const _localPort) {
 }
 
 unsigned int Request::getLocalPort() const { return localPort; }
+
+void Request::countUpCntCGIExec() { cntCGIExec++; }
