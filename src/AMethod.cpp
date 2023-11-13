@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:40:36 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/13 18:04:03 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,7 +480,8 @@ Result<int, bool> AMethod::checkRedirects() {
 	std::stringstream ss;
 	std::string size;
 
-	if (isloc == true && loc.isReturn() == true) {
+	if (isloc == true && loc.isReturn() == true)
+	{
 		res.setStatus(loc.getReturnStatus());
 		if (statusmap.find(loc.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(loc.getReturnStatus()));
@@ -493,13 +494,18 @@ Result<int, bool> AMethod::checkRedirects() {
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(loc.getReturnBody());
 		}
-		if (loc.getReturnUrl().empty() == false) {
+		else if (loc.getReturnUrl().empty() == false) {
 			res.addHeader("Location", loc.getReturnUrl());
+		}
+		else
+		{
+			setErrorPageBody();
 		}
 		return Ok<int>(0);
 	}
 	// config指定のリダイレクト
-	else if (conf.isReturn() == true) {
+	else if (conf.isReturn() == true)
+	{
 		res.setStatus(conf.getReturnStatus());
 		if (statusmap.find(conf.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(conf.getReturnStatus()));
@@ -511,11 +517,12 @@ Result<int, bool> AMethod::checkRedirects() {
 			res.addHeader("Content-Length", size);
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(conf.getReturnBody());
-		} else {
-			res.addHeader("Content-Length", "0");
-		}
-		if (conf.getReturnUrl().empty() == false) {
+		}else if (conf.getReturnUrl().empty() == false) {
 			res.addHeader("Location", conf.getReturnUrl());
+		}
+		else
+		{
+			setErrorPageBody();
 		}
 		return Ok<int>(0);
 	}
