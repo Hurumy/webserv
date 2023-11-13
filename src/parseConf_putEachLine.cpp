@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 17:58:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/13 17:44:55 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		//  std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		// std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 		//  std::cout << i << ", " << lines.size() << std::endl;
 
 		if (lines.at(i).empty() == false) {
@@ -125,7 +125,7 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// for (size_t i = 0; i < line.size() - 1; i ++)
 	// {
 	// 	std::cout << RED << line.at(i) << RESET << std::endl;
-	// 	std::cout << i << ", " << line.size() << std::endl;
+	// 	//std::cout << i << ", " << line.size() << std::endl;
 	// }
 
 	// Configの初期化処理(コンストラクタでやりたくないから・・・)
