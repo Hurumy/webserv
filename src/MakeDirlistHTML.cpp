@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/21 14:24:29 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/15 08:04:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 	//ディレクトリにあるものの要素を読んでいく
 	errno = 0;
 	struct dirent *st = readdir(ds);
-	if (st == NULL && errno != 0) return Error<bool>(false);
+	if (st == NULL && errno != 0)
+	{
+		closedir(ds);
+		return Error<bool>(false);
+	}
 
 	// HTMLに詰める
 	struct stat sstat;
@@ -64,7 +68,11 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		// statでファイルの作成日時を取得する
 		tmpfilepath = path + st->d_name;
 		status = stat(tmpfilepath.c_str(), &sstat);
-		if (status == -1) return Error<bool>(false);
+		if (status == -1)
+		{
+			closedir(ds);
+			return Error<bool>(false);
+		}
 
 		//上のDefineで差異を舐めしてくれてありがとう！！@shtanemu
 		stime = sstat.st_mtim;
@@ -86,7 +94,11 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		//もう一度読む
 		st = readdir(ds);
 	}
-	if (errno != 0) return Error<bool>(false);
+	if (errno != 0)
+	{
+		closedir(ds);
+		return Error<bool>(false);
+	}
 
 	closedir(ds);
 
