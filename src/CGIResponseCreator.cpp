@@ -375,6 +375,18 @@ bool CGIResponseCreator::_chDirectory() {
 	return true;
 }
 
+bool CGIResponseCreator::_deleteVariables(char **envp, char **argv) {
+	for (char **i_envp = envp; *i_envp != NULL; ++i_envp) {
+		delete[] *i_envp;
+	}
+	delete[] envp;
+	for (char **i_argv = argv; *i_argv != NULL; ++i_argv) {
+		delete[] *i_argv;
+	}
+	delete[] argv;
+	return true;
+}
+
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
@@ -436,17 +448,10 @@ bool CGIResponseCreator::execCGIScript() {
 		if (_chDirectory() == false) { std::exit(EXIT_FAILURE); }
 		execve(runtimePath.c_str(), argv, envp);
 		ft::putSystemError("execve");
-		// delete envp
+		_deleteVariables(envp, argv);
 		std::exit(EXIT_FAILURE);
 	}
-	for (char **i_envp = envp; *i_envp != NULL; ++i_envp) {
-		delete[] *i_envp;
-	}
-	delete[] envp;
-	for (char **i_argv = argv; *i_argv != NULL; ++i_argv) {
-		delete[] *i_argv;
-	}
-	delete[] argv;
+	_deleteVariables(envp, argv);
 	request.countUpCntCGIExec();
 	startTime = std::time(NULL);
 	return true;

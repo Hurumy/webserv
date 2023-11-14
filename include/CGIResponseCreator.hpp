@@ -79,6 +79,7 @@ class CGIResponseCreator {
 		bool _setLocalRedirResponse(std::istringstream &issline, std::string &location);
 		bool _setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location);
 		void _setCGIErrorResponse(std::vector<Config> const &configs);
+		bool _deleteVariables(char **envp, char **argv);
 
 		Request &request;
 		Response &response;
