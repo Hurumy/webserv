@@ -12,8 +12,11 @@
 
 #include "Server.hpp"
 
+#include <signal.h>
+
 #include "ConfParser.hpp"
 #include "Config.hpp"
+#include "ft.hpp"
 
 bool Server::startUp(std::string const &pathConfig) {
 	Result<std::vector<Config>, bool> result(parseConf(pathConfig));
@@ -36,6 +39,10 @@ bool Server::startUp(std::string const &pathConfig) {
 	if (socketHandler.initAllSSockets() == false) return false;
 	if (socketHandler.createPollfds() == false) return false;
 	if (socketHandler.setRevents() == false) return false;
+	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+		ft::putSystemError("signal");
+		return false;
+	}
 	return true;
 }
 
