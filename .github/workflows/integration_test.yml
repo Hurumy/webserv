@@ -45,6 +45,6 @@ jobs:
 
       - name: Run test
         run: |
-        cd ./integrationtest
-        bash run.sh remake
+          cd ./integrationtest
+          bash run.sh remake
 
