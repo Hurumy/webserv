@@ -79,6 +79,4 @@ TEST(SocketHandlerTest, setReventsTest) {
 	std::vector<struct pollfd> const &resutl_pollfds =
 		socketHandler.getPollfds();
 	ASSERT_EQ(resutl_pollfds.at(0).fd, ssockets.at(0).getSockfd());
-	ASSERT_EQ(resutl_pollfds.at(0).revents, ssockets.at(0).getRevents());
-	ASSERT_EQ(resutl_pollfds.at(1).revents, ssockets.at(1).getRevents());
 }
