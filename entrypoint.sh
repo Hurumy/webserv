@@ -34,11 +34,13 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
-git clone https://github.com/google/googletest.git googletest
-status=$?
-if [ $status -ne 0 ]; then
-  echo "Failed to download googletest library: $status"
-  exit $status
+if [ ! -d googletest ]; then
+  git clone https://github.com/google/googletest.git googletest
+  status=$?
+  if [ $status -ne 0 ]; then
+    echo "Failed to download googletest library: $status"
+    exit $status
+  fi
 fi
 
 cd googletest 
