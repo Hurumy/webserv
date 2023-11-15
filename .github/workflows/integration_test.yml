@@ -44,5 +44,7 @@ jobs:
           echo WEBSERV='${PROJECT_ROOT}webserv' >> .env
 
       - name: Run test
-        run: bash run.sh remake
+        run: |
+        cd ./integrationtest
+        bash run.sh remake
 
