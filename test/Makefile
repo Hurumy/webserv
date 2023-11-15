@@ -15,6 +15,11 @@ CC				:= c++
 CFLAGS			:= -Wall -Wextra -Werror -std=c++14
 
 UNAME_OS		:= $(shell uname -s)
+ifeq ($(UNAME_OS), Linux)
+	CFLAGS	+= -D_LINUX
+else ifeq ($(UNAME_OS), Darwin)
+	CFLAGS	+= -D_DARWIN
+endif
 
 SRC_FILES		:= \
 					gtest_main.cpp \

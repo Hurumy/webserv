@@ -62,7 +62,13 @@ TEST(SocketHandlerTest, setReventsTest) {
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
 	std::vector<struct pollfd> const &pollfds = socketHandler.getPollfds();
 	ASSERT_EQ(pollfds.at(0).fd, ssockets.at(0).getSockfd());
+#if defined(_LINUX)
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#elif defined(_DARWIN)
 	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLHUP);
+#else
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#endif
 	ASSERT_TRUE(socketHandler.setRevents());
 	std::vector<struct pollfd> const &resutl_pollfds =
 		socketHandler.getPollfds();
