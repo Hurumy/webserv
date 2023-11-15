@@ -49,21 +49,27 @@ DEPS			:= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.d, $(SRCS))
 DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
+					Server.cpp \
 					APayload.cpp \
-					Address.cpp \
+					Response.cpp \
 					Request.cpp \
 					Version.cpp \
-					Response.cpp \
+					test.cpp \
+					makeStatusMap.cpp \
 					Status.cpp \
 					Config.cpp \
 					Port.cpp \
-					SSocket.cpp \
 					CSocket.cpp \
+					SSocket.cpp \
 					SocketHandler.cpp \
 					CGIResponseCreator.cpp \
 					MetaVariables.cpp \
+					Address.cpp \
+					AMethod.cpp \
+					MethodGet.cpp \
+					MethodPost.cpp \
+					MethodDelete.cpp \
 					parseRequest.cpp \
-					stringCleaner.cpp \
 					parseConf.cpp \
 					parseConf_cutConfByDirective.cpp \
 					parseConf_cutConfToEachPort.cpp \
@@ -80,10 +86,7 @@ WS_SRC_FILES	:= \
 					pC_uploadpath.cpp \
 					pC_allowedmethods.cpp \
 					RequestHandler.cpp \
-					AMethod.cpp \
-					MethodGet.cpp \
-					MethodPost.cpp \
-					MethodDelete.cpp \
+					stringCleaner.cpp \
 					MakeDirlistHTML.cpp \
 					Location.cpp \
 					parseConf_parseLocation.cpp \
