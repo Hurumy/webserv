@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseConf_putEachLine.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 17:58:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int isServerSetting(std::string raw) {
 
 	//一番上の階層に存在したディレクティブがServerでなかった場合はエラーを返す
 	if (pos == std::string::npos)
-		errorInInit("Unknown directive (OvO)");
+		ft::errorInInit("Unknown directive (OvO)");
 	else
 		return (0);
 	return (0);
@@ -87,7 +87,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 				break;
 			} else if (lines.at(i).empty() == false) {
 				std::cout << RED << lines.at(i) << RESET << std::endl;
-				errorInInit("Unknown directive was detected.(｀・ω・´)");
+				ft::errorInInit("Unknown directive was detected.(｀・ω・´)");
 			}
 			if (status == -1) break;
 		}
@@ -117,7 +117,7 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	//後に流すstd::vector<std::string>にはLocationのディレクティブは含まれないようにする
 	Result<std::vector<std::string>, bool> res = cutOutLocation(line, conf);
 	if (res.isOK() == false) {
-		errorInInit("parsing Location is failed(´ω`)");
+		ft::errorInInit("parsing Location is failed(´ω`)");
 	} else {
 		line = res.getOk();
 	}
@@ -144,7 +144,7 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	//重複・初期化処理ない時の処理
 	if (conf.getAddresses().size() == 0) thereisnoListen(conf);
 	if (conf.getServerName().size() == 0)
-		errorInInit("There is no server name...（＾ω＾）");
+		ft::errorInInit("There is no server name...（＾ω＾）");
 	if (conf.getMaxBodySize() == 0) conf.setMaxBodySize(ULLONG_MAX);
 
 	//返す

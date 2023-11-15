@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 15:03:28 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/12 14:40:54 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <ctime>
 
+#include "ft.hpp"
 #include "Result.hpp"
-#include "puterror.hpp"
+#include "ft.hpp"
 
 CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 									   const std::string &_cgiPath)
@@ -32,6 +34,7 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 	  pid(0),
 	  monitoredfd(0),
 	  revents(0),
+	  cgiIntput(request.getBody()),
 	  cgiPath(_cgiPath),
 	  portNum(0) {
 	std::memset(inpfd, 0, sizeof(inpfd));
@@ -40,6 +43,10 @@ CGIResponseCreator::CGIResponseCreator(Request &_request, Response &_response,
 
 CGIResponseCreator::tag const &CGIResponseCreator::getPhase() const {
 	return phase;
+}
+
+CGIResponseCreator::type const &CGIResponseCreator::getResponseType() const {
+	return responseType;
 }
 
 void CGIResponseCreator::setPhase(CGIResponseCreator::tag const &_phase) {
@@ -102,15 +109,31 @@ bool CGIResponseCreator::_setGateWayInterface() {
 bool CGIResponseCreator::_setPathInfo() {
 	std::string filename;
 	std::string postFilename;
+	std::size_t posDir;
+	std::size_t posFilename;
+	std::size_t posExclaim;
+	std::size_t posSharp;
 	std::size_t posCut;
 
-	std::clog << cgiPath << std::endl;
-	filename = cgiPath.substr(cgiPath.rfind("/"));
-	postFilename = request.getUrl().substr(request.getUrl().find(filename) +
+	posDir = cgiPath.rfind("/");
+	if (posDir == std::string::npos) { posDir = 0; }
+	filename = cgiPath.substr(posDir);
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) { return true; }
+	postFilename = request.getUrl().substr(posFilename +
 										   filename.size());
+	posExclaim = postFilename.find("?");
+	if (posExclaim == std::string::npos) { posExclaim = 0; }
+	posSharp = postFilename.find("#");
+	if (posSharp == std::string::npos) { posSharp = 0; }
 	posCut = std::min(postFilename.find("?"), postFilename.find("#"));
-	metaVariables.setMetaVar(MetaVariables::PATH_INFO,
-							 postFilename.substr(0, posCut));
+	if (posCut == 0) {
+		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
+								postFilename);
+	} else {
+		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
+								postFilename.substr(0, posCut));
+	}
 	return true;
 }
 
@@ -126,11 +149,17 @@ bool CGIResponseCreator::_setPathTranslated() {
 bool CGIResponseCreator::_setQuerySring() {
 	std::string filename;
 	std::string postFilename;
+	std::size_t posDir;
+	std::size_t posFilename;
 	std::size_t posQueryString;
 	std::size_t posHash;
 
-	filename = cgiPath.substr(cgiPath.rfind("/"));
-	postFilename = request.getUrl().substr(request.getUrl().find(filename) +
+	posDir = cgiPath.rfind("/");
+	if (posDir == std::string::npos) { posDir = 0; }
+	filename = cgiPath.substr(posDir);
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) { return true; }
+	postFilename = request.getUrl().substr(posFilename +
 										   filename.size());
 	posQueryString = postFilename.find("?");
 	if (posQueryString == std::string::npos) return false;
@@ -161,17 +190,21 @@ bool CGIResponseCreator::_setRequestMethod() {
 bool CGIResponseCreator::_setScriptName() {
 	std::string filename;
 	std::string scriptName;
+	std::size_t posDir;
+	std::size_t posFilename;
 
-	if (cgiPath.rfind("/") != std::string::npos) {
-		filename = cgiPath.substr(cgiPath.rfind("/"));
+	posDir = cgiPath.rfind("/");
+	if (posDir != std::string::npos) {
+		filename = cgiPath.substr(posDir);
 	} else {
 		filename = cgiPath;
 	}
-	if (request.getUrl().find(filename) == std::string::npos) {
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) {
 		return false;
 	}
 	scriptName = request.getUrl().substr(
-		0, request.getUrl().find(filename) + filename.size());
+		0, posFilename + filename.size());
 	metaVariables.setMetaVar(MetaVariables::SCRIPT_NAME, scriptName);
 	return true;
 }
@@ -279,6 +312,8 @@ char **CGIResponseCreator::_createEnvp() {
 char **CGIResponseCreator::_createArgv() {
 	char **argv;
 	char **head;
+	std::size_t posDir(0);
+	std::string cgiScriptFileName;
 
 	argv = new (std::nothrow) char *[3];
 	if (argv == NULL) {
@@ -298,7 +333,13 @@ char **CGIResponseCreator::_createArgv() {
 		delete[] head;
 		return NULL;
 	}
-	std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
+	posDir = cgiPath.rfind('/');
+	if (posDir == std::string::npos) {
+		std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
+	} else {
+		cgiScriptFileName = "." + cgiPath.substr(posDir);
+		std::strncpy(*argv, cgiScriptFileName.c_str(), cgiScriptFileName.size() + 1);
+	}
 	// *argv[cgiPath.size() + 1] = '\0';
 	argv++;
 	*argv = NULL;
@@ -347,25 +388,70 @@ bool CGIResponseCreator::_setRuntime() {
 	return true;
 }
 
+bool CGIResponseCreator::_chDirectory() {
+	std::string cgiDirPath;
+	std::size_t posDir(0);
+
+	posDir = cgiPath.rfind('/');
+	if (posDir == std::string::npos) { return true; }
+	cgiDirPath = cgiPath.substr(0, posDir + 1);
+	if (chdir(cgiDirPath.c_str()) == -1) {
+		ft::putSystemError("chdir");
+		return false;
+	}
+	return true;
+}
+
+bool CGIResponseCreator::_deleteVariables(char **envp, char **argv) {
+	for (char **i_envp = envp; *i_envp != NULL; ++i_envp) {
+		delete[] *i_envp;
+	}
+	delete[] envp;
+	for (char **i_argv = argv; *i_argv != NULL; ++i_argv) {
+		delete[] *i_argv;
+	}
+	delete[] argv;
+	return true;
+}
+
 bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
 
+	if (request.getCntCGIExec() > 10) { return false; }
 	if (pipe(inpfd) == -1) {
 		// error handling
-		putSytemError("pipe");
+		ft::putSystemError("pipe");
 		return false;
+	}
+	if (fcntl(inpfd[0], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
+	if (fcntl(inpfd[1], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
 	}
 	if (pipe(outpfd) == -1) {
 		// error handling
-		putSytemError("pipe");
+		ft::putSystemError("pipe");
 		close(inpfd[0]);
 		close(inpfd[1]);
 		return false;
 	}
+	if (fcntl(outpfd[0], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
+	if (fcntl(outpfd[1], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
+		// error handling
+	}
+	if (setEnvVars() == false) { return false; }
+	envp = _createEnvp();
+	if (envp == NULL) { return false; }
+	if (_setRuntime() == false) { return false; }
+	argv = _createArgv();
+	if (argv == NULL) { return false; }
 	pid = fork();
 	if (pid == -1) {
-		putSytemError("fork");
+		ft::putSystemError("fork");
 		deinit();
 		// error handling
 		return false;
@@ -373,12 +459,12 @@ bool CGIResponseCreator::execCGIScript() {
 	if (pid == 0) {
 		// for developement
 		if (dup2(inpfd[0], 0) == -1) {
-			putSytemError("dup2");
+			ft::putSystemError("dup2");
 			deinit();
 			std::exit(EXIT_FAILURE);
 		}
 		if (dup2(outpfd[1], 1) == -1) {
-			putSytemError("dup2");
+			ft::putSystemError("dup2");
 			deinit();
 			std::exit(EXIT_FAILURE);
 		}
@@ -386,15 +472,15 @@ bool CGIResponseCreator::execCGIScript() {
 		close(inpfd[1]);
 		close(outpfd[0]);
 		close(outpfd[1]);
-		setEnvVars();
-		envp = _createEnvp();
-		_setRuntime();
-		argv = _createArgv();
+		if (_chDirectory() == false) { std::exit(EXIT_FAILURE); }
 		execve(runtimePath.c_str(), argv, envp);
-		putSytemError("execve");
-		// delete envp
+		ft::putSystemError("execve");
+		_deleteVariables(envp, argv);
 		std::exit(EXIT_FAILURE);
 	}
+	_deleteVariables(envp, argv);
+	request.countUpCntCGIExec();
+	startTime = std::time(NULL);
 	return true;
 }
 
@@ -413,12 +499,22 @@ void CGIResponseCreator::setMonitoredfd(CGIResponseCreator::tag const &_phase) {
 	}
 }
 
-bool CGIResponseCreator::writeMessageBody() const {
-	// for develope
+bool CGIResponseCreator::writeMessageBody() {
+	ssize_t lenWrite(0);
+
 	if ((revents & POLLOUT) != POLLOUT) {
 		return false;
 	}
-	write(inpfd[1], "Makefile", 8);
+	if (cgiIntput.empty() == false) {
+		lenWrite = write(inpfd[1], cgiIntput.c_str(), cgiIntput.size());
+		switch (lenWrite) {
+			case -1: break ;
+			default : { cgiIntput.erase(0, lenWrite); } break ;
+		}
+	}
+	if (cgiIntput.empty() == false) { return false; }
+	close(inpfd[1]);
+	inpfd[1] = 0;
 	return true;
 }
 
@@ -432,16 +528,15 @@ bool CGIResponseCreator::recvCGIOutput() {
 	readLen = read(outpfd[0], buf, BUFFER_SIZE);
 	if (readLen == -1) {
 		// errorhandling
-		putSytemError("read");
+		ft::putSystemError("read");
 		return false;
 	}
-	// if (readLen == 0) {
-	// 	phase = CGIResponseCreator::CGIFIN;
-	// 	return true;
-	// }
+	if (readLen == 0) {
+		phase = CGIResponseCreator::CGIFIN;
+		return true;
+	}
 	// for develope
 	cgiOutput.append(buf, readLen);
-	phase = CGIResponseCreator::CGIFIN;
 	return true;
 }
 
@@ -452,64 +547,202 @@ pid_t CGIResponseCreator::waitChildProc() {
 	switch (rwait) {
 		case -1: {
 			phase = CGIResponseCreator::CGIFIN;
-			putSytemError("waitpid");
+			ft::putSystemError("waitpid");
 		} break;
 		case 0: {
-			phase = CGIResponseCreator::CGIRECV;
+			// nothing to do
+			if (15 > std::difftime(std::time(NULL), startTime)) { break; }
+			if (kill(pid, SIGTERM) == -1) { ft::putSystemError("kill"); }
 		} break;
 		default: {
 			if (phase != CGIResponseCreator::CGIFIN) {
 				phase = CGIResponseCreator::CGILASTRECV;
+				setMonitoredfd(CGIResponseCreator::CGIRECV);
 			}
 		} break;
 	}
 	return rwait;
 }
 
-bool CGIResponseCreator::setCGIOutput() {
+bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key) {
+	std::string value;
+	std::size_t bodySize(0);
+	
+	issheader >> value;
+	response.addHeader("Content-Type", value);
+	while (issline.eof() == false) {
+		std::getline(issline, line);
+		if (line.empty() == true) {
+			std::string body;
+
+			while (issline.eof() == false) {
+				std::getline(issline, body);
+				if (issline.eof() == true) { response.addBody(body); }
+				else { response.addBody(body + "\r\n"); }
+			}
+		} else {
+			issheader.clear();
+			issheader.str(line);
+			std::getline(issheader, key, ':');
+			std::getline(issheader, value);
+			response.addHeader(key, value);
+		}
+	}
 	response.setStatus(200);
 	response.setStatusMessage("OK");
-	// for develope
-	response.setHeader("Content-Type", "text/plain");
-	response.setBody(cgiOutput);
+	bodySize = response.getBody().size();
+	if (bodySize != 0) {
+		std::stringstream ss;
+		ss << bodySize;
+		response.addHeader("Content-Length", ss.str());
+	}
+	responseType = CGIResponseCreator::DOC;
 	return true;
 }
 
-bool CGIResponseCreator::waitDeadCGIProc() {
-	if (pid == 0 || kill(pid, 0) == -1) {
+bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issline, std::string &location) {
+	std::string extra;
+
+	request.setUrl(location);
+	std::getline(issline, extra);
+	if (extra.empty() == false) {
+		responseType = CGIResponseCreator::OTHER;
 		return false;
 	}
-	if (waitpid(pid, &wstatus, 0) == -1) {
-		putSytemError("waitpid");
-		return false;
-	}
+	responseType = CGIResponseCreator::LOCALREDIR;
 	return true;
+}
+
+bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location) {
+	std::string key;
+	std::string value;
+	std::size_t bodySize(0);
+
+	response.setHeader("Location", location);
+	while (issline.eof() == false) {
+		std::getline(issline, line);
+		if (line.empty() == true) {
+			std::string body;
+
+			while (issline.eof() == false) {
+				std::getline(issline, body);
+				if (issline.eof() == true) { response.addBody(body); }
+				else { response.addBody(body + "\r\n"); }
+			}
+		} else {
+			issheader.clear();
+			issheader.str(line);
+			std::getline(issheader, key, ':');
+			std::getline(issheader, value);
+			response.addHeader(key, value);
+		}
+	}
+	Result<std::string, bool> result = response.getHeader("Status");
+	if (result.isOK() == true) {
+		unsigned int statusCode;
+		std::string reasonPhrase;
+
+		std::stringstream ssStatus(result.getOk());
+		ssStatus >> statusCode;
+		ssStatus >> reasonPhrase;
+		response.setStatus(statusCode);
+		response.setStatusMessage(reasonPhrase);
+	} else {
+		response.setStatus(302);
+		response.setStatusMessage("Found");
+	}
+	bodySize = response.getBody().size();
+	if (bodySize != 0) {
+		std::stringstream ss;
+		ss << bodySize;
+		response.addHeader("Content-Length", ss.str());
+	}
+	responseType = CGIResponseCreator::CLIENTREDIR;
+	return true;
+}
+
+void CGIResponseCreator::_setCGIErrorResponse(std::vector<Config> const &configs) {
+	RequestHandler requestHandler(configs, request);
+
+	requestHandler.searchMatchHost();
+	response.setStatus(500);
+	response.setStatusMessage("Internal Server Error");
+	requestHandler.setCgiResponse(response);
+	response = requestHandler.getResponse();
+	responseType = CGIResponseCreator::OTHER;
+}
+
+bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
+	std::istringstream issline(cgiOutput);
+	std::string line;
+
+	std::getline(issline, line);
+	if (line.empty() == true) {
+		_setCGIErrorResponse(configs);
+		return false;
+	}
+	std::istringstream issheader(line);
+	std::string key;
+	
+	std::getline(issheader, key, ':');
+	if (ft::strcmpCaseIns(key, "Content-Type") == true) {
+		return _setDocumentRedirResponse(issline, line, issheader, key);
+	} else if (ft::strcmpCaseIns(key, "Location") == true) {
+		std::string location;
+
+		std::getline(issheader, location);
+		if (location.at(0) == '/') {
+			if (_setLocalRedirResponse(issline, location) == true) { return true; }
+
+		}
+		else if (location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTP), SCHEMENAME_FOLLOWED_BY_COLON_HTTP) == 0 ||
+			location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTPS), SCHEMENAME_FOLLOWED_BY_COLON_HTTPS) == 0) {
+			return _setClientRedirResponse(issline, line, issheader, location);
+		}
+	}
+	_setCGIErrorResponse(configs);
+	return false;
 }
 
 bool CGIResponseCreator::deinit() {
 	if (inpfd[0] != 0) {
 		if (close(inpfd[0]) == -1) {
-			putSytemError("close");
+			ft::putSystemError("close");
 			// error handling
 		}
+		inpfd[0] = 0;
 	}
 	if (inpfd[1] != 0) {
 		if (close(inpfd[1]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
+		inpfd[1] = 0;
 	}
 	if (outpfd[0] != 0) {
 		if (close(outpfd[0]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
+		outpfd[0] = 0;
 	}
 	if (outpfd[1] != 0) {
 		if (close(outpfd[1]) == -1) {
 			// error handling
-			putSytemError("close");
+			ft::putSystemError("close");
 		}
+		outpfd[1] = 0;
 	}
+	runtimePath.clear();
+	cgiIntput.clear();
+	cgiOutput.clear();
+	cgiPath.clear();
+	hostName.clear();
+	metaVariables.init();
+	startTime = 0;
 	return true;
+}
+
+void CGIResponseCreator::setCGIPath(const std::string &_cgiPath) {
+	cgiPath = _cgiPath;
 }

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:18:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/10/26 14:32:12 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,20 +114,20 @@ void CSocket::setLasttime(std::time_t const &_lasttime) {
 
 void CSocket::setRemoteAddr(u_int32_t s_addr) {
 	int byte;
-	int bitshift(32);
+	int bitshift(0);
 	std::stringstream ss;
 
-	while (bitshift != 0) {
-		bitshift = bitshift - 8;
-		byte = (s_addr >> bitshift) & 0xFF;
+	while (4 > bitshift) {
+		byte = (s_addr >> (bitshift * 8)) & 0xFF;
 		ss << byte;
-		if (bitshift == 0) {
+		if (bitshift == 3) {
 			remoteAddr.append(ss.str());
 		} else {
 			remoteAddr.append(ss.str() + ".");
 		}
 		ss.str("");
 		ss.clear(std::stringstream::goodbit);
+		bitshift++;
 	}
 }
 

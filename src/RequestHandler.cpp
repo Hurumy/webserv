@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestHandler.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 17:32:21 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 14:47:43 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:34:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ Result<int, bool> RequestHandler::searchMatchHost() {
 	} else {
 		servername = "";
 	}
-	res.addHeader("Server", servername);
+	res.addHeader("Host", servername);
 	return Ok<int>(confnum);
 }
 
@@ -167,12 +167,15 @@ Result<int, bool> RequestHandler::routeMethod() {
 			return Error<bool>(false);
 		}
 		get.setURI();
-
+	
 		// cgiだったらcgiの情報をセットして返す
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
 			query = get.getQuery();
+			#if defined(_DEBUGFLAG)
+					std::cout << RED << "RequestHandler::routeMethod:it was cgi" << RESET << std::endl;
+			#endif
 			return Ok<int>(0);
 		} else {
 			iscgi = false;
@@ -186,7 +189,10 @@ Result<int, bool> RequestHandler::routeMethod() {
 
 		//リダイレクトチェック
 		Result<int, bool> res_rg = get.checkRedirects();
-		if (res_rg.isOK() == true) return Ok<int>(0);
+		if (res_rg.isOK() == true) 
+		{
+			return Ok<int>(0);
+		}
 
 		// getする
 		Result<int, bool> res_get = get.act();

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_maxbodysize.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 16:52:58 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:17:27 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ int readMaxBodySize(Config &conf, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "client_max_body_size")
-		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("Invalid form detected in return directives ⊂('ω`⊂ 三");
+		ft::errorInInit("Invalid form detected in return directives ⊂('ω`⊂ 三");
 
 	if (isNumber_andUnit(lines.at(1)) == false)
-		errorInInit(
+		ft::errorInInit(
 			"Invalid expression detected in client_max_body_size directive "
 			"(´っω-).｡oO");
 
@@ -61,13 +61,13 @@ int l_readMaxBodySize(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "client_max_body_size")
-		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("Invalid form detected in return directives ⊂('ω`⊂ 三");
+		ft::errorInInit("Invalid form detected in return directives ⊂('ω`⊂ 三");
 
 	if (isNumber_andUnit(lines.at(1)) == false)
-		errorInInit(
+		ft::errorInInit(
 			"Invalid expression detected in client_max_body_size directive "
 			"(´っω-).｡oO");
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/05 14:34:38 by komatsud         ###   ########.fr        #
+#    Updated: 2023/11/07 12:26:30 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,11 @@ CC				:= c++
 CFLAGS			:= -Wall -Wextra -Werror -std=c++14
 
 UNAME_OS		:= $(shell uname -s)
+ifeq ($(UNAME_OS), Linux)
+	CFLAGS	+= -D_LINUX
+else ifeq ($(UNAME_OS), Darwin)
+	CFLAGS	+= -D_DARWIN
+endif
 
 SRC_FILES		:= \
 					gtest_main.cpp \
@@ -49,22 +54,27 @@ DEPS			:= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.d, $(SRCS))
 DFLAGS			:= -MMD
 
 WS_SRC_FILES	:= \
+					Server.cpp \
 					APayload.cpp \
-					Address.cpp \
+					Response.cpp \
 					Request.cpp \
 					Version.cpp \
-					Response.cpp \
+					test.cpp \
+					makeStatusMap.cpp \
 					Status.cpp \
 					Config.cpp \
 					Port.cpp \
-					SSocket.cpp \
 					CSocket.cpp \
+					SSocket.cpp \
 					SocketHandler.cpp \
 					CGIResponseCreator.cpp \
 					MetaVariables.cpp \
-					puterror.cpp \
+					Address.cpp \
+					AMethod.cpp \
+					MethodGet.cpp \
+					MethodPost.cpp \
+					MethodDelete.cpp \
 					parseRequest.cpp \
-					stringCleaner.cpp \
 					parseConf.cpp \
 					parseConf_cutConfByDirective.cpp \
 					parseConf_cutConfToEachPort.cpp \
@@ -81,10 +91,7 @@ WS_SRC_FILES	:= \
 					pC_uploadpath.cpp \
 					pC_allowedmethods.cpp \
 					RequestHandler.cpp \
-					AMethod.cpp \
-					MethodGet.cpp \
-					MethodPost.cpp \
-					MethodDelete.cpp \
+					stringCleaner.cpp \
 					MakeDirlistHTML.cpp \
 					Location.cpp \
 					parseConf_parseLocation.cpp \
@@ -92,6 +99,7 @@ WS_SRC_FILES	:= \
 					pC_cgi_path.cpp \
 					pC_alias.cpp \
 					sComp.cpp \
+					ft.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj

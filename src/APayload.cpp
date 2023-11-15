@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   APayload.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:15:57 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 14:38:06 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 15:25:20 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ bool APayload::setVersion(std::string const &_version) {
 
 bool APayload::setBody(std::string const &_body) {
 	body = _body;
+	return (true);
+}
+
+bool APayload::addBody(std::string const &_body) {
+	body.append(_body);
 	return (true);
 }
 

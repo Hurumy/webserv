@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:18:38 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:51:26 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ class CSocket {
 				CGI,
 				SEND,
 				CLOSE,
+				CSETERROR,
+				CSENDERROR,
 		};
 
 		int getSockfd() const;

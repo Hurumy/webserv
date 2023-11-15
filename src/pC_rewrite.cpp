@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_rewrite.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 16:23:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/15 15:00:08 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int readRewrite(Config &conf, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "rewrite")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 3)
-		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+		ft::errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
 	conf.addRedirects(lines.at(1), lines.at(2));
 
@@ -40,10 +40,10 @@ int l_readRewrite(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "rewrite")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 3)
-		errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
+		ft::errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
 	loc.addRedirects(lines.at(1), lines.at(2));
 

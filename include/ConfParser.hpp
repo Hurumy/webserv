@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ConfParser.hpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 11:39:42 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:24:11 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "Result.hpp"
 #include "SSocket.hpp"
 #include "webserv.hpp"
+#include "ft.hpp"
 
 Result<std::vector<std::string>, bool> cutOutLocation(
 	const std::vector<std::string> &origin, Config &conf);

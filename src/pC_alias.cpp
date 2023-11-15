@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_alias.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 11:34:51 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/23 11:44:37 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int l_readAlias(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "alias")
-		errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive was detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("Too many elements in alias directives _(´ω`_)⌒)_ ))");
+		ft::errorInInit("Too many elements in alias directives _(´ω`_)⌒)_ ))");
 
 	loc.setAlias(lines.at(1));
 

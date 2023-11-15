@@ -39,6 +39,8 @@ class Request : public virtual APayload {
 		std::string const &getLocalAddr() const;
 		void setLocalPort(unsigned int const _localPort);
 		unsigned int getLocalPort() const;
+		void countUpCntCGIExec();
+		std::size_t getCntCGIExec() const;
 
 	protected:
 	private:
@@ -50,6 +52,7 @@ class Request : public virtual APayload {
 		std::string remoteAddr;
 		std::string localAddr;
 		unsigned int localPort;
+		std::size_t cntCGIExec;
 
 		static std::vector<std::string> initMethods();
 		bool loadRequestLine(CSocket &csocket);
