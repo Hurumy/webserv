@@ -19,6 +19,36 @@ if [ $status -ne 0 ]; then
   exit $status
 fi
 
+echo "${0}: install utilities for Google test."
+apt install -y cmake
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to install cmake: $status"
+  exit $status
+fi
+
+apt install -y ninja-build
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to install ninja: $status"
+  exit $status
+fi
+
+git clone https://github.com/google/googletest.git googletest
+status=$?
+if [ $status -ne 0 ]; then
+  echo "Failed to download googletest library: $status"
+  exit $status
+fi
+
+cd googletest 
+
+cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=../test
+cmake --build build
+cmake --install build
+
+cd ..
+
 echo "${0}: install python libraries"
 python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
 status=$?
