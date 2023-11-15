@@ -157,7 +157,13 @@ bool SocketHandler::createPollfds() {
 			 iter != ssockets.end(); ++iter) {
 			std::memset(&added_pollfd, 0, sizeof(added_pollfd));
 			added_pollfd.fd = iter->getSockfd();
+#if defined(_LINUX)
+			added_pollfd.events = POLLIN | POLLOUT | POLLRDHUP;
+#elif defined(_DARWIN)
 			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
+#else
+			added_pollfd.events = POLLIN | POLLOUT | POLLRDHUP;
+#endif
 			pollfds.push_back(added_pollfd);
 		}
 	}
@@ -171,7 +177,7 @@ bool SocketHandler::createPollfds() {
 #elif defined(_DARWIN)
 			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
 #else
-			added_pollfd.events = POLLIN | POLLOUT | POLLHUP;
+			added_pollfd.events = POLLIN | POLLOUT | POLLRDHUP;
 #endif
 			pollfds.push_back(added_pollfd);
 		}
