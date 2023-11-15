@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:09:44 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/26 11:30:41 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/15 10:23:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,12 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 	}
 
 	// std::cout << "test" << std::endl;
+
+	// URIがディレクトリを指していて、しかもTrailing slashがなかった場合に追加する
+	if (uri.find_last_of('/') != uri.size() - 1)
+	{
+		uri += '/';
+	}
 
 	// Location,Configのいずれかでディレクトリリスティングが有効になっているか確認する
 	if (isloc == true && loc.getDirlist() == true) {

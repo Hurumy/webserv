@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 18:46:54 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/15 08:04:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/15 10:22:56 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ MakeDirlistHTML::MakeDirlistHTML(std::string _path) : path(_path) {}
 
 MakeDirlistHTML::~MakeDirlistHTML() {}
 
-Result<std::string, bool> MakeDirlistHTML::returnHTML() {
+Result<std::string, bool> MakeDirlistHTML::returnHTML()
+{
 	html += header;
 	html += "\t<head><title>Index of ";
 	html += path;
