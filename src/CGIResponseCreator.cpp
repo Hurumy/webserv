@@ -109,14 +109,31 @@ bool CGIResponseCreator::_setGateWayInterface() {
 bool CGIResponseCreator::_setPathInfo() {
 	std::string filename;
 	std::string postFilename;
+	std::size_t posDir;
+	std::size_t posFilename;
+	std::size_t posExclaim;
+	std::size_t posSharp;
 	std::size_t posCut;
 
-	filename = cgiPath.substr(cgiPath.rfind("/"));
-	postFilename = request.getUrl().substr(request.getUrl().find(filename) +
+	posDir = cgiPath.rfind("/");
+	if (posDir == std::string::npos) { posDir = 0; }
+	filename = cgiPath.substr(posDir);
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) { return true; }
+	postFilename = request.getUrl().substr(posFilename +
 										   filename.size());
+	posExclaim = postFilename.find("?");
+	if (posExclaim == std::string::npos) { posExclaim = 0; }
+	posSharp = postFilename.find("#");
+	if (posSharp == std::string::npos) { posSharp = 0; }
 	posCut = std::min(postFilename.find("?"), postFilename.find("#"));
-	metaVariables.setMetaVar(MetaVariables::PATH_INFO,
-							 postFilename.substr(0, posCut));
+	if (posCut == 0) {
+		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
+								postFilename);
+	} else {
+		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
+								postFilename.substr(0, posCut));
+	}
 	return true;
 }
 
