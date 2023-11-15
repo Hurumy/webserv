@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/15 12:19:34 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/15 12:20:46 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,10 +531,8 @@ Result<int, bool> AMethod::checkRedirects() {
 	if (isloc == true)
 	{
 		Result<std::string, bool> resr_loc = loc.getRedirects(req.getUrl());
-		std::cout << req.getUrl() << std::endl;
 		if (resr_loc.isOK() == true)
 		{
-			std::cout << RED "redirect" RESET << std::endl;
 			res.setStatus(302);
 			res.setStatusMessage(statusmap.at(302));
 			res.addHeader("Location", resr_loc.getOk());
@@ -542,10 +540,8 @@ Result<int, bool> AMethod::checkRedirects() {
 		}
 	}
 	Result<std::string, bool> resr_conf = conf.getRedirects(req.getUrl());
-	std::cout << req.getUrl() << std::endl;
 	if (resr_conf.isOK() == true)
 	{
-		std::cout << RED "redirect" RESET << std::endl;
 		res.setStatus(302);
 		res.setStatusMessage(statusmap.at(302));
 		res.addHeader("Location", resr_conf.getOk());
