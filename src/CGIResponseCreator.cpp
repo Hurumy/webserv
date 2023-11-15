@@ -190,17 +190,21 @@ bool CGIResponseCreator::_setRequestMethod() {
 bool CGIResponseCreator::_setScriptName() {
 	std::string filename;
 	std::string scriptName;
+	std::size_t posDir;
+	std::size_t posFilename;
 
-	if (cgiPath.rfind("/") != std::string::npos) {
-		filename = cgiPath.substr(cgiPath.rfind("/"));
+	posDir = cgiPath.rfind("/");
+	if (posDir != std::string::npos) {
+		filename = cgiPath.substr(posDir);
 	} else {
 		filename = cgiPath;
 	}
-	if (request.getUrl().find(filename) == std::string::npos) {
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) {
 		return false;
 	}
 	scriptName = request.getUrl().substr(
-		0, request.getUrl().find(filename) + filename.size());
+		0, posFilename + filename.size());
 	metaVariables.setMetaVar(MetaVariables::SCRIPT_NAME, scriptName);
 	return true;
 }
