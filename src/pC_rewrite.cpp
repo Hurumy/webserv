@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 16:23:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/14 14:20:59 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/15 12:13:30 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ int readRewrite(Config &conf, std::string oneline) {
 
 	conf.addRedirects(lines.at(1), lines.at(2));
 
-	Result<std::string, bool> res = conf.getRedirects(lines.at(1));
-
 	return (0);
 }
 
@@ -46,8 +44,6 @@ int l_readRewrite(Location &loc, std::string oneline) {
 		errorInInit("Invalid number of elements _(´ω`_)⌒)_ ))");
 
 	loc.addRedirects(lines.at(1), lines.at(2));
-
-	Result<std::string, bool> res = loc.getRedirects(lines.at(1));
 
 	return (0);
 }
