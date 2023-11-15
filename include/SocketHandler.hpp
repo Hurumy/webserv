@@ -15,9 +15,9 @@
 #include <poll.h>
 
 #include <cstring>
+#include <list>
 #include <map>
 #include <vector>
-#include <list>
 
 #include "CGIResponseCreator.hpp"
 #include "CSocket.hpp"

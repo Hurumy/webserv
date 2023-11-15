@@ -19,10 +19,9 @@
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
-#include <string>
 #include <ctime>
+#include <string>
 
-#include "ft.hpp"
 #include "Result.hpp"
 #include "ft.hpp"
 
@@ -116,23 +115,29 @@ bool CGIResponseCreator::_setPathInfo() {
 	std::size_t posCut;
 
 	posDir = cgiPath.rfind("/");
-	if (posDir == std::string::npos) { posDir = 0; }
+	if (posDir == std::string::npos) {
+		posDir = 0;
+	}
 	filename = cgiPath.substr(posDir);
 	posFilename = request.getUrl().find(filename);
-	if (posFilename == std::string::npos) { return true; }
-	postFilename = request.getUrl().substr(posFilename +
-										   filename.size());
+	if (posFilename == std::string::npos) {
+		return true;
+	}
+	postFilename = request.getUrl().substr(posFilename + filename.size());
 	posExclaim = postFilename.find("?");
-	if (posExclaim == std::string::npos) { posExclaim = 0; }
+	if (posExclaim == std::string::npos) {
+		posExclaim = 0;
+	}
 	posSharp = postFilename.find("#");
-	if (posSharp == std::string::npos) { posSharp = 0; }
+	if (posSharp == std::string::npos) {
+		posSharp = 0;
+	}
 	posCut = std::min(postFilename.find("?"), postFilename.find("#"));
 	if (posCut == 0) {
-		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
-								postFilename);
+		metaVariables.setMetaVar(MetaVariables::PATH_INFO, postFilename);
 	} else {
 		metaVariables.setMetaVar(MetaVariables::PATH_INFO,
-								postFilename.substr(0, posCut));
+								 postFilename.substr(0, posCut));
 	}
 	return true;
 }
@@ -155,12 +160,15 @@ bool CGIResponseCreator::_setQuerySring() {
 	std::size_t posHash;
 
 	posDir = cgiPath.rfind("/");
-	if (posDir == std::string::npos) { posDir = 0; }
+	if (posDir == std::string::npos) {
+		posDir = 0;
+	}
 	filename = cgiPath.substr(posDir);
 	posFilename = request.getUrl().find(filename);
-	if (posFilename == std::string::npos) { return true; }
-	postFilename = request.getUrl().substr(posFilename +
-										   filename.size());
+	if (posFilename == std::string::npos) {
+		return true;
+	}
+	postFilename = request.getUrl().substr(posFilename + filename.size());
 	posQueryString = postFilename.find("?");
 	if (posQueryString == std::string::npos) return false;
 	posHash = postFilename.find("#");
@@ -203,8 +211,7 @@ bool CGIResponseCreator::_setScriptName() {
 	if (posFilename == std::string::npos) {
 		return false;
 	}
-	scriptName = request.getUrl().substr(
-		0, posFilename + filename.size());
+	scriptName = request.getUrl().substr(0, posFilename + filename.size());
 	metaVariables.setMetaVar(MetaVariables::SCRIPT_NAME, scriptName);
 	return true;
 }
@@ -338,7 +345,8 @@ char **CGIResponseCreator::_createArgv() {
 		std::strncpy(*argv, cgiPath.c_str(), cgiPath.size() + 1);
 	} else {
 		cgiScriptFileName = "." + cgiPath.substr(posDir);
-		std::strncpy(*argv, cgiScriptFileName.c_str(), cgiScriptFileName.size() + 1);
+		std::strncpy(*argv, cgiScriptFileName.c_str(),
+					 cgiScriptFileName.size() + 1);
 	}
 	// *argv[cgiPath.size() + 1] = '\0';
 	argv++;
@@ -393,7 +401,9 @@ bool CGIResponseCreator::_chDirectory() {
 	std::size_t posDir(0);
 
 	posDir = cgiPath.rfind('/');
-	if (posDir == std::string::npos) { return true; }
+	if (posDir == std::string::npos) {
+		return true;
+	}
 	cgiDirPath = cgiPath.substr(0, posDir + 1);
 	if (chdir(cgiDirPath.c_str()) == -1) {
 		ft::putSystemError("chdir");
@@ -404,11 +414,11 @@ bool CGIResponseCreator::_chDirectory() {
 
 bool CGIResponseCreator::_deleteVariables(char **envp, char **argv) {
 	for (char **i_envp = envp; *i_envp != NULL; ++i_envp) {
-		delete[] *i_envp;
+		delete[] * i_envp;
 	}
 	delete[] envp;
 	for (char **i_argv = argv; *i_argv != NULL; ++i_argv) {
-		delete[] *i_argv;
+		delete[] * i_argv;
 	}
 	delete[] argv;
 	return true;
@@ -418,7 +428,9 @@ bool CGIResponseCreator::execCGIScript() {
 	char **envp;
 	char **argv;
 
-	if (request.getCntCGIExec() > 10) { return false; }
+	if (request.getCntCGIExec() > 10) {
+		return false;
+	}
 	if (pipe(inpfd) == -1) {
 		// error handling
 		ft::putSystemError("pipe");
@@ -443,12 +455,20 @@ bool CGIResponseCreator::execCGIScript() {
 	if (fcntl(outpfd[1], F_SETFL, O_NONBLOCK, FD_CLOEXEC) == -1) {
 		// error handling
 	}
-	if (setEnvVars() == false) { return false; }
+	if (setEnvVars() == false) {
+		return false;
+	}
 	envp = _createEnvp();
-	if (envp == NULL) { return false; }
-	if (_setRuntime() == false) { return false; }
+	if (envp == NULL) {
+		return false;
+	}
+	if (_setRuntime() == false) {
+		return false;
+	}
 	argv = _createArgv();
-	if (argv == NULL) { return false; }
+	if (argv == NULL) {
+		return false;
+	}
 	pid = fork();
 	if (pid == -1) {
 		ft::putSystemError("fork");
@@ -472,7 +492,9 @@ bool CGIResponseCreator::execCGIScript() {
 		close(inpfd[1]);
 		close(outpfd[0]);
 		close(outpfd[1]);
-		if (_chDirectory() == false) { std::exit(EXIT_FAILURE); }
+		if (_chDirectory() == false) {
+			std::exit(EXIT_FAILURE);
+		}
 		execve(runtimePath.c_str(), argv, envp);
 		ft::putSystemError("execve");
 		_deleteVariables(envp, argv);
@@ -508,11 +530,16 @@ bool CGIResponseCreator::writeMessageBody() {
 	if (cgiIntput.empty() == false) {
 		lenWrite = write(inpfd[1], cgiIntput.c_str(), cgiIntput.size());
 		switch (lenWrite) {
-			case -1: break ;
-			default : { cgiIntput.erase(0, lenWrite); } break ;
+			case -1:
+				break;
+			default: {
+				cgiIntput.erase(0, lenWrite);
+			} break;
 		}
 	}
-	if (cgiIntput.empty() == false) { return false; }
+	if (cgiIntput.empty() == false) {
+		return false;
+	}
 	close(inpfd[1]);
 	inpfd[1] = 0;
 	return true;
@@ -551,8 +578,12 @@ pid_t CGIResponseCreator::waitChildProc() {
 		} break;
 		case 0: {
 			// nothing to do
-			if (15 > std::difftime(std::time(NULL), startTime)) { break; }
-			if (kill(pid, SIGTERM) == -1) { ft::putSystemError("kill"); }
+			if (15 > std::difftime(std::time(NULL), startTime)) {
+				break;
+			}
+			if (kill(pid, SIGTERM) == -1) {
+				ft::putSystemError("kill");
+			}
 		} break;
 		default: {
 			if (phase != CGIResponseCreator::CGIFIN) {
@@ -564,10 +595,12 @@ pid_t CGIResponseCreator::waitChildProc() {
 	return rwait;
 }
 
-bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key) {
+bool CGIResponseCreator::_setDocumentRedirResponse(
+	std::istringstream &issline, std::string &line,
+	std::istringstream &issheader, std::string &key) {
 	std::string value;
 	std::size_t bodySize(0);
-	
+
 	issheader >> value;
 	response.addHeader("Content-Type", value);
 	while (issline.eof() == false) {
@@ -577,8 +610,11 @@ bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, 
 
 			while (issline.eof() == false) {
 				std::getline(issline, body);
-				if (issline.eof() == true) { response.addBody(body); }
-				else { response.addBody(body + "\r\n"); }
+				if (issline.eof() == true) {
+					response.addBody(body);
+				} else {
+					response.addBody(body + "\r\n");
+				}
 			}
 		} else {
 			issheader.clear();
@@ -600,7 +636,8 @@ bool CGIResponseCreator::_setDocumentRedirResponse(std::istringstream &issline, 
 	return true;
 }
 
-bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issline, std::string &location) {
+bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issline,
+												std::string &location) {
 	std::string extra;
 
 	request.setUrl(location);
@@ -613,7 +650,10 @@ bool CGIResponseCreator::_setLocalRedirResponse(std::istringstream &issline, std
 	return true;
 }
 
-bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location) {
+bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline,
+												 std::string &line,
+												 std::istringstream &issheader,
+												 std::string &location) {
 	std::string key;
 	std::string value;
 	std::size_t bodySize(0);
@@ -626,8 +666,11 @@ bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, st
 
 			while (issline.eof() == false) {
 				std::getline(issline, body);
-				if (issline.eof() == true) { response.addBody(body); }
-				else { response.addBody(body + "\r\n"); }
+				if (issline.eof() == true) {
+					response.addBody(body);
+				} else {
+					response.addBody(body + "\r\n");
+				}
 			}
 		} else {
 			issheader.clear();
@@ -661,7 +704,8 @@ bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline, st
 	return true;
 }
 
-void CGIResponseCreator::_setCGIErrorResponse(std::vector<Config> const &configs) {
+void CGIResponseCreator::_setCGIErrorResponse(
+	std::vector<Config> const &configs) {
 	RequestHandler requestHandler(configs, request);
 
 	requestHandler.searchMatchHost();
@@ -683,7 +727,7 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 	}
 	std::istringstream issheader(line);
 	std::string key;
-	
+
 	std::getline(issheader, key, ':');
 	if (ft::strcmpCaseIns(key, "Content-Type") == true) {
 		return _setDocumentRedirResponse(issline, line, issheader, key);
@@ -692,11 +736,16 @@ bool CGIResponseCreator::setCGIOutput(std::vector<Config> const &configs) {
 
 		std::getline(issheader, location);
 		if (location.at(0) == '/') {
-			if (_setLocalRedirResponse(issline, location) == true) { return true; }
+			if (_setLocalRedirResponse(issline, location) == true) {
+				return true;
+			}
 
-		}
-		else if (location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTP), SCHEMENAME_FOLLOWED_BY_COLON_HTTP) == 0 ||
-			location.compare(0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTPS), SCHEMENAME_FOLLOWED_BY_COLON_HTTPS) == 0) {
+		} else if (location.compare(
+					   0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTP),
+					   SCHEMENAME_FOLLOWED_BY_COLON_HTTP) == 0 ||
+				   location.compare(
+					   0, std::strlen(SCHEMENAME_FOLLOWED_BY_COLON_HTTPS),
+					   SCHEMENAME_FOLLOWED_BY_COLON_HTTPS) == 0) {
 			return _setClientRedirResponse(issline, line, issheader, location);
 		}
 	}

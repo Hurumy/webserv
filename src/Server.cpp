@@ -21,7 +21,9 @@
 bool Server::startUp(std::string const &pathConfig) {
 	Result<std::vector<Config>, bool> result(parseConf(pathConfig));
 
-	if (result.isError() == true) { return false; }
+	if (result.isError() == true) {
+		return false;
+	}
 	configs = result.getOk();
 
 	for (std::vector<Config>::iterator confiter = configs.begin();

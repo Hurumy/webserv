@@ -18,8 +18,8 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
-#include "webserv.hpp"
 #include "ft.hpp"
+#include "webserv.hpp"
 
 Result<std::vector<std::string>, bool> cutOutLocation(
 	const std::vector<std::string> &origin, Config &conf);

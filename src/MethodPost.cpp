@@ -91,11 +91,11 @@ int MethodPost::openPostResource() {
 	//パス自体へのアクセスを調べる
 	status = access(uppath.c_str(), W_OK);
 	if (status == -1) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "Error in MethodPost::openPostResource" << RESET
-						<< std::endl;
-				std::cout << RED << "uppath: " << uppath << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout << RED << "Error in MethodPost::openPostResource" << RESET
+				  << std::endl;
+		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+#endif
 		res.setStatus(401);
 		res.setStatusMessage("Unauthorized");
 		return (401);
@@ -112,10 +112,13 @@ int MethodPost::openPostResource() {
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
-		#if defined(_DEBUGFLAG)
-				std::cout << RED << "Error in MethodPost::openPostResource Internal Server Error" << RESET << std::endl;
-				std::cout << RED << "uppath: " << uppath << RESET << std::endl;
-		#endif
+#if defined(_DEBUGFLAG)
+		std::cout
+			<< RED
+			<< "Error in MethodPost::openPostResource Internal Server Error"
+			<< RESET << std::endl;
+		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		res.setHeader("Connection", "close");
