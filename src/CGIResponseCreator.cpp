@@ -149,11 +149,17 @@ bool CGIResponseCreator::_setPathTranslated() {
 bool CGIResponseCreator::_setQuerySring() {
 	std::string filename;
 	std::string postFilename;
+	std::size_t posDir;
+	std::size_t posFilename;
 	std::size_t posQueryString;
 	std::size_t posHash;
 
-	filename = cgiPath.substr(cgiPath.rfind("/"));
-	postFilename = request.getUrl().substr(request.getUrl().find(filename) +
+	posDir = cgiPath.rfind("/");
+	if (posDir == std::string::npos) { posDir = 0; }
+	filename = cgiPath.substr(posDir);
+	posFilename = request.getUrl().find(filename);
+	if (posFilename == std::string::npos) { return true; }
+	postFilename = request.getUrl().substr(posFilename +
 										   filename.size());
 	posQueryString = postFilename.find("?");
 	if (posQueryString == std::string::npos) return false;
