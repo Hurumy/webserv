@@ -13,7 +13,7 @@
 #include <string>
 
 namespace ft {
-	bool strcmpCaseIns(const std::string &s1, const std::string &s2);
-	int errorInInit(std::string const &errormessage);
-	void putSystemError(char const *msg);
-}
+bool strcmpCaseIns(const std::string &s1, const std::string &s2);
+int errorInInit(std::string const &errormessage);
+void putSystemError(char const *msg);
+}  // namespace ft

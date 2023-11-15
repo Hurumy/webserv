@@ -13,15 +13,15 @@
 #pragma once
 
 #include <ctime>
-#include <string>
 #include <sstream>
+#include <string>
 
 #include "CSocket.hpp"
+#include "Config.hpp"
 #include "MetaVariables.hpp"
 #include "Request.hpp"
-#include "Response.hpp"
-#include "Config.hpp"
 #include "RequestHandler.hpp"
+#include "Response.hpp"
 
 #define WS_CGI_VERSION "CGI/1.1"
 #define WS_HTTP_VERSION "HTTP/1.1"
@@ -30,7 +30,14 @@
 
 class CGIResponseCreator {
 	public:
-		enum tag { CGIREADY, CGISTARTUP, CGIWRITE, CGIRECV, CGILASTRECV, CGIFIN };
+		enum tag {
+				CGIREADY,
+				CGISTARTUP,
+				CGIWRITE,
+				CGIRECV,
+				CGILASTRECV,
+				CGIFIN
+		};
 		enum type { DOC, LOCALREDIR, CLIENTREDIR, OTHER };
 		CGIResponseCreator(Request &_request, Response &_response,
 						   const std::string &_cgiPath);
@@ -75,9 +82,16 @@ class CGIResponseCreator {
 		bool _setServerProtocol();
 		bool _setRuntime();
 		bool _chDirectory();
-		bool _setDocumentRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &key);
-		bool _setLocalRedirResponse(std::istringstream &issline, std::string &location);
-		bool _setClientRedirResponse(std::istringstream &issline, std::string &line, std::istringstream &issheader, std::string &location);
+		bool _setDocumentRedirResponse(std::istringstream &issline,
+									   std::string &line,
+									   std::istringstream &issheader,
+									   std::string &key);
+		bool _setLocalRedirResponse(std::istringstream &issline,
+									std::string &location);
+		bool _setClientRedirResponse(std::istringstream &issline,
+									 std::string &line,
+									 std::istringstream &issheader,
+									 std::string &location);
 		void _setCGIErrorResponse(std::vector<Config> const &configs);
 		bool _deleteVariables(char **envp, char **argv);
 

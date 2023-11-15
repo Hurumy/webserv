@@ -24,7 +24,8 @@ int readCGIExtension(Config &conf, std::string oneline) {
 		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() < 2)
-		ft::errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
+		ft::errorInInit(
+			"Too few argments in cgi_extension directives ι(´Д｀υ)");
 
 	for (size_t i = 1; i < lines.size(); i++) {
 		conf.addCgiExtension(lines.at(i));
@@ -45,7 +46,8 @@ int l_readCGIExtension(Location &loc, std::string oneline) {
 		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() < 2)
-		ft::errorInInit("Too few argments in cgi_extension directives ι(´Д｀υ)");
+		ft::errorInInit(
+			"Too few argments in cgi_extension directives ι(´Д｀υ)");
 
 	for (size_t i = 1; i < lines.size(); i++) {
 		loc.addCgiExtension(lines.at(i));

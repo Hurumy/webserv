@@ -50,7 +50,8 @@ int l_readRoot(Location &loc, std::string oneline) {
 	if (lines.size() != 2)
 		ft::errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
-	if (loc.getRootDir().empty() == false) ft::errorInInit("Too many root declare");
+	if (loc.getRootDir().empty() == false)
+		ft::errorInInit("Too many root declare");
 
 	loc.setRootDir(lines.at(1));
 

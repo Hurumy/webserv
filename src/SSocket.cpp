@@ -70,7 +70,8 @@ bool SSocket::init() {
 		ft::putSystemError("socket");
 		std::exit(EXIT_FAILURE);
 	}
-	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval, (socklen_t)sizeof(optval)) == -1) {
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval,
+				   (socklen_t)sizeof(optval)) == -1) {
 		ft::putSystemError("setsockopt");
 		std::exit(EXIT_FAILURE);
 	}
