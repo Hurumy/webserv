@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 15:33:51 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/16 14:27:06 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,21 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 	ss >> filesize;
 
 	// locationのMaxBodySizeを見る
-	if (filesize > loc.getMaxBodySize()) {
-		std::cout << "location: " << loc.getMaxBodySize() << std::endl;
+	if (isloc && filesize > loc.getMaxBodySize()) {
+		#if defined(_DEBUGFLAG)
+		std::cout << RED "filesize: " << filesize << std::endl;
+		std::cout << "location: " << loc.getMaxBodySize() << RESET << std::endl;
+		#endif
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
 	}
 	// configのMaxBodySizeを見る
 	else if (filesize > conf.getMaxBodySize()) {
-		std::cout << "config: " << conf.getMaxBodySize() << std::endl;
+		#if defined(_DEBUGFLAG)
+		std::cout << RED "filesize: " << filesize << std::endl;
+		std::cout << "config: " << conf.getMaxBodySize() << RESET << std::endl;
+		#endif
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);

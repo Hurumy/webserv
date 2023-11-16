@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/16 10:22:28 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/16 14:22:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// Configの初期化処理(コンストラクタでやりたくないから・・・)
 	conf.setDirlist(false);
 	conf.setIsReturn(false);
+	conf.setMaxBodySize(ULLONG_MAX);
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {
@@ -145,7 +146,6 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	if (conf.getAddresses().size() == 0) thereisnoListen(conf);
 	if (conf.getServerName().size() == 0)
 		ft::errorInInit("There is no server name...（＾ω＾）");
-	if (conf.getMaxBodySize() == 0) conf.setMaxBodySize(ULLONG_MAX);
 
 	//返す
 	return Ok<Config>(conf);
