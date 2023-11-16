@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseConf_cutConfByDirective.cpp                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 14:04:53 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/29 12:40:12 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 
 	fd = open(filepath.c_str(), O_RDONLY);
 	if (fd < 0) {
-		errorInInit("Failed to open the config file｡°(´ฅωฅ`)°｡");
+		ft::errorInInit("Failed to open the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
@@ -34,7 +34,7 @@ static Result<std::string, bool> openAndReadConf(std::string filepath) {
 	} while (status > 0);
 
 	if (status == -1) {
-		errorInInit("Failed to read the config file｡°(´ฅωฅ`)°｡");
+		ft::errorInInit("Failed to read the config file｡°(´ฅωฅ`)°｡");
 		return Error<bool>(false);
 	}
 
@@ -71,7 +71,7 @@ static bool countParentheses(std::string rawdata, std::string start,
 	if (num_of_start == num_of_end)
 		return (true);
 	else {
-		errorInInit(
+		ft::errorInInit(
 			"Inconsistent number of parentheses in the Config file（>Д<）");
 		return (false);
 	}

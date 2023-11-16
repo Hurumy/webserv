@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   APayload.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:08:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 14:37:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 15:25:15 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ class APayload {
 		std::string const &getBody() const;
 		bool addHeader(std::string const &key, std::string const &value);
 		bool setHeader(std::string const &key, std::string const &value);
+		bool addBody(std::string const &_body);
 		Result<std::string, bool> const getHeader(std::string const &key) const;
 		std::map<std::string, std::string, sComp> const &getAllHeader() const;
 };

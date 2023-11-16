@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_index.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/15 17:20:57 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/12 11:25:58 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ int readIndex(Config &conf, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "index")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
+	if (lines.size() < 2) ft::errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (conf.getIndex().empty() == false)
-		errorInInit("Too many index is declare(´-ω-`)");
+		ft::errorInInit("Too many index is declare(´-ω-`)");
 
 	// std::cout << lines.size() << std::endl;
 	for (size_t i = 1; i < lines.size(); i++) {
@@ -44,12 +44,12 @@ int l_readIndex(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "index")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
-	if (lines.size() < 2) errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
+	if (lines.size() < 2) ft::errorInInit("There are no settings(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (loc.getIndex().empty() == false)
-		errorInInit("Too many index is declare(´-ω-`)");
+		ft::errorInInit("Too many index is declare(´-ω-`)");
 
 	// std::cout << lines.size() << std::endl;
 	for (size_t i = 1; i < lines.size(); i++) {

@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:27:34 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/13 17:36:15 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/16 10:22:05 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "Ok.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
+#include "ft.hpp"
 #include "webserv.hpp"
 
 Result<std::vector<std::string>, bool> cutOutLocation(

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 16:48:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 11:08:43 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:23:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <cstring>
 #include <sstream>
 
-#include "puterror.hpp"
+#include "ft.hpp"
 
 SSocket::SSocket(const std::string &_ipaddr, unsigned int _port, ipvers _ipver,
 				 int _backlog)
@@ -50,6 +50,7 @@ u_int32_t SSocket::_convertIpstrToUint() const {
 bool SSocket::init() {
 	struct sockaddr_in s_addr;
 	socklen_t addrsize;
+	const int optval(1);
 
 	std::memset(&s_addr, 0, sizeof(sockaddr_in));
 	if (ipver == IPV4) {
@@ -66,17 +67,22 @@ bool SSocket::init() {
 	sockfd = socket(s_addr.sin_family, SOCK_STREAM, 0);
 	if (sockfd == -1) {
 		// error output
-		putSytemError("socket");
+		ft::putSystemError("socket");
+		std::exit(EXIT_FAILURE);
+	}
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (void *)&optval,
+				   (socklen_t)sizeof(optval)) == -1) {
+		ft::putSystemError("setsockopt");
 		std::exit(EXIT_FAILURE);
 	}
 	if (bind(sockfd, (const struct sockaddr *)&s_addr, addrsize) == -1) {
 		// error output
-		putSytemError("bind");
+		ft::putSystemError("bind");
 		std::exit(EXIT_FAILURE);
 	}
 	if (listen(sockfd, backlog) == -1) {
 		// error output
-		putSytemError("listen");
+		ft::putSystemError("listen");
 		std::exit(EXIT_FAILURE);
 	}
 	return true;

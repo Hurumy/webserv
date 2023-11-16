@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_listen.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 13:55:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/25 10:38:17 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ static int rL_searchipv6(Address &add, std::string oneline) {
 	//[]はあるが、片方しかない時、順序がおかしいとき
 	else if (start == std::string::npos || end == std::string::npos ||
 			 start >= end) {
-		errorInInit("too many [] signs detected!! (ﾉω<､)\n");
+		ft::errorInInit("too many [] signs detected!! (ﾉω<､)\n");
 	}
 
 	// []がそれぞれ一つずつしかないことを確認する
 	tmp = oneline.find('[', start + 1);
 	tmp2 = oneline.find(']', end + 1);
 	if (tmp != std::string::npos || tmp2 != std::string::npos) {
-		errorInInit("too many [] signs detected!! (ﾉω<､)\n");
+		ft::errorInInit("too many [] signs detected!! (ﾉω<､)\n");
 	}
 
 	// []の中身を切り出す(つまりIPアドレスの設定を読み出す)
@@ -85,7 +85,7 @@ static int rL_searchipv6(Address &add, std::string oneline) {
 	}
 	// :があったが、[]の直後ではなかった場合、それは変な位置なのでエラー。
 	else {
-		errorInInit("syntax error in listen directive (ﾉω<､)\n");
+		ft::errorInInit("syntax error in listen directive (ﾉω<､)\n");
 	}
 
 	return (1);
@@ -187,7 +187,7 @@ int readListen(Config &conf, std::string oneline) {
 
 	// 	}
 	// 	else
-	// 		errorInInit("Unknown directive found....°(ಗдಗ。)°.");
+	// 		ft::errorInInit("Unknown directive found....°(ಗдಗ。)°.");
 	// }
 
 	// std::cout << "ipaddress: " << add.getIpAddress() << std::endl;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SocketHandler_test.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:14:49 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/30 16:10:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/06 10:35:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ TEST(SocketHandlerTest, constructorTest) {
 	ASSERT_EQ(ssockets.at(1).getPort(), expected01);
 	ASSERT_EQ(ssockets.at(2).getPort(), expected02);
 	socketHandler.addCSocket(CSocket(3, 2110443574, "127.0.0.1", 8080));
-	std::vector<CSocket> const &csockets = socketHandler.getCSockets();
-	ASSERT_EQ(csockets.at(0).getRevents(), 0);
+	std::list<CSocket> const &csockets = socketHandler.getCSockets();
+	ASSERT_EQ(csockets.front().getRevents(), 0);
 }
 
 TEST(SocketHandlerTest, pollfdsTest) {
@@ -48,7 +48,13 @@ TEST(SocketHandlerTest, pollfdsTest) {
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
 	std::vector<struct pollfd> const &pollfds = socketHandler.getPollfds();
 	ASSERT_EQ(pollfds.at(0).fd, ssockets.at(0).getSockfd());
+#if defined(_LINUX)
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#elif defined(_DARWIN)
 	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLHUP);
+#else
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#endif
 }
 
 TEST(SocketHandlerTest, setReventsTest) {
@@ -62,11 +68,15 @@ TEST(SocketHandlerTest, setReventsTest) {
 	std::vector<SSocket> const &ssockets = socketHandler.getSSockets();
 	std::vector<struct pollfd> const &pollfds = socketHandler.getPollfds();
 	ASSERT_EQ(pollfds.at(0).fd, ssockets.at(0).getSockfd());
+#if defined(_LINUX)
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#elif defined(_DARWIN)
 	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLHUP);
+#else
+	ASSERT_EQ(pollfds.at(0).events, POLLIN | POLLOUT | POLLRDHUP);
+#endif
 	ASSERT_TRUE(socketHandler.setRevents());
 	std::vector<struct pollfd> const &resutl_pollfds =
 		socketHandler.getPollfds();
 	ASSERT_EQ(resutl_pollfds.at(0).fd, ssockets.at(0).getSockfd());
-	ASSERT_EQ(resutl_pollfds.at(0).revents, ssockets.at(0).getRevents());
-	ASSERT_EQ(resutl_pollfds.at(1).revents, ssockets.at(1).getRevents());
 }

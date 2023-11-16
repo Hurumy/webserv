@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/25 12:22:03 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/05 17:36:56 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <poll.h>
 
 #include <cstring>
+#include <list>
 #include <map>
 #include <vector>
 
@@ -28,11 +29,12 @@
 
 class SocketHandler {
 	private:
-		std::vector<CSocket>::iterator _deinitCSocket(
-			std::vector<CSocket>::iterator &csockiter);
+		std::list<CSocket>::iterator _deinitCSocket(
+			std::list<CSocket>::iterator &csockiter);
 
 		std::vector<SSocket> ssockets;
-		std::vector<CSocket> csockets;
+		std::list<CSocket> csockets;
+		std::list<pid_t> cpids;
 		std::size_t timeout;
 		int pollTimeout;
 		std::vector<struct pollfd> pollfds;
@@ -53,7 +55,7 @@ class SocketHandler {
 		bool removeClosedCSockets();
 		std::vector<SSocket> const &getSSockets() const;
 		void setSSockets(const std::vector<SSocket> &_ssockets);
-		std::vector<CSocket> const &getCSockets() const;
+		std::list<CSocket> const &getCSockets() const;
 		int getTimeout() const;
 		void setTimeout(const std::size_t _timeout);
 		void setPollTimeout(const int _pollTimeout);
@@ -65,11 +67,10 @@ class SocketHandler {
 		bool recieveCSockets();
 		std::map<int, Request> const &getRequests() const;
 		bool recvCSocketsData();
-		bool sendDataMap(std::map<int, std::string> const &dataMap);
 		bool sendResponses();
 		bool loadRequests();
-		std::map<int, std::string> createResponse();
 		bool loadResponses(std::vector<Config> const &configs);
-		bool handleCGIRequest();
+		bool handleCGIRequest(std::vector<Config> const &configs);
 		bool closeTimeoutCSockets();
+		bool waitDeadCGIProcs();
 };

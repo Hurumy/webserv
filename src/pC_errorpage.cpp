@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pC_errorpage.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 14:39:24 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/14 16:43:17 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ int readErrorPage(Config &conf, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "error_page")
-		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 3)
-		errorInInit("Too many argments in error_page directives ι(´Д｀υ)");
+		ft::errorInInit("Too many argments in error_page directives ι(´Д｀υ)");
 
 	if (isNumber(lines.at(1)) == false)
-		errorInInit(
+		ft::errorInInit(
 			"Invalid HTTP statuscode in error_page directives "
 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
@@ -36,7 +36,7 @@ int readErrorPage(Config &conf, std::string oneline) {
 	ss >> num;
 
 	if (!(100 <= num && num < 600))
-		errorInInit(
+		ft::errorInInit(
 			"Invalid HTTP statuscode in error_page directives "
 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
@@ -59,13 +59,13 @@ int l_readErrorPage(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "error_page")
-		errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected! (ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 3)
-		errorInInit("Too many argments in error_page directives ι(´Д｀υ)");
+		ft::errorInInit("Too many argments in error_page directives ι(´Д｀υ)");
 
 	if (isNumber(lines.at(1)) == false)
-		errorInInit(
+		ft::errorInInit(
 			"Invalid HTTP statuscode in error_page directives "
 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 
@@ -73,7 +73,7 @@ int l_readErrorPage(Location &loc, std::string oneline) {
 	ss >> num;
 
 	if (!(100 <= num && num < 600))
-		errorInInit(
+		ft::errorInInit(
 			"Invalid HTTP statuscode in error_page directives "
 			"▂▅▇█▓▒░(’ω’)░▒▓█▇▅▂");
 

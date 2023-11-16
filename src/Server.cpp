@@ -3,17 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/29 16:07:10 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/05 17:37:30 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
+#include <signal.h>
+
 #include "ConfParser.hpp"
 #include "Config.hpp"
+#include "ft.hpp"
 
 bool Server::startUp(std::string const &pathConfig) {
 	Result<std::vector<Config>, bool> result(parseConf(pathConfig));
@@ -38,6 +41,10 @@ bool Server::startUp(std::string const &pathConfig) {
 	if (socketHandler.initAllSSockets() == false) return false;
 	if (socketHandler.createPollfds() == false) return false;
 	if (socketHandler.setRevents() == false) return false;
+	if (signal(SIGPIPE, SIG_IGN) == SIG_ERR) {
+		ft::putSystemError("signal");
+		return false;
+	}
 	return true;
 }
 
@@ -48,10 +55,8 @@ bool Server::serverLoop() {
 		if (socketHandler.getCSockets().empty() == false) {
 			socketHandler.recvCSocketsData();
 			socketHandler.loadRequests();
-			socketHandler.handleCGIRequest();
+			socketHandler.handleCGIRequest(configs);
 			socketHandler.loadResponses(configs);
-			// responses = socketHandler.createResponse();
-			// socketHandler.sendDataMap(responses);
 			socketHandler.sendResponses();
 		}
 		socketHandler.recieveCSockets();
@@ -60,6 +65,7 @@ bool Server::serverLoop() {
 		socketHandler.setRevents();
 		socketHandler.closeTimeoutCSockets();
 		socketHandler.removeClosedCSockets();
+		socketHandler.waitDeadCGIProcs();
 	}
 	return true;
 }

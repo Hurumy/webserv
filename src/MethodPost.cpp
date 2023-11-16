@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/01 16:47:32 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:33:51 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ int MethodPost::openPostResource() {
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
+#if defined(_DEBUGFLAG)
+		std::cout
+			<< RED
+			<< "Error in MethodPost::openPostResource Internal Server Error"
+			<< RESET << std::endl;
+		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
+#endif
 		res.setStatus(500);
 		res.setStatusMessage("Internal Server Error");
 		res.setHeader("Connection", "close");
@@ -139,8 +146,7 @@ int MethodPost::openPostResource() {
 	ss >> filesize;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0;
-		 i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
+	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
 
 	ofs.close();

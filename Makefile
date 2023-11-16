@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+         #
+#    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 14:39:08 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/05 14:45:44 by komatsud         ###   ########.fr        #
+#    Updated: 2023/11/07 12:17:42 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,14 @@ CC			:= c++
 CFLAGS		:= -Wall -Wextra -Werror -std=c++98
 UNAME_OS	:= $(shell uname -s)
 ifeq ($(UNAME_OS), Linux)
-	DFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+	DBFLAGS	:= -Wshadow -fsanitize=address -g -D_DEBUGFLAG
+	CFLAGS	+= -D_LINUX
 else ifeq ($(UNAME_OS), Darwin)
-	DFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+	DBFLAGS	:= -Wshadow-all -fsanitize=address -g -D_DEBUGFLAG
+	CFLAGS	+= -D_DARWIN
 endif
 ifeq ($(MAKECMDGOALS), debug)
-	CFLAGS += $(DFLAGS)
+	CFLAGS += $(DBFLAGS)
 endif
 
 SRC_FILES	:= \
@@ -62,7 +64,6 @@ SRC_FILES	:= \
 				pC_uploadpath.cpp \
 				pC_allowedmethods.cpp \
 				RequestHandler.cpp \
-				puterror.cpp \
 				stringCleaner.cpp \
 				MakeDirlistHTML.cpp \
 				Location.cpp \
@@ -70,7 +71,8 @@ SRC_FILES	:= \
 				pC_location.cpp \
 				pC_cgi_path.cpp \
 				pC_alias.cpp \
-				sComp.cpp
+				sComp.cpp \
+				ft.cpp
 
 SRC_DIR		:= src
 OBJ_DIR		:= obj

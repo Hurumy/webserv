@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 17:47:31 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/14 14:21:14 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/16 10:23:12 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int readAutoindex(Config &conf, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "autoindex")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("Invalid number of elements _(´ω`_)⌒)_ ))");
+		ft::errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
 	// std::cout << lines.at(1) << std::endl;
 
@@ -32,7 +32,7 @@ int readAutoindex(Config &conf, std::string oneline) {
 	else if (lines.at(1) == "off")
 		conf.setDirlist(false);
 	else
-		errorInInit(
+		ft::errorInInit(
 			"Invalid setting is detected in autoindex directive (¦3[___]");
 
 	// std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET <<
@@ -49,17 +49,17 @@ int l_readAutoindex(Location &loc, std::string oneline) {
 	lines.erase(std::remove(lines.begin(), lines.end(), ""), lines.end());
 
 	if (lines.at(0) != "autoindex")
-		errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
+		ft::errorInInit("Unknown directive detected!(ﾉｼ｀･ω･)ﾉｼ");
 
 	if (lines.size() != 2)
-		errorInInit("Invalid number of elements _(´ω`_)⌒)_ ))");
+		ft::errorInInit("Too many Root directives _(´ω`_)⌒)_ ))");
 
 	if (lines.at(1) == "on")
 		loc.setDirlist(true);
 	else if (lines.at(1) == "off")
 		loc.setDirlist(false);
 	else
-		errorInInit(
+		ft::errorInInit(
 			"Invalid setting is detected in autoindex directive (¦3[___]");
 
 	// std::cout << GREEN "autoindex is now: " << conf.getDirlist() << RESET <<

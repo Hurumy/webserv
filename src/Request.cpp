@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/01 17:33:33 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:34:05 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 Request::Request()
 	: contentLength(0),
 	  lastContentLength(contentLength),
-	  phase(Request::REQLINE) {}
+	  phase(Request::REQLINE),
+	  cntCGIExec(0) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -99,7 +100,8 @@ bool Request::loadPayload(CSocket &csocket) {
 				lastContentLength -= afterSize - beforeSize;
 				if (lastContentLength != 0) {
 					csocket.setPhase(CSocket::RECV);
-					return true;
+					// return true;
+					return false;
 				}
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
@@ -125,21 +127,21 @@ bool Request::loadRequestLine(CSocket &csocket) {
 	iss >> extra;
 	if (extra.empty() == false) {
 		csocket.popDataLine();
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	if (_method.empty() == true) {
 		csocket.popDataLine();
-		csocket.setPhase(CSocket::RECV);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	if (isValidURL(_url) == false) {
 		// Should return error page
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	} else if (isVersion(_version) == false) {
 		// Should return error page
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	setMethod(_method);
@@ -237,3 +239,7 @@ void Request::setLocalPort(unsigned int const _localPort) {
 }
 
 unsigned int Request::getLocalPort() const { return localPort; }
+
+void Request::countUpCntCGIExec() { cntCGIExec++; }
+
+std::size_t Request::getCntCGIExec() const { return cntCGIExec; }
