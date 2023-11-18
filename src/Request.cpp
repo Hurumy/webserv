@@ -126,6 +126,9 @@ bool Request::loadPayload(CSocket &csocket) {
 				// std::clog << getLines() << std::endl;
 			}
 				return true;
+			case Request::CHUNKEDBODY: {
+				
+			} return true;
 		}
 	}
 	return true;
