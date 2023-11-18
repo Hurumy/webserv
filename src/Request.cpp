@@ -84,6 +84,23 @@ bool Request::loadPayload(CSocket &csocket) {
 						ss >> contentLength;
 						lastContentLength = contentLength;
 					}
+					std::map<std::string, std::string>::iterator cencodeiter =
+						header.find("transfer-encoding");
+					if (cencodeiter != header.end()) {
+						std::istringstream iss(cencodeiter->second);
+						std::string element;
+
+						while (true) {
+							if (iss.eof() == true) { break; }
+							std::getline(iss, element, ',');
+							std::stringstream sselem(element);
+							std::string encoding;
+							sselem >> encoding;
+							if (encoding.compare("chunked") == 0) {
+								// phase = Request::CHUNKEDBODY;
+							}
+						} 
+					}
 					phase = Request::BODY;
 					break;
 				}
