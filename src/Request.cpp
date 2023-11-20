@@ -127,7 +127,37 @@ bool Request::loadPayload(CSocket &csocket) {
 			}
 				return true;
 			case Request::CHUNKEDBODY: {
+				std::string chunkLine(csocket.getDataLine());
+				std::stringstream ss;
+				std::size_t chunkSize(0);
 				
+				if (chunkLine.empty() == true) {
+					csocket.setPhase(CSocket::RECV);
+					return false;
+				}
+				ss << chunkLine;
+				ss >> chunkSize;
+				ss >> chunkExt;
+				csockData.popDataLine();
+				while (chunkSize > 0) {
+					body.append(csocket.popDataLine());
+					chunkLength += chunkSize;
+					ss.str("");
+					ss.clear(std::stringstream::goodbit);
+					chunkLine = csocket.getDataLine();
+					if (chunkLine.empty() == true) {
+						csocket.setPhase(CSocket::RECV);
+						return false;
+					}
+					ss << chunkLine;
+					ss >> chunkSize;
+					ss >> chunkExt;
+					csockData.popDataLine();
+				}
+				// remove trailer field
+				std::stringstream ssChunkLength;
+				ssChunkLength << chunkLength;
+				header["Content-Length"] = ssChunkLength.str();
 			} return true;
 		}
 	}
