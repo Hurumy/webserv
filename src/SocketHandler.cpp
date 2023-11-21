@@ -387,10 +387,6 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 		if (iter->getPhase() == CSocket::PASS) {
 			RequestHandler requestHandler =
 				RequestHandler(configs, requests[iter->getSockfd()]);
-// for debugging
-#if defined(_DEBUGFLAG)
-			std::clog << requests[iter->getSockfd()].getLines() << std::endl;
-#endif
 			if (requestHandler.searchMatchHost().isError() == true) {
 				// error handling
 				responses[iter->getSockfd()] = requestHandler.getResponse();
