@@ -99,7 +99,7 @@ bool Request::loadPayload(CSocket &csocket) {
 							std::string encoding;
 							sselem >> encoding;
 							if (encoding.compare("chunked") == 0) {
-								phase = Request::RECVCHUNKEDBODY;
+								phase = Request::CHUNKEDBODY;
 							}
 						}
 					}
@@ -116,7 +116,6 @@ bool Request::loadPayload(CSocket &csocket) {
 							std::string expect;
 							sselem >> expect;
 							if (expect.compare("100-continue") == 0) {
-								phase = Request::RECVCHUNKEDBODY;
 								csocket.setPhase(CSocket::SETCONTINUE);
 								return true;
 							}
@@ -146,25 +145,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				// std::clog << getLines() << std::endl;
 			}
 				return true;
-			case Request::RECVCHUNKEDBODY: {
-				std::string chunkLine(csocket.getDataLine());
-				std::stringstream ss;
-				std::size_t chunkSize(0);
-				
-				if (chunkLine.empty() == true) {
-					csocket.setPhase(CSocket::RECV);
-					return false;
-				}
-				ss << chunkLine;
-				ss >> std::hex >> chunkSize;
-				ss >> chunkExt;
-				if (csocket.getData().size() < chunkSize) {
-					csocket.setPhase(CSocket::RECV);
-					return false;
-				}
-				phase = Request::SETCHUNKEDBODY;
-			} break;
-			case Request::SETCHUNKEDBODY: {
+			case Request::CHUNKEDBODY: {
 				std::string chunkLine(csocket.getDataLine());
 				std::stringstream ss;
 				std::size_t chunkSize(0);
@@ -176,7 +157,6 @@ bool Request::loadPayload(CSocket &csocket) {
 				while (chunkSize > 0) {
 					if (csocket.getData().size() < chunkSize) {
 						csocket.setPhase(CSocket::RECV);
-						phase = Request::RECVCHUNKEDBODY;
 						return false;
 					}
 					csocket.popDataLine();
@@ -187,7 +167,6 @@ bool Request::loadPayload(CSocket &csocket) {
 					chunkLine = csocket.getDataLine();
 					if (chunkLine.empty() == true) {
 						csocket.setPhase(CSocket::RECV);
-						phase = Request::RECVCHUNKEDBODY;
 						return false;
 					}
 					ss.str("");
