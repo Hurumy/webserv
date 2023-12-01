@@ -99,7 +99,7 @@ bool Request::loadPayload(CSocket &csocket) {
 							std::string encoding;
 							sselem >> encoding;
 							if (encoding.compare("chunked") == 0) {
-								phase = Request::CHUNKEDBODY;
+								phase = Request::RECVCHUNKEDBODY;
 							}
 						} 
 					}
@@ -127,7 +127,7 @@ bool Request::loadPayload(CSocket &csocket) {
 				// std::clog << getLines() << std::endl;
 			}
 				return true;
-			case Request::CHUNKEDBODY: {
+			case Request::RECVCHUNKEDBODY: {
 				std::string chunkLine(csocket.getDataLine());
 				std::stringstream ss;
 				std::size_t chunkSize(0);
@@ -137,28 +137,45 @@ bool Request::loadPayload(CSocket &csocket) {
 					return false;
 				}
 				ss << chunkLine;
-				ss >> chunkSize;
+				ss >> std::hex >> chunkSize;
 				ss >> chunkExt;
-				csocket.popDataLine();
+				if (csocket.getData().size() < chunkSize) {
+					csocket.setPhase(CSocket::RECV);
+					return false;
+				}
+				phase = Request::SETCHUNKEDBODY;
+			} break;
+			case Request::SETCHUNKEDBODY: {
+				std::string chunkLine(csocket.getDataLine());
+				std::stringstream ss;
+				std::size_t chunkSize(0);
+
+				ss << chunkLine;
+				ss >> std::hex >> chunkSize;
+				ss >> chunkExt;
+				// csocket.popDataLine();
 				while (chunkSize > 0) {
 					if (csocket.getData().size() < chunkSize) {
 						csocket.setPhase(CSocket::RECV);
+						phase = Request::RECVCHUNKEDBODY;
 						return false;
 					}
-					body.append(csocket.getData().substr(0, chunkSize).c_str());
-					csocket.eraseData(chunkSize);
+					csocket.popDataLine();
+					body.append(csocket.getData(), 0, chunkSize);
+					csocket.eraseData(chunkSize+2);
 					chunkLength += chunkSize;
-					chunkLine = csocket.getData();
+					chunkSize = 0;
+					chunkLine = csocket.getDataLine();
 					if (chunkLine.empty() == true) {
 						csocket.setPhase(CSocket::RECV);
+						phase = Request::RECVCHUNKEDBODY;
 						return false;
 					}
 					ss.str("");
 					ss.clear(std::stringstream::goodbit);
 					ss << chunkLine;
-					ss >> chunkSize;
+					ss >> std::hex >> chunkSize;
 					ss >> chunkExt;
-					csocket.popDataLine();
 				}
 				// remove trailer field
 				std::stringstream ssChunkLength;

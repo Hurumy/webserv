@@ -35,6 +35,8 @@ class CSocket {
 				CGI,
 				SEND,
 				CLOSE,
+				SETCONTINUE,
+				SENDCONTINUE,
 				CSETERROR,
 				CSENDERROR,
 		};

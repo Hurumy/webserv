@@ -21,7 +21,7 @@
 
 class Request : public virtual APayload {
 	public:
-		enum tag { REQLINE, HEADER, BODY, CHUNKEDBODY };
+		enum tag { REQLINE, HEADER, BODY, RECVCHUNKEDBODY, SETCHUNKEDBODY };
 		Request();
 
 		const std::string getLines() const;
