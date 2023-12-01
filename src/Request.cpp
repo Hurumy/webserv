@@ -101,7 +101,26 @@ bool Request::loadPayload(CSocket &csocket) {
 							if (encoding.compare("chunked") == 0) {
 								phase = Request::RECVCHUNKEDBODY;
 							}
-						} 
+						}
+					}
+					std::map<std::string, std::string>::iterator expectiter =
+						header.find("expect");
+					if (expectiter != header.end()) {
+						std::istringstream iss(expectiter->second);
+						std::string element;
+
+						while (true) {
+							if (iss.eof() == true) { break; }
+							std::getline(iss, element, ',');
+							std::stringstream sselem(element);
+							std::string expect;
+							sselem >> expect;
+							if (expect.compare("100-continue") == 0) {
+								phase = Request::RECVCHUNKEDBODY;
+								csocket.setPhase(CSocket::SETCONTINUE);
+								return true;
+							}
+						}
 					}
 					break;
 				}
@@ -181,9 +200,11 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::stringstream ssChunkLength;
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
+				csocket.setPhase(CSocket::PASS);
 			} return true;
 		}
 	}
+	csocket.setPhase(CSocket::PASS);
 	return true;
 }
 
