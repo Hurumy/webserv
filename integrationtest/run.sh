@@ -13,7 +13,35 @@ if [ "$?" -ne 0 ]; then
 	exit 1
 fi
 
-echo 
+echo
+echo "==== Create conf file ====="
+echo "server {
+		listen 			8081;
+		server_name  localhost;
+		root		 /content;
+ 
+		index readme.html;
+		autoindex on;
+		upload_path	$PWD/content;
+		allowedMethods	GET POST DELETE;
+		cgi_extension py pl;
+		client_max_body_size 5m;
+}
+
+server {
+		listen 			8082;
+		server_name  localhost;
+		root		 /content;
+ 
+		index readme.html;
+		autoindex on;
+		allowedMethods	GET POST DELETE;
+		cgi_extension py pl;
+		client_max_body_size 5m;
+}
+" > ${CONFFILE}
+
+echo
 echo "==== Start webserv ====="
 ${WEBSERV} ${CONFFILE} &
 
