@@ -51,7 +51,7 @@ std::map<std::string, std::string> MethodPost::initExtMap() {
 Result<std::string, bool> MethodPost::setExtension(std::string fname, std::string type) const
 {
 	std::string extension;
-	std::string	res;
+	std::string	_res;
 
 	if (ext.find(type) != ext.end())
 		extension = ext.at(type);
@@ -59,8 +59,8 @@ Result<std::string, bool> MethodPost::setExtension(std::string fname, std::strin
 		return Error<bool>(false);
 	
 	// std::cout << "extension: " << extension << std::endl;
-	res = fname + "." + extension;
-	return Ok<std::string>(res);
+	_res = fname + "." + extension;
+	return Ok<std::string>(_res);
 }
 
 
