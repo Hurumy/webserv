@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MethodPost.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 15:33:51 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/16 15:44:32 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,57 @@
 
 #include "AMethod.hpp"
 #include "webserv.hpp"
+
+const std::map<std::string, std::string> MethodPost::ext = initExtMap();
+
+std::map<std::string, std::string> MethodPost::initExtMap() {
+	std::map<std::string, std::string> tmp;
+	tmp["text/html"] = "html";
+	tmp["text/csv"] = "csv";
+	tmp["text/css"] = "css";
+	tmp["text/javascript"] = "js";
+	tmp["application/json"] = "json";
+	tmp["application/pdf"] = "pdf";
+	tmp["application/vnd.ms-excel"] = "xls";
+	tmp["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"] =
+		"xlsx";
+	tmp["application/vnd.ms-powerpoint"] = "ppt";
+	tmp["application/"
+		"vnd.openxmlformats-officedocument.presentationml.presentation"] =
+		"pptx";
+	tmp["application/msword"] = "doc";
+	tmp["application/"
+		"vnd.openxmlformats-officedocument.wordprocessingml.document"] = "docx";
+	tmp["image/jpeg"] = "jpg";
+	tmp["image/png"] = "png";
+	tmp["image/gif"] = "gif";
+	tmp["image/bmp"] = "bmp";
+	tmp["image/svg+xml"] = "svg";
+	tmp["application/zip"] = "zip";
+	tmp["application/x-lzh"] = "lzh";
+	tmp["application/x-tar"] = "tar";
+	tmp["audio/mpeg"] = "mp3";
+	tmp["video/mp4"] = "mp4";
+	tmp["video/mpeg"] = "mpeg";
+	tmp["application/octet-stream"] = "exe";
+	tmp["text/plain"] = "txt";
+	return (tmp);
+}
+
+Result<std::string, bool> MethodPost::setExtension(std::string fname,
+												   std::string type) const {
+	std::string extension;
+	std::string _res;
+
+	if (ext.find(type) != ext.end())
+		extension = ext.at(type);
+	else
+		return Error<bool>(false);
+
+	// std::cout << "extension: " << extension << std::endl;
+	_res = fname + "." + extension;
+	return Ok<std::string>(_res);
+}
 
 MethodPost::MethodPost(Config _conf, Request _req, Response &_res)
 	: AMethod(_conf, _req, _res) {}
@@ -54,15 +105,21 @@ Result<int, bool> MethodPost::checkMaxBodySize() {
 	ss >> filesize;
 
 	// locationのMaxBodySizeを見る
-	if (filesize > loc.getMaxBodySize()) {
-		std::cout << "location: " << loc.getMaxBodySize() << std::endl;
+	if (isloc && filesize > loc.getMaxBodySize()) {
+#if defined(_DEBUGFLAG)
+		std::cout << RED "filesize: " << filesize << std::endl;
+		std::cout << "location: " << loc.getMaxBodySize() << RESET << std::endl;
+#endif
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
 	}
 	// configのMaxBodySizeを見る
 	else if (filesize > conf.getMaxBodySize()) {
-		std::cout << "config: " << conf.getMaxBodySize() << std::endl;
+#if defined(_DEBUGFLAG)
+		std::cout << RED "filesize: " << filesize << std::endl;
+		std::cout << "config: " << conf.getMaxBodySize() << RESET << std::endl;
+#endif
 		res.setStatus(413);
 		res.setStatusMessage("Payload Too Large");
 		return Error<bool>(false);
@@ -109,6 +166,16 @@ int MethodPost::openPostResource() {
 	filename = makeFilename(uppath);
 	// std::cout << BLUE << filename << RESET << std::endl;
 
+	//拡張子をつける
+	Result<std::string, bool> res_type = req.getHeader("Content-Type");
+	if (res_type.isOK() == true) {
+		std::string const &type = res_type.getOk();
+		Result<std::string, bool> res_fn = setExtension(filename, type);
+		if (res_fn.isOK()) {
+			filename = res_fn.getOk();
+		}
+	}
+
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
 	if (!ofs) {
@@ -146,7 +213,8 @@ int MethodPost::openPostResource() {
 	ss >> filesize;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
+	for (unsigned long long i = 0;
+		 i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
 
 	ofs.close();
