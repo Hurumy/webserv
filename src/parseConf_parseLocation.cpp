@@ -77,7 +77,7 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	std::string path;
 	int status = 0;
 
-	//std::cout << RED"parseLocation!: " << line.at(0) << RESET << std::endl;
+	// std::cout << RED"parseLocation!: " << line.at(0) << RESET << std::endl;
 
 	// Locationの初期設定
 	res.setDirlist(false);
@@ -118,24 +118,19 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 	}
 
 	//"location" というディレクティブが含まれるかどうかチェックする
-	for (size_t i = 0; i < line.size(); i++)
-	{
+	for (size_t i = 0; i < line.size(); i++) {
 		// "location"を探す
 		hed_pos = line.at(i).find("location");
 		// std::cout << "line.at(i): " << i << ": " << line.at(i) << std::endl;
-	
-		if (hed_pos != std::string::npos && i < line.size())
-		{
+
+		if (hed_pos != std::string::npos && i < line.size()) {
 			// "location"の後にある{を探す
 			st_pos = line.at(i + 1).find("{");
-			if (st_pos != std::string::npos)
-			{
+			if (st_pos != std::string::npos) {
 				// {の直後にある}を探す
-				for (size_t j = i + 1; j < line.size(); j++)
-				{
+				for (size_t j = i + 1; j < line.size(); j++) {
 					end_pos = line.at(j).find("}");
-					if (end_pos != std::string::npos)
-					{
+					if (end_pos != std::string::npos) {
 						// i~jまでのStringを切り出し、パースしてLocationをConfigに詰める
 						// 元のLineからi~jの部分を削除する
 						tmp.erase(tmp.begin(), tmp.end());
@@ -151,7 +146,8 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 						}
 
 						// for (size_t k = 0; k < loc.size(); k++)
-						// 	std::cout << YELLOW << loc.at(k) << RESET << std::endl;
+						// 	std::cout << YELLOW << loc.at(k) << RESET <<
+						// std::endl;
 
 						// Locationパーサーにかけ、解釈し、Configに詰める
 						Result<int, bool> res_1 = parseLocation(loc, conf);
@@ -161,13 +157,12 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 
 						// lineにtmpをコピーする
 						line.erase(line.begin(), line.end());
-						for (size_t k = 0; k < tmp.size(); k++)
-						{
+						for (size_t k = 0; k < tmp.size(); k++) {
 							line.push_back(tmp.at(k));
 						}
-						
-						i --;
-						break ;
+
+						i--;
+						break;
 					}
 				}
 			}

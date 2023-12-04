@@ -20,8 +20,9 @@ class MethodPost : public AMethod {
 		std::string makeFilename(std::string _uppath);
 		Result<int, bool> checkMaxBodySize();
 		static const std::map<std::string, std::string> ext;
-		static	std::map<std::string, std::string> initExtMap();
-		Result<std::string, bool> setExtension(std::string fname, std::string type) const;
+		static std::map<std::string, std::string> initExtMap();
+		Result<std::string, bool> setExtension(std::string fname,
+											   std::string type) const;
 
 	protected:
 	public:
