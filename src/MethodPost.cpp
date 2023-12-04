@@ -213,7 +213,7 @@ int MethodPost::openPostResource() {
 	ss >> filesize;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
+	for (unsigned long long i = 0; i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
 
 	ofs.close();
