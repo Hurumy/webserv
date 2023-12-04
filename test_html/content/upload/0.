@@ -1,0 +1,36 @@
+-----------------------------193640222742544593242912032932
+Content-Disposition: form-data; name="test"; filename="dockermemo.txt"
+Content-Type: text/plain
+
+Image作る 	docker build -t (名前) (Dockerfileがあるディレクトリ)
+コンテナの中に入る 	docker exec -it (コンテナ名) /bin/bash
+コンテナを作りつつ入る	docker container run --rm -it -p 8080:80 (image) /bin/bash
+コンテナを作りつつバックグラウンド実行 docker run --rm -itd -p 8080:80 (image) /bin/bash
+デタッチ Ctrl-P Ctrl-Q
+
+ぜんぜんなぜかわからないが、Docker-composeにBuildの項を追加したら、一度docker-compose buildでImageをビルドしてからじゃないとすぐにコンテナが死んでしまった
+RUNで実行されるコマンドは、毎回中間的なコンテナを起動して行うので、一括でやりたい場合は&&などでつなぐ
+
+
+Apt-get -y -q update
+Apt-get install -y -q nginx
+Service nginx start
+	NginxのconfファイルをWordpressのファイル類を参照するように書き直す
+
+Apt-get -y -q update
+Apt-get -y -q install mariadb-server
+service mariadb start
+	Wordpressから注文を受けてDBを作れるようにする
+
+
+Apt-get -y -q update
+Apt-get -y -q php7.4 php7.4-mysql
+Apt-get -y -q install wget
+wget https://ja.wordpress.org/latest-ja.tar.gz
+tar -xzvf latest-ja.tar.gz 
+Mv wordpress /var/www/html/wordpress
+	wp-configにDBの情報を追記し、Mariadbと通信できるようにする
+
+Var/www/html/wp-content
+Etc/nginx/nginx.conf
+-----------------------------193640222742544593242912032932--

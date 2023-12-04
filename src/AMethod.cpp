@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   AMethod.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:41:01 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/03 15:33:29 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/16 10:22:15 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,7 +480,8 @@ Result<int, bool> AMethod::checkRedirects() {
 	std::stringstream ss;
 	std::string size;
 
-	if (isloc == true && loc.isReturn() == true) {
+	if (isloc == true && loc.isReturn() == true)
+	{
 		res.setStatus(loc.getReturnStatus());
 		if (statusmap.find(loc.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(loc.getReturnStatus()));
@@ -493,13 +494,18 @@ Result<int, bool> AMethod::checkRedirects() {
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(loc.getReturnBody());
 		}
-		if (loc.getReturnUrl().empty() == false) {
+		else if (loc.getReturnUrl().empty() == false) {
 			res.addHeader("Location", loc.getReturnUrl());
+		}
+		else
+		{
+			setErrorPageBody();
 		}
 		return Ok<int>(0);
 	}
 	// config指定のリダイレクト
-	else if (conf.isReturn() == true) {
+	if (conf.isReturn() == true)
+	{
 		res.setStatus(conf.getReturnStatus());
 		if (statusmap.find(conf.getReturnStatus()) != statusmap.end())
 			res.setStatusMessage(statusmap.at(conf.getReturnStatus()));
@@ -511,14 +517,37 @@ Result<int, bool> AMethod::checkRedirects() {
 			res.addHeader("Content-Length", size);
 			res.addHeader("Content-Type", "text/html");
 			res.setBody(conf.getReturnBody());
-		} else {
-			res.addHeader("Content-Length", "0");
-		}
-		if (conf.getReturnUrl().empty() == false) {
+		}else if (conf.getReturnUrl().empty() == false) {
 			res.addHeader("Location", conf.getReturnUrl());
+		}
+		else
+		{
+			setErrorPageBody();
 		}
 		return Ok<int>(0);
 	}
+
+	// rewriteの確認
+	if (isloc == true)
+	{
+		Result<std::string, bool> resr_loc = loc.getRedirects(req.getUrl());
+		if (resr_loc.isOK() == true)
+		{
+			res.setStatus(302);
+			res.setStatusMessage(statusmap.at(302));
+			res.addHeader("Location", resr_loc.getOk());
+			return Ok<int>(0);
+		}
+	}
+	Result<std::string, bool> resr_conf = conf.getRedirects(req.getUrl());
+	if (resr_conf.isOK() == true)
+	{
+		res.setStatus(302);
+		res.setStatusMessage(statusmap.at(302));
+		res.addHeader("Location", resr_conf.getOk());
+		return Ok<int>(0);
+	}
+
 	return Error<bool>(true);
 }
 

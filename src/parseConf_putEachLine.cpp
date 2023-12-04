@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseConf_putEachLine.cpp                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 15:25:22 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/16 14:22:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int checkSettings(Config &conf, std::string oneline) {
 
 	lines = lineSpliter(oneline, " ");
 	for (size_t i = 0; i < lines.size(); i++) {
-		//  std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
+		// std::cout << YELLOW ": " << lines.at(i) << RESET << std::endl;
 		//  std::cout << i << ", " << lines.size() << std::endl;
 
 		if (lines.at(i).empty() == false) {
@@ -125,12 +125,13 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	// for (size_t i = 0; i < line.size() - 1; i ++)
 	// {
 	// 	std::cout << RED << line.at(i) << RESET << std::endl;
-	// 	std::cout << i << ", " << line.size() << std::endl;
+	// 	//std::cout << i << ", " << line.size() << std::endl;
 	// }
 
 	// Configの初期化処理(コンストラクタでやりたくないから・・・)
 	conf.setDirlist(false);
 	conf.setIsReturn(false);
+	conf.setMaxBodySize(ULLONG_MAX);
 
 	//セミコロンで切り分けられるひとかたまりを見て、Confに中身を詰める
 	for (size_t i = 0; i < line.size(); i++) {
@@ -145,7 +146,6 @@ Result<Config, bool> parsePortVecs(std::string port) {
 	if (conf.getAddresses().size() == 0) thereisnoListen(conf);
 	if (conf.getServerName().size() == 0)
 		ft::errorInInit("There is no server name...（＾ω＾）");
-	if (conf.getMaxBodySize() == 0) conf.setMaxBodySize(ULLONG_MAX);
 
 	//返す
 	return Ok<Config>(conf);

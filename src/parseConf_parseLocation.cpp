@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parseConf_parseLocation.cpp                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 10:37:32 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/07 12:20:31 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/11/16 14:27:19 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,12 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	std::string path;
 	int status = 0;
 
+	//std::cout << RED"parseLocation!: " << line.at(0) << RESET << std::endl;
+
 	// Locationの初期設定
 	res.setDirlist(false);
 	res.setIsReturn(false);
+	res.setMaxBodySize(ULLONG_MAX);
 
 	// 1行ずつ読み込んでLocationに設定をセットする
 	for (size_t i = 0; i < line.size(); i++) {
@@ -92,7 +95,6 @@ Result<int, bool> parseLocation(std::vector<std::string> const &line,
 	}
 
 	//記述がなかった時などの設定を含める
-	if (res.getMaxBodySize() == 0) res.setMaxBodySize(ULLONG_MAX);
 
 	// Locationの設定を読み終わったらConfigにLocationを追加だ！
 	path = res.getUri();
@@ -116,22 +118,30 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 	}
 
 	//"location" というディレクティブが含まれるかどうかチェックする
-	for (size_t i = 0; i < line.size(); i++) {
+	for (size_t i = 0; i < line.size(); i++)
+	{
 		// "location"を探す
 		hed_pos = line.at(i).find("location");
-		if (hed_pos != std::string::npos && i < line.size() - 1) {
+		// std::cout << "line.at(i): " << i << ": " << line.at(i) << std::endl;
+	
+		if (hed_pos != std::string::npos && i < line.size())
+		{
 			// "location"の後にある{を探す
 			st_pos = line.at(i + 1).find("{");
-			if (st_pos != std::string::npos) {
+			if (st_pos != std::string::npos)
+			{
 				// {の直後にある}を探す
-				for (size_t j = i + 1; j < line.size(); j++) {
+				for (size_t j = i + 1; j < line.size(); j++)
+				{
 					end_pos = line.at(j).find("}");
-					if (end_pos != std::string::npos) {
-						// i-jまでのStringを切り出し、パースしてLocationをConfigに詰める
-						// 元のLineからi-jを削除する
+					if (end_pos != std::string::npos)
+					{
+						// i~jまでのStringを切り出し、パースしてLocationをConfigに詰める
+						// 元のLineからi~jの部分を削除する
 						tmp.erase(tmp.begin(), tmp.end());
+						loc.erase(loc.begin(), loc.end());
 
-						// tmpにコピーしてLineに戻す
+						// i~jの部分をLocationに詰める、i~jでない部分をtmpにコピーしてLineに戻す
 						for (size_t k = 0; k < line.size(); k++) {
 							if (k < i || k > j) {
 								tmp.push_back(line.at(k));
@@ -139,6 +149,9 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 								loc.push_back(line.at(k));
 							}
 						}
+
+						// for (size_t k = 0; k < loc.size(); k++)
+						// 	std::cout << YELLOW << loc.at(k) << RESET << std::endl;
 
 						// Locationパーサーにかけ、解釈し、Configに詰める
 						Result<int, bool> res_1 = parseLocation(loc, conf);
@@ -148,9 +161,13 @@ Result<std::vector<std::string>, bool> cutOutLocation(
 
 						// lineにtmpをコピーする
 						line.erase(line.begin(), line.end());
-						for (size_t k = 0; k < tmp.size(); k++) {
+						for (size_t k = 0; k < tmp.size(); k++)
+						{
 							line.push_back(tmp.at(k));
 						}
+						
+						i --;
+						break ;
 					}
 				}
 			}
