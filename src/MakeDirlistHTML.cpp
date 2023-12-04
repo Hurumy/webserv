@@ -24,8 +24,7 @@ MakeDirlistHTML::MakeDirlistHTML(std::string _path) : path(_path) {}
 
 MakeDirlistHTML::~MakeDirlistHTML() {}
 
-Result<std::string, bool> MakeDirlistHTML::returnHTML()
-{
+Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 	html += header;
 	html += "\t<head><title>Index of ";
 	html += path;
@@ -42,8 +41,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML()
 	//ディレクトリにあるものの要素を読んでいく
 	errno = 0;
 	struct dirent *st = readdir(ds);
-	if (st == NULL && errno != 0)
-	{
+	if (st == NULL && errno != 0) {
 		closedir(ds);
 		return Error<bool>(false);
 	}
@@ -69,8 +67,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML()
 		// statでファイルの作成日時を取得する
 		tmpfilepath = path + st->d_name;
 		status = stat(tmpfilepath.c_str(), &sstat);
-		if (status == -1)
-		{
+		if (status == -1) {
 			closedir(ds);
 			return Error<bool>(false);
 		}
@@ -95,8 +92,7 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML()
 		//もう一度読む
 		st = readdir(ds);
 	}
-	if (errno != 0)
-	{
+	if (errno != 0) {
 		closedir(ds);
 		return Error<bool>(false);
 	}

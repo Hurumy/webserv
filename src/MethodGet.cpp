@@ -177,9 +177,9 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 
 	// std::cout << "test" << std::endl;
 
-	// URIがディレクトリを指していて、しかもTrailing slashがなかった場合に追加する
-	if (uri.find_last_of('/') != uri.size() - 1)
-	{
+	// URIがディレクトリを指していて、しかもTrailing
+	// slashがなかった場合に追加する
+	if (uri.find_last_of('/') != uri.size() - 1) {
 		uri += '/';
 	}
 
