@@ -22,6 +22,10 @@ echo "==== Run Integration tests ====="
 python3 runner.py tests
 
 echo 
+echo "==== Run shell test ====="
+bash tests/test.sh
+
+echo 
 echo "==== Shutdown webserv ====="
 PID=$(ps | grep webserv  | awk '{print $1}')
 kill ${PID}
