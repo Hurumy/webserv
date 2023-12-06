@@ -93,7 +93,9 @@ bool Request::loadPayload(CSocket &csocket) {
 						std::string element;
 
 						while (true) {
-							if (iss.eof() == true) { break; }
+							if (iss.eof() == true) {
+								break;
+							}
 							std::getline(iss, element, ',');
 							std::stringstream sselem(element);
 							std::string encoding;
@@ -110,7 +112,9 @@ bool Request::loadPayload(CSocket &csocket) {
 						std::string element;
 
 						while (true) {
-							if (iss.eof() == true) { break; }
+							if (iss.eof() == true) {
+								break;
+							}
 							std::getline(iss, element, ',');
 							std::stringstream sselem(element);
 							std::string expect;
@@ -161,7 +165,7 @@ bool Request::loadPayload(CSocket &csocket) {
 					}
 					csocket.popDataLine();
 					body.append(csocket.getData(), 0, chunkSize);
-					csocket.eraseData(chunkSize+2);
+					csocket.eraseData(chunkSize + 2);
 					chunkLength += chunkSize;
 					chunkSize = 0;
 					chunkLine = csocket.getDataLine();
@@ -180,7 +184,8 @@ bool Request::loadPayload(CSocket &csocket) {
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
 				csocket.setPhase(CSocket::PASS);
-			} return true;
+			}
+				return true;
 		}
 	}
 	csocket.setPhase(CSocket::PASS);
