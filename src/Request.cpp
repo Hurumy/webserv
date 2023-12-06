@@ -26,7 +26,8 @@ Request::Request()
 	: contentLength(0),
 	  lastContentLength(contentLength),
 	  phase(Request::REQLINE),
-	  cntCGIExec(0) {}
+	  cntCGIExec(0),
+	  chunkLength(0) {}
 
 const std::string Request::getLines() const {
 	std::string line;
@@ -85,6 +86,41 @@ bool Request::loadPayload(CSocket &csocket) {
 						lastContentLength = contentLength;
 					}
 					phase = Request::BODY;
+					std::map<std::string, std::string>::iterator cencodeiter =
+						header.find("transfer-encoding");
+					if (cencodeiter != header.end()) {
+						std::istringstream iss(cencodeiter->second);
+						std::string element;
+
+						while (true) {
+							if (iss.eof() == true) { break; }
+							std::getline(iss, element, ',');
+							std::stringstream sselem(element);
+							std::string encoding;
+							sselem >> encoding;
+							if (encoding.compare("chunked") == 0) {
+								phase = Request::CHUNKEDBODY;
+							}
+						}
+					}
+					std::map<std::string, std::string>::iterator expectiter =
+						header.find("expect");
+					if (expectiter != header.end()) {
+						std::istringstream iss(expectiter->second);
+						std::string element;
+
+						while (true) {
+							if (iss.eof() == true) { break; }
+							std::getline(iss, element, ',');
+							std::stringstream sselem(element);
+							std::string expect;
+							sselem >> expect;
+							if (expect.compare("100-continue") == 0) {
+								csocket.setPhase(CSocket::SETCONTINUE);
+								return true;
+							}
+						}
+					}
 					break;
 				}
 				if (isTrueLoadHeader == false) {
@@ -109,8 +145,45 @@ bool Request::loadPayload(CSocket &csocket) {
 				// std::clog << getLines() << std::endl;
 			}
 				return true;
+			case Request::CHUNKEDBODY: {
+				std::string chunkLine(csocket.getDataLine());
+				std::stringstream ss;
+				std::size_t chunkSize(0);
+
+				ss << chunkLine;
+				ss >> std::hex >> chunkSize;
+				ss >> chunkExt;
+				// csocket.popDataLine();
+				while (chunkSize > 0) {
+					if (csocket.getData().size() < chunkSize) {
+						csocket.setPhase(CSocket::RECV);
+						return false;
+					}
+					csocket.popDataLine();
+					body.append(csocket.getData(), 0, chunkSize);
+					csocket.eraseData(chunkSize+2);
+					chunkLength += chunkSize;
+					chunkSize = 0;
+					chunkLine = csocket.getDataLine();
+					if (chunkLine.empty() == true) {
+						csocket.setPhase(CSocket::RECV);
+						return false;
+					}
+					ss.str("");
+					ss.clear(std::stringstream::goodbit);
+					ss << chunkLine;
+					ss >> std::hex >> chunkSize;
+					ss >> chunkExt;
+				}
+				// remove trailer field
+				std::stringstream ssChunkLength;
+				ssChunkLength << chunkLength;
+				header["Content-Length"] = ssChunkLength.str();
+				csocket.setPhase(CSocket::PASS);
+			} return true;
 		}
 	}
+	csocket.setPhase(CSocket::PASS);
 	return true;
 }
 

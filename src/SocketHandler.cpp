@@ -303,7 +303,8 @@ bool SocketHandler::sendResponses() {
 	for (std::list<CSocket>::iterator csockiter = csockets.begin();
 		 csockiter != csockets.end(); ++csockiter) {
 		if ((csockiter->getPhase() == CSocket::SEND ||
-			 csockiter->getPhase() == CSocket::CSENDERROR) &&
+			 csockiter->getPhase() == CSocket::CSENDERROR ||
+			 csockiter->getPhase() == CSocket::SENDCONTINUE) &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
@@ -326,12 +327,14 @@ bool SocketHandler::sendResponses() {
 							  << std::endl;
 				}
 #endif
+				if (csockiter->getPhase() != CSocket::SENDCONTINUE) {
+					removeResponse(csockiter->getSockfd());
+				}
 				if (csockiter->getPhase() == CSocket::CSENDERROR) {
 					csockiter->setPhase(CSocket::CLOSE);
 				} else {
 					csockiter->setPhase(CSocket::RECV);
 				}
-				removeResponse(csockiter->getSockfd());
 			}
 		}
 	}
@@ -369,7 +372,6 @@ bool SocketHandler::loadRequests() {
 				std::clog << requests[csockiter->getSockfd()].getLines()
 						  << std::endl;
 #endif
-				csockiter->setPhase(CSocket::PASS);
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
@@ -387,10 +389,6 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 		if (iter->getPhase() == CSocket::PASS) {
 			RequestHandler requestHandler =
 				RequestHandler(configs, requests[iter->getSockfd()]);
-// for debugging
-#if defined(_DEBUGFLAG)
-			std::clog << requests[iter->getSockfd()].getLines() << std::endl;
-#endif
 			if (requestHandler.searchMatchHost().isError() == true) {
 				// error handling
 				responses[iter->getSockfd()] = requestHandler.getResponse();
@@ -433,6 +431,14 @@ bool SocketHandler::loadResponses(std::vector<Config> const &configs) {
 			response.setHeader("Connecion", "close");
 			responses[iter->getSockfd()] = response;
 			iter->setPhase(CSocket::CSENDERROR);
+		} else if (iter->getPhase() == CSocket::SETCONTINUE) {
+			Response response;
+			response.setVersion("HTTP/1.1");
+			response.setStatus(100);
+			response.setStatusMessage("Continue");
+			response.setHeader("Connecion", "keep-alive");
+			responses[iter->getSockfd()] = response;
+			iter->setPhase(CSocket::SENDCONTINUE);
 		}
 	}
 	return true;

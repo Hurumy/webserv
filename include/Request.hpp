@@ -21,7 +21,7 @@
 
 class Request : public virtual APayload {
 	public:
-		enum tag { REQLINE, HEADER, BODY };
+		enum tag { REQLINE, HEADER, BODY, CHUNKEDBODY };
 		Request();
 
 		const std::string getLines() const;
@@ -53,6 +53,8 @@ class Request : public virtual APayload {
 		std::string localAddr;
 		unsigned int localPort;
 		std::size_t cntCGIExec;
+		std::size_t chunkLength;
+		std::string chunkExt;
 
 		static std::vector<std::string> initMethods();
 		bool loadRequestLine(CSocket &csocket);
