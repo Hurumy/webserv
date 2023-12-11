@@ -32,15 +32,14 @@ jobs:
         run: make debug
 
       - name: Install libraries
-        run: python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
-
+        run: python -m pip install --upgrade pip setuptools && python -m pip install -r requirement.txt
       - name: Set env variables
         run: |
           cd ./integrationtest
           echo HOST_NAME='127.0.0.1' >> .env
           echo PORT=8081 >> .env
           echo PROJECT_ROOT='../' >> .env
-          echo CONFFILE='${PROJECT_ROOT}conf_files/test.conf' >> .env
+          echo CONFFILE='conf/test.conf' >> .env
           echo WEBSERV='${PROJECT_ROOT}webserv' >> .env
 
       - name: Run test
