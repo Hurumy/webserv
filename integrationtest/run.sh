@@ -49,6 +49,13 @@ if [ "$?" -ne 0 ]; then
 fi
 
 echo
+echo "==== Allow webserv to execute CGI ====="
+chmod -R 775 content/cgi_bin/
+if [ "$?" -ne 0 ]; then
+	exit 1
+fi
+
+echo
 echo "==== Start webserv ====="
 ${WEBSERV} ${CONFFILE} &
 if [ "$?" -ne 0 ]; then
