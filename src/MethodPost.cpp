@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:13 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/16 15:44:32 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/12/11 15:29:54 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,6 @@ std::map<std::string, std::string> MethodPost::initExtMap() {
 	return (tmp);
 }
 
-Result<std::string, bool> MethodPost::setExtension(std::string fname,
-												   std::string type) const {
-	std::string extension;
-	std::string _res;
-
-	if (ext.find(type) != ext.end())
-		extension = ext.at(type);
-	else
-		return Error<bool>(false);
-
-	// std::cout << "extension: " << extension << std::endl;
-	_res = fname + "." + extension;
-	return Ok<std::string>(_res);
-}
-
 MethodPost::MethodPost(Config _conf, Request _req, Response &_res)
 	: AMethod(_conf, _req, _res) {}
 
@@ -75,6 +60,19 @@ std::string MethodPost::makeFilename(std::string _uppath) {
 	int status = 0;
 	unsigned long long number = 0;
 	std::stringstream ss;
+	std::string _ext = "";
+	bool is_type = false;
+
+	Result<std::string, bool> res_type = req.getHeader("Content-Type");
+	if (res_type.isOK() == true)
+	{
+		std::string type = res_type.getOk();
+		if (ext.find(type) != ext.end())
+		{
+			_ext = ext.at(type);
+			is_type = true;
+		}
+	}
 
 	do {
 		ss.str("");
@@ -82,6 +80,11 @@ std::string MethodPost::makeFilename(std::string _uppath) {
 		ss << _uppath;
 		ss << "/";
 		ss << number;
+		if (is_type == true)
+		{
+			ss << ".";
+			ss << _ext;
+		}
 		filename = ss.str();
 		status = access(filename.c_str(), F_OK);
 		number++;
@@ -164,17 +167,7 @@ int MethodPost::openPostResource() {
 
 	//被りのないファイル名を調べる
 	filename = makeFilename(uppath);
-	// std::cout << BLUE << filename << RESET << std::endl;
-
-	//拡張子をつける
-	Result<std::string, bool> res_type = req.getHeader("Content-Type");
-	if (res_type.isOK() == true) {
-		std::string const &type = res_type.getOk();
-		Result<std::string, bool> res_fn = setExtension(filename, type);
-		if (res_fn.isOK()) {
-			filename = res_fn.getOk();
-		}
-	}
+	//std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
@@ -212,10 +205,14 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
+	//std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
+
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0;
-		 i < filesize / sizeof(char) && req.getBody().c_str()[i]; i++)
+	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
+	{
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
+		//std::cerr << YELLOW << "i: " << i << RESET << std::endl;
+	}
 
 	ofs.close();
 
