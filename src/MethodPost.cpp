@@ -64,11 +64,9 @@ std::string MethodPost::makeFilename(std::string _uppath) {
 	bool is_type = false;
 
 	Result<std::string, bool> res_type = req.getHeader("Content-Type");
-	if (res_type.isOK() == true)
-	{
+	if (res_type.isOK() == true) {
 		std::string type = res_type.getOk();
-		if (ext.find(type) != ext.end())
-		{
+		if (ext.find(type) != ext.end()) {
 			_ext = ext.at(type);
 			is_type = true;
 		}
@@ -80,8 +78,7 @@ std::string MethodPost::makeFilename(std::string _uppath) {
 		ss << _uppath;
 		ss << "/";
 		ss << number;
-		if (is_type == true)
-		{
+		if (is_type == true) {
 			ss << ".";
 			ss << _ext;
 		}
@@ -167,7 +164,7 @@ int MethodPost::openPostResource() {
 
 	//被りのないファイル名を調べる
 	filename = makeFilename(uppath);
-	//std::cout << BLUE << filename << RESET << std::endl;
+	// std::cout << BLUE << filename << RESET << std::endl;
 
 	//作ったファイル名のファイルを開く
 	std::ofstream ofs(filename.c_str(), std::ios::binary);
@@ -205,13 +202,12 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
-	//std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
+	// std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
 
 	//ファイルに書き込みをする
-	for (unsigned long long i = 0; i < filesize / sizeof(char); i++)
-	{
+	for (unsigned long long i = 0; i < filesize / sizeof(char); i++) {
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
-		//std::cerr << YELLOW << "i: " << i << RESET << std::endl;
+		// std::cerr << YELLOW << "i: " << i << RESET << std::endl;
 	}
 
 	ofs.close();
