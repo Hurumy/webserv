@@ -52,7 +52,7 @@ fi
 
 echo 
 echo "==== Run Integration tests ====="
-python3 runner.py tests
+python runner.py tests
 if [ "$?" -ne 0 ]; then
 	PID=$(ps | grep webserv  | awk '{print $1}')
 	kill ${PID}
