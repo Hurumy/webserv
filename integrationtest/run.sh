@@ -44,14 +44,29 @@ server {
 echo
 echo "==== Start webserv ====="
 ${WEBSERV} ${CONFFILE} &
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
 
 echo 
 echo "==== Run Integration tests ====="
 python3 runner.py tests
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
 
 echo 
 echo "==== Run shell test ====="
 bash tests/test.sh
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
 
 echo 
 echo "==== Shutdown webserv ====="
