@@ -6,7 +6,7 @@
 /*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:24:25 by komatsud          #+#    #+#             */
-/*   Updated: 2023/11/16 15:33:42 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/12/11 15:19:24 by komatsud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@ class MethodPost : public AMethod {
 		Result<int, bool> checkMaxBodySize();
 		static const std::map<std::string, std::string> ext;
 		static std::map<std::string, std::string> initExtMap();
-		Result<std::string, bool> setExtension(std::string fname,
-											   std::string type) const;
 
 	protected:
 	public:
