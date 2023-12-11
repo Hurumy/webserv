@@ -40,7 +40,7 @@ jobs:
           echo HOST_NAME='127.0.0.1' >> .env
           echo PORT=8081 >> .env
           echo PROJECT_ROOT='../' >> .env
-          echo CONFFILE='${PROJECT_ROOT}conf_files/test.conf' >> .env
+          echo CONFFILE='conf/test.conf' >> .env
           echo WEBSERV='${PROJECT_ROOT}webserv' >> .env
 
       - name: Run test
