@@ -42,6 +42,13 @@ server {
 " > ${CONFFILE}
 
 echo
+echo "==== Reinstall dotenv ====="
+pip install -U python-dotenv
+if [ "$?" -ne 0 ]; then
+	exit 1
+fi
+
+echo
 echo "==== Start webserv ====="
 ${WEBSERV} ${CONFFILE} &
 if [ "$?" -ne 0 ]; then
