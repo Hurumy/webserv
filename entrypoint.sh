@@ -52,7 +52,7 @@ cmake --install build
 cd ..
 
 echo "${0}: install python libraries"
-python -m pip install --upgrade pip setuptools && pip install -r requirement.txt
+python3.8 -m pip install --upgrade pip setuptools && python3.8 -m pip install -r requirement.txt
 status=$?
 if [ $status -ne 0 ]; then
   echo "Failed to install python-dotenv: $status"
