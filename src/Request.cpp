@@ -62,6 +62,21 @@ bool Request::setMethod(std::string _method) {
 
 std::string const &Request::getMethod() const { return (this->method); }
 
+// void Request::_removeTrailerField() {
+	// std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+	// if (headerIter == header.end()) return;
+	// std::istringstream iss(headerIter->second);
+	// std::stringstream ssForRemoveSpaces;
+	// std::string trailer;
+
+	// std::getline(iss, trailer, ',');
+	// ssForRemoveSpaces << trailer;
+	// trailer.clear();
+	// ssForRemoveSpaces >> trailer;
+
+	
+// }
+
 bool Request::loadPayload(CSocket &csocket) {
 	bool isTrueLoadHeader;
 
@@ -186,6 +201,9 @@ bool Request::loadPayload(CSocket &csocket) {
 				csocket.setPhase(CSocket::PASS);
 			}
 				return true;
+			case Request::TRAILERFIELD: {
+				
+			} return true;
 		}
 	}
 	csocket.setPhase(CSocket::PASS);
