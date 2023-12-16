@@ -217,21 +217,14 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::stringstream ssForRemoveSpaces;
 				std::string trailer;
 
-				std::getline(ss, trailer, ',');
-				ssForRemoveSpaces.str("");
-				ssForRemoveSpaces.clear(std::stringstream::goodbit);
-				ssForRemoveSpaces << trailer;
-				trailer.clear();
-				ssForRemoveSpaces >> trailer;
 				while (ss.good() == true) {
-					std::clog << RED << trailer << RESET << std::endl;
-					setHeader(trailer, "");
 					std::getline(ss, trailer, ',');
 					ssForRemoveSpaces.str("");
 					ssForRemoveSpaces.clear(std::stringstream::goodbit);
 					ssForRemoveSpaces << trailer;
 					trailer.clear();
 					ssForRemoveSpaces >> trailer;
+					setHeader(trailer, "");
 				}
 				csocket.setPhase(CSocket::PASS);
 			} return true;
