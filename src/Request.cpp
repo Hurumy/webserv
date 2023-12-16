@@ -194,15 +194,46 @@ bool Request::loadPayload(CSocket &csocket) {
 					ss >> std::hex >> chunkSize;
 					ss >> chunkExt;
 				}
-				// remove trailer field
 				std::stringstream ssChunkLength;
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
+				// remove trailer field
+				std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+				if (headerIter != header.end()) {
+					phase = Request::TRAILERFIELD;
+					break ;
+				}
 				csocket.setPhase(CSocket::PASS);
 			}
 				return true;
 			case Request::TRAILERFIELD: {
-				
+				std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+				if (headerIter == header.end()) {
+					csocket.setPhase(CSocket::PASS);
+					return true;
+				}
+
+				std::stringstream ss(headerIter->second);
+				std::stringstream ssForRemoveSpaces;
+				std::string trailer;
+
+				std::getline(ss, trailer, ',');
+				ssForRemoveSpaces.str("");
+				ssForRemoveSpaces.clear(std::stringstream::goodbit);
+				ssForRemoveSpaces << trailer;
+				trailer.clear();
+				ssForRemoveSpaces >> trailer;
+				while (ss.good() == true) {
+					std::clog << RED << trailer << RESET << std::endl;
+					setHeader(trailer, "");
+					std::getline(ss, trailer, ',');
+					ssForRemoveSpaces.str("");
+					ssForRemoveSpaces.clear(std::stringstream::goodbit);
+					ssForRemoveSpaces << trailer;
+					trailer.clear();
+					ssForRemoveSpaces >> trailer;
+				}
+				csocket.setPhase(CSocket::PASS);
 			} return true;
 		}
 	}
