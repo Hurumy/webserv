@@ -178,18 +178,20 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::stringstream ssChunkLength;
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
-				std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+				std::map<std::string, std::string>::iterator headerIter =
+					header.find("trailer");
 				if (headerIter != header.end()) {
 					csocket.popDataLine();
 					phase = Request::TRAILERFIELD;
-					break ;
+					break;
 				}
 				csocket.setPhase(CSocket::PASS);
 			}
 				return true;
 			case Request::TRAILERFIELD: {
 				if (trailers.empty() == true) {
-					std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+					std::map<std::string, std::string>::iterator headerIter =
+						header.find("trailer");
 					if (headerIter == header.end()) {
 						csocket.setPhase(CSocket::PASS);
 						return true;
@@ -206,7 +208,7 @@ bool Request::loadPayload(CSocket &csocket) {
 						ssForRemoveSpaces << trailer;
 						trailer.clear();
 						ssForRemoveSpaces >> trailer;
-						trailers[trailer] =  "";
+						trailers[trailer] = "";
 					}
 				}
 
@@ -215,7 +217,8 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::string value;
 
 				while (true) {
-					if (csocket.getDataLine().empty() == true && trailers.size() == cntRemovedTrailers) {
+					if (csocket.getDataLine().empty() == true &&
+						trailers.size() == cntRemovedTrailers) {
 						csocket.popDataLine();
 						csocket.setPhase(CSocket::PASS);
 						return true;
@@ -228,8 +231,10 @@ bool Request::loadPayload(CSocket &csocket) {
 						csocket.setPhase(CSocket::RECV);
 						return false;
 					}
-					std::map<std::string, std::string>::iterator trailersIter = trailers.find(key);
-					if (trailersIter == trailers.end() && trailers.size() == cntRemovedTrailers) {		
+					std::map<std::string, std::string>::iterator trailersIter =
+						trailers.find(key);
+					if (trailersIter == trailers.end() &&
+						trailers.size() == cntRemovedTrailers) {
 						csocket.setPhase(CSocket::PASS);
 						return true;
 					} else if (trailersIter == trailers.end()) {
@@ -241,7 +246,8 @@ bool Request::loadPayload(CSocket &csocket) {
 					csocket.popDataLine();
 					cntRemovedTrailers++;
 				}
-			} return true;
+			}
+				return true;
 		}
 	}
 	csocket.setPhase(CSocket::PASS);

@@ -17,8 +17,8 @@
 
 #include "APayload.hpp"
 #include "CSocket.hpp"
-#include "webserv.hpp"
 #include "sComp.hpp"
+#include "webserv.hpp"
 
 class Request : public virtual APayload {
 	public:
