@@ -18,10 +18,11 @@
 #include "APayload.hpp"
 #include "CSocket.hpp"
 #include "webserv.hpp"
+#include "sComp.hpp"
 
 class Request : public virtual APayload {
 	public:
-		enum tag { REQLINE, HEADER, BODY, CHUNKEDBODY };
+		enum tag { REQLINE, HEADER, BODY, CHUNKEDBODY, TRAILERFIELD };
 		Request();
 
 		const std::string getLines() const;
@@ -55,6 +56,9 @@ class Request : public virtual APayload {
 		std::size_t cntCGIExec;
 		std::size_t chunkLength;
 		std::string chunkExt;
+		std::string trailerField;
+		std::map<std::string, std::string, sComp> trailers;
+		std::size_t cntRemovedTrailers;
 
 		static std::vector<std::string> initMethods();
 		bool loadRequestLine(CSocket &csocket);

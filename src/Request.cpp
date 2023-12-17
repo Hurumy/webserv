@@ -140,13 +140,10 @@ bool Request::loadPayload(CSocket &csocket) {
 				lastContentLength -= afterSize - beforeSize;
 				if (lastContentLength != 0) {
 					csocket.setPhase(CSocket::RECV);
-					// return true;
 					return false;
 				}
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
-				// for debugging
-				// std::clog << getLines() << std::endl;
 			}
 				return true;
 			case Request::CHUNKEDBODY: {
@@ -157,7 +154,6 @@ bool Request::loadPayload(CSocket &csocket) {
 				ss << chunkLine;
 				ss >> std::hex >> chunkSize;
 				ss >> chunkExt;
-				// csocket.popDataLine();
 				while (chunkSize > 0) {
 					if (csocket.getData().size() < chunkSize) {
 						csocket.setPhase(CSocket::RECV);
@@ -179,13 +175,73 @@ bool Request::loadPayload(CSocket &csocket) {
 					ss >> std::hex >> chunkSize;
 					ss >> chunkExt;
 				}
-				// remove trailer field
 				std::stringstream ssChunkLength;
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
+				std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+				if (headerIter != header.end()) {
+					csocket.popDataLine();
+					phase = Request::TRAILERFIELD;
+					break ;
+				}
 				csocket.setPhase(CSocket::PASS);
 			}
 				return true;
+			case Request::TRAILERFIELD: {
+				if (trailers.empty() == true) {
+					std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
+					if (headerIter == header.end()) {
+						csocket.setPhase(CSocket::PASS);
+						return true;
+					}
+
+					std::stringstream ss(headerIter->second);
+					std::stringstream ssForRemoveSpaces;
+					std::string trailer;
+
+					while (ss.good() == true) {
+						std::getline(ss, trailer, ',');
+						ssForRemoveSpaces.str("");
+						ssForRemoveSpaces.clear(std::stringstream::goodbit);
+						ssForRemoveSpaces << trailer;
+						trailer.clear();
+						ssForRemoveSpaces >> trailer;
+						trailers[trailer] =  "";
+					}
+				}
+
+				std::stringstream ss;
+				std::string key;
+				std::string value;
+
+				while (true) {
+					if (csocket.getDataLine().empty() == true && trailers.size() == cntRemovedTrailers) {
+						csocket.popDataLine();
+						csocket.setPhase(CSocket::PASS);
+						return true;
+					}
+					ss.str("");
+					ss.clear(std::stringstream::goodbit);
+					ss << csocket.getDataLine();
+					std::getline(ss, key, ':');
+					if (ss.good() == false) {
+						csocket.setPhase(CSocket::RECV);
+						return false;
+					}
+					std::map<std::string, std::string>::iterator trailersIter = trailers.find(key);
+					if (trailersIter == trailers.end() && trailers.size() == cntRemovedTrailers) {		
+						csocket.setPhase(CSocket::PASS);
+						return true;
+					} else if (trailersIter == trailers.end()) {
+						csocket.setPhase(CSocket::RECV);
+						return false;
+					}
+					std::getline(ss, value, ':');
+					setHeader(key, value);
+					csocket.popDataLine();
+					cntRemovedTrailers++;
+				}
+			} return true;
 		}
 	}
 	csocket.setPhase(CSocket::PASS);
