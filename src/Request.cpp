@@ -62,21 +62,6 @@ bool Request::setMethod(std::string _method) {
 
 std::string const &Request::getMethod() const { return (this->method); }
 
-// void Request::_removeTrailerField() {
-	// std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
-	// if (headerIter == header.end()) return;
-	// std::istringstream iss(headerIter->second);
-	// std::stringstream ssForRemoveSpaces;
-	// std::string trailer;
-
-	// std::getline(iss, trailer, ',');
-	// ssForRemoveSpaces << trailer;
-	// trailer.clear();
-	// ssForRemoveSpaces >> trailer;
-
-	
-// }
-
 bool Request::loadPayload(CSocket &csocket) {
 	bool isTrueLoadHeader;
 
@@ -155,13 +140,10 @@ bool Request::loadPayload(CSocket &csocket) {
 				lastContentLength -= afterSize - beforeSize;
 				if (lastContentLength != 0) {
 					csocket.setPhase(CSocket::RECV);
-					// return true;
 					return false;
 				}
 				phase = Request::REQLINE;
 				csocket.setPhase(CSocket::PASS);
-				// for debugging
-				// std::clog << getLines() << std::endl;
 			}
 				return true;
 			case Request::CHUNKEDBODY: {
@@ -172,7 +154,6 @@ bool Request::loadPayload(CSocket &csocket) {
 				ss << chunkLine;
 				ss >> std::hex >> chunkSize;
 				ss >> chunkExt;
-				// csocket.popDataLine();
 				while (chunkSize > 0) {
 					if (csocket.getData().size() < chunkSize) {
 						csocket.setPhase(CSocket::RECV);
@@ -197,7 +178,6 @@ bool Request::loadPayload(CSocket &csocket) {
 				std::stringstream ssChunkLength;
 				ssChunkLength << chunkLength;
 				header["Content-Length"] = ssChunkLength.str();
-				// remove trailer field
 				std::map<std::string, std::string>::iterator headerIter = header.find("trailer");
 				if (headerIter != header.end()) {
 					csocket.popDataLine();
