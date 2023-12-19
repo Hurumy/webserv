@@ -26,5 +26,10 @@ class TestPostRequest(unittest.TestCase):
 		r = requests.post(URI_TOP, data=file_text, headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
-		# self.assertEqual(r.text, file_text)
-		# self.assertEqual(r.status_code, 200)
+
+		with open('./content/0.txt', 'rb') as fs:
+			file_text_cmp = fs.read()
+		self.assertEqual(file_text_cmp.decode('ascii'), 'MozillaDeveloperNetwork')
+		self.assertEqual(r.status_code, 201)
+
+		if os.path.exists('./content/0.txt'): os.remove('./content/0.txt')
