@@ -11,6 +11,28 @@ URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 class TestPostRequest(unittest.TestCase):
 
+	def test_simple_post_jpg(self):
+		print('\n===========================')
+		print('TEST: test simple POST request of jpg')
+		print('===========================\n')
+
+		with open('./content/wordpress-logo.jpg', 'rb') as fs:
+			file_text = fs.read()
+		
+		headers = {
+			'Content-Type':'image/jpg'
+		}
+		r = requests.post(URI_TOP, data=file_text)
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+
+		with open('./content/0.jpg', 'rb') as fs:
+			file_text_cmp = fs.read()
+		self.assertEqual(file_text_cmp, file_text)
+		self.assertEqual(r.status_code, 201)
+
+		if os.path.exists('./content/0.jpg'): os.remove('./content/0.jpg')
+
 	def test_trailerfield(self):
 		print('\n===========================')
 		print('TEST: test trailerfield Chunked transfer encoding')
@@ -22,7 +44,7 @@ class TestPostRequest(unittest.TestCase):
 			'Content-Type':'text/plain',
 			'Transfer-Encoding':'chunked',
 			'Trailer':'Expires'
-        }
+		}
 		r = requests.post(URI_TOP, data=file_text, headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
