@@ -54,3 +54,21 @@ class TestGetRequest(unittest.TestCase):
 		print('Status: ',r.status_code)
 		self.assertEqual(r.content, file_text)
 		self.assertEqual(r.status_code, 200)
+
+	def test_quoted_string(self):
+		print('\n===========================')
+		print('TEST: test Quoted string in GET')
+		print('===========================\n')
+
+		with open('./content/readme.html') as fs:
+			file_text = fs.read()
+
+		headers = {
+			'X_TEST_01': 'AA\ A',
+			'X_TEST_02': 'AA\,, BBB, CCC'
+		}
+		r = requests.get(URI_TOP + '/readme.html', headers=headers)
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.text, file_text)
+		self.assertEqual(r.status_code, 200)
