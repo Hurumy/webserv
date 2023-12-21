@@ -202,7 +202,7 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
-	std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
+	//std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
 
 	// Content-Lengthとボディのサイズが異なった場合400で返す
 	if (filesize != req.getBody().size())
