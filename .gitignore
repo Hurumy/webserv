@@ -67,4 +67,5 @@ playground
 
 # for no perm test
 noreadperm.conf
+.DS_Store
 
