@@ -132,8 +132,6 @@ int MethodPost::openPostResource() {
 	int status = 0;
 	std::string uppath;
 
-	std::cerr << RED << "openPostResource" << RESET << std::endl;
-
 	// locationでUploadPathが設定されていたらそれを使う
 	if (isloc == true && loc.getUploadPath().empty() == false) {
 		uppath = loc.getUploadPath();
