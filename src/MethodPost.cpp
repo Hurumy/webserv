@@ -208,7 +208,7 @@ int MethodPost::openPostResource() {
 	if (filesize != req.getBody().size())
 	{
 		#if defined(_DEBUGFLAG)
-		std::cerr << RED << "Error::MethodPost::openPostResource::400::ContentーLengthとボディのサイズが一致しない" << std::endl;
+		std::cerr << RED << "Error::MethodPost::openPostResource::400::ContentーLengthとボディのサイズが一致しない" << RESET << std::endl;
 		#endif
 		res.setStatus(400);
 		res.setStatusMessage("Bad Request");
