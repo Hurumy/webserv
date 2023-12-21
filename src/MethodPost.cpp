@@ -132,6 +132,8 @@ int MethodPost::openPostResource() {
 	int status = 0;
 	std::string uppath;
 
+	std::cerr << RED << "openPostResource" << RESET << std::endl;
+
 	// locationでUploadPathが設定されていたらそれを使う
 	if (isloc == true && loc.getUploadPath().empty() == false) {
 		uppath = loc.getUploadPath();
@@ -202,7 +204,18 @@ int MethodPost::openPostResource() {
 	ss << str;
 	ss >> filesize;
 
-	// std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
+	std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
+
+	// Content-Lengthとボディのサイズが異なった場合400で返す
+	if (filesize != req.getBody().size())
+	{
+		#if defined(_DEBUGFLAG)
+		std::cerr << RED << "Error::MethodPost::openPostResource::400::ContentーLengthとボディのサイズが一致しない" << std::endl;
+		#endif
+		res.setStatus(400);
+		res.setStatusMessage("Bad Request");
+		return (400);
+	}
 
 	//ファイルに書き込みをする
 	for (unsigned long long i = 0; i < filesize / sizeof(char); i++) {
