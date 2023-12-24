@@ -54,3 +54,37 @@ class TestGetRequest(unittest.TestCase):
 		print('Status: ',r.status_code)
 		self.assertEqual(r.content, file_text)
 		self.assertEqual(r.status_code, 200)
+
+	def test_quoted_string(self):
+		print('\n===========================')
+		print('TEST: test Quoted string in GET')
+		print('===========================\n')
+
+		with open('./content/readme.html') as fs:
+			file_text = fs.read()
+
+		headers = {
+			'X_TEST_01': 'AA\ A',
+			'X_TEST_02': 'AA\,, BBB, CCC'
+		}
+		r = requests.get(URI_TOP + '/readme.html', headers=headers)
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.text, file_text)
+		self.assertEqual(r.status_code, 200)
+
+	def test_quoted_string_nl(self):
+		print('\n===========================')
+		print('TEST: test Quoted string with a new line in GET')
+		print('===========================\n')
+
+		client = Ipv4Client(HOST_NAME, int(PORT))
+		client.send('GET /helloworld.txt HTTP/1.1\r\n')
+		client.send('Host: ' + HOST_NAME + ':' + PORT + '\r\n')
+		client.send("X_TEST: AAA\r\nAAA\r\n")
+		client.send("\r\n")
+		client.recv()
+		client.close()
+		print('Response:\n',client.response_data)
+		print('Status: ',client.status)
+		self.assertEqual(client.status, 200)

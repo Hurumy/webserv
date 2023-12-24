@@ -292,28 +292,34 @@ bool Request::loadRequestLine(CSocket &csocket) {
 }
 
 bool Request::loadHeader(CSocket &csocket) {
+	if (csocket.getData().find("\r\n") == std::string::npos) {
+		csocket.setPhase(CSocket::RECV);
+		return false;
+	}
+
 	std::istringstream iss(csocket.getDataLine());
 	std::string key;
 	std::string value;
 
 	if (header.size() > header.max_size() - 1) {
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
-	iss >> key;
-	if (key.empty() == false) {
-		key.resize(key.size() - 1);
-	} else {
-		csocket.setPhase(CSocket::RECV);
+	if (iss.good() == false) {
+		csocket.setPhase(CSocket::CSETERROR);
+		return false;
+	}
+	std::getline(iss, key, ':');
+	if (iss.good() == false) {
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	iss >> value;
-	if (value.empty() == false) {
-		header[key] = value;
-	} else {
-		csocket.setPhase(CSocket::RECV);
+	if (value.empty() == true) {
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
+	header[key] = value;
 	while (iss >> value) {
 		header[key].append(" " + value);
 	}

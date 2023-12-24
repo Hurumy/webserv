@@ -314,7 +314,7 @@ bool SocketHandler::sendResponses() {
 				std::clog << responses[csockiter->getSockfd()].getLines()
 						  << std::endl;
 				{
-					int fd = open("./Makefile", O_RDONLY);
+					int fd = open("/dev/random", O_RDONLY);
 					std::clog << "open fd: " << fd << std::endl;
 					close(fd);
 					std::clog << "the number of CGIResponseCreators: "
