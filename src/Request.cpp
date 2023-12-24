@@ -300,20 +300,24 @@ bool Request::loadHeader(CSocket &csocket) {
 		csocket.setPhase(CSocket::CLOSE);
 		return false;
 	}
-	iss >> key;
-	if (key.empty() == false) {
-		key.resize(key.size() - 1);
-	} else {
-		csocket.setPhase(CSocket::RECV);
+	if (iss.good() == false) {
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::CSETERROR);
+		return false;
+	}
+	std::getline(iss, key, ':');
+	if (iss.good() == false) {
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	iss >> value;
-	if (value.empty() == false) {
-		header[key] = value;
-	} else {
-		csocket.setPhase(CSocket::RECV);
+	if (value.empty() == true) {
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
+	header[key] = value;
 	while (iss >> value) {
 		header[key].append(" " + value);
 	}
