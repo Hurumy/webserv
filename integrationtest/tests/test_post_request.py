@@ -22,7 +22,7 @@ class TestPostRequest(unittest.TestCase):
 		headers = {
 			'Content-Type':'image/jpeg'
 		}
-		r = requests.post(URI_TOP, data=file_text)
+		r = requests.post(URI_TOP, data=file_text, headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 
