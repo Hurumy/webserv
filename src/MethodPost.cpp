@@ -204,6 +204,19 @@ int MethodPost::openPostResource() {
 
 	// std::cerr << RED << "filesize: " << filesize << RESET << std::endl;
 
+	// Content-Lengthとボディのサイズが異なった場合400で返す
+	if (filesize != req.getBody().size()) {
+#if defined(_DEBUGFLAG)
+		std::cerr << RED
+				  << "Error::MethodPost::openPostResource::400::"
+					 "ContentーLengthとボディのサイズが一致しない"
+				  << RESET << std::endl;
+#endif
+		res.setStatus(400);
+		res.setStatusMessage("Bad Request");
+		return (400);
+	}
+
 	//ファイルに書き込みをする
 	for (unsigned long long i = 0; i < filesize / sizeof(char); i++) {
 		ofs.write(&req.getBody().c_str()[i], sizeof(char));
