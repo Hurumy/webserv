@@ -292,12 +292,18 @@ bool Request::loadRequestLine(CSocket &csocket) {
 }
 
 bool Request::loadHeader(CSocket &csocket) {
+	if (csocket.getData().find("\r\n") == std::string::npos) {
+		csocket.setPhase(CSocket::RECV);
+		return false;
+	}
+
 	std::istringstream iss(csocket.getDataLine());
 	std::string key;
 	std::string value;
 
 	if (header.size() > header.max_size() - 1) {
-		csocket.setPhase(CSocket::CLOSE);
+		csocket.popDataLine();
+		csocket.setPhase(CSocket::CSETERROR);
 		return false;
 	}
 	if (iss.good() == false) {
