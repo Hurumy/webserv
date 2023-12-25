@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:12:24 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 17:36:56 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 10:57:34 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
+#include "AddrMonitor.hpp"
 
 class SocketHandler {
 	private:
@@ -41,6 +42,7 @@ class SocketHandler {
 		std::map<int, Request> requests;
 		std::map<int, Response> responses;
 		std::map<int, CGIResponseCreator> cgiResponseCreators;
+		AddrMonitor addrMonitor;
 
 	protected:
 	public:
