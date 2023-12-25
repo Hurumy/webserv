@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 10:50:33 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 11:16:34 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 20:19:44 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 #include <ctime>
 #include <string>
 #include <map>
+#include <stdint.h>
+
+typedef uint32_t u_int32_t;
 
 class AddrMonitor {
     private:

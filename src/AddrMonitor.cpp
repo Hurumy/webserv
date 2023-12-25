@@ -6,13 +6,16 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 10:50:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 20:14:49 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 20:19:27 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sstream>
+#include <stdint.h>
 
 #include "AddrMonitor.hpp"
+
+typedef uint32_t u_int32_t;
 
 AddrMonitor::AddrMonitor() 
     : lasttime(std::time(NULL)) {}
