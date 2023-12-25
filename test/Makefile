@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/11/07 12:26:30 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/12/25 20:22:46 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,6 @@ WS_SRC_FILES	:= \
 					Response.cpp \
 					Request.cpp \
 					Version.cpp \
-					test.cpp \
 					makeStatusMap.cpp \
 					Status.cpp \
 					Config.cpp \
