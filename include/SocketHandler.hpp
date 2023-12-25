@@ -19,6 +19,7 @@
 #include <map>
 #include <vector>
 
+#include "AddrMonitor.hpp"
 #include "CGIResponseCreator.hpp"
 #include "CSocket.hpp"
 #include "Config.hpp"
@@ -26,7 +27,6 @@
 #include "Response.hpp"
 #include "Result.hpp"
 #include "SSocket.hpp"
-#include "AddrMonitor.hpp"
 
 class SocketHandler {
 	private:

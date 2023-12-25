@@ -10,21 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <sstream>
+#include "AddrMonitor.hpp"
+
 #include <stdint.h>
 
-#include "AddrMonitor.hpp"
+#include <sstream>
 
 typedef uint32_t u_int32_t;
 
-AddrMonitor::AddrMonitor() 
-    : lasttime(std::time(NULL)) {}
+AddrMonitor::AddrMonitor() : lasttime(std::time(NULL)) {}
 
 std::string AddrMonitor::_getRemoteAddr(u_int32_t s_addr) {
 	int byte;
 	int bitshift(0);
 	std::stringstream ss;
-    std::string remoteAddr;
+	std::string remoteAddr;
 
 	while (4 > bitshift) {
 		byte = (s_addr >> (bitshift * 8)) & 0xFF;
@@ -38,12 +38,12 @@ std::string AddrMonitor::_getRemoteAddr(u_int32_t s_addr) {
 		ss.clear(std::stringstream::goodbit);
 		bitshift++;
 	}
-    return remoteAddr;
+	return remoteAddr;
 }
 
 bool AddrMonitor::countAddr(unsigned long s_addr) {
 	std::map<std::string, std::size_t>::iterator iter;
-    std::string remoteAddr(_getRemoteAddr(s_addr));
+	std::string remoteAddr(_getRemoteAddr(s_addr));
 
 	iter = addrMap.find(remoteAddr);
 	if (iter != addrMap.end()) {
@@ -51,22 +51,23 @@ bool AddrMonitor::countAddr(unsigned long s_addr) {
 	} else {
 		addrMap[remoteAddr] = 0;
 	}
-    return true;    
+	return true;
 }
 
 bool AddrMonitor::clearAddrMap() {
-    if (std::difftime(std::time(NULL), lasttime) > 8) {
-	    addrMap.clear();
-        lasttime = std::time(NULL);
-    }
-    return true;
+	if (std::difftime(std::time(NULL), lasttime) > 8) {
+		addrMap.clear();
+		lasttime = std::time(NULL);
+	}
+	return true;
 }
 #include "webserv.hpp"
 bool AddrMonitor::IsWarn() {
-    for (std::map<std::string, std::size_t>::iterator iter = addrMap.begin(); iter != addrMap.end(); ++iter) {
-        if (iter->second > 3000) { 
-            return true;
-        }
-    }
-    return false;
+	for (std::map<std::string, std::size_t>::iterator iter = addrMap.begin();
+		 iter != addrMap.end(); ++iter) {
+		if (iter->second > 3000) {
+			return true;
+		}
+	}
+	return false;
 }

@@ -250,7 +250,9 @@ bool SocketHandler::recieveCSockets() {
 	int sockfd;
 
 	addrMonitor.clearAddrMap();
-	if (addrMonitor.IsWarn() == true) { return true; }
+	if (addrMonitor.IsWarn() == true) {
+		return true;
+	}
 	for (std::vector<SSocket>::iterator ssockiter = ssockets.begin();
 		 ssockiter != ssockets.end(); ++ssockiter) {
 		if ((ssockiter->getRevents() & POLLIN) == POLLIN) {
@@ -310,9 +312,11 @@ bool SocketHandler::sendResponses() {
 			 csockiter->getPhase() == CSocket::SENDCONTINUE) &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
 			if (csockiter->getIsKeepAlive() == true) {
-				responses[csockiter->getSockfd()].setHeader("connection", "keep-alive");
+				responses[csockiter->getSockfd()].setHeader("connection",
+															"keep-alive");
 			} else {
-				responses[csockiter->getSockfd()].setHeader("connection", "close");
+				responses[csockiter->getSockfd()].setHeader("connection",
+															"close");
 			}
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
@@ -338,7 +342,8 @@ bool SocketHandler::sendResponses() {
 				if (csockiter->getPhase() != CSocket::SENDCONTINUE) {
 					removeResponse(csockiter->getSockfd());
 				}
-				if (csockiter->getPhase() == CSocket::CSENDERROR || csockiter->getIsKeepAlive() == false) {
+				if (csockiter->getPhase() == CSocket::CSENDERROR ||
+					csockiter->getIsKeepAlive() == false) {
 					csockiter->setPhase(CSocket::CLOSE);
 				} else {
 					csockiter->setPhase(CSocket::RECV);
@@ -380,7 +385,8 @@ bool SocketHandler::loadRequests() {
 				std::clog << requests[csockiter->getSockfd()].getLines()
 						  << std::endl;
 #endif
-				Result<std::string, bool> res = requests[csockiter->getSockfd()].getHeader("connection");
+				Result<std::string, bool> res =
+					requests[csockiter->getSockfd()].getHeader("connection");
 				if (res.isOK() == true) {
 					if (res.getOk().compare("close") == 0) {
 						csockiter->setIsKeepAlive(false);
