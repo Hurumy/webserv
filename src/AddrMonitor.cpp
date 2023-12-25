@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 10:50:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 12:29:50 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 20:14:49 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ bool AddrMonitor::clearAddrMap() {
 bool AddrMonitor::IsWarn() {
     for (std::map<std::string, std::size_t>::iterator iter = addrMap.begin(); iter != addrMap.end(); ++iter) {
         if (iter->second > 3000) { 
-            std::clog << RED << "TOO MUCH" << RESET << std::endl;
             return true;
         }
     }
