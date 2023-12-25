@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/10/26 14:32:12 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 12:50:06 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ CSocket::CSocket(int const _sockfd, unsigned long s_addr,
 	  phase(CSocket::RECV),
 	  lasttime(std::time(NULL)),
 	  localAddr(_localAddr),
-	  localPort(_localPort) {
+	  localPort(_localPort),
+	  isKeepAlive(true) {
 	setRemoteAddr(s_addr);
 }
 

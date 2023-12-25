@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:53:37 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/02 18:51:26 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 12:49:46 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,4 +72,5 @@ class CSocket {
 		std::string remoteAddr;
 		std::string localAddr;
 		unsigned int localPort;
+		bool isKeepAlive;
 };
