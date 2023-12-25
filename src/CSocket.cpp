@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 13:01:41 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 12:50:06 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 19:55:23 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,3 +137,7 @@ std::string const &CSocket::getRemoteAddr() const { return remoteAddr; }
 std::string const &CSocket::getLocalAddr() const { return localAddr; }
 
 unsigned int CSocket::getLocalPort() const { return localPort; }
+
+void CSocket::setIsKeepAlive(const bool flag) { isKeepAlive = flag; }
+
+bool CSocket::getIsKeepAlive() { return isKeepAlive; }
