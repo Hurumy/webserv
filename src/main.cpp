@@ -23,18 +23,23 @@
 #include "ft.hpp"
 
 int main(const int argc, const char **argv) {
-	if (argc != 2) {
-		ft::errorInInit("Usage: ./webserv <conf_file_path>");
-		return 1;
-	}
+	try {
+		if (argc != 2) {
+			ft::errorInInit("Usage: ./webserv <conf_file_path>");
+			return 1;
+		}
 
-	Server server;
+		Server server;
 
-	if (server.startUp(std::string(argv[1])) == false) return 1;
-	if (server.serverLoop() == false) {
-		return 1;
-	}
-	if (server.down() == false) {
+		if (server.startUp(std::string(argv[1])) == false) return 1;
+		if (server.serverLoop() == false) {
+			return 1;
+		}
+		if (server.down() == false) {
+			return 1;
+		}
+	} catch (...) {
+		ft::putSystemError("fatal");
 		return 1;
 	}
 	return 0;
