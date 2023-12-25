@@ -6,7 +6,7 @@
 #    By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/02 16:27:56 by shtanemu          #+#    #+#              #
-#    Updated: 2023/12/25 20:22:46 by shtanemu         ###   ########.fr        #
+#    Updated: 2023/12/25 20:30:20 by shtanemu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,7 +98,8 @@ WS_SRC_FILES	:= \
 					pC_cgi_path.cpp \
 					pC_alias.cpp \
 					sComp.cpp \
-					ft.cpp
+					ft.cpp \
+					AddrMonitor.cpp
 
 WS_SRC_DIR		:= ../src
 WS_OBJ_DIR		:= wsobj
