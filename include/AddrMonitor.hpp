@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 10:50:33 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 11:08:06 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 11:16:34 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ class AddrMonitor {
     private:
         std::map<std::string, std::size_t> addrMap;
         std::time_t lasttime;
+        
+        std::string _getRemoteAddr(u_int32_t s_addr);
     protected:
     public:
         AddrMonitor();
 
-		bool countAddr(std::string &remoteAddr);
+		bool countAddr(unsigned long s_addr);
 		bool clearAddrMap();
 		bool IsWarn();
 };
