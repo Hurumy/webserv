@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 12:25:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/25 19:55:43 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,7 @@ bool SocketHandler::sendResponses() {
 				if (csockiter->getPhase() != CSocket::SENDCONTINUE) {
 					removeResponse(csockiter->getSockfd());
 				}
-				if (csockiter->getPhase() == CSocket::CSENDERROR) {
+				if (csockiter->getPhase() == CSocket::CSENDERROR || csockiter->getIsKeepAlive() == false) {
 					csockiter->setPhase(CSocket::CLOSE);
 				} else {
 					csockiter->setPhase(CSocket::RECV);
@@ -375,6 +375,12 @@ bool SocketHandler::loadRequests() {
 				std::clog << requests[csockiter->getSockfd()].getLines()
 						  << std::endl;
 #endif
+				Result<std::string, bool> res = requests[csockiter->getSockfd()].getHeader("connection");
+				if (res.isOK() == true) {
+					if (res.getOk().compare("close") == 0) {
+						csockiter->setIsKeepAlive(false);
+					}
+				}
 			}
 			csockiter->setLasttime(std::time(NULL));
 		}
