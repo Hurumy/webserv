@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/12 14:40:54 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:38:25 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -621,7 +621,11 @@ bool CGIResponseCreator::_setDocumentRedirResponse(
 			issheader.str(line);
 			std::getline(issheader, key, ':');
 			std::getline(issheader, value);
-			response.addHeader(key, value);
+			if (ft::strcmpCaseIns(key, ("Set-Cookie")) == true) {
+				response.addSetCookie(value);
+			} else {
+				response.addHeader(key, value);
+			}
 		}
 	}
 	response.setStatus(200);
@@ -677,7 +681,11 @@ bool CGIResponseCreator::_setClientRedirResponse(std::istringstream &issline,
 			issheader.str(line);
 			std::getline(issheader, key, ':');
 			std::getline(issheader, value);
-			response.addHeader(key, value);
+			if (ft::strcmpCaseIns(key, ("Set-Cookie")) == true) {
+				response.addSetCookie(value);
+			} else {
+				response.addHeader(key, value);
+			}
 		}
 	}
 	Result<std::string, bool> result = response.getHeader("Status");
