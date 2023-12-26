@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/03 15:28:25 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/26 20:23:50 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:39:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,4 @@ class Response : public virtual APayload {
 		bool setStatusMessage(std::string const &message);
 		std::string const &getStatusMessage() const;
 		void addSetCookie(std::string const &cookie);
-		std::string getAllSetCookies() const;
 };

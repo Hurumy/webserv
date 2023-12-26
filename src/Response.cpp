@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 14:42:17 by komatsud          #+#    #+#             */
-/*   Updated: 2023/12/26 20:25:59 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:41:12 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ const std::string Response::getLines() const {
 		 iter != header.end(); ++iter) {
 		line += iter->first + ": ";
 		line += iter->second + "\r\n";
+	}
+	for (std::list<std::string>::const_iterator iter = setCookies.begin(); iter != setCookies.end(); ++iter) {
+		line += "Set-Cookie: ";
+		line += *iter + "\r\n";
 	}
 	line += "\r\n";
 	line += body;
@@ -52,14 +56,4 @@ std::string const &Response::getStatusMessage() const {
 
 void Response::addSetCookie(std::string const &cookie) {
 	setCookies.push_back(cookie);
-}
-
-std::string Response::getAllSetCookies() const {
-	std::string lines;
-
-	for (std::list<std::string>::const_iterator iter = setCookies.begin(); iter != setCookies.end(); ++iter) {
-		lines.append(*iter);
-		lines.append("\r\n");
-	}
-	return lines;
 }
