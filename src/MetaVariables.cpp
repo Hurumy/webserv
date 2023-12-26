@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 21:18:00 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 16:03:45 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 18:42:50 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ std::map<std::string, std::string> MetaVariables::initMetaVariables() {
 	initialMetaVariables["SERVER_NAME="] = "";
 	initialMetaVariables["SERVER_PROTOCOL="] = "";
 	initialMetaVariables["SERVER_SOFTWARE="] = "";
+	initialMetaVariables["HTTP_COOKIE="] = "";
 	return initialMetaVariables;
 }
 
@@ -91,6 +92,9 @@ void MetaVariables::setMetaVar(MetaVariables::tag const varName,
 		case MetaVariables::SERVER_SOFTWARE:
 			metaVariablesMap["SERVER_SOFTWARE="] = value;
 			break;
+		case MetaVariables::HTTP_COOKIE:
+			metaVariablesMap["HTTP_COOKIE="] = value;
+			break;
 	}
 }
 
@@ -130,6 +134,8 @@ std::string const &MetaVariables::getMetaVar(MetaVariables::tag const varName) {
 			return metaVariablesMap["SERVER_PROTOCOL="];
 		case MetaVariables::SERVER_SOFTWARE:
 			return metaVariablesMap["SERVER_SOFTWARE="];
+		case MetaVariables::HTTP_COOKIE:
+			return metaVariablesMap["HTTP_COOKIE="];
 	}
 	return metaVariablesMap["AUTH_TYPE="];
 }
