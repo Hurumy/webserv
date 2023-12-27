@@ -173,7 +173,8 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
-			// std::cout << RED << "path_to_cgi" << path_to_cgi << RESET << std::endl;
+			// std::cout << RED << "path_to_cgi" << path_to_cgi << RESET <<
+			// std::endl;
 			query = get.getQuery();
 #if defined(_DEBUGFLAG)
 			std::cout << RED << "RequestHandler::routeMethod:it was cgi"
