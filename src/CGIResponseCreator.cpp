@@ -506,6 +506,7 @@ bool CGIResponseCreator::execCGIScript() {
 		if (_chDirectory() == false) {
 			std::exit(EXIT_FAILURE);
 		}
+		// std::cerr << RED << runtimePath << RESET << std::endl;
 		execve(runtimePath.c_str(), argv, envp);
 		ft::putSystemError("execve");
 		_deleteVariables(envp, argv);

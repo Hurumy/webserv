@@ -35,6 +35,7 @@ class AMethod {
 		Request req;
 		Response &res;
 		std::string uri;
+		std::string	uri_without_root;
 		std::string query;
 		bool isloc;
 		Location loc;

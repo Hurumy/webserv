@@ -129,7 +129,7 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 	int status;
 	struct stat t_stat;
 
-	// std::cout << "uri: " << uri << std::endl;
+	// std::cout << RED << "uri: " << uri << RESET << std::endl;
 
 	// URIがディレクトリを指しているか確認する
 	status = stat(uri.c_str(), &t_stat);
@@ -205,7 +205,7 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 	// std::cout << "uri: " << uri << std::endl;
 
 	//有効になっていたらメソッドを呼んでそのまま帰る
-	MakeDirlistHTML dir(uri);
+	MakeDirlistHTML dir(uri, uri_without_root);
 	Result<std::string, bool> dir_res = dir.returnHTML();
 	if (dir_res.isOK() == true) {
 		std::stringstream ss;

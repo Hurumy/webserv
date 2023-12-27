@@ -156,6 +156,7 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 
 //ここで、各Method内でエラーが見つかった時にはその中でエラーページをセットしている
 Result<int, bool> RequestHandler::routeMethod() {
+	// std::cout << RED << "req_uri: " << req.getUrl() << RESET << std::endl;
 	if (req.getMethod() == "GET") {
 		//クラス呼ぶ
 		MethodGet get(configs.at(confnum), req, res);
@@ -172,6 +173,7 @@ Result<int, bool> RequestHandler::routeMethod() {
 		if (get.isCgi().isOK() == true) {
 			iscgi = true;
 			path_to_cgi = get.isCgi().getOk();
+			// std::cout << RED << "path_to_cgi" << path_to_cgi << RESET << std::endl;
 			query = get.getQuery();
 #if defined(_DEBUGFLAG)
 			std::cout << RED << "RequestHandler::routeMethod:it was cgi"
