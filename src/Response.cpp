@@ -29,7 +29,8 @@ const std::string Response::getLines() const {
 		line += iter->first + ": ";
 		line += iter->second + "\r\n";
 	}
-	for (std::list<std::string>::const_iterator iter = setCookies.begin(); iter != setCookies.end(); ++iter) {
+	for (std::list<std::string>::const_iterator iter = setCookies.begin();
+		 iter != setCookies.end(); ++iter) {
 		line += "Set-Cookie: ";
 		line += *iter + "\r\n";
 	}
