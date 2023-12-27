@@ -24,7 +24,7 @@
 class MakeDirlistHTML {
 	private:
 		std::string path;
-		std::string	uri_without_root;
+		std::string uri_without_root;
 		std::string html;
 		static const std::string header;
 		static const size_t bufsize;

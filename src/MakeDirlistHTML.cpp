@@ -20,7 +20,9 @@
 const std::string MakeDirlistHTML::header = "<html>\n";
 const size_t MakeDirlistHTML::bufsize = 200;
 
-MakeDirlistHTML::MakeDirlistHTML(std::string _path, std::string _uri_without_root) : path(_path), uri_without_root(_uri_without_root) {}
+MakeDirlistHTML::MakeDirlistHTML(std::string _path,
+								 std::string _uri_without_root)
+	: path(_path), uri_without_root(_uri_without_root) {}
 
 MakeDirlistHTML::~MakeDirlistHTML() {}
 
@@ -46,7 +48,8 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		return Error<bool>(false);
 	}
 
-	std::cerr << RED << "uri_without_root: " << uri_without_root << RESET << std::endl;
+	std::cerr << RED << "uri_without_root: " << uri_without_root << RESET
+			  << std::endl;
 
 	// HTMLに詰める
 	struct stat sstat;
