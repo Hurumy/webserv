@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Response.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 14:42:17 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/30 14:42:19 by komatsud         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:41:12 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ const std::string Response::getLines() const {
 		line += iter->first + ": ";
 		line += iter->second + "\r\n";
 	}
+	for (std::list<std::string>::const_iterator iter = setCookies.begin(); iter != setCookies.end(); ++iter) {
+		line += "Set-Cookie: ";
+		line += *iter + "\r\n";
+	}
 	line += "\r\n";
 	line += body;
 	return (line);
@@ -48,4 +52,8 @@ unsigned int Response::getStatus() const { return (status); }
 
 std::string const &Response::getStatusMessage() const {
 	return (statusMessage);
+}
+
+void Response::addSetCookie(std::string const &cookie) {
+	setCookies.push_back(cookie);
 }

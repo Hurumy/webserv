@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 20:29:31 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/06 16:04:11 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 18:41:38 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ class MetaVariables {
 				SERVER_NAME,
 				SERVER_PORT,
 				SERVER_PROTOCOL,
-				SERVER_SOFTWARE
+				SERVER_SOFTWARE,
+				HTTP_COOKIE
 		};
 
 		void setMetaVar(MetaVariables::tag const varName,

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/08 13:27:25 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/26 20:43:07 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ class CGIResponseCreator {
 		bool _setServerName();
 		bool _setServerPort();
 		bool _setServerProtocol();
+		bool _setHttpCookie();
 		bool _setRuntime();
 		bool _chDirectory();
 		bool _setDocumentRedirResponse(std::istringstream &issline,
