@@ -15,7 +15,7 @@
 #include <gtest/gtest.h>
 
 TEST(MakeDirListHTMLTest, writeOutTest) {
-	MakeDirlistHTML tmp("./www/content/");
+	MakeDirlistHTML tmp("./www/content/", "./www/content/");
 
 	//目以外でチェックするのが厳しいので、
 	//ディレクトリリスティングの結果が正しいことを目で確認してください・・・。

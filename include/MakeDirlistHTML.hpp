@@ -24,13 +24,14 @@
 class MakeDirlistHTML {
 	private:
 		std::string path;
+		std::string	uri_without_root;
 		std::string html;
 		static const std::string header;
 		static const size_t bufsize;
 
 	protected:
 	public:
-		MakeDirlistHTML(std::string _path);
+		MakeDirlistHTML(std::string _path, std::string _uri_without_root);
 		~MakeDirlistHTML();
 		Result<std::string, bool> returnHTML();
 };

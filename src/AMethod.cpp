@@ -342,6 +342,19 @@ void AMethod::setURI() {
 
 	// std::cout << "uri: " << uri << std::endl;
 
+	// uri_without_rootを設定、スラッシュも二重のやつをなくす
+	// これは必ずTrailing slash ありにする
+	uri_without_root = uri;
+	while (1) {
+		size_t pos = uri_without_root.find("//");
+		if (pos == std::string::npos) break;
+		size_t len = 2;
+		uri_without_root.replace(pos, len, "/");
+	}
+	if (uri_without_root.find_last_of('/') != uri_without_root.size() - 1) {
+		uri_without_root += '/';
+	}
+
 	// ConfigのrootがあればさらにURIの頭にくっつける
 	if (conf.getRootDir().empty() == false) {
 		tmp = conf.getRootDir() + '/' + uri;
