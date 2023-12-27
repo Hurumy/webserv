@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/25 20:10:27 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/27 12:28:37 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,10 +311,7 @@ bool SocketHandler::sendResponses() {
 			 csockiter->getPhase() == CSocket::CSENDERROR ||
 			 csockiter->getPhase() == CSocket::SENDCONTINUE) &&
 			(csockiter->getRevents() & POLLOUT) == POLLOUT) {
-			if (csockiter->getIsKeepAlive() == true) {
-				responses[csockiter->getSockfd()].setHeader("connection",
-															"keep-alive");
-			} else {
+			if (csockiter->getIsKeepAlive() == false) {
 				responses[csockiter->getSockfd()].setHeader("connection",
 															"close");
 			}
@@ -339,14 +336,14 @@ bool SocketHandler::sendResponses() {
 							  << std::endl;
 				}
 #endif
-				if (csockiter->getPhase() != CSocket::SENDCONTINUE) {
-					removeResponse(csockiter->getSockfd());
-				}
 				if (csockiter->getPhase() == CSocket::CSENDERROR ||
-					csockiter->getIsKeepAlive() == false) {
+					csockiter->getIsKeepAlive() == false || responses[csockiter->getSockfd()].getStatus() == 500) {
 					csockiter->setPhase(CSocket::CLOSE);
 				} else {
 					csockiter->setPhase(CSocket::RECV);
+				}
+				if (csockiter->getPhase() != CSocket::SENDCONTINUE) {
+					removeResponse(csockiter->getSockfd());
 				}
 			}
 		}
