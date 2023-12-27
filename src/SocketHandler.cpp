@@ -337,7 +337,8 @@ bool SocketHandler::sendResponses() {
 				}
 #endif
 				if (csockiter->getPhase() == CSocket::CSENDERROR ||
-					csockiter->getIsKeepAlive() == false || responses[csockiter->getSockfd()].getStatus() == 500) {
+					csockiter->getIsKeepAlive() == false ||
+					responses[csockiter->getSockfd()].getStatus() == 500) {
 					csockiter->setPhase(CSocket::CLOSE);
 				} else {
 					csockiter->setPhase(CSocket::RECV);
