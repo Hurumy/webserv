@@ -39,6 +39,19 @@ server {
 		cgi_extension py pl;
 		client_max_body_size 5m;
 }
+
+server {
+		listen 			8083;
+		server_name  localhost;
+		root		 /content;
+ 
+		index readme.html;
+		autoindex on;
+		allowedMethods	GET POST DELETE;
+		upload_path	$PWD/content;
+		cgi_extension py pl;
+		client_max_body_size 5;
+}
 " > ${CONFFILE}
 
 echo
