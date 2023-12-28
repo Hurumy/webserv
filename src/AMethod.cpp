@@ -198,7 +198,8 @@ void AMethod::setErrorPageBody() {
 		ss << "</body>\n";
 		ss << "</html>\n";
 		std::string __body;
-		ss >> __body;
+		__body = ss.str();
+		std::cerr << RED << "__body: " << __body << RESET << std::endl;
 		res.setBody(__body);
 		unsigned long long __bodysize;
 		std::string	_bodysize;
@@ -206,6 +207,7 @@ void AMethod::setErrorPageBody() {
 		std::stringstream __sb;
 		__sb << __bodysize;
 		__sb >> _bodysize;
+		std::cerr << RED << "bodysize: " << _bodysize << RESET << std::endl;
 		res.setHeader("Content-Length", _bodysize);
 		return;
 	}
