@@ -11,7 +11,7 @@ URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 class TestDeleteRequest(unittest.TestCase):
 
-	def test_simple_post_jpg(self):
+	def test_simple_delete_jpg(self):
 		print('\n===========================')
 		print('TEST: test simple DELETE request of jpg')
 		print('===========================\n')
@@ -27,7 +27,7 @@ class TestDeleteRequest(unittest.TestCase):
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
 
-		self.assertEqual(os.path.exists('./content/0.jpg'), True)
+		self.assertEqual(os.path.exists('./content/0.jpg'), False)
 		self.assertEqual(r2.status_code, 204)
 
 		if os.path.exists('./content/0.jpg'): os.remove('./content/0.jpg')
