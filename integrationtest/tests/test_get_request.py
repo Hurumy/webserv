@@ -84,7 +84,16 @@ class TestGetRequest(unittest.TestCase):
 		client.send("X_TEST: AAA\r\nAAA\r\n")
 		client.send("\r\n")
 		client.recv()
-		client.close()
 		print('Response:\n',client.response_data)
 		print('Status: ',client.status)
-		self.assertEqual(client.status, 200)
+		self.assertEqual(client.status, 400)
+
+	def test_payload_too_large(self):
+		print('\n===========================')
+		print('TEST: test Payload Too Large to MaxBodySize configuration with GET Method')
+		print('===========================\n')
+
+		r = requests.get('http://' + HOST_NAME + ':' + '8083' + '/', data='aaaaaaaaaa')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 413)

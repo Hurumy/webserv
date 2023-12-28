@@ -151,6 +151,24 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 		get.setErrorPageBody();
 		return Error<bool>(false);
 	}
+	if (req.getHeader("Content-Length").isOK() == true)
+	{
+		std::stringstream ss;
+		std::string contlen;
+		unsigned long long size;
+		contlen = req.getHeader("Content-Length").getOk();
+		ss << contlen;
+		ss >> size;
+		// std::cerr << RED << "content-length: " << size << RESET << std::endl;
+		bool _status = get.checkMaxBodySize(size);
+		if (_status == false)
+		{
+			res.setStatus(413);
+			res.setStatusMessage("Payload Too Large");
+			get.setErrorPageBody();
+			return Error<bool>(false);
+		}
+	}
 	return Ok<int>(0);
 }
 

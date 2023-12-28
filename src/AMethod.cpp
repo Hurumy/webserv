@@ -82,6 +82,21 @@ AMethod::AMethod(Config _conf, Request _req, Response &_res)
 
 AMethod::~AMethod() {}
 
+bool	AMethod::checkMaxBodySize(unsigned long long __size) const
+{
+	// LocationのMaxBodySizeをチェック
+	if (isloc == true && __size > loc.getMaxBodySize())
+	{
+		return (false);
+	}
+	// ConfigのMaxBodySizeをチェック
+	if (__size > conf.getMaxBodySize())
+	{
+		return (false);
+	}
+	return (true);
+}
+
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
 	std::ifstream ifs(filename.c_str(), std::ios::in | std::ios::binary);
