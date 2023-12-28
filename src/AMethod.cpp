@@ -199,15 +199,15 @@ void AMethod::setErrorPageBody() {
 		ss << "</html>\n";
 		std::string __body;
 		__body = ss.str();
-		//std::cerr << RED << "__body: " << __body << RESET << std::endl;
+		// std::cerr << RED << "__body: " << __body << RESET << std::endl;
 		res.setBody(__body);
 		unsigned long long __bodysize;
-		std::string	_bodysize;
+		std::string _bodysize;
 		__bodysize = __body.size();
 		std::stringstream __sb;
 		__sb << __bodysize;
 		__sb >> _bodysize;
-		//std::cerr << RED << "bodysize: " << _bodysize << RESET << std::endl;
+		// std::cerr << RED << "bodysize: " << _bodysize << RESET << std::endl;
 		res.setHeader("Content-Length", _bodysize);
 		return;
 	}
