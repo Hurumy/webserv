@@ -182,7 +182,31 @@ void AMethod::setErrorPageBody() {
 	if (res_1.isOK() == false) {
 		res.setStatus(orist);
 		res.setStatusMessage(oristm);
-		res.setHeader("Content-Length", "0");
+		std::stringstream ss;
+		ss << "<!DOCTYPE html>\n";
+		ss << "<html>\n";
+		ss << "<head>\n";
+		ss << "</head>\n";
+		ss << "<body>\n";
+		ss << "<h1>Error ";
+		ss << orist;
+		ss << " ";
+		ss << oristm;
+		ss << "</h1>\n";
+		ss << "<p>&nbsp;</p>\n";
+		ss << "<p style=\"text-align: center;\">webserv</p>";
+		ss << "</body>\n";
+		ss << "</html>\n";
+		std::string __body;
+		ss >> __body;
+		res.setBody(__body);
+		unsigned long long __bodysize;
+		std::string	_bodysize;
+		__bodysize = __body.size();
+		std::stringstream __sb;
+		__sb << __bodysize;
+		__sb >> _bodysize;
+		res.setHeader("Content-Length", _bodysize);
 		return;
 	}
 
