@@ -48,7 +48,7 @@ class AMethod {
 		// Result<int, bool>					searchSettingsOfURI();
 	public:
 		virtual Result<int, bool> act() = 0;
-		bool	checkMaxBodySize(unsigned long long __size) const;
+		bool checkMaxBodySize(unsigned long long __size) const;
 		Result<int, bool> checkRedirects();
 		Result<int, bool> checkURI();
 		void setURI();

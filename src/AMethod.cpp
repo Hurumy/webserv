@@ -82,16 +82,13 @@ AMethod::AMethod(Config _conf, Request _req, Response &_res)
 
 AMethod::~AMethod() {}
 
-bool	AMethod::checkMaxBodySize(unsigned long long __size) const
-{
+bool AMethod::checkMaxBodySize(unsigned long long __size) const {
 	// LocationのMaxBodySizeをチェック
-	if (isloc == true && __size > loc.getMaxBodySize())
-	{
+	if (isloc == true && __size > loc.getMaxBodySize()) {
 		return (false);
 	}
 	// ConfigのMaxBodySizeをチェック
-	if (__size > conf.getMaxBodySize())
-	{
+	if (__size > conf.getMaxBodySize()) {
 		return (false);
 	}
 	return (true);
