@@ -84,7 +84,6 @@ class TestGetRequest(unittest.TestCase):
 		client.send("X_TEST: AAA\r\nAAA\r\n")
 		client.send("\r\n")
 		client.recv()
-		client.close()
 		print('Response:\n',client.response_data)
 		print('Status: ',client.status)
 		self.assertEqual(client.status, 400)
