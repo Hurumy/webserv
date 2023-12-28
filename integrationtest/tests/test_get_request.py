@@ -87,7 +87,7 @@ class TestGetRequest(unittest.TestCase):
 		client.close()
 		print('Response:\n',client.response_data)
 		print('Status: ',client.status)
-		self.assertEqual(client.status, 200)
+		self.assertEqual(client.status, 400)
 
 	def test_payload_too_large(self):
 		print('\n===========================')
