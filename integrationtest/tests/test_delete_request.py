@@ -23,7 +23,7 @@ class TestDeleteRequest(unittest.TestCase):
 			'Content-Type':'image/jpeg'
 		}
 		r = requests.post(URI_TOP, data=file_text, headers=headers)
-        r2 = requests.delete(URI_TOP + '/0.jpg')
+		r2 = requests.delete(URI_TOP + '/0.jpg')
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
 
