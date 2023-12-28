@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/04 16:54:10 by komatsud          #+#    #+#             */
-/*   Updated: 2023/12/25 20:05:19 by shtanemu         ###   ########.fr       */
+/*   Updated: 2023/12/28 15:24:57 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ Request::Request()
 	  lastContentLength(contentLength),
 	  phase(Request::REQLINE),
 	  cntCGIExec(0),
-	  chunkLength(0) {}
+	  chunkLength(0),
+	  cntRemovedTrailers(0) {}
 
 const std::string Request::getLines() const {
 	std::string line;
