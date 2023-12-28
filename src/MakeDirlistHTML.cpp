@@ -48,7 +48,8 @@ Result<std::string, bool> MakeDirlistHTML::returnHTML() {
 		return Error<bool>(false);
 	}
 
-	//std::cerr << RED << "uri_without_root: " << uri_without_root << RESET << std::endl;
+	// std::cerr << RED << "uri_without_root: " << uri_without_root << RESET <<
+	// std::endl;
 
 	// HTMLに詰める
 	struct stat sstat;
