@@ -5,8 +5,8 @@ echo "\
 HOST_NAME='localhost'
 PORT='8081'
 PROJECT_ROOT='../'
-CONFFILE=\"${PROJECT_ROOT}integrationtest/conf/test.conf\"
-WEBSERV=\"${PROJECT_ROOT}webserv\"
+CONFFILE=\"\${PROJECT_ROOT}integrationtest/conf/test.conf\"
+WEBSERV=\"\${PROJECT_ROOT}webserv\"
 " > .env
 
 source .env set
