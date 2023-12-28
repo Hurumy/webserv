@@ -15,7 +15,9 @@ def main(path):
 	loader = TestLoader()
 	test = loader.discover(path)
 	runner = TextTestRunner()
-	runner.run(test)
+	r = runner.run(test)
+	if not r.wasSuccessful():
+		sys.exit(1)
 
 if __name__ == '__main__':
 	if len(sys.argv) != 2:
