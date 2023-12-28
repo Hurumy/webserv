@@ -159,7 +159,7 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 		contlen = req.getHeader("Content-Length").getOk();
 		ss << contlen;
 		ss >> size;
-		std::cerr << RED << "content-length: " << size << RESET << std::endl;
+		// std::cerr << RED << "content-length: " << size << RESET << std::endl;
 		bool _status = get.checkMaxBodySize(size);
 		if (_status == false)
 		{
