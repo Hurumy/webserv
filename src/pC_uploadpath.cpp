@@ -28,6 +28,62 @@ int readUploadPath(Config &conf, std::string oneline) {
 	if (conf.getUploadPath().empty() == false)
 		ft::errorInInit("Too many upload_path declare");
 
+	// パスが有効かチェック
+	DIR	*_stat = opendir(lines.at(1).c_str());
+	if (_stat == NULL)
+	{
+		std::string	errm = "upload_path: ";
+		if (errno == ENOTDIR)
+		{
+			errm += "Not a Directory, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENAMETOOLONG)
+		{
+			errm += "Path is too long, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENOENT)
+		{
+			errm += "Can't find the location, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ELOOP)
+		{
+			errm += "Loop detected, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == EMFILE)
+		{
+			errm += "Can't get a file descriptor, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENFILE)
+		{
+			errm += "file table overflow, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == EACCES)
+		{
+			errm += "It is forbidden, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENOMEM)
+		{
+			errm += "Memory is not enough, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+	}
+	closedir(_stat);
+
 	conf.setUploadPath(lines.at(1));
 
 	return (0);
@@ -48,6 +104,62 @@ int l_readUploadPath(Location &loc, std::string oneline) {
 
 	if (loc.getUploadPath().empty() == false)
 		ft::errorInInit("Too many upload_path declare");
+
+	// パスが有効かチェック
+	DIR	*_stat = opendir(lines.at(1).c_str());
+	if (_stat == NULL)
+	{
+		std::string	errm = "upload_path: ";
+		if (errno == ENOTDIR)
+		{
+			errm += "Not a Directory, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENAMETOOLONG)
+		{
+			errm += "Path is too long, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENOENT)
+		{
+			errm += "Can't find the location, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ELOOP)
+		{
+			errm += "Loop detected, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == EMFILE)
+		{
+			errm += "Can't get a file descriptor, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENFILE)
+		{
+			errm += "file table overflow, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == EACCES)
+		{
+			errm += "It is forbidden, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+		else if (errno == ENOMEM)
+		{
+			errm += "Memory is not enough, in ";
+			errm += lines.at(1);
+			ft::errorInInit(errm);
+		}
+	}
+	closedir(_stat);
 
 	loc.setUploadPath(lines.at(1));
 
