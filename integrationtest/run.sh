@@ -1,4 +1,23 @@
 #! /bin/bash
+
+ESC=$(printf '\033') RESET="${ESC}[0m"
+
+BOLD="${ESC}[1m"        FAINT="${ESC}[2m"       ITALIC="${ESC}[3m"
+UNDERLINE="${ESC}[4m"   BLINK="${ESC}[5m"       FAST_BLINK="${ESC}[6m"
+REVERSE="${ESC}[7m"     CONCEAL="${ESC}[8m"     STRIKE="${ESC}[9m"
+
+GOTHIC="${ESC}[20m"     DOUBLE_UNDERLINE="${ESC}[21m" NORMAL="${ESC}[22m"
+NO_ITALIC="${ESC}[23m"  NO_UNDERLINE="${ESC}[24m"     NO_BLINK="${ESC}[25m"
+NO_REVERSE="${ESC}[27m" NO_CONCEAL="${ESC}[28m"       NO_STRIKE="${ESC}[29m"
+
+BLACK="${ESC}[30m"      RED="${ESC}[31m"        GREEN="${ESC}[32m"
+YELLOW="${ESC}[33m"     BLUE="${ESC}[34m"       MAGENTA="${ESC}[35m"
+CYAN="${ESC}[36m"       WHITE="${ESC}[37m"      DEFAULT="${ESC}[39m"
+
+BG_BLACK="${ESC}[40m"   BG_RED="${ESC}[41m"     BG_GREEN="${ESC}[42m"
+BG_YELLOW="${ESC}[43m"  BG_BLUE="${ESC}[44m"    BG_MAGENTA="${ESC}[45m"
+BG_CYAN="${ESC}[46m"    BG_WHITE="${ESC}[47m"   BG_DEFAULT="${ESC}[49m"
+
 set -o allexport
 
 echo "\
@@ -108,3 +127,32 @@ echo
 echo "==== Shutdown webserv ====="
 PID=$(ps | grep webserv  | awk '{print $1}')
 kill ${PID}
+
+
+# Configテスト用ループ
+for FILE in `ls test_confs/*.conf`
+do
+
+echo "${ESC}${RED}${ESC}= Start webserv =${ESC}${RESET}${ESC}"
+${WEBSERV} ${FILE} &
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
+
+echo 
+echo "${ESC}${RED}${ESC}= Run Integration tests =${ESC}${RESET}${ESC}"
+python runner.py tests
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
+
+echo 
+echo "${ESC}${RED}${ESC}= Shutdown webserv =${ESC}${RESET}${ESC}"
+PID=$(ps | grep webserv  | awk '{print $1}')
+
+done
+
