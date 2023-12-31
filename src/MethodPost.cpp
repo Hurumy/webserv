@@ -153,9 +153,9 @@ int MethodPost::openPostResource() {
 				  << std::endl;
 		std::cout << RED << "uppath: " << uppath << RESET << std::endl;
 #endif
-		res.setStatus(401);
-		res.setStatusMessage("Unauthorized");
-		return (401);
+		res.setStatus(403);
+		res.setStatusMessage("Forbidden");
+		return (403);
 	}
 
 	// Config/Locationで指定されているMaxBodySizeを超えていないかしらべる

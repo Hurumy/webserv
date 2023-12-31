@@ -54,9 +54,9 @@ int MethodDelete::openResourceDelete() {
 			std::cout << RED << "Error in MethodDelete::openResourseDelete"
 					  << RESET << std::endl;
 #endif
-			res.setStatus(401);
-			res.setStatusMessage("Unauthorized");
-			return (401);
+			res.setStatus(403);
+			res.setStatusMessage("Forbidden");
+			return (403);
 		}
 	} else {
 		res.setStatus(404);
