@@ -260,3 +260,47 @@ class TestAllowedMethodsConfigs(unittest.TestCase):
 		print('Status: ',r3.status_code)
 		self.assertEqual(os.path.exists('./content/a/dummy'), False)
 		self.assertEqual(r3.status_code, 204)
+
+	def test_l_allowed_methods_priority(self):
+		print('\n===========================')
+		print('TEST: l_allowedMethods Configs priority')
+		print('===========================\n')
+
+		HOST_NAME = "localhost"
+		PORT = "25572"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
+		headers = {
+			'Host':'thr'
+		}
+		# try to get
+		r = requests.get(URI_TOP + '/content/a/index.html', headers=headers)
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 405)
+
+		# try to post
+		with open('./content/wordpress-logo.jpg', 'rb') as fs:
+			file_text = fs.read()
+		headers2 = {
+			'Content-Type':'image/jpeg',
+			'Host':'thr'
+		}
+		r2 = requests.post(URI_TOP + '/content/a/', data=file_text, headers=headers2)
+		print('Response:\n',r2.text)
+		print('Status: ',r2.status_code)
+		with open('./content/a/0.jpg', 'rb') as fs:
+			file_text_cmp = fs.read()
+		self.assertEqual(file_text_cmp, file_text)
+		self.assertEqual(r2.status_code, 201)
+		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
+
+		# try to delete
+		if not os.path.exists('./content/a/dummy'):
+			f = open("./content/a/dummy", 'w')
+			f.close()
+		r3 = requests.delete(URI_TOP + '/content/a/dummy', headers=headers)
+		print('Response:\n',r3.text)
+		print('Status: ',r3.status_code)
+		self.assertEqual(os.path.exists('./content/a/dummy'), True)
+		self.assertEqual(r3.status_code, 405)
+
