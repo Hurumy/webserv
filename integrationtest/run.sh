@@ -136,7 +136,7 @@ kill ${PID}
 for FILE in `ls ./test_confs/*.conf`
 do
 
-TESTDIR=${FILE}_test
+TESTDIR=${FILE}_test/
 
 echo
 echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
