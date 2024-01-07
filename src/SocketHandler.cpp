@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2024/01/07 13:25:32 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:29:33 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,7 +318,7 @@ bool SocketHandler::sendResponses() {
 			}
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
-				// error handling
+				csockiter->setPhase(CSocket::CLOSE);
 			} else {
 #if defined(_DEBUGFLAG)
 				std::clog << responses[csockiter->getSockfd()].getLines()
