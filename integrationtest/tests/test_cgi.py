@@ -121,3 +121,14 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 500)
+
+	def test_cgi_directory_script_executed(self):
+		print('\n===========================')
+		print('TEST: The directory of CGI Script executed')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/valid_cgi_directory.py')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.content.decode('utf-8')  , os.getcwd() + '/content/cgi_bin\r\n')
+		self.assertEqual(r.status_code, 200)
