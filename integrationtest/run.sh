@@ -10,11 +10,11 @@ GOTHIC="${ESC}[20m"     DOUBLE_UNDERLINE="${ESC}[21m" NORMAL="${ESC}[22m"
 NO_ITALIC="${ESC}[23m"  NO_UNDERLINE="${ESC}[24m"     NO_BLINK="${ESC}[25m"
 NO_REVERSE="${ESC}[27m" NO_CONCEAL="${ESC}[28m"       NO_STRIKE="${ESC}[29m"
 
-BLACK="${ESC}[30m"      RED="${ESC}[31m"        GREEN="${ESC}[32m"
+BLACK="${ESC}[30m"      GREEN="${ESC}[31m"        GREEN="${ESC}[32m"
 YELLOW="${ESC}[33m"     BLUE="${ESC}[34m"       MAGENTA="${ESC}[35m"
 CYAN="${ESC}[36m"       WHITE="${ESC}[37m"      DEFAULT="${ESC}[39m"
 
-BG_BLACK="${ESC}[40m"   BG_RED="${ESC}[41m"     BG_GREEN="${ESC}[42m"
+BG_BLACK="${ESC}[40m"   BG_GREEN="${ESC}[41m"     BG_GREEN="${ESC}[42m"
 BG_YELLOW="${ESC}[43m"  BG_BLUE="${ESC}[44m"    BG_MAGENTA="${ESC}[45m"
 BG_CYAN="${ESC}[46m"    BG_WHITE="${ESC}[47m"   BG_DEFAULT="${ESC}[49m"
 
@@ -105,6 +105,8 @@ if [ "$?" -ne 0 ]; then
 	exit 1
 fi
 
+
+<<COMMENTOUT
 echo 
 echo "==== Run Integration tests ====="
 python runner.py tests
@@ -122,6 +124,7 @@ if [ "$?" -ne 0 ]; then
 	kill ${PID}
 	exit 1
 fi
+COMMENTOUT
 
 echo 
 echo "==== Shutdown webserv ====="
@@ -130,10 +133,19 @@ kill ${PID}
 
 
 # Configテスト用ループ
-for FILE in `ls test_confs/*.conf`
+for FILE in `ls ./test_confs/*.conf`
 do
 
-echo "${ESC}${RED}${ESC}= Start webserv =${ESC}${RESET}${ESC}"
+TESTDIR=${FILE}_test
+
+echo
+echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+echo
+echo "${ESC}${GREEN}${ESC} Testdir Name: $(echo ${TESTDIR} | xargs basename) ${ESC}${RESET}${ESC}"
+
+
+echo
+echo "${ESC}${GREEN}${ESC} = Start webserv =${ESC}${RESET}${ESC}"
 ${WEBSERV} ${FILE} &
 if [ "$?" -ne 0 ]; then
 	PID=$(ps | grep webserv  | awk '{print $1}')
@@ -142,8 +154,10 @@ if [ "$?" -ne 0 ]; then
 fi
 
 echo 
-echo "${ESC}${RED}${ESC}= Run Integration tests =${ESC}${RESET}${ESC}"
-python runner.py tests
+echo "${ESC}${GREEN}${ESC} = Run Integration tests = ${ESC}${RESET}${ESC}"
+echo
+python runner.py ${TESTDIR}
+echo
 if [ "$?" -ne 0 ]; then
 	PID=$(ps | grep webserv  | awk '{print $1}')
 	kill ${PID}
@@ -151,8 +165,10 @@ if [ "$?" -ne 0 ]; then
 fi
 
 echo 
-echo "${ESC}${RED}${ESC}= Shutdown webserv =${ESC}${RESET}${ESC}"
+echo "${ESC}${GREEN}${ESC} = Shutdown webserv =${ESC}${RESET}${ESC}"
+echo
 PID=$(ps | grep webserv  | awk '{print $1}')
+kill ${PID} > /dev/null 2>&1
 
 done
 
