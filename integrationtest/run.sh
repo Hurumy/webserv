@@ -141,7 +141,7 @@ TESTDIR=${FILE}_test
 echo
 echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
 echo
-echo "${ESC}${GREEN}${ESC} Testdir Name: $(echo ${TESTDIR} | xargs basename) ${ESC}${RESET}${ESC}"
+echo "${ESC}${GREEN}${ESC} Testdir Name: $(echo ${TESTDIR}) ${ESC}${RESET}${ESC}"
 
 
 echo
