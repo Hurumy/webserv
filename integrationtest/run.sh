@@ -172,3 +172,29 @@ kill ${PID} > /dev/null 2>&1
 
 done
 
+
+# Configテスト用ループ(WebservがConfigの読み込みで終了し、起動しないパターン)
+for FILE in `ls ./test_confs_error/*.conf`
+do
+
+echo
+echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+
+echo
+echo "= Start webserv ="
+timeout -sKILL 8 ${WEBSERV} ${FILE} &
+if [ $? != 0 ]; then
+	echo
+	echo "${ESC}${RED}${ESC} Timeout. Webserv is not exited by $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+	exit 1
+else
+	echo
+	echo "Webserv is Successfully exited."
+	sleep 0.1
+fi
+
+done
+
+echo
+echo "${ESC}${BOLD}${GREEN}${ESC} Integration Test completed. ${ESC}${RESET}${ESC}"
+
