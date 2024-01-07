@@ -277,7 +277,7 @@ char **CGIResponseCreator::_createEnvp() {
 	pwd = std::getenv("PWD");
 	if (pwd.empty() == false) {
 		std::size_t posDir;
-		
+
 		posDir = cgiPath.rfind('/');
 		if (posDir != std::string::npos) {
 			std::size_t posDirHead;
@@ -285,7 +285,7 @@ char **CGIResponseCreator::_createEnvp() {
 			cgiDirPath = cgiPath.substr(0, posDir);
 			posDirHead = cgiDirPath.find("./");
 			if (posDirHead != std::string::npos) {
-				cgiDirPath = cgiDirPath.substr(posDirHead+2);
+				cgiDirPath = cgiDirPath.substr(posDirHead + 2);
 				newPwd = "PWD=" + pwd + "/" + cgiDirPath;
 			} else {
 				newPwd = "PWD=" + pwd;
