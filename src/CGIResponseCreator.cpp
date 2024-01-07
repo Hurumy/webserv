@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/28 23:26:35 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:23:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,6 @@ char **CGIResponseCreator::_createEnvp() {
 			} else {
 				newPwd = "PWD=" + pwd;
 			}
-			std::clog << RED << newPwd << RESET << std::endl;
 		}
 	}
 
