@@ -152,7 +152,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		r = requests.get(URI_TOP + '/content/b/index.html', headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
-		self.assertEqual(r.text, "a\n")
+		self.assertEqual(r.text, "b\n")
 		self.assertEqual(r.status_code, 200)
 
 		# try to post

@@ -28,7 +28,7 @@ class TestLAutoIndexConfigs(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)
-        # try to get
+		# try to get
 		r = requests.get(URI_TOP + '/content/b/', headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
@@ -50,8 +50,25 @@ class TestLAutoIndexConfigs(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 403)
-        # try to get
+		# try to get
 		r = requests.get(URI_TOP + '/content/b/', headers=headers)
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 200)
+
+	def test_l_autoindex_priority(self):
+		print('\n===========================')
+		print('TEST: l_autoindex Configs Priority')
+		print('===========================\n')
+
+		HOST_NAME = "localhost"
+		PORT = "25577"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
+		headers = {
+			'Host':'thr'
+		}
+		# try to get
+		r = requests.get(URI_TOP + '/content/a/', headers=headers)
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)
