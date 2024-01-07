@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/27 12:28:37 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 13:29:33 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,16 +285,17 @@ bool SocketHandler::recvCSocketsData() {
 		if ((iter->getRevents() & POLLIN) == POLLIN &&
 			iter->getPhase() == CSocket::RECV) {
 			if (iter->readData() == false) {
-				return false;
-			}
-			std::string data = iter->getData();
-			std::map<int, Request>::iterator reqiter =
-				requests.find(iter->getSockfd());
-			if (reqiter != requests.end() &&
-				reqiter->second.getPhase() == Request::BODY) {
-				iter->setPhase(CSocket::LOAD);
-			} else if (data.find("\r\n") != std::string::npos) {
-				iter->setPhase(CSocket::LOAD);
+				iter->setPhase(CSocket::CLOSE);
+			} else {
+				std::string data = iter->getData();
+				std::map<int, Request>::iterator reqiter =
+					requests.find(iter->getSockfd());
+				if (reqiter != requests.end() &&
+					reqiter->second.getPhase() == Request::BODY) {
+					iter->setPhase(CSocket::LOAD);
+				} else if (data.find("\r\n") != std::string::npos) {
+					iter->setPhase(CSocket::LOAD);
+				}
 			}
 		}
 	}
@@ -317,7 +318,7 @@ bool SocketHandler::sendResponses() {
 			}
 			if (csockiter->sendData(
 					responses[csockiter->getSockfd()].getLines()) == false) {
-				// error handling
+				csockiter->setPhase(CSocket::CLOSE);
 			} else {
 #if defined(_DEBUGFLAG)
 				std::clog << responses[csockiter->getSockfd()].getLines()
