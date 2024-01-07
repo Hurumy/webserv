@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/26 20:44:14 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 12:23:13 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,28 @@ char **CGIResponseCreator::_createEnvp() {
 	extern char **environ;
 	char **envp;
 	char **head;
+	std::string pwd;
+	std::string cgiDirPath;
+	std::string newPwd;
+
+	pwd = std::getenv("PWD");
+	if (pwd.empty() == false) {
+		std::size_t posDir;
+
+		posDir = cgiPath.rfind('/');
+		if (posDir != std::string::npos) {
+			std::size_t posDirHead;
+
+			cgiDirPath = cgiPath.substr(0, posDir);
+			posDirHead = cgiDirPath.find("./");
+			if (posDirHead != std::string::npos) {
+				cgiDirPath = cgiDirPath.substr(posDirHead + 2);
+				newPwd = "PWD=" + pwd + "/" + cgiDirPath;
+			} else {
+				newPwd = "PWD=" + pwd;
+			}
+		}
+	}
 
 	std::vector<std::vector<char> > vstrings;
 	for (std::size_t i_environ = 0; environ[i_environ] != NULL; ++i_environ) {
@@ -308,7 +330,11 @@ char **CGIResponseCreator::_createEnvp() {
 	head = envp;
 	for (std::vector<std::vector<char> >::iterator iter = vstrings.begin();
 		 iter != vstrings.end(); ++iter) {
-		*envp = new (std::nothrow) char[iter->size()];
+		if (std::strncmp(iter->data(), "PWD=", 4) == 0) {
+			*envp = new (std::nothrow) char[newPwd.size()];
+		} else {
+			*envp = new (std::nothrow) char[iter->size()];
+		}
 		if (*envp == NULL) {
 			char **iteratedEnvp = head;
 			char **deletedEnvp = iteratedEnvp;
@@ -320,7 +346,11 @@ char **CGIResponseCreator::_createEnvp() {
 			delete[] head;
 			return NULL;
 		}
-		std::strncpy(*envp, iter->data(), iter->size());
+		if (std::strncmp(iter->data(), "PWD=", 4) == 0) {
+			std::strncpy(*envp, newPwd.c_str(), newPwd.size());
+		} else {
+			std::strncpy(*envp, iter->data(), iter->size());
+		}
 		envp++;
 	}
 	*envp = NULL;
