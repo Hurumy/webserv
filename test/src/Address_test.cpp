@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Address_test.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:28:47 by komatsud          #+#    #+#             */
-/*   Updated: 2023/09/18 14:42:17 by komatsud         ###   ########.fr       */
+/*   Updated: 2024/01/07 16:15:21 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ TEST(AddressTest, portTest) {
 
 TEST(AddressTest, ipversTest) {
 	Address add;
-	int expected(1);
+	ipvers expected(IPV4);
 
 	add.setIpVers(expected);
 	ASSERT_EQ(add.getIpVers(), expected);

@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:10:30 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/19 18:21:18 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 16:14:45 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class Address {
 	public:
 		std::string const getIpAddress() const;
 		int getPort() const;
-		int getIpVers() const;
+		ipvers getIpVers() const;
 		bool getIsAddress() const;
 		bool setIpAddress(std::string address);
 		bool setPort(int _port);
