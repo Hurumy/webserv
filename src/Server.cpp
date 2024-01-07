@@ -32,7 +32,8 @@ bool Server::startUp(std::string const &pathConfig) {
 		for (std::vector<Address>::const_iterator addriter = addresses.begin();
 			 addriter != addresses.end(); ++addriter) {
 			sources.push_back(SSocket(addriter->getIpAddress(),
-									  addriter->getPort(), addriter->getIpVers(), 1000));
+									  addriter->getPort(),
+									  addriter->getIpVers(), 1000));
 		}
 	}
 	socketHandler.setSSockets(sources);
