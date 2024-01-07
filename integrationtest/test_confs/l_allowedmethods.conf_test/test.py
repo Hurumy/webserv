@@ -11,7 +11,7 @@ load_dotenv()
 # PORT = "25565"
 # URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
-class TestAllowedMethodsConfigs(unittest.TestCase):
+class TestL_AllowedMethodsConfigs(unittest.TestCase):
 
 	def test_l_allowed_methods_only_get(self):
 		print('\n===========================')
