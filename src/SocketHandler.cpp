@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/09 12:26:40 by shtanemu          #+#    #+#             */
-/*   Updated: 2024/01/07 13:29:33 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:54:00 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -533,6 +533,10 @@ bool SocketHandler::handleCGIRequest(std::vector<Config> const &configs) {
 							csockiter->setPhase(CSocket::PASS);
 						} else {
 							csockiter->setPhase(CSocket::SEND);
+						}
+						if (iter->second.getResponseType() ==
+							CGIResponseCreator::CLIENTREDIR) {
+							csockiter->setIsKeepAlive(false);
 						}
 						break;
 					}
