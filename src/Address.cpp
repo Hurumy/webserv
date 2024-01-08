@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Address.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: komatsud <komatsud@student.42.fr>          +#+  +:+       +#+        */
+/*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 14:24:50 by komatsud          #+#    #+#             */
-/*   Updated: 2023/10/18 14:46:22 by komatsud         ###   ########.fr       */
+/*   Updated: 2024/01/07 16:14:53 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string const Address::getIpAddress() const { return (this->ipaddress); }
 
 int Address::getPort() const { return (this->port); }
 
-int Address::getIpVers() const { return (this->ipver); }
+ipvers Address::getIpVers() const { return (this->ipver); }
 
 bool Address::getIsAddress() const { return (this->isaddress); }
 

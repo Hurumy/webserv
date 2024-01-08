@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 11:16:29 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/11/05 17:37:30 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/07 16:05:03 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ bool Server::startUp(std::string const &pathConfig) {
 		for (std::vector<Address>::const_iterator addriter = addresses.begin();
 			 addriter != addresses.end(); ++addriter) {
 			sources.push_back(SSocket(addriter->getIpAddress(),
-									  addriter->getPort(), IPV4, 1000));
+									  addriter->getPort(),
+									  addriter->getIpVers(), 1000));
 		}
 	}
 	socketHandler.setSSockets(sources);
