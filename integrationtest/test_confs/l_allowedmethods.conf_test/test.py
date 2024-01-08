@@ -41,6 +41,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		r2 = requests.post(URI_TOP + '/content/a/', data=file_text, headers=headers2)
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
+		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
 		self.assertEqual(r2.status_code, 405)
 		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
 
@@ -83,6 +84,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		print('Status: ',r2.status_code)
 		with open('./content/b/0.jpg', 'rb') as fs:
 			file_text_cmp = fs.read()
+		if os.path.exists('./content/b/0.jpg'): os.remove('./content/b/0.jpg')
 		self.assertEqual(file_text_cmp, file_text)
 		self.assertEqual(r2.status_code, 201)
 		if os.path.exists('./content/b/0.jpg'): os.remove('./content/b/0.jpg')
@@ -124,6 +126,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		r2 = requests.post(URI_TOP + '/content/c/', data=file_text, headers=headers2)
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
+		if os.path.exists('./content/c/0.jpg'): os.remove('./content/c/0.jpg')
 		self.assertEqual(r2.status_code, 405)
 		if os.path.exists('./content/c/0.jpg'): os.remove('./content/c/0.jpg')
 
@@ -165,6 +168,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		r2 = requests.post(URI_TOP + '/content/b/', data=file_text, headers=headers2)
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
+		if os.path.exists('./content/b/0.jpg'): os.remove('./content/b/0.jpg')
 		self.assertEqual(r2.status_code, 405)
 		if os.path.exists('./content/b/0.jpg'): os.remove('./content/b/0.jpg')
 
@@ -207,6 +211,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		print('Status: ',r2.status_code)
 		with open('./content/c/0.jpg', 'rb') as fs:
 			file_text_cmp = fs.read()
+		if os.path.exists('./content/c/0.jpg'): os.remove('./content/c/0.jpg')
 		self.assertEqual(file_text_cmp, file_text)
 		self.assertEqual(r2.status_code, 201)
 		if os.path.exists('./content/c/0.jpg'): os.remove('./content/c/0.jpg')
@@ -248,6 +253,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		r2 = requests.post(URI_TOP + '/content/a/', data=file_text, headers=headers2)
 		print('Response:\n',r2.text)
 		print('Status: ',r2.status_code)
+		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
 		self.assertEqual(r2.status_code, 405)
 		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
 
@@ -290,6 +296,7 @@ class TestL_AllowedMethodsConfigs(unittest.TestCase):
 		print('Status: ',r2.status_code)
 		with open('./content/a/0.jpg', 'rb') as fs:
 			file_text_cmp = fs.read()
+		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
 		self.assertEqual(file_text_cmp, file_text)
 		self.assertEqual(r2.status_code, 201)
 		if os.path.exists('./content/a/0.jpg'): os.remove('./content/a/0.jpg')
