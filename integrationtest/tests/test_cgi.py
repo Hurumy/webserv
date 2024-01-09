@@ -142,7 +142,7 @@ class TestCGIRequest(unittest.TestCase):
 		with open('./content/cgi_bin/valid_cgi_extension_script.cgi') as fs:
 			file_text = fs.read()
 		new_file_text = '#!' + shutil.which('python') + "\n\n" + file_text
-		with open('./content/cgi_bin/valid_cgi_extension_script.cgi') as fs:
+		with open('./content/cgi_bin/valid_cgi_extension_script.cgi', 'w') as fs:
 			fs.write(new_file_text)
 		r = requests.get(URI_TOP + '/cgi_bin/valid_cgi_extension_script.cgi')
 		print('Response:\n',r.text)
