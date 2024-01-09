@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2024/01/09 11:34:11 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:47:05 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ char **CGIResponseCreator::_createArgv() {
 	return head;
 }
 bool CGIResponseCreator::_setRuntimeFromShebang() {
-	std::ifstream file(cgiPath);
+	std::ifstream file(cgiPath.c_str());
 	if (file.is_open() == false) { return false; }
 	else {
 		std::string shebang;
