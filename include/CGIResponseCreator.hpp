@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:36:35 by shtanemu          #+#    #+#             */
-/*   Updated: 2023/12/26 20:43:07 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:31:08 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ class CGIResponseCreator {
 									 std::string &location);
 		void _setCGIErrorResponse(std::vector<Config> const &configs);
 		bool _deleteVariables(char **envp, char **argv);
+		bool _setRuntimeFromShebang();
 
 		Request &request;
 		Response &response;

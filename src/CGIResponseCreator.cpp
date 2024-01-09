@@ -6,7 +6,7 @@
 /*   By: shtanemu <shtanemu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 22:54:44 by shtanemu          #+#    #+#             */
-/*   Updated: 2024/01/07 12:23:13 by shtanemu         ###   ########.fr       */
+/*   Updated: 2024/01/09 11:34:11 by shtanemu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <cstring>
 #include <ctime>
 #include <string>
+#include <fstream>
 
 #include "Result.hpp"
 #include "ft.hpp"
@@ -394,6 +395,18 @@ char **CGIResponseCreator::_createArgv() {
 	*argv = NULL;
 	return head;
 }
+bool CGIResponseCreator::_setRuntimeFromShebang() {
+	std::ifstream file(cgiPath);
+	if (file.is_open() == false) { return false; }
+	else {
+		std::string shebang;
+		std::getline(file, shebang);
+		if (shebang.find("#!") != 0) { file.close(); return false; }
+		runtimePath = shebang.substr(2);
+		file.close();
+	}
+	return true;
+}
 
 bool CGIResponseCreator::_setRuntime() {
 	std::size_t posExtension;
@@ -410,11 +423,13 @@ bool CGIResponseCreator::_setRuntime() {
 			runtimeName = "perl";
 		} else if (extension.compare(".php") == 0) {
 			runtimeName = "php";
-		} else {
-			runtimeName = "sh";
+		} else { 
+			if (_setRuntimeFromShebang() == false) { runtimeName = "sh"; }
+			else { return true; }
 		}
 	} else {
-		runtimeName = "sh";
+		if (_setRuntimeFromShebang() == false) { runtimeName = "sh"; }
+		else { return true; }
 	}
 	path = std::getenv("PATH");
 	if (path == NULL) {
