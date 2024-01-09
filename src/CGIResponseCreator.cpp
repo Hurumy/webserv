@@ -20,8 +20,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-#include <string>
 #include <fstream>
+#include <string>
 
 #include "Result.hpp"
 #include "ft.hpp"
@@ -397,11 +397,15 @@ char **CGIResponseCreator::_createArgv() {
 }
 bool CGIResponseCreator::_setRuntimeFromShebang() {
 	std::ifstream file(cgiPath.c_str());
-	if (file.is_open() == false) { return false; }
-	else {
+	if (file.is_open() == false) {
+		return false;
+	} else {
 		std::string shebang;
 		std::getline(file, shebang);
-		if (shebang.find("#!") != 0) { file.close(); return false; }
+		if (shebang.find("#!") != 0) {
+			file.close();
+			return false;
+		}
 		runtimePath = shebang.substr(2);
 		file.close();
 	}
@@ -423,13 +427,19 @@ bool CGIResponseCreator::_setRuntime() {
 			runtimeName = "perl";
 		} else if (extension.compare(".php") == 0) {
 			runtimeName = "php";
-		} else { 
-			if (_setRuntimeFromShebang() == false) { runtimeName = "sh"; }
-			else { return true; }
+		} else {
+			if (_setRuntimeFromShebang() == false) {
+				runtimeName = "sh";
+			} else {
+				return true;
+			}
 		}
 	} else {
-		if (_setRuntimeFromShebang() == false) { runtimeName = "sh"; }
-		else { return true; }
+		if (_setRuntimeFromShebang() == false) {
+			runtimeName = "sh";
+		} else {
+			return true;
+		}
 	}
 	path = std::getenv("PATH");
 	if (path == NULL) {
