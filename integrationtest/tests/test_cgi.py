@@ -132,3 +132,13 @@ class TestCGIRequest(unittest.TestCase):
 		print('Status: ',r.status_code)
 		self.assertEqual(r.content.decode('utf-8')  , os.getcwd() + '/content/cgi_bin\r\n')
 		self.assertEqual(r.status_code, 200)
+
+	def test_cgi_extension_script(self):
+		print('\n===========================')
+		print('TEST: .cgi extension script GET')
+		print('===========================\n')
+
+		r = requests.get(URI_TOP + '/cgi_bin/valid_cgi_extension_script.cgi')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
+		self.assertEqual(r.status_code, 200)
