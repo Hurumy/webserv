@@ -2,6 +2,7 @@ import unittest
 from dotenv import load_dotenv
 import os
 import requests
+import shutil
 
 load_dotenv()
 HOST_NAME = os.getenv('HOST_NAME')
@@ -131,4 +132,19 @@ class TestCGIRequest(unittest.TestCase):
 		print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.content.decode('utf-8')  , os.getcwd() + '/content/cgi_bin\r\n')
+		self.assertEqual(r.status_code, 200)
+
+	def test_cgi_extension_script(self):
+		print('\n===========================')
+		print('TEST: .cgi extension script GET')
+		print('===========================\n')
+
+		with open('./content/cgi_bin/valid_cgi_extension_script.cgi') as fs:
+			file_text = fs.read()
+		new_file_text = '#!' + shutil.which('python') + "\n\n" + file_text
+		with open('./content/cgi_bin/valid_cgi_extension_script.cgi', 'w') as fs:
+			fs.write(new_file_text)
+		r = requests.get(URI_TOP + '/cgi_bin/valid_cgi_extension_script.cgi')
+		print('Response:\n',r.text)
+		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)

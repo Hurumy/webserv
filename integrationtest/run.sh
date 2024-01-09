@@ -33,7 +33,7 @@ echo "server {
 		autoindex on;
 		upload_path	$PWD/content;
 		allowedMethods	GET POST DELETE;
-		cgi_extension py pl;
+		cgi_extension py pl cgi;
 		client_max_body_size 5m;
 }
 
