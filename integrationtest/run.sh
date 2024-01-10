@@ -182,15 +182,19 @@ echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) $
 
 echo
 echo "= Start webserv ="
-timeout -sKILL 8 ${WEBSERV} ${FILE} &
-if [ $? != 0 ]; then
+timeout 8 ${WEBSERV} ${FILE}
+if [ $? = 124 ]; then
 	echo
 	echo "${ESC}${RED}${ESC} Timeout. Webserv is not exited by $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
 	exit 1
-else
+elif [ $? = 1 ]; then
 	echo
 	echo "Webserv is Successfully exited."
 	sleep 0.1
+else
+	echo
+	echo "${ESC}${RED}${ESC}Some Error occured...${ESC}${RESET}${ESC}"
+	exit 1
 fi
 
 done

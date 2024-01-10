@@ -25,7 +25,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		}
 		# py
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.py') as fs:
 			pytext = fs.read()
@@ -33,7 +33,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/cgi_bin/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -41,7 +41,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
         # sh
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.sh') as fs:
 			shtext = fs.read()
@@ -61,7 +61,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		}
 		# py
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.py') as fs:
 			pytext = fs.read()
@@ -77,7 +77,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
         # sh
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.sh') as fs:
 			shtext = fs.read()
@@ -97,7 +97,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		}
 		# py
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.py') as fs:
 			pytext = fs.read()
@@ -105,7 +105,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/cgi_bin/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -113,7 +113,7 @@ class TestCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
         # sh
 		r = requests.get(URI_TOP + '/content/cgi_bin/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/cgi_bin/test.sh') as fs:
 			shtext = fs.read()
