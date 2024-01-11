@@ -68,7 +68,7 @@ static int rL_searchipv6(Address &add, std::string oneline) {
 	// :がなかった場合->ポートの設定がないので、ポートを初期値にセット
 	if (portsign == std::string::npos) {
 		add.setIpVers(IPV6);
-		add.setPort(80);
+		add.setPort(8000);
 	}
 	// :が正しい位置([]の直後)にあった場合、ポートの設定を切り出す
 	else if (portsign == end + 1) {
@@ -79,6 +79,9 @@ static int rL_searchipv6(Address &add, std::string oneline) {
 		ss >> portnumber;
 
 		// std::cout << "port: " << portnumber << std::endl;
+
+		if (!(1024 <= portnumber && portnumber <= 65535))
+			ft::errorInInit("invalid PortNumber is detected in listen directive!!(´×ω×`)\n");
 
 		add.setIpVers(IPV6);
 		add.setPort(portnumber);
@@ -120,6 +123,10 @@ int rL_searchipv4(Address &add, std::string oneline) {
 		sb >> portnum;
 		// std::cout << "portnum: " << portnum << std::endl;
 
+		// もしもポート番号が不適切であればエラーを出す
+		if (!(1024 <= portnum && portnum <= 65535))
+			ft::errorInInit("invalid PortNumber is detected in listen directive!!(´×ω×`)\n");
+
 		add.setIpVers(IPV4);
 		add.setIpAddress(address_str);
 		add.setPort(portnum);
@@ -133,11 +140,11 @@ int rL_searchipv4(Address &add, std::string oneline) {
 			add.setIpVers(IPV4);
 			add.setIpAddress(oneline);
 
-			// アドレスの指定のみでポートの設定がなかった場合、デフォルトでポートを80番に設定する
-			add.setPort(80);
+			// アドレスの指定のみでポートの設定がなかった場合、デフォルトでポートを8000番に設定する
+			add.setPort(8000);
 			return (1);
 		}
-		// .がなかった時(ポート設定のみの時) 後でValidate!
+		// .がなかった時(ポート設定のみの時)
 		else {
 			ss << oneline;
 			ss >> portnum;
@@ -146,6 +153,11 @@ int rL_searchipv4(Address &add, std::string oneline) {
 
 			//ポートの設定しかなかった場合、IPアドレスを0.0.0.0に設定する
 			add.setIpAddress("0.0.0.0");
+
+			// もしもポート番号が不適切であればエラーを出す
+			if (!(1024 <= portnum && portnum <= 65535))
+				ft::errorInInit("invalid PortNumber is detected in listen directive!!(´×ω×`)\n");
+
 			return (1);
 		}
 	}
