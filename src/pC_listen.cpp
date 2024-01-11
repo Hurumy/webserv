@@ -204,7 +204,7 @@ int readListen(Config &conf, std::string oneline) {
 int thereisnoListen(Config &conf) {
 	Address add;
 
-	add.setPort(80);
+	add.setPort(8000);
 	add.setIpVers(IPV4);
 	add.setIpAddress("0.0.0.0");
 	conf.addAddresses(add);
