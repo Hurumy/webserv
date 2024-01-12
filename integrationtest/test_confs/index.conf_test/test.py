@@ -10,7 +10,7 @@ HOST_NAME = "localhost"
 PORT = "8080"
 URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
-class TestIndesConfigs(unittest.TestCase):
+class TestIndexConfigs(unittest.TestCase):
 
 	def test_simple_get_index_page(self):
 		print('\n===========================')
