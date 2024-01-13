@@ -26,7 +26,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# a
 		# py
 		r = requests.get(URI_TOP + '/content/a/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/test.py') as fs:
 			pytext = fs.read()
@@ -34,7 +34,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/a/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -42,7 +42,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/a/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/test.sh') as fs:
 			shtext = fs.read()
@@ -52,7 +52,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# b
 		# py
 		r = requests.get(URI_TOP + '/content/b/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/test.py') as fs:
 			pytext = fs.read()
@@ -60,7 +60,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/b/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -68,7 +68,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/b/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/test.sh') as fs:
 			shtext = fs.read()
@@ -78,7 +78,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# c
 		# py
 		r = requests.get(URI_TOP + '/content/c/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/test.py') as fs:
 			pytext = fs.read()
@@ -86,7 +86,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/c/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -94,7 +94,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/c/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/test.sh') as fs:
 			shtext = fs.read()
@@ -115,7 +115,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# b
 		# py
 		r = requests.get(URI_TOP + '/content/b/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/test.py') as fs:
 			pytext = fs.read()
@@ -123,7 +123,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/b/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -131,7 +131,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/b/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/b/test.sh') as fs:
 			shtext = fs.read()
@@ -141,7 +141,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# c
 		# py
 		r = requests.get(URI_TOP + '/content/c/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/test.py') as fs:
 			pytext = fs.read()
@@ -149,7 +149,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/c/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -157,7 +157,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/c/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/c/test.sh') as fs:
 			shtext = fs.read()
@@ -167,7 +167,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		# a
 		# py
 		r = requests.get(URI_TOP + '/content/a/test.py', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/test.py') as fs:
 			pytext = fs.read()
@@ -175,7 +175,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# pl
 		r = requests.get(URI_TOP + '/content/a/cgiext_test.pl', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/cgiext_test.pl') as fs:
 			pltext = fs.read()
@@ -183,7 +183,7 @@ class TestLCGIExtensionConfigs(unittest.TestCase):
 		self.assertEqual(r.status_code, 200)
 		# sh
 		r = requests.get(URI_TOP + '/content/a/test.sh', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		with open('./content/a/test.sh') as fs:
 			shtext = fs.read()

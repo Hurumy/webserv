@@ -25,7 +25,7 @@ class TestAutoIndexConfigs(unittest.TestCase):
 		}
 		# try to get
 		r = requests.get(URI_TOP + '/content/a/', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 200)
 
@@ -42,6 +42,6 @@ class TestAutoIndexConfigs(unittest.TestCase):
 		}
 		# try to get
 		r = requests.get(URI_TOP + '/content/a/', headers=headers)
-		print('Response:\n',r.text)
+		#print('Response:\n',r.text)
 		print('Status: ',r.status_code)
 		self.assertEqual(r.status_code, 403)
