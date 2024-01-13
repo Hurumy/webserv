@@ -7,8 +7,6 @@ load_dotenv()
 HOST_NAME = os.getenv('HOST_NAME')
 PORT = os.getenv('PORT')
 HOST_NAME = "localhost"
-PORT = "8080"
-URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 class TestLClientMaxBodySizeConfigs(unittest.TestCase):
 
@@ -16,6 +14,9 @@ class TestLClientMaxBodySizeConfigs(unittest.TestCase):
 		print('\n===========================')
 		print('TEST: POST with max body size')
 		print('===========================\n')
+
+		PORT = "8080"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 		data = 'aaaaa'
 		headers = {
@@ -33,6 +34,9 @@ class TestLClientMaxBodySizeConfigs(unittest.TestCase):
 		print('TEST: POST with max body size')
 		print('===========================\n')
 
+		PORT = "8081"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
+
 		data = 'aaaaaa'
 		headers = {
 			'Host':'def',
@@ -48,6 +52,9 @@ class TestLClientMaxBodySizeConfigs(unittest.TestCase):
 		print('\n===========================')
 		print('TEST: Having prior over top scope')
 		print('===========================\n')
+
+		PORT = "8081"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 		data = 'aaaaa'
 		headers = {
