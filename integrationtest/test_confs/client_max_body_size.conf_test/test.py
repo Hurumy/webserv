@@ -10,7 +10,7 @@ HOST_NAME = "localhost"
 PORT = "8080"
 URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
-class TestIndexConfigs(unittest.TestCase):
+class TestClientMaxBodySizeConfigs(unittest.TestCase):
 
 	def test_post_with_max_body_size(self):
 		print('\n===========================')
