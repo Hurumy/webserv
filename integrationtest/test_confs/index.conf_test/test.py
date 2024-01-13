@@ -7,8 +7,6 @@ load_dotenv()
 HOST_NAME = os.getenv('HOST_NAME')
 PORT = os.getenv('PORT')
 HOST_NAME = "localhost"
-PORT = "8080"
-URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 class TestIndexConfigs(unittest.TestCase):
 
@@ -16,6 +14,9 @@ class TestIndexConfigs(unittest.TestCase):
 		print('\n===========================')
 		print('TEST: Simple GET index page')
 		print('===========================\n')
+
+		PORT = "8080"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 		with open('./content/readme.html') as fs:
 			file_text = fs.read()
@@ -33,6 +34,9 @@ class TestIndexConfigs(unittest.TestCase):
 		print('TEST: Having prior over autoindex')
 		print('===========================\n')
 
+		PORT = "8081"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
+
 		with open('./content/readme.html') as fs:
 			file_text = fs.read()
 		headers = {
@@ -48,6 +52,9 @@ class TestIndexConfigs(unittest.TestCase):
 		print('\n===========================')
 		print('TEST: Test use index of top scope instead of loaction one')
 		print('===========================\n')
+
+		PORT = "8082"
+		URI_TOP = 'http://' + HOST_NAME + ':' + PORT
 
 		with open('./content/readme.html') as fs:
 			file_text = fs.read()
