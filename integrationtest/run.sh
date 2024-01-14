@@ -90,6 +90,26 @@ echo "server {
 }
 " > ./test_confs/upload_path.conf
 
+echo "server {
+		server_name  def;
+		listen 8080;
+
+		location / {
+			upload_path $PWD/content/;
+		}
+}
+
+server {
+		server_name  def;
+		listen 8081;
+
+		upload_path $PWD/;
+		location / {
+			upload_path $PWD/content/;
+		}
+}
+" > ./test_confs/l_upload_path.conf
+
 echo
 echo "==== Reinstall dotenv ====="
 pip install -U python-dotenv
