@@ -4,8 +4,6 @@ import os
 import requests
 
 load_dotenv()
-HOST_NAME = os.getenv('HOST_NAME')
-PORT = os.getenv('PORT')
 HOST_NAME = "localhost"
 
 class TestIndexConfigs(unittest.TestCase):
