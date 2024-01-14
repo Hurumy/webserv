@@ -82,6 +82,14 @@ server {
 }
 " > ${CONFFILE}
 
+echo "server {
+		server_name  def;
+		listen 8080;
+
+        upload_path $PWD/content/;
+}
+" > ./test_confs/upload_path.conf
+
 echo
 echo "==== Reinstall dotenv ====="
 pip install -U python-dotenv
