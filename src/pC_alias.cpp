@@ -25,6 +25,8 @@ int l_readAlias(Location &loc, std::string oneline) {
 	if (lines.size() != 2)
 		ft::errorInInit("Too many elements in alias directives _(´ω`_)⌒)_ ))");
 
+	// Configのルートを持っていないので、パスの確認ができない。考えておく
+
 	loc.setAlias(lines.at(1));
 
 	return (0);

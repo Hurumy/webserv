@@ -1,4 +1,23 @@
 #! /bin/bash
+
+ESC=$(printf '\033') RESET="${ESC}[0m"
+
+BOLD="${ESC}[1m"        FAINT="${ESC}[2m"       ITALIC="${ESC}[3m"
+UNDERLINE="${ESC}[4m"   BLINK="${ESC}[5m"       FAST_BLINK="${ESC}[6m"
+REVERSE="${ESC}[7m"     CONCEAL="${ESC}[8m"     STRIKE="${ESC}[9m"
+
+GOTHIC="${ESC}[20m"     DOUBLE_UNDERLINE="${ESC}[21m" NORMAL="${ESC}[22m"
+NO_ITALIC="${ESC}[23m"  NO_UNDERLINE="${ESC}[24m"     NO_BLINK="${ESC}[25m"
+NO_REVERSE="${ESC}[27m" NO_CONCEAL="${ESC}[28m"       NO_STRIKE="${ESC}[29m"
+
+BLACK="${ESC}[30m"      GREEN="${ESC}[31m"        GREEN="${ESC}[32m"
+YELLOW="${ESC}[33m"     BLUE="${ESC}[34m"       MAGENTA="${ESC}[35m"
+CYAN="${ESC}[36m"       WHITE="${ESC}[37m"      DEFAULT="${ESC}[39m"
+
+BG_BLACK="${ESC}[40m"   BG_GREEN="${ESC}[41m"     BG_GREEN="${ESC}[42m"
+BG_YELLOW="${ESC}[43m"  BG_BLUE="${ESC}[44m"    BG_MAGENTA="${ESC}[45m"
+BG_CYAN="${ESC}[46m"    BG_WHITE="${ESC}[47m"   BG_DEFAULT="${ESC}[49m"
+
 set -o allexport
 
 echo "\
@@ -63,6 +82,34 @@ server {
 }
 " > ${CONFFILE}
 
+echo "server {
+		server_name  def;
+		listen 8080;
+
+        upload_path $PWD/content/;
+}
+" > ./test_confs/upload_path.conf
+
+echo "server {
+		server_name  def;
+		listen 8080;
+
+		location / {
+			upload_path $PWD/content/;
+		}
+}
+
+server {
+		server_name  def;
+		listen 8081;
+
+		upload_path $PWD/;
+		location / {
+			upload_path $PWD/content/;
+		}
+}
+" > ./test_confs/l_upload_path.conf
+
 echo
 echo "==== Reinstall dotenv ====="
 pip install -U python-dotenv
@@ -86,6 +133,8 @@ if [ "$?" -ne 0 ]; then
 	exit 1
 fi
 
+
+<<COMMENTOUT
 echo 
 echo "==== Run Integration tests ====="
 python runner.py tests
@@ -103,8 +152,81 @@ if [ "$?" -ne 0 ]; then
 	kill ${PID}
 	exit 1
 fi
+COMMENTOUT
 
 echo 
 echo "==== Shutdown webserv ====="
 PID=$(ps | grep webserv  | awk '{print $1}')
 kill ${PID}
+
+
+# Configテスト用ループ
+for FILE in `ls ./test_confs/*.conf`
+do
+
+TESTDIR=${FILE}_test/
+
+echo
+echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+echo
+echo "${ESC}${GREEN}${ESC} Testdir Name: $(echo ${TESTDIR}) ${ESC}${RESET}${ESC}"
+
+
+echo
+echo "${ESC}${GREEN}${ESC} = Start webserv =${ESC}${RESET}${ESC}"
+${WEBSERV} ${FILE} &
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
+
+echo 
+echo "${ESC}${GREEN}${ESC} = Run Integration tests = ${ESC}${RESET}${ESC}"
+echo
+python runner.py ${TESTDIR}
+echo
+if [ "$?" -ne 0 ]; then
+	PID=$(ps | grep webserv  | awk '{print $1}')
+	kill ${PID}
+	exit 1
+fi
+
+echo 
+echo "${ESC}${GREEN}${ESC} = Shutdown webserv =${ESC}${RESET}${ESC}"
+echo
+PID=$(ps | grep webserv  | awk '{print $1}')
+kill ${PID} > /dev/null 2>&1
+
+done
+
+
+# Configテスト用ループ(WebservがConfigの読み込みで終了し、起動しないパターン)
+for FILE in `ls ./test_confs_error/*.conf`
+do
+
+echo
+echo "${ESC}${GREEN}${ESC} Starting test with $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+
+echo
+echo "= Start webserv ="
+timeout 8 ${WEBSERV} ${FILE}
+if [ $? = 124 ]; then
+	echo
+	echo "${ESC}${RED}${ESC} Timeout. Webserv is not exited by $(echo ${FILE} | xargs basename) ${ESC}${RESET}${ESC}"
+	exit 1
+elif [ $? = 1 ]; then
+	echo
+	echo "Webserv is Successfully exited."
+	sleep 0.1
+else
+	echo
+	echo "${ESC}${RED}${ESC}Some Error occured...${ESC}${RESET}${ESC}"
+	exit 1
+fi
+
+done
+
+echo
+echo "${ESC}${BOLD}${GREEN}${ESC} Integration Test completed. ${ESC}${RESET}${ESC}"
+

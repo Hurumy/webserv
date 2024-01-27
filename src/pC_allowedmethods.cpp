@@ -29,7 +29,7 @@ int readAllowedMethods(Config &conf, std::string oneline) {
 
 	for (size_t i = 1; i < lines.size(); i++) {
 		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
-			lines.at(i) == "DELETE" || lines.at(i) == "PUT") {
+			lines.at(i) == "DELETE") {
 			status = conf.addReqMethod(lines.at(i), true);
 			if (status == false) {
 				ft::errorInInit("Too many allowedMethod is declare(´-ω-`)");
@@ -58,7 +58,7 @@ int l_readAllowedMethods(Location &loc, std::string oneline) {
 
 	for (size_t i = 1; i < lines.size(); i++) {
 		if (lines.at(i) == "GET" || lines.at(i) == "POST" ||
-			lines.at(i) == "DELETE" || lines.at(i) == "PUT") {
+			lines.at(i) == "DELETE") {
 			status = loc.addReqMethod(lines.at(i), true);
 			if (status == false) {
 				ft::errorInInit("Too many allowedMethod is declare(´-ω-`)");
