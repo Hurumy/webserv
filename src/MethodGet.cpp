@@ -133,7 +133,7 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 
 	// URIがディレクトリを指しているか確認する
 	status = stat(uri.c_str(), &t_stat);
-	if (status == -1) {
+	if (status != 0) {
 		// std::cout << "stat failed" << errno << std::endl;
 		if (errno == ENAMETOOLONG) {
 			res.setStatus(414);
