@@ -55,4 +55,5 @@ class AMethod {
 		void setErrorPageBody();
 		std::string const &getQuery() const;
 		Result<std::string, bool> const isCgi() const;
+		Result<int, bool> const isAllowedMethod() const;
 };

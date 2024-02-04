@@ -326,6 +326,15 @@ Result<int, bool> MethodGet::searchIndex() {
 }
 
 Result<int, bool> MethodGet::act() {
+
+	// AllowedMethodのチェック
+	Result<int, bool> const res_alm = isAllowedMethod();
+	if (res_alm.isError() == true)
+	{
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+
 	//(ディレクトリリスティングが有効なら)もしくは(この内部処理でエラーが起こっていた→エラーページをセットして)この時点で帰る
 	Result<int, bool> res_dir = checkIsDirlisting();
 	if (res_dir.isOK() == true) {

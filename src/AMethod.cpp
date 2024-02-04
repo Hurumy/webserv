@@ -333,19 +333,21 @@ Result<int, bool> AMethod::checkURI() {
 void AMethod::setURI() {
 	std::string tmp;
 
-	// std::cout << uri << std::endl;
+	//std::cout << RED "uri: " << uri << RESET << std::endl;
+
 
 	// uriを一つずつ長くしていって、最長一致なLocationを探す
+	// Trailing slash の有無を区別しない
 	std::stringstream ss;
 	std::string shortpath;
 	std::string locpath;
 	ss << uri;
 	isloc = false;
-	std::getline(ss, tmp, '/');
 	while (ss.eof() == false) {
+		std::getline(ss, tmp, '/');
 		shortpath += tmp;
 		shortpath += '/';
-		// std::cout << shortpath << std::endl;
+		std::cout << shortpath << std::endl;
 
 		// locationの設定が適用されるか否か、されるとしたらどのLocationかを検索する
 		if (conf.getLocations(shortpath).isOK() == true) {
@@ -353,8 +355,8 @@ void AMethod::setURI() {
 			loc = conf.getLocations(shortpath).getOk();
 			locpath = shortpath;
 		}
-		std::getline(ss, tmp, '/');
 	}
+	
 
 	// Locationの設定があった場合、
 	//  1.
@@ -379,6 +381,7 @@ void AMethod::setURI() {
 	}
 
 	// std::cout << "uri: " << uri << std::endl;
+	// uri += '/';
 
 	// uri_without_rootを設定、スラッシュも二重のやつをなくす
 	// これは必ずTrailing slash ありにする
@@ -392,6 +395,8 @@ void AMethod::setURI() {
 	if (uri_without_root.find_last_of('/') != uri_without_root.size() - 1) {
 		uri_without_root += '/';
 	}
+	// std::cout << RED "uri: " << uri << RESET << std::endl;
+	// std::cout << RED "uri_without_root: " << uri_without_root << RESET << std::endl;
 
 	// ConfigのrootがあればさらにURIの頭にくっつける
 	if (conf.getRootDir().empty() == false) {
@@ -525,12 +530,33 @@ void AMethod::setURI() {
 	return;
 }
 
+Result<int, bool> const AMethod::isAllowedMethod() const
+{
+	// ConfigのAllowedMethodチェック
+	if (conf.getReqMethod(req.getMethod()).isOK() == false)
+	{
+		res.setStatus(405);
+		res.setStatusMessage(statusmap.at(405));
+		return Error<bool>(false);
+	}
+
+	// LocationのAllowedMethodチェック
+	if (loc.getReqMethod(req.getMethod()).isOK() == false)
+	{
+		res.setStatus(405);
+		res.setStatusMessage(statusmap.at(405));
+		return Error<bool>(false);
+	}
+
+	return Ok<int>(0);
+}
+
 Result<int, bool> AMethod::checkRedirects() {
 	//リダイレクトなどを確認する
-	// location指定のリダイレクト
 	std::stringstream ss;
 	std::string size;
 
+	// location指定のリダイレクト
 	if (isloc == true && loc.isReturn() == true) {
 		res.setStatus(loc.getReturnStatus());
 		if (statusmap.find(loc.getReturnStatus()) != statusmap.end())

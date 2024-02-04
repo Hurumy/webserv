@@ -144,13 +144,6 @@ Result<int, bool> RequestHandler::checkRequiedHeader() {
 		get.setErrorPageBody();
 		return Error<bool>(false);
 	}
-	if (this->confnum < configs.size() &&
-		configs.at(confnum).getReqMethod(req.getMethod()).isOK() == false) {
-		res.setStatus(405);
-		res.setStatusMessage("Method Not Allowed");
-		get.setErrorPageBody();
-		return Error<bool>(false);
-	}
 	if (req.getHeader("Content-Length").isOK() == true) {
 		std::stringstream ss;
 		std::string contlen;

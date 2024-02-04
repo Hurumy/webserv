@@ -68,6 +68,14 @@ int MethodDelete::openResourceDelete() {
 Result<int, bool> MethodDelete::act() {
 	int status;
 
+	// AllowedMethodのチェック
+	Result<int, bool> const res_alm = isAllowedMethod();
+	if (res_alm.isError() == true)
+	{
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+
 	status = openResourceDelete();
 	if (200 <= status && status <= 299) {
 		res.addHeader("Content-Length", "0");

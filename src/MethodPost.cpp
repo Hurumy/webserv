@@ -240,6 +240,14 @@ int MethodPost::openPostResource() {
 Result<int, bool> MethodPost::act() {
 	int status;
 
+	// AllowedMethodのチェック
+	Result<int, bool> const res_alm = isAllowedMethod();
+	if (res_alm.isError() == true)
+	{
+		setErrorPageBody();
+		return Error<bool>(false);
+	}
+
 	status = openPostResource();
 	if (status >= 200 && status <= 299) {
 		res.addHeader("Location", filename.substr(1, filename.size() - 1));
