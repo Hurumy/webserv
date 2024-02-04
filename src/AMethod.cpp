@@ -107,7 +107,7 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 			res.setStatus(414);
 			res.setStatusMessage("URI Too Long");
 			return Error<bool>(false);
-		} else if (errno == ENOENT) {
+		} else if (errno == ENOENT || errno == ENOTDIR) {
 	#if defined(_DEBUGFLAG)
 			std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
 					<< std::endl;
@@ -116,7 +116,7 @@ Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 			res.setStatus(404);
 			res.setStatusMessage(statusmap.at(404));
 			return Error<bool>(false);
-		} else if (errno == EACCES || errno == ENOTDIR) {
+		} else if (errno == EACCES) {
 			res.setStatus(403);
 			res.setStatusMessage(statusmap.at(403));
 			return Error<bool>(false);
