@@ -96,32 +96,44 @@ bool AMethod::checkMaxBodySize(unsigned long long __size) const {
 
 Result<std::string, bool> const AMethod::_openFile(std::string filename) {
 	// open
-	std::ifstream ifs(filename.c_str(), std::ios::in | std::ios::binary);
-	if (!ifs && errno == ENOENT) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
-				  << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
-		res.setStatus(404);
-		res.setStatusMessage(statusmap.at(404));
-		return Error<bool>(false);
-	} else if (!ifs && errno == EACCES) {
-		res.setStatus(403);
-		res.setStatusMessage(statusmap.at(403));
-		return Error<bool>(false);
-	} else if (!ifs) {
-#if defined(_DEBUGFLAG)
-		std::cout << RED
-				  << "AMethod::_openFile "
-					 "open失敗。エラーコードがHTTPステータスコードと対応しない"
-				  << RESET << std::endl;
-		std::cout << RED << "Filename: " << filename << RESET << std::endl;
-#endif
-		res.setStatus(500);
-		res.setStatusMessage(statusmap.at(500));
-		res.setHeader("Connection", "close");
-		return Error<bool>(false);
+	std::ifstream ifs;
+	ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
+
+	// ifsが無効な時
+	if (!ifs || ((ifs.rdstate() & std::ifstream::badbit) != 0))
+	{
+		access(filename.c_str(), R_OK);
+		if (errno == ENAMETOOLONG) {
+			res.setStatus(414);
+			res.setStatusMessage("URI Too Long");
+			return Error<bool>(false);
+		} else if (errno == ENOENT) {
+	#if defined(_DEBUGFLAG)
+			std::cout << RED << "AMethod::_openFile open失敗。ENOENT" << RESET
+					<< std::endl;
+			std::cout << RED << "Filename: " << filename << RESET << std::endl;
+	#endif
+			res.setStatus(404);
+			res.setStatusMessage(statusmap.at(404));
+			return Error<bool>(false);
+		} else if (errno == EACCES || errno == ENOTDIR) {
+			res.setStatus(403);
+			res.setStatusMessage(statusmap.at(403));
+			return Error<bool>(false);
+		} else {
+	#if defined(_DEBUGFLAG)
+			std::cout << RED
+					<< "AMethod::_openFile "
+						"open失敗。エラーコードがHTTPステータスコードと対応しない"
+					<< RESET << std::endl;
+			std::cout << RED << "Filename: " << filename << RESET << std::endl;
+			std::cout << RED << "errno: " << errno << RESET << std::endl;
+	#endif
+			res.setStatus(500);
+			res.setStatusMessage(statusmap.at(500));
+			res.setHeader("Connection", "close");
+			return Error<bool>(false);
+		}
 	}
 
 	// サイズを測る

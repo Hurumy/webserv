@@ -154,6 +154,8 @@ Result<int, bool> MethodGet::checkIsDirlisting() {
 			res.setStatusMessage("Forbidden");
 			setErrorPageBody();
 			return Ok<int>(-1);
+		} else if (errno == ENOTDIR) {
+			return Error<bool>(false);
 		} else {
 #if defined(_DEBUGFLAG)
 			std::cout
